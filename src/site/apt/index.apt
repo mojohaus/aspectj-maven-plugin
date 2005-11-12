@@ -166,7 +166,6 @@ Usage:
                </configuration>
 	       <executions>
 	         <execution>
-		   <phase>generate-source</phase>
 		   <goals>
 		     <goal>wsdl2java</goal>
 		   </goals>
