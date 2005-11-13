@@ -19,7 +19,6 @@ package org.codehaus.mojo.axistools;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -91,14 +90,14 @@ public class Java2WSDLMojo
     private String namespace;
     
     /**
-     * @parameter expression="${PkgToNS}"
+     * @parameter expression="${packageToNamespace}"
      */
-    private String PkgToNS;
+    private String packageToNamespace;
     
     /**
      * @parameter expression="${methods}"
      */
-    private List methods;
+    private ArrayList methods;
     
     /** 
      * @parameter expression="false"
@@ -133,12 +132,12 @@ public class Java2WSDLMojo
     /**
      * @parameter expression="${exclude}"
      */
-    private List excludes;
+    private ArrayList excludes;
     
     /**
      * @parameter expression="${stopClasses}"
      */
-    private List stopClasses;
+    private ArrayList stopClasses;
     
     /**
      * @parameter expression="${typeMappingVersion}"
@@ -163,7 +162,7 @@ public class Java2WSDLMojo
     /**
      * @parameter expression="${extraClasses}"
      */
-    private List extraClasses;
+    private ArrayList extraClasses;
     
     /**
      * @parameter expression="${importSchema}"
@@ -260,10 +259,10 @@ public class Java2WSDLMojo
             argsList.add( namespace );
         }
 
-        if ( PkgToNS != null )
+        if ( packageToNamespace != null )
         {
             argsList.add( "-p" );
-            argsList.add( PkgToNS );
+            argsList.add( packageToNamespace );
         }
         
         if ( methods != null && methods.size() > 0)

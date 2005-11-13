@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -50,7 +49,7 @@ public class WSDL2JavaMojo
      * 
      * @parameter expression=""
      */
-    private List urls;
+    private ArrayList urls;
 
     /**
      * source directory that contains .wsdl files
@@ -134,14 +133,14 @@ public class WSDL2JavaMojo
     private boolean skeletonDeploy;
     
     /**
-     * @parameter expression="${NStoPkg}"
+     * @parameter expression="${namespaceToPackage}"
      */
-    private String NStoPkg;
+    private String namespaceToPackage;
     
     /**
-     * @parameter expression="${fileNStoPkg}"
+     * @parameter expression="${fileNamespaceToPackage}"
      */
-    private String fileNStoPkg;
+    private String fileNamespaceToPackage;
     
     /**
      * @parameter expression="${deployScope}"
@@ -377,12 +376,12 @@ public class WSDL2JavaMojo
             argsList.add( "-S" );            
         }
         
-        if ( NStoPkg != null ) 
+        if ( namespaceToPackage != null ) 
         {
             if ( packageSpace == null ) 
             { 
                 argsList.add( "-N" );
-                argsList.add( NStoPkg );
+                argsList.add( namespaceToPackage );
             } 
             else 
             {
@@ -390,10 +389,10 @@ public class WSDL2JavaMojo
             }
         }
         
-        if ( fileNStoPkg != null ) 
+        if ( fileNamespaceToPackage != null ) 
         {
             argsList.add( "-f" );
-            argsList.add( fileNStoPkg );
+            argsList.add( fileNamespaceToPackage );
         }
         
         if ( deployScope != null )
