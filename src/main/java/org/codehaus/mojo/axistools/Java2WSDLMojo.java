@@ -28,7 +28,7 @@ import org.apache.maven.project.MavenProject;
  * A Plugin for generating stubs for WSDL files using Axis WSDL2Java.
  * 
  * @goal java2wsdl
- * @phase generate-sources
+ * @phase process-classes
  * @description Java2WSDL plugin
  * @author jesse <jesse.mcconnell@gmail.com>
  * @version $Id: WSDL2JavaMojo.java 495 2005-09-16 16:02:55Z jesse $

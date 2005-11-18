@@ -18,11 +18,19 @@ package org.codehaus.mojo.axistools;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.JarURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -31,6 +39,7 @@ import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
 
 /**
  * A Plugin for generating stubs for WSDL files using Axis WSDL2Java.
@@ -58,6 +67,14 @@ public class WSDL2JavaMojo
      */
     private File sourceDirectory;
 
+    /**
+     * source dependency that contains the wsdl file
+     * 
+     * @parameter expression="${sourceDependency}"
+     */
+    private String sourceDependency;
+    
+    
     /**
      * @parameter expression="${project.build.directory}/generated-sources/axistools/wsdl2java"
      *
@@ -215,6 +232,20 @@ public class WSDL2JavaMojo
      */
     private MavenProject project;
 
+    /**
+     * @parameter expression="${localRepository}"
+     * @required
+     * @readonly
+     */
+    protected ArtifactRepository localRepository;
+    
+    /**
+     * @parameter expression="${component.org.apache.maven.artifact.factory.ArtifactFactory}"
+     * @required
+     * @readonly
+     */
+    private ArtifactFactory artifactFactory;
+    
     public void execute()
         throws MojoExecutionException
     {
@@ -250,6 +281,26 @@ public class WSDL2JavaMojo
                 {
                     throw new MojoExecutionException( "WSDL2Java execution failed", t );
                 }
+            }
+        }
+        else if ( sourceDependency != null ) 
+        {
+            System.out.println("REPO: " + localRepository.getBasedir());
+            
+            Artifact artifact = artifactFactory.createArtifact( "gallup", "general-utilities", "1.0", null, "jar" );
+            
+            System.out.println("Artifact Path: "  + localRepository.pathOf(artifact));
+            try 
+            {
+                URL url = new URL("jar:file:" + localRepository.getBasedir() + File.separator + localRepository.pathOf(artifact) + "!/META-INF/maven/gallup/general-utilities/pom.xml" );
+                
+                JarURLConnection jarConnection = (JarURLConnection)url.openConnection();
+                
+                System.out.println(IOUtil.toString(jarConnection.getInputStream()));
+            } 
+            catch (IOException ioe) 
+            {
+                ioe.printStackTrace();
             }
         }
         else
