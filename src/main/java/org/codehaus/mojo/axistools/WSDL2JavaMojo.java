@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -68,13 +69,12 @@ public class WSDL2JavaMojo
     private File sourceDirectory;
 
     /**
-     * source dependency that contains the wsdl file
+     * list of source dependencies in the format groupId:artifactId:version:file
      * 
-     * @parameter expression="${sourceDependency}"
+     * @parameter expression=""
      */
-    private String sourceDependency;
-    
-    
+    private ArrayList sourceDependencies;
+       
     /**
      * @parameter expression="${project.build.directory}/generated-sources/axistools/wsdl2java"
      *
@@ -283,24 +283,45 @@ public class WSDL2JavaMojo
                 }
             }
         }
-        else if ( sourceDependency != null ) 
+        else if ( sourceDependencies != null ) 
         {
-            System.out.println("REPO: " + localRepository.getBasedir());
-            
-            Artifact artifact = artifactFactory.createArtifact( "gallup", "general-utilities", "1.0", null, "jar" );
-            
-            System.out.println("Artifact Path: "  + localRepository.pathOf(artifact));
-            try 
+            for (Iterator i = sourceDependencies.iterator(); i.hasNext();)
             {
-                URL url = new URL("jar:file:" + localRepository.getBasedir() + File.separator + localRepository.pathOf(artifact) + "!/META-INF/maven/gallup/general-utilities/pom.xml" );
+                String sourceDependencyString = (String)i.next();
                 
-                JarURLConnection jarConnection = (JarURLConnection)url.openConnection();
+                // format should be groupId:artifactId:version:file
+                StringTokenizer strtok = new StringTokenizer(sourceDependencyString, ":");
                 
-                System.out.println(IOUtil.toString(jarConnection.getInputStream()));
-            } 
-            catch (IOException ioe) 
-            {
-                ioe.printStackTrace();
+                if (strtok.countTokens() == 4)
+                {
+                    String groupId = strtok.nextToken();
+                    String artifactId = strtok.nextToken();
+                    String version = strtok.nextToken();
+                    String wsdlFileString = strtok.nextToken();
+                    
+                    Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, null, "jar" );
+                    
+                    try 
+                    {
+                        URL url = new URL("jar:file:" + localRepository.getBasedir() + File.separator + localRepository.pathOf(artifact) + "!" + wsdlFileString );
+                        
+                        JarURLConnection jarConnection = (JarURLConnection)url.openConnection();
+                        
+                        
+                        String wsdl = outputDirectory + File.separator + groupId + File.separator + artifactId + File.separator + version;
+                        
+                                               
+                        FileUtils.fileWrite(IOUtil.toString(jarConnection.getInputStream()), wsdl);
+                        MojoWSDL2Java wsdlMojo = new MojoWSDL2Java();
+                        wsdlMojo.execute( generateWSDLArgumentList( wsdl ) );
+                    } 
+                    catch (Exception e) 
+                    {
+                        throw new MojoExecutionException("unable to retrieve or process " + wsdlFileString + " from " + artifact.getArtifactId(), e);
+                    }
+                } else {
+                    throw new MojoExecutionException("not enough tokens in sourceDependency: " + sourceDependencyString);
+                }
             }
         }
         else
