@@ -18,11 +18,13 @@ package org.codehaus.mojo.axistools;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 
 /**
  * A Plugin for generating stubs for WSDL files using Axis WSDL2Java.
@@ -175,6 +177,12 @@ public class Java2WSDLMojo
      */
     private MavenProject project;
 
+    /**
+     * @component
+     */
+    private MavenProjectHelper projectHelper;
+
+    
     public void execute()
         throws MojoExecutionException
     {
@@ -182,13 +190,6 @@ public class Java2WSDLMojo
         if ( !outputDirectory.exists() )
         {
             outputDirectory.mkdirs();
-        }
-
-        getLog().info( "about to add compile source root" );
-
-        if ( project != null )
-        {
-            project.addCompileSourceRoot( outputDirectory.getAbsolutePath() );
         }
 
         try 
@@ -200,6 +201,8 @@ public class Java2WSDLMojo
         {
             throw new MojoExecutionException( "Java2WSDL execution failed", t);
         }
+        
+        projectHelper.addResource(project, outputDirectory.getAbsolutePath(), Collections.singletonList("**/*.wsdl"), Collections.EMPTY_LIST);
         
     }
 
