@@ -40,6 +40,13 @@ public class Java2WSDLMojo
 {
 
     /**
+     * the directory the compile objects will be located for java2wsdl to source from
+     * 
+     * @parameter expression="${project.build.directory}/classes
+     */
+    private File classesDirectory;
+    
+    /**
      * @parameter expression="${project.build.directory}/generated-sources/axistools/java2wsdl"
      *
      */
@@ -401,6 +408,9 @@ public class Java2WSDLMojo
             argsList.add( "-C" );
             argsList.add( importSchema );   
         }
+        
+        argsList.add( "-X" );
+        argsList.add( classesDirectory );
         
         if ( classOfPortType != null ) 
         {
