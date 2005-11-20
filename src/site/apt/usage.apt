@@ -1,0 +1,119 @@
+Usage
+
+  This plugin weaves aspectJ aspects with your classes using the AspectJ ajc compiler
+  
++------------------------------------------+
+<project>
+...
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.5-SNAPSHOT</version>
+                <configuration>
+                    <options>
+                        <option>-1.5</option>
+                        <option>-verbose</option>
+                        <option>-showWeaveInfo</option>
+                    </options>
+                    <ajdtBuildDefFile>build-1-5.ajproperties</ajdtBuildDefFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal> <!-- use this goal to weave all your main classes -->
+                            <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
+                        </goals>
+                    </execution>
+               </executions>
+           </plugin>
+           ...
+       </plugins>
+   <build>
+...
+</project>
++------------------------------------------+
+
+Option reference
+
++------------------------------------------+
+      -injars JarList
+            deprecated: since 1.2, use -inpath, which also takes directories. 
+      -inpath Path
+            Accept as source bytecode any .class files in the .jar files or directories on Path. The output will include these classes, possibly as woven with any applicable aspects. Path is a single argument containing a list of paths to zip files or directories, delimited by the platform-specific path delimiter. 
+      -aspectpath JarList
+            Weave binary aspects from JarList zip files into all sources. The aspects should have been output by the same version of the compiler. To run the output classes requires putting all the aspectpath entries on the run classpath. JarList, like classpath, is a single argument containing a list of paths to jar files, delimited by the platform- specific classpath delimiter. 
+      -argfile File
+            The file is a line-delimited list of arguments. These arguments are inserted into the argument list. 
+      -outjar output.jar
+            Put output classes in zip file output.jar. 
+      -outxml
+            Generate aop.xml file for load-time weaving with default name. 
+      -outxmlfile custom/aop.xml
+	        Generate aop.xml file for load-time weaving with custom name. 
+      -sourceroots DirPaths
+            Find and build all .java or .aj source files under any directory listed in DirPaths. DirPaths, like classpath, is a single argument containing a list of paths to directories, delimited by the platform- specific classpath delimiter. Required by -incremental. 
+      -emacssym
+            Generate .ajesym symbol files for emacs support 
+      -Xlint
+            Same as -Xlint:warning (enabled by default) 
+      -Xlint:{level}
+            Set default level for messages about potential programming mistakes in crosscutting code. {level} may be ignore, warning, or error. This overrides entries in org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar, but does not override levels set using the -Xlintfile option. 
+      -Xlintfile PropertyFile
+            Specify properties file to set levels for specific crosscutting messages. PropertyFile is a path to a Java .properties file that takes the same property names and values as org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar, which it also overrides. 
+      -classpath Path
+            Specify where to find user class files. Path is a single argument containing a list of paths to zip files or directories, delimited by the platform-specific path delimiter. 
+      -bootclasspath Path
+            Override location of VM's bootclasspath for purposes of evaluating types when compiling. Path is a single argument containing a list of paths to zip files or directories, delimited by the platform-specific path delimiter. 
+      -extdirs Path
+            Override location of VM's extension directories for purposes of evaluating types when compiling. Path is a single argument containing a list of paths to directories, delimited by the platform-specific path delimiter. 
+      -target [1.1 to 1.4]
+            Specify classfile target setting (1.1 to 1.4, default is 1.2) 
+      -1.3
+            Set compliance level to 1.3 
+      -1.4
+            Set compliance level to 1.4 (default) 
+      -source [1.3|1.4]
+            Toggle assertions (1.3 or 1.4, default is 1.3). When using -source 1.3, an assert() statement valid under Java 1.4 will result in a compiler error. When using -source 1.4, treat assert as a keyword and implement assertions according to the 1.4 language spec. 
+      -deprecation
+            Same as -warn:deprecation 
+      -noImportError
+            Emit no errors for unresolved imports 
+      -proceedOnError
+            Keep compiling after error, dumping class files with problem methods 
+      -g:[lines,vars,source]
+            -debug attributes level, that may take three forms:
+            -g         all debug info ('-g:lines,vars,source')
+            -g:none    no debug info
+            -g:{items} debug info for any/all of [lines, vars, source], e.g.,
+              -g:lines,source
+      -preserveAllLocals
+            Preserve all local variables during code generation (to facilitate debugging). 
+      -referenceInfo
+            Compute reference information. 
+      -encoding format
+            Specify default source encoding format. Specify custom encoding on a per file basis by suffixing each input source file/folder name with '[encoding]'. 
+      -verbose
+            Emit messages about accessed/processed compilation units 
+      -showWeaveInfo
+            Emit messages about weaving 
+      -log file
+            Specify a log file for compiler messages. 
+      -progress
+            Show progress (requires -log mode). 
+      -time
+            Display speed information. 
+      -repeat N
+            Repeat compilation process N times (typically to do performance analysis). 
+      -Xnoweave
+            (Experimental) produce unwoven class files for input using -injars. 
+      -Xreweavable[:compress]
+            (Experimental) runs weaver in reweavable mode which causes it to create woven classes that can be rewoven, subject to the restriction that on attempting a reweave all the types that advised the woven type must be accessible. 
+      -XnoInline
+            (Experimental) do not inline around advice 
+      -XincrementalFile file
+            (Experimental) This works like incremental mode, but using a file rather than standard input to control the compiler. It will recompile each time file is changed and and halt when file is deleted. 
+      -XserializableAspects
+            (Experimental) Normally it is an error to declare aspects Serializable. This option removes that restriction. 
++------------------------------------------+
