@@ -32,7 +32,10 @@ import junit.framework.TestCase;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.versioning.VersionRange;
+import org.apache.maven.embedder.MavenEmbedder;
+import org.apache.maven.embedder.MavenEmbedderConsoleLogger;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.mojo.aspectj.AbstractAjcCompiler;
@@ -61,7 +64,13 @@ public class AjcCompilerMojoTest
     protected void setUp()
         throws Exception
     {
-        super.setUp();
+        MavenEmbedder embedder = new MavenEmbedder();
+
+        embedder.setClassLoader( Thread.currentThread().getContextClassLoader() );
+        embedder.setLogger( new MavenEmbedderConsoleLogger() );
+        embedder.start();
+        ArtifactRepository localRepository = embedder.getLocalRepository();
+
         ajcMojo.project = project;
         ClassPathResource cpr = new ClassPathResource( "test-project/pom.xml" );
         basedir = cpr.getFile().getAbsolutePath();
@@ -69,14 +78,20 @@ public class AjcCompilerMojoTest
         basedir = temp + "/src/test/resources/test-project/";
         project.getBuild().setOutputDirectory( basedir + "/target/classes" );
         ajcMojo.basedir = new File( basedir );
-        Artifact aspectJTools = new DefaultArtifact( "aspectj", "aspectjtools", VersionRange
-            .createFromVersion( "1.5m5" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
-        Artifact aspectJTRt = new DefaultArtifact( "aspectj", "aspectjrt", VersionRange.createFromVersion( "1.5m5" ),
-                                                   "compile", "jar", "", new DefaultArtifactHandler( "" ) );
 
-        aspectJTools.setFile( new File( basedir + "aspectjtools-1.5m5.jar" ) );
-        aspectJTRt.setFile( new File( basedir + "aspectjrt-1.5m5.jar" ) );
         Set artifacts = new HashSet();
+
+        Artifact aspectJTools = new DefaultArtifact( "aspectj", "aspectjtools", VersionRange
+            .createFromVersion( "1.5.0_M5" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
+        Artifact aspectJTRt = new DefaultArtifact( "aspectj", "aspectjrt",
+                                                   VersionRange.createFromVersion( "1.5.0_M5" ), "compile", "jar", "",
+                                                   new DefaultArtifactHandler( "" ) );
+
+        aspectJTools.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTools )
+            + ".jar" ) );
+        aspectJTRt.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTRt )
+            + ".jar" ) );
+
         artifacts.add( aspectJTools );
         artifacts.add( aspectJTRt );
         project.setArtifacts( artifacts );
