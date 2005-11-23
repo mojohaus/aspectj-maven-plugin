@@ -45,4 +45,12 @@ public class AjcCompileMojo
         return project.getBuild().getOutputDirectory();
     }
 
+    /**
+     * 
+     */
+    protected String getSourceDirectory()
+    {
+        return project.getBuild().getSourceDirectory();
+    }
+
 }

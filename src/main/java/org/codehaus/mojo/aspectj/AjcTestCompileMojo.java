@@ -45,4 +45,12 @@ public class AjcTestCompileMojo
         return project.getBuild().getTestOutputDirectory();
     }
 
+    /**
+     * 
+     */
+    protected String getSourceDirectory()
+    {
+        return project.getBuild().getTestSourceDirectory();
+    }
+
 }

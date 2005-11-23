@@ -147,6 +147,54 @@ public abstract class AbstractAjcCompiler
             arguments.addAll( passthroughArgs );
         }
 
+        Set includes = getBuildFiles();
+
+        if ( checkModifications( includes ) )
+        {
+
+            // add target dir argument
+            arguments.add( "-d" );
+            arguments.add( getOutputDirectory() );
+
+            arguments.addAll( includes );
+
+            if ( getLog().isDebugEnabled() )
+            {
+                String command = "Running : ajc ";
+                Iterator iter = arguments.iterator();
+                while ( iter.hasNext() )
+                {
+                    command += ( iter.next() + " " );
+                }
+                getLog().debug( command );
+            }
+            Main main = new Main();
+            MavenMessageHandler mavenMessageHandler = new MavenMessageHandler( getLog() );
+            main.setHolder( mavenMessageHandler );
+
+            main.runMain( (String[]) arguments.toArray( new String[0] ), false );
+            IMessage[] errors = mavenMessageHandler.getErrors();
+            if ( errors.length > 0 )
+            {
+                String errorMessage = "";
+                for ( int i = 0; i < errors.length; i++ )
+                {
+                    errorMessage += errors[i] + "\n";
+                }
+                throw new MojoExecutionException( "Compiler errors : \n" + errorMessage );
+            }
+        }
+    }
+
+    /**
+     * Resolves the combination of all include and exclude statements
+     * and returns a set of all the files to be compiled and weaved.
+     * @return
+     * @throws MojoExecutionException
+     */
+    protected Set getBuildFiles()
+        throws MojoExecutionException
+    {
         Set includes = new HashSet();
 
         // Add all in the sourceDir property
@@ -176,39 +224,7 @@ public abstract class AbstractAjcCompiler
             Set exludes = resolveIncludeExcludeString( (String) ajdtBuildProperties.get( "src.excludes" ) );
             includes.removeAll( exludes );
         }
-
-        // add target dir argument
-        arguments.add( "-d" );
-        arguments.add( getOutputDirectory() );
-
-        arguments.addAll( includes );
-
-        if ( getLog().isDebugEnabled() )
-        {
-            String command = "Running : ajc ";
-            Iterator iter = arguments.iterator();
-            while ( iter.hasNext() )
-            {
-                command += ( iter.next() + " " );
-            }
-            getLog().debug( command );
-        }
-        Main main = new Main();
-        MavenMessageHandler mavenMessageHandler = new MavenMessageHandler( getLog() );
-        main.setHolder( mavenMessageHandler );
-
-        main.runMain( (String[]) arguments.toArray( new String[0] ), false );
-        IMessage[] errors = mavenMessageHandler.getErrors();
-        if ( errors.length > 0 )
-        {
-            String errorMessage = "";
-            for ( int i = 0; i < errors.length; i++ )
-            {
-                errorMessage += errors[i] + "\n";
-            }
-            throw new MojoExecutionException( "Compiler errors : \n" + errorMessage );
-        }
-
+        return includes;
     }
 
     /**
@@ -217,6 +233,13 @@ public abstract class AbstractAjcCompiler
      * @return where compiled classes should be put.
      */
     protected abstract String getOutputDirectory();
+
+    /**
+     * Abstract method used by child classes to spesify the correct source directory for classes.
+     * 
+     * @return where compiled classes should be put.
+     */
+    protected abstract String getSourceDirectory();
 
     /**
      * Constructs AspectJ compiler classpath string
@@ -293,5 +316,41 @@ public abstract class AbstractAjcCompiler
             throw new MojoExecutionException( "Could not resolve java or aspect classes to compile", e );
         }
         return inclExlSet;
+    }
+
+    /**
+     * Checks all included files for modifications. If one of the files has changed, we need
+     * to reweave everything, since a pointcut may have changed. 
+     *
+     */
+    protected boolean checkModifications( Set files )
+    {
+        String outDir = new File( getOutputDirectory() ).getAbsolutePath();
+        String sourceDir = new File( getSourceDirectory() ).getAbsolutePath();
+        Iterator iter = files.iterator();
+        while ( iter.hasNext() )
+        {
+            File sourceFile = new File( (String) iter.next() );
+            String compiledFileName = sourceFile.getAbsolutePath().replace( sourceDir, outDir );
+            compiledFileName = compiledFileName.replace( ".java", ".class" );
+            compiledFileName = compiledFileName.replace( ".aj", ".class" );
+            if ( FileUtils.fileExists( compiledFileName ) )
+            {
+                File compiledFile = new File( compiledFileName );
+                if ( sourceFile.lastModified() > compiledFile.lastModified() )
+                {
+                    getLog().debug( "Modification detected. Needs to reweave" );
+                    return true;
+                }
+            }
+            else
+            {
+                getLog().debug( "No classfile found. Need to reweave" );
+                return true;
+            }
+
+        }
+        getLog().debug( "No modifications detected. no new weaving needed" );
+        return false;
     }
 }

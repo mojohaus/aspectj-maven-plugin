@@ -77,6 +77,7 @@ public class AjcCompilerMojoTest
         String temp = cpr.getFile().getParentFile().getParentFile().getParentFile().getParentFile().getAbsolutePath();
         basedir = temp + "/src/test/resources/test-project/";
         project.getBuild().setOutputDirectory( basedir + "/target/classes" );
+        project.getBuild().setSourceDirectory( basedir + "/src/main/java" );
         ajcMojo.basedir = new File( basedir );
 
         Set artifacts = new HashSet();
@@ -246,6 +247,29 @@ public class AjcCompilerMojoTest
                 "/META-INF/customaop.xml" };
             ajcMojo.execute();
             assertTrue( FileUtils.fileExists( project.getBuild().getOutputDirectory() + "/META-INF/customaop.xml" ) );
+        }
+        catch ( Exception e )
+        {
+            fail();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public void testCheckModifications()
+        throws Exception
+    {
+        try
+        {
+            ajcMojo.sourceDir = "src/main";
+            ajcMojo.options = new String[] { "-1.5", "-verbose", "-showWeaveInfo" };
+            assertTrue( ajcMojo.checkModifications( ajcMojo.getBuildFiles() ) );
+            ajcMojo.execute();
+            assertFalse( ajcMojo.checkModifications( ajcMojo.getBuildFiles() ) );
+            File aSourceFile = FileUtils.getFile(project.getBuild().getSourceDirectory()+"/org/codehaus/mojo/aspectj/Azpect.java");
+            aSourceFile.setLastModified(System.currentTimeMillis());
+            assertTrue( ajcMojo.checkModifications( ajcMojo.getBuildFiles() ) );
         }
         catch ( Exception e )
         {
