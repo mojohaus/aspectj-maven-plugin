@@ -33,7 +33,7 @@ import org.apache.maven.project.MavenProjectHelper;
  * @phase process-classes
  * @description Java2WSDL plugin
  * @author jesse <jesse.mcconnell@gmail.com>
- * @version $Id: WSDL2JavaMojo.java 495 2005-09-16 16:02:55Z jesse $
+ * @version $Id$
  */
 public class Java2WSDLMojo
     extends AbstractMojo

@@ -49,7 +49,7 @@ import org.codehaus.plexus.util.IOUtil;
  * @phase generate-sources
  * @description WSDL2Java plugin
  * @author jesse <jesse.mcconnell@gmail.com>
- * @version $Id: WSDL2JavaMojo.java 495 2005-09-16 16:02:55Z jesse $
+ * @version $Id$
  */
 public class WSDL2JavaMojo
     extends AbstractMojo
