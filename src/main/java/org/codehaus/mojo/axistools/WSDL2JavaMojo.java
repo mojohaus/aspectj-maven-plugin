@@ -17,17 +17,19 @@ package org.codehaus.mojo.axistools;
  */
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
@@ -49,6 +51,7 @@ import org.codehaus.plexus.util.IOUtil;
  * @phase generate-sources
  * @description WSDL2Java plugin
  * @author jesse <jesse.mcconnell@gmail.com>
+ * @author Christoph Schoenfeld <christophster@gmail.com>
  * @version $Id$
  */
 public class WSDL2JavaMojo
@@ -82,10 +85,24 @@ public class WSDL2JavaMojo
     private File outputDirectory;
 
     /**
+     * Cache directory for WSDLs from URLs
+     * 
+     * @parameter expression="${project.build.directory}/axistools/wsdl2java/urlDownloads"
+     */
+    private File urlDownloadDirectory;
+
+    /**
+     * Cache directory for WSDLs from sourceDependencies
+     * 
+     * @parameter expression="${project.build.directory}/axistools/wsdl2java/sourceDependencies"
+     */
+    private File sourceDependencyDirectory;
+    
+    /**
      * @parameter expression="${basedir}/target"
      *
      */
-    private String timestampDirectory;
+    private File timestampDirectory;
 
     /**
      * @parameter expression="${serverSide}"
@@ -207,7 +224,7 @@ public class WSDL2JavaMojo
     /**
      * load.wsdl would further subpackage into load.*
      * 
-     * @parameter expression="$subPackageByFileName"
+     * @parameter expression="${subPackageByFileName}"
      */
     private boolean subPackageByFileName;
 
@@ -262,76 +279,34 @@ public class WSDL2JavaMojo
             project.addCompileSourceRoot( outputDirectory.getAbsolutePath() );
         }
 
-        // process urls if they are present, by their nature they 
-        // will be regenerated every time.
-        if ( urls != null )
+        // Get WSDL files
+        
+        if ( urls != null ) 
         {
-
-            for ( Iterator i = urls.iterator(); i.hasNext(); )
+            for (Iterator i = urls.iterator(); i.hasNext();)
             {
-                String url = (String) i.next();
-                getLog().info( "processing wsdl location: " + url );
-
-                try
-                {
-                    MojoWSDL2Java wsdlMojo = new MojoWSDL2Java();
-                    wsdlMojo.execute( generateWSDLArgumentList( url ) );
-                }
-                catch ( Throwable t )
-                {
-                    throw new MojoExecutionException( "WSDL2Java execution failed", t );
-                }
+                downloadWSDLFromUrl( (String) i.next() );      
             }
         }
-        else if ( sourceDependencies != null ) 
+        
+        if ( sourceDependencies != null ) 
         {
             for (Iterator i = sourceDependencies.iterator(); i.hasNext();)
             {
-                String sourceDependencyString = (String)i.next();
-                
-                // format should be groupId:artifactId:version:file
-                StringTokenizer strtok = new StringTokenizer(sourceDependencyString, ":");
-                
-                if (strtok.countTokens() == 4)
-                {
-                    String groupId = strtok.nextToken();
-                    String artifactId = strtok.nextToken();
-                    String version = strtok.nextToken();
-                    String wsdlFileString = strtok.nextToken();
-                    
-                    Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, null, "jar" );
-                    
-                    try 
-                    {
-                        URL url = new URL("jar:file:" + localRepository.getBasedir() + File.separator + localRepository.pathOf(artifact) + "!" + wsdlFileString );
-                        
-                        JarURLConnection jarConnection = (JarURLConnection)url.openConnection();
-                        
-                        
-                        String wsdl = outputDirectory + File.separator + groupId + File.separator + artifactId + File.separator + version;
-                        
-                                               
-                        FileUtils.fileWrite(IOUtil.toString(jarConnection.getInputStream()), wsdl);
-                        MojoWSDL2Java wsdlMojo = new MojoWSDL2Java();
-                        wsdlMojo.execute( generateWSDLArgumentList( wsdl ) );
-                    } 
-                    catch (Exception e) 
-                    {
-                        throw new MojoExecutionException("unable to retrieve or process " + wsdlFileString + " from " + artifact.getArtifactId(), e);
-                    }
-                } else {
-                    throw new MojoExecutionException("not enough tokens in sourceDependency: " + sourceDependencyString);
-                }
+                extractWSDLFromSourceDependency( (String) i.next() );
             }
         }
-        else
+
+        Set wsdlSet = computeStaleWSDLs();
+
+        if ( wsdlSet.isEmpty() ) 
         {
-
-            Set wsdlSet = computeStaleWSDLs();
-
+            getLog().info("Nothing to generate. All WSDL files are up to date.");
+        } 
+        else 
+        {        
             for ( Iterator i = wsdlSet.iterator(); i.hasNext(); )
             {
-
                 File wsdl = (File) i.next();
 
                 getLog().info( "processing wsdl: " + wsdl.toString() );
@@ -341,19 +316,220 @@ public class WSDL2JavaMojo
                     MojoWSDL2Java wsdlMojo = new MojoWSDL2Java();
                     wsdlMojo.execute( generateWSDLArgumentList( wsdl.getAbsolutePath() ) );
 
-                    FileUtils.copyFileToDirectory( wsdl, new File( timestampDirectory ) );
+                    FileUtils.copyFileToDirectory( wsdl, timestampDirectory );
                 }
                 catch ( Throwable t )
                 {
                     throw new MojoExecutionException( "WSDL2Java execution failed", t );
                 }
-
             }
         }
 
         if (runTestCasesAsUnitTests) {
             migrateTestSource();
         }
+    }
+
+    /**
+     * Replaces all characters in the given name except for the '.'. and
+     * alphanumeric characters to make it a safe valid file name.
+     * 
+     * <p>
+     * Possible drawback: This uses JDK 1.4 regular expressions and will not
+     * compile with older J2SE versions.
+     * 
+     * @param aName name to make safe
+     * @return the safe file name
+     */
+    private String createSafeFileName(String aName) 
+    {
+        return aName.replaceAll( "[^\\p{Alnum}\\.]", "-" );
+    }
+
+    /**
+     * Downloads a missing or stale WSDL from the given URL to the directory
+     * {@link #urlDownloadDirectory}.
+     * 
+     * @param urlStr the WSDL URL
+     * @throws MojoExecutionException
+     *             <li>if the syntax of a URL is invalid
+     *             <li>if the URL cannot be opened to check the modification
+     *             timestamp
+     *             <li>if the URL cannot be downloaded
+     */
+    private void downloadWSDLFromUrl(String urlStr) throws MojoExecutionException 
+    {
+
+        URLConnection urlConnection;
+        try 
+        {
+            URL url = new URL(urlStr);
+            urlConnection = url.openConnection();
+        } catch (Exception e) 
+        {
+            throw new MojoExecutionException( 
+                    "unable to open connection for download of WSDL file from URL " 
+                    + urlStr + ". Reason: " + e.getClass().getName() 
+                    + ": " + e.getMessage(), e );
+        }
+        
+        File localWsdl = new File( urlDownloadDirectory, createSafeFileName( urlStr ) );
+        // Compare modification timestamp of the URL against 
+        // that of the local copy.
+        if ( localWsdl.exists() 
+                && localWsdl.lastModified() == urlConnection.getLastModified() ) 
+        {
+            getLog().debug( "local copy of WSDL file from URL " + urlStr + " is up to date." );
+            return;
+        }
+
+        // The local copy does not exist or it is outdated.
+        // Copy the file from the URL to disk
+
+        if ( !urlDownloadDirectory.exists() ) 
+        {                                
+            urlDownloadDirectory.mkdirs();
+        }
+        
+        InputStream urlInput = null;
+        OutputStream localWsdlOutput = null;
+        try 
+        {
+            urlInput = urlConnection.getInputStream();
+            localWsdlOutput = new FileOutputStream( localWsdl );
+            
+            IOUtil.copy( urlInput, localWsdlOutput );
+            localWsdlOutput.flush();
+            
+            getLog().info( "downloaded WSDL from URL " + urlStr 
+                    +  " ("+localWsdl.length()+" Bytes)." );
+            
+        }
+        catch ( Exception e ) 
+        {
+            throw new MojoExecutionException( 
+                    "unable to download WSDL file from " 
+                    + urlStr + " to "+localWsdl.getAbsolutePath() 
+                    + ". Reason: " + e.getClass().getName() 
+                    + ": " + e.getMessage(), e );
+        }
+        finally 
+        {
+            IOUtil.close( urlInput );
+            IOUtil.close( localWsdlOutput );
+        }
+
+        localWsdl.setLastModified( urlConnection.getLastModified() );        
+    }
+    
+    /**
+     * Extracts a stale or missing WSDL from the artifact referenced via the
+     * given source dependency name to the directory
+     * {@link #sourceDependencyDirectory}.
+     * 
+     * @param sourceDependencyString the source dependency (format should be
+     *            <code>groupId:artifactId:version:file</code>)
+     * @throws MojoExecutionException
+     *             <li>if the sourceDependency format is invalid
+     *             <li>if the referenced artifact JAR file cannot be opened
+     *             <li>if the referenced WSDL file cannot be found or retrieved
+     *             from the referenced artifact 
+     */
+    private void extractWSDLFromSourceDependency(String sourceDependencyString) throws MojoExecutionException 
+    {
+        
+        StringTokenizer strtok = new StringTokenizer( sourceDependencyString, ":" );
+        
+        if (strtok.countTokens() != 4)
+        {
+            throw new MojoExecutionException( 
+                    "invalid sourceDependency: " 
+                    + sourceDependencyString 
+                    + ". Expected format: groupId:artifactId:version:file");
+        }
+        
+        String groupId = strtok.nextToken();
+        String artifactId = strtok.nextToken();
+        String version = strtok.nextToken();
+        String wsdlFileString = strtok.nextToken();
+        
+        JarEntry entry;
+        JarURLConnection jarConnection;
+        try 
+        {
+            Artifact artifact = artifactFactory.createArtifact( 
+                    groupId, artifactId, version, null, "jar" );
+            
+            URL url = new URL( "jar:file:" + localRepository.getBasedir() 
+                    + File.separator + localRepository.pathOf( artifact ) 
+                    + "!" + wsdlFileString );
+            
+            jarConnection = (JarURLConnection)url.openConnection();
+            
+            entry = jarConnection.getJarEntry();
+            if ( entry == null ) 
+            {
+                throw new MojoExecutionException( "unable to find " 
+                        + wsdlFileString + " in artifact of sourceDependency " 
+                        + sourceDependencyString + "." );
+            }
+        } 
+        catch (Exception e) 
+        {
+            throw new MojoExecutionException(
+                    "unable to open JAR URL connection for extraction of " +
+                    "WSDL file from artifact of sourceDependency " 
+                    + sourceDependencyString + ". Reason: " + e.getClass().getName() 
+                    + ": " + e.getMessage(), e );
+        }
+
+        File localWsdl = new File( sourceDependencyDirectory, 
+                createSafeFileName( sourceDependencyString ) );
+                                 
+        // Compare modification timestamp of the jar entry against
+        // that of the local copy
+        if ( localWsdl.exists() 
+                && entry.getTime() == localWsdl.lastModified() )
+        {
+            getLog().debug( "local copy of WSDL file from artifact of sourceDependency " 
+                    + sourceDependencyString + " is up to date." );
+            return;                            
+        }
+
+        // The local copy does not exist or it is outdated.
+        // Copy the file from the JAR entry to disk.
+        
+        if ( !sourceDependencyDirectory.exists() ) 
+        {                                
+            sourceDependencyDirectory.mkdirs();
+        }
+
+        InputStream jarWsdlInput = null;
+        FileOutputStream localWsdlOutput = null;
+        try
+        {
+            jarWsdlInput = jarConnection.getInputStream();
+            localWsdlOutput = new FileOutputStream( localWsdl );
+            
+            IOUtil.copy( jarWsdlInput, localWsdlOutput );
+            localWsdlOutput.flush();
+            
+            getLog().info( "extracted WSDL from sourceDependency " 
+                    + sourceDependencyString + " (" + localWsdl.length() + " Bytes)." );
+        } 
+        catch (Exception e) 
+        {
+            throw new MojoExecutionException( "unable to retrieve " 
+                    + wsdlFileString + " from artifact of sourceDependency " 
+                        + sourceDependencyString + ".", e );
+        } 
+        finally 
+        {
+            IOUtil.close(jarWsdlInput);
+            IOUtil.close(localWsdlOutput);
+        }
+
+        localWsdl.setLastModified( entry.getTime() );
     }
 
     /**
@@ -392,8 +568,8 @@ public class WSDL2JavaMojo
     /**
      * generate the parameter String[] to be passed into the main method 
      * 
-     * @param wsdl
-     * @return
+     * @param wsdl path of the wsdl file to process
+     * @return argument array for the invocation of {@link WSDL2JavaMojo}
      */
     private String[] generateWSDLArgumentList( String wsdl ) throws MojoExecutionException
     {
@@ -529,8 +705,7 @@ public class WSDL2JavaMojo
         {
             argsList.add( "-p" );
             argsList.add( packageSpace );
-        }
-        
+        }      
         else if ( packageSpace != null && subPackageByFileName )
         {
             argsList.add( "-p" );
@@ -583,13 +758,21 @@ public class WSDL2JavaMojo
 
         scanner.addSourceMapping( mapping );
 
-        File outDir = new File( timestampDirectory );
-
         Set staleSources = new HashSet();
 
         try
         {
-            staleSources.addAll( scanner.getIncludedSources( sourceDirectory, outDir ) );
+            staleSources.addAll( scanner.getIncludedSources( sourceDirectory, timestampDirectory ) );
+            
+            if (urlDownloadDirectory.exists()) 
+            {
+                staleSources.addAll( scanner.getIncludedSources( urlDownloadDirectory, timestampDirectory ) );
+            }
+            
+            if (sourceDependencyDirectory.exists()) 
+            {
+                staleSources.addAll( scanner.getIncludedSources( sourceDependencyDirectory, timestampDirectory ) );
+            }
         }
         catch ( InclusionScanException e )
         {

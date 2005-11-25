@@ -198,7 +198,6 @@ public class Java2WSDLMojo
         {
             outputDirectory.mkdirs();
         }
-
         try 
         {
             MojoJava2WSDL mojo = new MojoJava2WSDL();
@@ -217,8 +216,7 @@ public class Java2WSDLMojo
     /**
      * generate the parameter String[] to be passed into the main method 
      * 
-     * @param wsdl
-     * @return
+     * @return argument array for the invocation of {@link MojoJava2WSDL}
      */
     private String[] generateArgumentList() throws MojoExecutionException
     {
@@ -409,8 +407,8 @@ public class Java2WSDLMojo
             argsList.add( importSchema );   
         }
         
-        argsList.add( "-X" );
-        argsList.add( classesDirectory );
+        argsList.add( "--classpath" );
+        argsList.add( classesDirectory.getAbsolutePath() );
         
         if ( classOfPortType != null ) 
         {
