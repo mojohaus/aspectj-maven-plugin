@@ -47,9 +47,9 @@
       <version>20040218.194635</version>
     </dependency>
     <dependency>
-      <groupId>plexus</groupId>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-compiler-api</artifactId>
-      <version>1.4</version>
+      <version>1.5.1</version>
     </dependency>
     <dependency>
       <groupId>plexus</groupId>

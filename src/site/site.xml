@@ -14,6 +14,9 @@
          <item name="Mojo" href="http://mojo.codehaus.org"/>
          <item name="Maven" href="http://maven.apache.org/maven2"/>
       </links>
+      <menu name="Axistools Plugin Quickstart">
+         <item name="Overview" href="howto.html"/>
+      </menu>
       ${reports}
    </body>
 </project>
