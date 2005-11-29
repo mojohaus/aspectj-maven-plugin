@@ -1,9 +1,11 @@
 package org.codehaus.mojo.aspectj;
 
+import java.util.List;
+
 /**
  * The MIT License
  *
- * Copyright (c) 2005, The Codehaus
+ * Copyright (c) 2005, Kaare Nilsen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -48,9 +50,9 @@ public class AjcCompileMojo
     /**
      * 
      */
-    protected String getSourceDirectory()
+    protected List getSourceDirectories()
     {
-        return project.getBuild().getSourceDirectory();
+        return project.getCompileSourceRoots();
     }
 
 }

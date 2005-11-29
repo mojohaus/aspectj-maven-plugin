@@ -3,7 +3,7 @@ package org.codehaus.mojo.aspectj;
 /**
  * The MIT License
  *
- * Copyright (c) 2005, The Codehaus
+ * Copyright (c) 2005, Kaare Nilsen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -32,9 +32,11 @@ import org.aspectj.lang.annotation.Before;
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 @Aspect
-public class Azpect{
+public class Azpect
+{
     @Before ("execution (* Clazz.print(..))")
-    public void trace(){
+    public void trace()
+    {
         System.out.println("Trace");
     }
     

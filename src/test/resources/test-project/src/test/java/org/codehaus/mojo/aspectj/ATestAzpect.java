@@ -1,8 +1,5 @@
 package org.codehaus.mojo.aspectj;
 
-import java.io.File;
-import java.util.List;
-
 /**
  * The MIT License
  *
@@ -26,46 +23,27 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 
 /**
- * Weaves all test classes.
+ * Testing of @AspectJ code style.
  * 
- * @goal test-compile
- * @requiresDependencyResolution compile
- * @phase test-compile
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
+@Aspect
+public class ATestAzpect
 {
-
-    /**
-     * 
-     */
-    protected String getOutputDirectory()
+    @Before ("execution (* Clazz.print(..))")
+    public void traceInMain()
     {
-        return project.getBuild().getTestOutputDirectory();
+        System.out.println("Trace");
     }
 
-    /**
-     * 
-     */
-    protected List getSourceDirectories()
+    @Before ("execution (* ATestCase.testCp(..))")
+    public void traceInTestCase()
     {
-        return project.getTestCompileSourceRoots();
+        System.out.println("Trace");
     }
-
-    /**
-     * Constructs AspectJ compiler classpath string
-     * 
-     * @return a os spesific classpath string
-     */
-    protected String createClassPath()
-    {
-        String cp = super.createClassPath();
-        cp += File.pathSeparatorChar + project.getBuild().getOutputDirectory();
-        return cp;
-    }
-
+    
 }

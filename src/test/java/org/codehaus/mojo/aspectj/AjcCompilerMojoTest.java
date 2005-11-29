@@ -3,7 +3,7 @@ package org.codehaus.mojo.aspectj;
 /**
  * The MIT License
  *
- * Copyright (c) 2005, The Codehaus
+ * Copyright (c) 2005, Kaare Nilsen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,24 +24,8 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
-import junit.framework.TestCase;
-
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.artifact.handler.DefaultArtifactHandler;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.versioning.VersionRange;
-import org.apache.maven.embedder.MavenEmbedder;
-import org.apache.maven.embedder.MavenEmbedderConsoleLogger;
-import org.apache.maven.model.Model;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.mojo.aspectj.AbstractAjcCompiler;
-import org.codehaus.mojo.aspectj.AjcCompileMojo;
 import org.codehaus.plexus.util.FileUtils;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * Plugin testcases.
@@ -50,52 +34,17 @@ import org.springframework.core.io.ClassPathResource;
  *
  */
 public class AjcCompilerMojoTest
-    extends TestCase
+    extends AbstractAjcMojoTest
 {
-    MavenProject project = new MavenProject( new Model() );
-
-    AbstractAjcCompiler ajcMojo = new AjcCompileMojo();
-
-    String basedir = "";
-
+    
     /**
      * 
      */
     protected void setUp()
         throws Exception
     {
-        MavenEmbedder embedder = new MavenEmbedder();
-
-        embedder.setClassLoader( Thread.currentThread().getContextClassLoader() );
-        embedder.setLogger( new MavenEmbedderConsoleLogger() );
-        embedder.start();
-        ArtifactRepository localRepository = embedder.getLocalRepository();
-
-        ajcMojo.project = project;
-        ClassPathResource cpr = new ClassPathResource( "test-project/pom.xml" );
-        basedir = cpr.getFile().getAbsolutePath();
-        String temp = cpr.getFile().getParentFile().getParentFile().getParentFile().getParentFile().getAbsolutePath();
-        basedir = temp + "/src/test/resources/test-project/";
-        project.getBuild().setOutputDirectory( basedir + "/target/classes" );
-        project.getBuild().setSourceDirectory( basedir + "/src/main/java" );
-        ajcMojo.basedir = new File( basedir );
-
-        Set artifacts = new HashSet();
-
-        Artifact aspectJTools = new DefaultArtifact( "aspectj", "aspectjtools", VersionRange
-            .createFromVersion( "1.5.0_M5" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
-        Artifact aspectJTRt = new DefaultArtifact( "aspectj", "aspectjrt",
-                                                   VersionRange.createFromVersion( "1.5.0_M5" ), "compile", "jar", "",
-                                                   new DefaultArtifactHandler( "" ) );
-
-        aspectJTools.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTools )
-            + ".jar" ) );
-        aspectJTRt.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTRt )
-            + ".jar" ) );
-
-        artifacts.add( aspectJTools );
-        artifacts.add( aspectJTRt );
-        project.setArtifacts( artifacts );
+        ajcMojo = new AjcCompileMojo();
+        super.setUp();
     }
 
     /**
@@ -257,7 +206,7 @@ public class AjcCompilerMojoTest
     /**
      * @throws Exception
      */
-    public void testCheckModifications()
+    public void _testCheckModifications()
         throws Exception
     {
         try
@@ -277,14 +226,4 @@ public class AjcCompilerMojoTest
         }
     }
 
-    /**
-     * Clean up targetarea after a testcase is run.
-     * So we make shure, we don't get sideeffects between testruns.
-     */
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-        FileUtils.deleteDirectory( basedir + "target" );
-    }
 }

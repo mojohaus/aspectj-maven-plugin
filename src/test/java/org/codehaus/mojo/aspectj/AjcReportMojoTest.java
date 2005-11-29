@@ -1,12 +1,14 @@
 package org.codehaus.mojo.aspectj;
 
-import java.io.File;
-import java.util.List;
+import java.util.Locale;
+
+import org.apache.maven.reporting.MavenReportException;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * The MIT License
  *
- * Copyright (c) 2005, Kaare Nilsen
+ * Copyright (c) 2005, The Codehaus
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,44 +30,45 @@ import java.util.List;
  */
 
 /**
- * Weaves all test classes.
+ * Reporting testcases.
  * 
- * @goal test-compile
- * @requiresDependencyResolution compile
- * @phase test-compile
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ *
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
+public class AjcReportMojoTest
+    extends AbstractAjcMojoTest
 {
-
     /**
      * 
      */
-    protected String getOutputDirectory()
+    protected void setUp()
+        throws Exception
     {
-        return project.getBuild().getTestOutputDirectory();
+        ajcMojo = new AjcReportMojo();
+        super.setUp();
     }
 
     /**
+     * @throws MavenReportException 
      * 
+     *
      */
-    protected List getSourceDirectories()
+    public void testCreateReport()
     {
-        return project.getTestCompileSourceRoots();
+        try
+        {
+            ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
+            ajcMojo.options = new String[] { "-verbose", "-private", "-source", "1.5" };
+            ajcMojo.executeReport( Locale.ENGLISH );
+            assertTrue( FileUtils.fileExists( project.getBuild().getDirectory() + "/site/aspectj-doc/index.html" ) );
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            fail( "Exception : " + e.toString() );
+        }
+
     }
 
-    /**
-     * Constructs AspectJ compiler classpath string
-     * 
-     * @return a os spesific classpath string
-     */
-    protected String createClassPath()
-    {
-        String cp = super.createClassPath();
-        cp += File.pathSeparatorChar + project.getBuild().getOutputDirectory();
-        return cp;
-    }
 
 }

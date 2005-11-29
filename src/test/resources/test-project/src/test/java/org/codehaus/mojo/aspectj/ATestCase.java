@@ -1,8 +1,5 @@
 package org.codehaus.mojo.aspectj;
 
-import java.io.File;
-import java.util.List;
-
 /**
  * The MIT License
  *
@@ -26,46 +23,23 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import junit.framework.TestCase;
 
 /**
- * Weaves all test classes.
+ * A testcase to test if we have correct weaving of testcases.
  * 
- * @goal test-compile
- * @requiresDependencyResolution compile
- * @phase test-compile
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
+public class ATestCase
+    extends TestCase
 {
-
     /**
-     * 
+     * Just to check if we don't get errors in weaving.
+     * @throws Exception
      */
-    protected String getOutputDirectory()
+    public void testCp()
+        throws Exception
     {
-        return project.getBuild().getTestOutputDirectory();
+        System.out.println( "I was executed" );
     }
-
-    /**
-     * 
-     */
-    protected List getSourceDirectories()
-    {
-        return project.getTestCompileSourceRoots();
-    }
-
-    /**
-     * Constructs AspectJ compiler classpath string
-     * 
-     * @return a os spesific classpath string
-     */
-    protected String createClassPath()
-    {
-        String cp = super.createClassPath();
-        cp += File.pathSeparatorChar + project.getBuild().getOutputDirectory();
-        return cp;
-    }
-
 }

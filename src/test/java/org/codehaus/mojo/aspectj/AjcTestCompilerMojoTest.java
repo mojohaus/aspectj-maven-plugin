@@ -1,8 +1,5 @@
 package org.codehaus.mojo.aspectj;
 
-import java.io.File;
-import java.util.List;
-
 /**
  * The MIT License
  *
@@ -26,46 +23,47 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import java.io.File;
+
+import org.codehaus.plexus.util.FileUtils;
 
 /**
- * Weaves all test classes.
+ * Plugin testcases.
  * 
- * @goal test-compile
- * @requiresDependencyResolution compile
- * @phase test-compile
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ *
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
+public class AjcTestCompilerMojoTest
+    extends AbstractAjcMojoTest
 {
-
+    
     /**
      * 
      */
-    protected String getOutputDirectory()
+    protected void setUp()
+        throws Exception
     {
-        return project.getBuild().getTestOutputDirectory();
+        ajcMojo = new AjcTestCompileMojo();
+        super.setUp();
     }
 
     /**
-     * 
+     * @throws Exception
      */
-    protected List getSourceDirectories()
+    public void testUsingCorrectClasspath()
+        throws Exception
     {
-        return project.getTestCompileSourceRoots();
+        try
+        {
+            ajcMojo.ajdtBuildDefFile = basedir + "test-build-1-5.ajproperties";
+            ajcMojo.options = new String[] { "-1.5", "-verbose", "-showWeaveInfo" };
+            assertTrue(ajcMojo.createClassPath().contains("junit"));
+            ajcMojo.execute();
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            fail( "Exception : " + e.toString() );
+        }
     }
-
-    /**
-     * Constructs AspectJ compiler classpath string
-     * 
-     * @return a os spesific classpath string
-     */
-    protected String createClassPath()
-    {
-        String cp = super.createClassPath();
-        cp += File.pathSeparatorChar + project.getBuild().getOutputDirectory();
-        return cp;
-    }
-
 }
