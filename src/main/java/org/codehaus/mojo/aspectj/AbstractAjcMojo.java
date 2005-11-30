@@ -115,6 +115,7 @@ public abstract class AbstractAjcMojo
     {
         String cp = new String();
         Set classPathElements = project.getDependencyArtifacts();
+        classPathElements.addAll(project.getArtifacts());
         Iterator iter = classPathElements.iterator();
         while ( iter.hasNext() )
         {
