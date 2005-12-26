@@ -119,7 +119,7 @@ public class WSDL2JavaMojo
     /**
      * mappings are only used when useEmitter is set to true
      * 
-     * @parameter expression="${mapping}"
+     * @parameter expression=""
      */
     private ArrayList mappings;
     
@@ -215,14 +215,14 @@ public class WSDL2JavaMojo
     private String factory;
     
     /**
-     * @parameter expression="${nsInclude}"
+     * @parameter expression=""
      */
-    private ArrayList nsInclude;
+    private ArrayList nsIncludes;
     
     /**
-     * @parameter expression="{$nsExclude}"
+     * @parameter expression=""
      */
-    private ArrayList nsExclude;
+    private ArrayList nsExcludes;
     
     /** 
      * @parameter expression="false"
@@ -604,18 +604,25 @@ public class WSDL2JavaMojo
     private String[] generateWSDLArgumentList( String wsdl ) throws MojoExecutionException
     {
 
+        
         ArrayList argsList = new ArrayList();
-        argsList.add( "-o" );
-        argsList.add( outputDirectory.getAbsolutePath() );
-
-        if ( serverSide )
+        
+        if ( debug ) 
         {
-            argsList.add( "-s" );
+            argsList.add( "--Debug" );
         }
-
+        
         if ( verbose )
         {
             argsList.add( "-v" );
+        }
+        
+        argsList.add( "-o" );
+        argsList.add( outputDirectory.getAbsolutePath() );
+        
+        if ( serverSide )
+        {
+            argsList.add( "-s" );
         }
 
         if ( testCases )
@@ -639,10 +646,7 @@ public class WSDL2JavaMojo
             argsList.add( timeout );
         }
         
-        if ( debug ) 
-        {
-            argsList.add( "-D" );
-        }
+        
         
         if ( noWrapped ) 
         {
@@ -696,16 +700,16 @@ public class WSDL2JavaMojo
             argsList.add( factory );
         }
         
-        if ( nsInclude != null ) 
+        if ( nsIncludes != null ) 
         {
             argsList.add( "-i" );
-            argsList.add( nsInclude );
+            argsList.add( listToCommaDelimitedString( nsIncludes ) );
         }
         
-        if ( nsExclude != null ) 
+        if ( nsExcludes != null ) 
         {
             argsList.add( "-x" );
-            argsList.add( nsExclude );
+            argsList.add( listToCommaDelimitedString( nsExcludes ) );
         }
         
         if ( helperGen ) 
@@ -856,9 +860,9 @@ public class WSDL2JavaMojo
         // ?? is it correct ?
         emitter.setImports( !noImports );
         // TODO:  is it comma separated in the mojo -> no documentation provided
-        emitter.setNamespaceExcludes( nsExclude );
+        emitter.setNamespaceExcludes( nsExcludes );
         // TODO:  is it comma separated in the mojo -> no documentation provided
-        emitter.setNamespaceIncludes( nsInclude );
+        emitter.setNamespaceIncludes( nsIncludes );
         emitter.setNowrap( noWrapped );
         
         if (StringUtils.isNotEmpty( namespaceToPackage )) {
@@ -908,6 +912,24 @@ public class WSDL2JavaMojo
             namespaceMap.put( mapping.getNamespace(), mapping.getTargetPackage() );
         }
         return namespaceMap;
+    }
+    
+    private String listToCommaDelimitedString( List list ) 
+    {
+        StringBuffer strbuf = new StringBuffer();
+        
+        if ( list != null )
+        {
+            for (Iterator i = list.iterator(); i.hasNext();)
+            {
+                strbuf.append( (String)i.next() );
+                if ( i.hasNext() )
+                {
+                    strbuf.append(",");
+                }
+            }
+        }
+        return strbuf.toString();
     }
     
 }
