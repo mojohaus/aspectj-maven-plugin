@@ -22,15 +22,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 
+import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -43,6 +47,7 @@ import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * A Plugin for generating stubs for WSDL files using Axis WSDL2Java.
@@ -105,6 +110,20 @@ public class WSDL2JavaMojo
     private File timestampDirectory;
 
     /**
+     * use the Emitter for generating the java files as opposed to the commandline wsdl2java tool
+     * 
+     * @parameter expression="false"
+     */
+    private boolean useEmitter;
+    
+    /**
+     * mappings are only used when useEmitter is set to true
+     * 
+     * @parameter expression="${mapping}"
+     */
+    private ArrayList mappings;
+    
+    /**
      * @parameter expression="${serverSide}"
      *
      */
@@ -125,12 +144,16 @@ public class WSDL2JavaMojo
     private boolean verbose;
 
     /**
+     * generate the test cases
+     * 
      * @parameter expression="${testCases}"
      * 
      */
     private boolean testCases;
     
     /**
+     * copy the generated test cases to a generated-sources test directory to be compiled and run as normal surefire unit tests
+     * 
      * @parameter expression="false"
      */
     private boolean runTestCasesAsUnitTests;
@@ -194,12 +217,12 @@ public class WSDL2JavaMojo
     /**
      * @parameter expression="${nsInclude}"
      */
-    private String nsInclude;
+    private ArrayList nsInclude;
     
     /**
      * @parameter expression="{$nsExclude}"
      */
-    private String nsExclude;
+    private ArrayList nsExclude;
     
     /** 
      * @parameter expression="false"
@@ -313,8 +336,15 @@ public class WSDL2JavaMojo
 
                 try
                 {
-                    MojoWSDL2Java wsdlMojo = new MojoWSDL2Java();
-                    wsdlMojo.execute( generateWSDLArgumentList( wsdl.getAbsolutePath() ) );
+                    if ( !useEmitter )
+                    {
+                        MojoWSDL2Java wsdlMojo = new MojoWSDL2Java();
+                        wsdlMojo.execute( generateWSDLArgumentList( wsdl.getAbsolutePath() ) );
+                    } 
+                    else 
+                    {
+                        runEmitter( wsdl );
+                    }
 
                     FileUtils.copyFileToDirectory( wsdl, timestampDirectory );
                 }
@@ -783,4 +813,101 @@ public class WSDL2JavaMojo
         return staleSources;
     }
 
+    private void runEmitter( File wsdl ) throws MojoExecutionException
+    {
+        Emitter emitter = new Emitter();
+        if ( mappings != null )
+        {
+            getLog().debug( "mappings size : " + mappings.size() );
+            HashMap mappingMap = this.getNamespaceMap( mappings );
+            getLog().debug( "mappingMap size : " + mappingMap.size() );
+            emitter.setNamespaceMap( mappingMap );
+        }
+
+        URL wsdlUrl = null;
+        
+        try {
+            wsdlUrl = new URL( "file:///" + wsdl.getAbsolutePath() );
+        } 
+        catch ( MalformedURLException e ) 
+        {
+            throw new MojoExecutionException("error processing " + wsdl.getAbsolutePath(), e);
+        }
+        
+        getLog().debug( "wsdlUrl.toExternalForm() " + wsdlUrl.toExternalForm() );
+
+       
+        //emitter.setAllowInvalidURL(mojo.is)
+        emitter.setAllWanted( allElements );
+        // not exists in the mojo
+        //emitter.setBuildFileWanted(true);
+        emitter.setDebug( debug );
+        // not in the mojo
+        //emitter.setDefaultTypeMapping(mojo.gett)
+        //emitter.setDeploy(mojo.is)
+        if (StringUtils.isNotEmpty( factory )) {
+            emitter.setFactory( factory );
+        }
+        emitter.setHelperWanted( helperGen );
+        
+        if (StringUtils.isNotEmpty( implementationClassName )) {
+            emitter.setImplementationClassName( implementationClassName );
+        }
+        // ?? is it correct ?
+        emitter.setImports( !noImports );
+        // TODO:  is it comma separated in the mojo -> no documentation provided
+        emitter.setNamespaceExcludes( nsExclude );
+        // TODO:  is it comma separated in the mojo -> no documentation provided
+        emitter.setNamespaceIncludes( nsInclude );
+        emitter.setNowrap( noWrapped );
+        
+        if (StringUtils.isNotEmpty( namespaceToPackage )) {
+            emitter.setNStoPkg( namespaceToPackage );
+        }
+        emitter.setOutputDir( outputDirectory.getPath() );
+        // TODO: is it the right mojo parameter certainly yes ;-)
+        if (StringUtils.isNotEmpty( packageSpace )) {
+            emitter.setPackageName( packageSpace );
+        }
+        emitter.setPassword( password );
+        // not in the mojo properties for custom JavaGeneratorFactories
+        //emitter.setProperties(mojo.getp)
+        // not in the mojo but needed ??
+        //emitter.setQName2ClassMap();
+        //emitter.setQuiet(mojo.is)
+        //emitter.setScope(mojo.get)
+        emitter.setServerSide( serverSide );
+        // not in the mojo but needed ??
+        //emitter.setServiceDesc(mojo.gets)
+        emitter.setSkeletonWanted( skeletonDeploy );
+        emitter.setTestCaseWanted( testCases );
+
+        // not in the mojo but needed ?
+        //emitter.setTypeCollisionProtection(mojo.is)
+        emitter.setTypeMappingVersion( typeMappingVersion );
+        emitter.setUsername( username );
+        emitter.setVerbose( verbose );
+        // not in the mojo but needed ?
+        //emitter.setWrapArrays(mojo.is)
+        try {
+            emitter.run( wsdlUrl.toExternalForm() );
+        } 
+        catch (Exception e )
+        {
+            throw new MojoExecutionException( "error running " + wsdlUrl.toExternalForm(), e );
+        }
+    }
+    
+    protected HashMap getNamespaceMap( List mappings )
+    {
+        HashMap namespaceMap = new HashMap( mappings.size() );
+        for ( int i = 0, size = mappings.size(); i < size; i++ )
+        {
+            Mapping mapping = (Mapping) mappings.get( i );
+            getLog().debug( "mapping " + mappings.toString() );
+            namespaceMap.put( mapping.getNamespace(), mapping.getTargetPackage() );
+        }
+        return namespaceMap;
+    }
+    
 }
