@@ -28,12 +28,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.Mojo;
@@ -114,7 +116,7 @@ public abstract class AbstractAjcMojo
     protected String createClassPath()
     {
         String cp = new String();
-        Set classPathElements = project.getDependencyArtifacts();
+        Set classPathElements = Collections.synchronizedSet(new TreeSet(project.getDependencyArtifacts()));
         classPathElements.addAll(project.getArtifacts());
         Iterator iter = classPathElements.iterator();
         while ( iter.hasNext() )

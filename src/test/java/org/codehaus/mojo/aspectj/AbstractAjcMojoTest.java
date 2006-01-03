@@ -39,7 +39,6 @@ import org.apache.maven.embedder.MavenEmbedderConsoleLogger;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * Baseclass for AjcMojo testcases. Sets up the testproject, and cleans
@@ -71,10 +70,8 @@ public abstract class AbstractAjcMojoTest
         ArtifactRepository localRepository = embedder.getLocalRepository();
 
         ajcMojo.project = project;
-        ClassPathResource cpr = new ClassPathResource( "test-project/pom.xml" );
-        basedir = cpr.getFile().getAbsolutePath();
-        String temp = cpr.getFile().getParentFile().getParentFile().getParentFile().getParentFile().getAbsolutePath();
-        basedir = temp + "/src/test/resources/test-project/";
+        String temp = new File(".").getAbsolutePath();
+        basedir = temp.substring(0,temp.length()-2) + "/src/test/resources/test-project/";
         project.getBuild().setDirectory(basedir + "/target");
         project.getBuild().setOutputDirectory( basedir + "/target/classes" );
         project.getBuild().setTestOutputDirectory( basedir + "/target/test-classes" );
@@ -87,9 +84,9 @@ public abstract class AbstractAjcMojoTest
         Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange
                                                      .createFromVersion( "3.8.1" ), "test", "jar", "", new DefaultArtifactHandler( "" ) );
         Artifact aspectJTools = new DefaultArtifact( "aspectj", "aspectjtools", VersionRange
-            .createFromVersion( "1.5.0_M5" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
+            .createFromVersion( "1.5.0" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
         Artifact aspectJTRt = new DefaultArtifact( "aspectj", "aspectjrt",
-                                                   VersionRange.createFromVersion( "1.5.0_M5" ), "compile", "jar", "",
+                                                   VersionRange.createFromVersion( "1.5.0" ), "compile", "jar", "",
                                                    new DefaultArtifactHandler( "" ) );
 
         junit.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( junit )

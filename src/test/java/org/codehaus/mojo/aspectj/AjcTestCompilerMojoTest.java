@@ -23,9 +23,6 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import java.io.File;
-
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Plugin testcases.
