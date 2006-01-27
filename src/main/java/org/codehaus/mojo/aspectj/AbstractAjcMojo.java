@@ -55,6 +55,9 @@ public abstract class AbstractAjcMojo
     extends AbstractMavenReport
     implements Mojo
 {
+    
+    public static final String DEFAULT_INCLUDES = "**/*.java, **/*.aj";
+    
     /**
      * The maven project.
      * 
@@ -173,19 +176,14 @@ public abstract class AbstractAjcMojo
                     }
                     else
                     {
-                        if ( !element.endsWith( "/" ) )
-                        {
-                            element += "/";
-                        }
-                        element += "**/*.java" + "," + element + "**/*.aj";
-                        inclExlSet.addAll( FileUtils.getFileNames( basedir, element, "", true ) );
+                        inclExlSet.addAll( FileUtils.getFileNames( new File( basedir, element ), DEFAULT_INCLUDES, "", true ) );
                     }
                 }
             }
         }
         catch ( IOException e )
         {
-            throw new MojoExecutionException( "Could not resolve java or aspect classes to compile", e );
+            throw new MojoExecutionException( "Could not resolve java or aspect sources to compile", e );
         }
         return inclExlSet;
     }
@@ -249,35 +247,51 @@ public abstract class AbstractAjcMojo
         throws MojoExecutionException
     {
         Set includes = new HashSet();
-
-        // Add all in the sourceDir property
-        if ( null != sourceDir )
+        
+        try
         {
-            includes.addAll( resolveIncludeExcludeString( sourceDir ) );
-        }
+            if ( ( sourceDir == null ) && ( ajdtBuildDefFile == null ) )
+            {
+                Iterator it = getSourceDirectories().iterator();
+                while ( it.hasNext() )
+                {
+                    includes.addAll( FileUtils.getFileNames( new File( ( String ) it.next() ), DEFAULT_INCLUDES, "", true ) );
+                }
+            }
 
-        // read jbuild def
-        if ( null != ajdtBuildDefFile )
-        {
-            Properties ajdtBuildProperties = new Properties();
-            try
+            // Add all in the sourceDir property
+            if ( null != sourceDir )
             {
-                ajdtBuildProperties.load( new FileInputStream( ajdtBuildDefFile ) );
+                includes.addAll( FileUtils.getFileNames( new File( basedir, sourceDir ), DEFAULT_INCLUDES, "", true ) );
             }
-            catch ( FileNotFoundException e )
+
+            // read jbuild def
+            if ( null != ajdtBuildDefFile )
             {
-                throw new MojoExecutionException( "Build properties file spesified not found", e );
+                Properties ajdtBuildProperties = new Properties();
+                try
+                {
+                    ajdtBuildProperties.load( new FileInputStream( ajdtBuildDefFile ) );
+                }
+                catch ( FileNotFoundException e )
+                {
+                    throw new MojoExecutionException( "Build properties file spesified not found", e );
+                }
+                catch ( IOException e )
+                {
+                    throw new MojoExecutionException( "IO Error reading build properties file spesified", e );
+                }
+                getLog().debug( "Include string : " + ajdtBuildProperties.get( "src.includes" ) );
+                includes.addAll( resolveIncludeExcludeString( (String) ajdtBuildProperties.get( "src.includes" ) ) );
+                Set exludes = resolveIncludeExcludeString( (String) ajdtBuildProperties.get( "src.excludes" ) );
+                includes.removeAll( exludes );
             }
-            catch ( IOException e )
-            {
-                throw new MojoExecutionException( "IO Error reading build properties file spesified", e );
-            }
-            getLog().debug( "Include string : " + ajdtBuildProperties.get( "src.includes" ) );
-            includes.addAll( resolveIncludeExcludeString( (String) ajdtBuildProperties.get( "src.includes" ) ) );
-            Set exludes = resolveIncludeExcludeString( (String) ajdtBuildProperties.get( "src.excludes" ) );
-            includes.removeAll( exludes );
+            return includes;
         }
-        return includes;
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Could not resolve java or aspect sources to compile", e );
+        }
     }
 
     /**
