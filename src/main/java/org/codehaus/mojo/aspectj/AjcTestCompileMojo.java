@@ -31,7 +31,7 @@ import java.util.List;
  * Weaves all test classes.
  * 
  * @goal test-compile
- * @requiresDependencyResolution compile
+ * @requiresDependencyResolution test
  * @phase test-compile
  * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
