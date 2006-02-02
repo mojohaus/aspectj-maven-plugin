@@ -8,7 +8,7 @@ Example of different configuration for compile and test-compile goal
         <dependency>
             <groupId>aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.5.0_M5</version>
+            <version>1.5.0</version>
             <scope>compile</scope>
         </dependency>
         ...
@@ -58,7 +58,7 @@ all aspects and weave all classen from a parent directory.
         <dependency>
             <groupId>aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.5.0_M5</version>
+            <version>1.5.0</version>
             <scope>compile</scope>
         </dependency>
         ...
