@@ -14,9 +14,12 @@
          <item name="mojo" href="http://mojo.codehaus.org"/>
       </menu>
       <menu name="AspectJ plugin Quickstart">
-         <item name="Overview" href="./usage.html"/>
+         <item name="Standard usage" href="./usage.html"/>
+         <item name="Seperate test/compile settings" href="./differentTestAndCompile.html"/>
+         <item name="Using includes/excludes" href="./includeExclude.html"/>
+         <item name="Using with AJDT" href="./usingTogetherWithAJDT.html"/>
+         <item name="Weaving jars" href="./weaveJars.html"/>
          <item name="Configuring Report" href="./usingReport.html"/>
-         <item name="Advanced examples" href="./advancedExamples.html"/>
          <item name="AspectJ home" href="http://aspectj.org"/>
       </menu>
       ${reports}

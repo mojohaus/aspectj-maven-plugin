@@ -43,12 +43,9 @@ Configuring aspectj report
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
-                    <options>
-                        <option>-verbose</option>
-                        <option>-private</option>
-                        <option>-source</option>
-                        <option>1.5</option>
-                    </options>
+                    <verbose>true</verbose>
+                    <privateScope>true</privateScope>
+                    <complianceLevel>1.5</complianceLevel>
                     <ajdtBuildDefFile>build.ajproperties</ajdtBuildDefFile>
                 </configuration>
                <reportSets> 

@@ -24,6 +24,7 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -32,6 +33,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.aspectj.tools.ajdoc.Main;
 import org.codehaus.doxia.site.renderer.SiteRenderer;
@@ -45,8 +48,45 @@ import org.codehaus.doxia.site.renderer.SiteRenderer;
  * @author       <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>  
  */
 public class AjcReportMojo
-    extends AbstractAjcMojo
+    extends AbstractMavenReport
 {
+    /**
+     * The maven project.
+     * 
+     * @parameter expression="${project}"
+     * @required @readonly
+     */
+    protected MavenProject project;
+
+    /**
+     * The basedir of the project.
+     * 
+     * @parameter expression="${basedir}"
+     * @required @readonly
+     */
+    protected File basedir;
+
+    /**
+     * List of ant-style patterns used to specify the aspects that should be included when 
+     * compiling. When none specified all .java and .aj files in the project source directories, or
+     * directories spesified by the ajdtDefFile property are included.
+     */
+    protected String[] includes;
+
+    /**
+     * List of ant-style patterns used to specify the aspects that should be excluded when 
+     * compiling. When none specified all .java and .aj files in the project source directories, or
+     * directories spesified by the ajdtDefFile property are included.
+     */
+    protected String[] excludes;
+
+    /**
+     * Where to find the ajdt build definition file.
+     * <i>If set this will override the use of project sourcedirs</i>.
+     * 
+     * @parameter
+     */
+    protected String ajdtBuildDefFile;
 
     /**
      * 
@@ -54,6 +94,75 @@ public class AjcReportMojo
      * @required @readonly
      */
     private SiteRenderer siteRenderer;
+
+    /**
+     * Shows only package, protected, and public classes and members.
+     * 
+     * @parameter
+     */
+    protected boolean packageScope;
+
+    /**
+     * Shows only protected and public classes and members. This is the default.
+     * 
+     * @parameter
+     */
+    protected boolean protectedScope;
+
+    /**
+     * Shows all classes and members.
+     * 
+     * @parameter
+     */
+    protected boolean privateScope;
+
+    /**
+     * Shows only public classes and members.
+     * 
+     * @parameter
+     */
+    protected boolean publicScope;
+
+    /**
+     * Specifies that javadoc should retrieve the text for the overview documentation from the "source" file specified by path/filename and place it on the Overview page (overview-summary.html). 
+     * The path/filename is relative to the ${basedir}. While you can use any name you want for filename and place it anywhere you want for path,
+     *  a typical thing to do is to name it overview.html and place it in the source tree at the directory that contains the topmost package directories. 
+     *  In this location, no path is needed when documenting packages, since -sourcepath will point to this file. For example, if the source tree for the 
+     *  java.lang package is /src/classes/java/lang/, then you could place the overview file at /src/classes/overview.html. See Real World Example.
+     *  For information about the file specified by path/filename, see overview comment file.Note that the overview page is created only if you pass into javadoc two or more package names. 
+     *  For further explanation, see HTML Frames.) The title on the overview page is set by -doctitle. 
+     * 
+     * @parameter
+     */
+    protected String overview;
+
+    /**
+     * Specifies the title to be placed near the top of the overview summary file. The title will be placed as a centered, 
+     * level-one heading directly beneath the upper navigation bar. The title may contain html tags and white space, though if 
+     * it does, it must be enclosed in quotes. Any internal quotation marks within title may have to be escaped.
+     * @parameter
+     */
+    protected String doctitle;
+
+    /**
+     * Provides more detailed messages while javadoc is running. Without the verbose option, messages appear for loading the source files, generating the documentation (one message per source file), 
+     * and sorting. The verbose option causes the printing of additional messages specifying the number of milliseconds to parse each java source file.
+     * 
+     * @parameter
+     */
+    protected boolean verbose;
+    
+    /**
+     * Specify compiler compliance setting (1.3 to 1.5, default is 1.4)
+     * 
+     *  @parameter
+     */
+    protected String complianceLevel;
+
+    /**
+     * Holder for all options passed
+     */
+    private List ajcOptions = new ArrayList();
 
     /**
      * Executes this ajdoc-report generation.
@@ -67,53 +176,21 @@ public class AjcReportMojo
         ArrayList arguments = new ArrayList();
         // Add classpath
         arguments.add( "-classpath" );
-        arguments.add( createClassPath() );
+        arguments.add( AjcHelper.createClassPath( project, getOutputDirectories() ) );
 
-        // Add all passthrough arguments
-        if ( null != options )
-        {
-            List passthroughArgs = Arrays.asList( options );
-            if ( passthroughArgs.contains( "-cp" ) || passthroughArgs.contains( "-classpath" ) )
-            {
-                passthroughArgs.remove( "-cp" );
-                passthroughArgs.remove( "-classpath" );
-                getLog()
-                    .warn(
-                           "-classpath argument is removed. If you need additional classpath entries, please add as dependencies in the pom" );
-            }
-            if ( passthroughArgs.contains( "-sourcedir" ) )
-            {
-                passthroughArgs.remove( "-sourcedir" );
-                getLog()
-                    .warn(
-                           "-sourcedir argument is removed. To set this argument use the plugin property sourceDir instead." );
-
-            }
-            if ( passthroughArgs.contains( "-help" ) )
-            {
-                passthroughArgs.remove( "-help" );
-                getLog().warn( "-help argument is removed" );
-
-            }
-            if ( passthroughArgs.contains( "-version" ) || passthroughArgs.contains( "-v" ) )
-            {
-                passthroughArgs.remove( "-version" );
-                passthroughArgs.remove( "-v" );
-                getLog().warn( "-version argument is removed. look in the pom ;)" );
-
-            }
-            if ( passthroughArgs.contains( "-d" ) )
-            {
-                passthroughArgs.remove( "-d" );
-                getLog().warn( "-d argument is removed. This plugin are using the build output directories." );
-            }
-            arguments.addAll( passthroughArgs );
-        }
+        arguments.addAll( ajcOptions );
 
         Set includes;
         try
         {
-            includes = getBuildFiles();
+            if ( null != ajdtBuildDefFile )
+            {
+                includes = AjcHelper.getBuildFilesForAjdtFile( ajdtBuildDefFile, basedir );
+            }
+            else
+            {
+                includes = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
+            }
         }
         catch ( MojoExecutionException e )
         {
@@ -158,6 +235,16 @@ public class AjcReportMojo
     protected String getOutputDirectory()
     {
         return project.getBuild().getDirectory() + "/site/aspectj-doc";
+    }
+
+    /**
+     * get compileroutput directory.
+     */
+    protected List getOutputDirectories()
+    {
+        return Arrays.asList( new String[] {
+            project.getBuild().getOutputDirectory(),
+            project.getBuild().getTestOutputDirectory() } );
     }
 
     /**
@@ -207,4 +294,77 @@ public class AjcReportMojo
     {
         return true;
     }
+
+    /**
+     * Get the maven project.
+     */
+    protected MavenProject getProject()
+    {
+        return project;
+    }
+
+    public void setOverview( String overview )
+    {
+        ajcOptions.add( "-overview" );
+        ajcOptions.add( overview );
+    }
+
+    public void setDoctitle( String doctitle )
+    {
+        ajcOptions.add( "-doctitle" );
+        ajcOptions.add( doctitle );
+    }
+
+    public void setPackageScope( boolean packageScope )
+    {
+        if ( packageScope )
+        {
+            ajcOptions.add( "-package" );
+        }
+    }
+
+    public void setPrivateScope( boolean privateScope )
+    {
+        if ( privateScope )
+        {
+            ajcOptions.add( "-private" );
+        }
+    }
+
+    public void setProtectedScope( boolean protectedScope )
+    {
+        if ( protectedScope )
+        {
+            ajcOptions.add( "-protected" );
+        }
+    }
+
+    public void setPublicScope( boolean publicScope )
+    {
+        if ( publicScope )
+        {
+            ajcOptions.add( "-public" );
+        }
+    }
+
+    public void setVerbose( boolean verbose )
+    {
+        if ( verbose )
+        {
+            ajcOptions.add( "-verbose" );
+        }
+    }
+    /** 
+     * Setters which when called sets compiler arguments
+     */
+    public void setComplianceLevel( String complianceLevel )
+    {
+        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) )
+        {
+            ajcOptions.add( "-source" );
+            ajcOptions.add( "-" + complianceLevel );
+        }
+
+    }
+
 }

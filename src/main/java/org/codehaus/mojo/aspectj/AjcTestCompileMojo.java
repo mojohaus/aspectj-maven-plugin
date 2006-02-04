@@ -1,6 +1,6 @@
 package org.codehaus.mojo.aspectj;
 
-import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,9 +43,9 @@ public class AjcTestCompileMojo
     /**
      * 
      */
-    protected String getOutputDirectory()
+    protected List getOutputDirectories()
     {
-        return project.getBuild().getTestOutputDirectory();
+        return Arrays.asList(new String[]{project.getBuild().getOutputDirectory(),project.getBuild().getTestOutputDirectory()});
     }
 
     /**
@@ -56,16 +56,5 @@ public class AjcTestCompileMojo
         return project.getTestCompileSourceRoots();
     }
 
-    /**
-     * Constructs AspectJ compiler classpath string
-     * 
-     * @return a os spesific classpath string
-     */
-    protected String createClassPath()
-    {
-        String cp = super.createClassPath();
-        cp += File.pathSeparatorChar + project.getBuild().getOutputDirectory();
-        return cp;
-    }
 
 }

@@ -1,7 +1,21 @@
 package org.codehaus.mojo.aspectj;
 
+import java.io.File;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
+import junit.framework.TestCase;
+
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.handler.DefaultArtifactHandler;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.versioning.VersionRange;
+import org.apache.maven.embedder.MavenEmbedder;
+import org.apache.maven.embedder.MavenEmbedderConsoleLogger;
+import org.apache.maven.model.Model;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.MavenReportException;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -36,17 +50,13 @@ import org.codehaus.plexus.util.FileUtils;
  *
  */
 public class AjcReportMojoTest
-    extends AbstractAjcMojoTest
+    extends TestCase
 {
-    /**
-     * 
-     */
-    protected void setUp()
-        throws Exception
-    {
-        ajcMojo = new AjcReportMojo();
-        super.setUp();
-    }
+    MavenProject project = new MavenProject( new Model() );
+
+    AjcReportMojo ajcMojo = new AjcReportMojo();;
+
+    String basedir = "";
 
     /**
      * @throws MavenReportException 
@@ -58,7 +68,9 @@ public class AjcReportMojoTest
         try
         {
             ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
-            ajcMojo.options = new String[] { "-verbose", "-private", "-source", "1.5" };
+            ajcMojo.setVerbose(true);
+            ajcMojo.setPrivateScope(true);
+            ajcMojo.setComplianceLevel("1.5");
             ajcMojo.executeReport( Locale.ENGLISH );
             assertTrue( FileUtils.fileExists( project.getBuild().getDirectory() + "/site/aspectj-doc/index.html" ) );
         }
@@ -70,5 +82,62 @@ public class AjcReportMojoTest
 
     }
 
+    /**
+     * 
+     */
+    protected void setUp()
+        throws Exception
+    {
+        MavenEmbedder embedder = new MavenEmbedder();
+
+        embedder.setClassLoader( Thread.currentThread().getContextClassLoader() );
+        embedder.setLogger( new MavenEmbedderConsoleLogger() );
+        embedder.start();
+        ArtifactRepository localRepository = embedder.getLocalRepository();
+
+        ajcMojo.project = project;
+        String temp = new File( "." ).getAbsolutePath();
+        basedir = temp.substring( 0, temp.length() - 2 ) + "/src/test/resources/test-project/";
+        project.getBuild().setDirectory( basedir + "/target" );
+        project.getBuild().setOutputDirectory( basedir + "/target/classes" );
+        project.getBuild().setTestOutputDirectory( basedir + "/target/test-classes" );
+        project.getBuild().setSourceDirectory( basedir + "/src/main/java" );
+        project.getBuild().setTestSourceDirectory( basedir + "/src/test/java" );
+        project.addCompileSourceRoot(project.getBuild().getSourceDirectory());
+        project.addTestCompileSourceRoot(project.getBuild().getTestSourceDirectory());
+        ajcMojo.basedir = new File( basedir );
+
+        Set artifacts = new HashSet();
+
+        Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange.createFromVersion( "3.8.1" ), "test",
+                                              "jar", "", new DefaultArtifactHandler( "" ) );
+        Artifact aspectJTools = new DefaultArtifact( "aspectj", "aspectjtools", VersionRange
+            .createFromVersion( "1.5.0" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
+        Artifact aspectJTRt = new DefaultArtifact( "aspectj", "aspectjrt", VersionRange.createFromVersion( "1.5.0" ),
+                                                   "compile", "jar", "", new DefaultArtifactHandler( "" ) );
+
+        junit.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( junit ) + ".jar" ) );
+        aspectJTools.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTools )
+            + ".jar" ) );
+        aspectJTRt.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTRt )
+            + ".jar" ) );
+
+        artifacts.add( aspectJTools );
+        artifacts.add( aspectJTRt );
+        artifacts.add( junit );
+        project.setDependencyArtifacts( artifacts );
+
+    }
+
+    /**
+     * Clean up targetarea after a testcase is run.
+     * So we make shure, we don't get sideeffects between testruns.
+     */
+    protected void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+        FileUtils.deleteDirectory( project.getBuild().getDirectory() );
+    }
 
 }

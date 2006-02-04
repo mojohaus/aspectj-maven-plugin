@@ -1,4 +1,7 @@
 Example of different configuration for compile and test-compile goal
+
+  To have different weaving configurations for the main and testclasses
+  you could do as shown below.
   
 +------------------------------------------+
 <project>
@@ -36,46 +39,6 @@ Example of different configuration for compile and test-compile goal
                         </configuration>
                         <goals>
                             <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-               </executions>
-           </plugin>
-           ...
-       </plugins>
-   <build>
-...
-</project>
-+------------------------------------------+
-
-Example of usage with setting sourcedir property, if you would like compile
-all aspects and weave all classen from a parent directory.
-  
-+------------------------------------------+
-<project>
-    ...
-    <dependencies>
-        ...
-        <dependency>
-            <groupId>aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.5.0</version>
-            <scope>compile</scope>
-        </dependency>
-        ...
-    </dependencies>
-    ...
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <configuration>
-                    <sourceDir>$build/src/main/java</sourceDir>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
                         </goals>
                     </execution>
                </executions>

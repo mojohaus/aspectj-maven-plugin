@@ -31,7 +31,7 @@ package org.codehaus.mojo.aspectj;
  *
  */
 public class AjcTestCompilerMojoTest
-    extends AbstractAjcMojoTest
+    extends CompilerMojoTestBase
 {
     
     /**
@@ -53,8 +53,10 @@ public class AjcTestCompilerMojoTest
         try
         {
             ajcMojo.ajdtBuildDefFile = basedir + "test-build-1-5.ajproperties";
-            ajcMojo.options = new String[] { "-1.5", "-verbose", "-showWeaveInfo" };
-            assertTrue(ajcMojo.createClassPath().contains("junit"));
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            assertTrue(AjcHelper.createClassPath(ajcMojo.project,ajcMojo.getOutputDirectories()).indexOf("junit") != -1);
             ajcMojo.execute();
         }
         catch ( Exception e )

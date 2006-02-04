@@ -46,13 +46,13 @@ import org.codehaus.plexus.util.FileUtils;
  * 
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public abstract class AbstractAjcMojoTest
+public abstract class CompilerMojoTestBase
     extends TestCase
 {
 
     MavenProject project = new MavenProject( new Model() );
 
-    AbstractAjcMojo ajcMojo;
+    AbstractAjcCompiler ajcMojo;
 
     String basedir = "";
 
@@ -77,6 +77,8 @@ public abstract class AbstractAjcMojoTest
         project.getBuild().setTestOutputDirectory( basedir + "/target/test-classes" );
         project.getBuild().setSourceDirectory( basedir + "/src/main/java" );
         project.getBuild().setTestSourceDirectory( basedir + "/src/test/java" );
+        project.addCompileSourceRoot(project.getBuild().getSourceDirectory());
+        project.addTestCompileSourceRoot(project.getBuild().getTestSourceDirectory());
         ajcMojo.basedir = new File( basedir );
 
         Set artifacts = new HashSet();

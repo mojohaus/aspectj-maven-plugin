@@ -23,8 +23,6 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import java.io.File;
-
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -34,9 +32,9 @@ import org.codehaus.plexus.util.FileUtils;
  *
  */
 public class AjcCompilerMojoTest
-    extends AbstractAjcMojoTest
+    extends CompilerMojoTestBase
 {
-    
+
     /**
      * 
      */
@@ -56,7 +54,9 @@ public class AjcCompilerMojoTest
         try
         {
             ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
-            ajcMojo.options = new String[] { "-1.5", "-verbose", "-showWeaveInfo" };
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
             ajcMojo.execute();
         }
         catch ( Exception e )
@@ -75,7 +75,9 @@ public class AjcCompilerMojoTest
         try
         {
             ajcMojo.ajdtBuildDefFile = basedir + "build-1-2.ajproperties";
-            ajcMojo.options = new String[] { "-1.4", "-verbose", "-showWeaveInfo" };
+            ajcMojo.setComplianceLevel( "1.4" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
             ajcMojo.execute();
         }
         catch ( Exception e )
@@ -94,7 +96,9 @@ public class AjcCompilerMojoTest
         try
         {
             ajcMojo.ajdtBuildDefFile = basedir + "build-1-2-using-exclusions.ajproperties";
-            ajcMojo.options = new String[] { "-1.4", "-verbose", "-showWeaveInfo" };
+            ajcMojo.setComplianceLevel( "1.4" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
             ajcMojo.execute();
         }
         catch ( Exception e )
@@ -113,26 +117,9 @@ public class AjcCompilerMojoTest
         try
         {
             ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
-            ajcMojo.options = new String[] { "-1.4", "-verbose", "-showWeaveInfo" };
-            ajcMojo.execute();
-            fail();
-        }
-        catch ( Exception e )
-        {
-            // success
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public void testWithUnsupportedCompilerOption()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
-            ajcMojo.options = new String[] { "-1.4", "-virbase", "-showWeaveInfo" };
+            ajcMojo.setComplianceLevel( "1.4" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
             ajcMojo.execute();
             fail();
         }
@@ -150,8 +137,89 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.sourceDir = "src/main";
-            ajcMojo.options = new String[] { "-1.5", "-verbose", "-showWeaveInfo", "-nowarn" };
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            ajcMojo.execute();
+        }
+        catch ( Exception e )
+        {
+            fail();
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public void testWithInclutionsFullClassName()
+        throws Exception
+    {
+        try
+        {
+            ajcMojo.setComplianceLevel( "1.4" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            ajcMojo.includes= new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
+            ajcMojo.execute();
+        }
+        catch ( Exception e )
+        {
+            fail();
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public void testWithInclutionsAntStyle()
+        throws Exception
+    {
+        try
+        {
+            ajcMojo.setComplianceLevel( "1.4" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            ajcMojo.includes= new String[]{"**/Old*eAspect.aj"};
+            ajcMojo.execute();
+        }
+        catch ( Exception e )
+        {
+            fail();
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public void testWithExclutionsFullClassName()
+        throws Exception
+    {
+        try
+        {
+            ajcMojo.setComplianceLevel( "1.4" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            ajcMojo.excludes= new String[]{"org/codehaus/mojo/aspectj/Azpect.java"};
+            ajcMojo.execute();
+        }
+        catch ( Exception e )
+        {
+            fail();
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public void testWithExclutionsAntStyle()
+        throws Exception
+    {
+        try
+        {
+            ajcMojo.setComplianceLevel( "1.4" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            ajcMojo.excludes= new String[]{"**/Az*.*"};
             ajcMojo.execute();
         }
         catch ( Exception e )
@@ -168,8 +236,10 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.sourceDir = "src/main";
-            ajcMojo.options = new String[] { "-1.5", "-verbose", "-showWeaveInfo", "-outxml" };
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            ajcMojo.setOutxml( true );
             ajcMojo.execute();
             assertTrue( FileUtils.fileExists( project.getBuild().getOutputDirectory() + "/META-INF/aop.xml" ) );
         }
@@ -187,38 +257,12 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.sourceDir = "src/main";
-            ajcMojo.options = new String[] {
-                "-1.5",
-                "-verbose",
-                "-showWeaveInfo",
-                "-outxmlfile",
-                "/META-INF/customaop.xml" };
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.setVerbose( true );
+            ajcMojo.setShowWeaveInfo( true );
+            ajcMojo.setOutxmlfile( "/META-INF/customaop.xml" );
             ajcMojo.execute();
             assertTrue( FileUtils.fileExists( project.getBuild().getOutputDirectory() + "/META-INF/customaop.xml" ) );
-        }
-        catch ( Exception e )
-        {
-            fail();
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public void _testCheckModifications()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.sourceDir = "src/main";
-            ajcMojo.options = new String[] { "-1.5", "-verbose", "-showWeaveInfo" };
-            assertTrue( ajcMojo.checkModifications( ajcMojo.getBuildFiles() ) );
-            ajcMojo.execute();
-            assertFalse( ajcMojo.checkModifications( ajcMojo.getBuildFiles() ) );
-            File aSourceFile = FileUtils.getFile(project.getBuild().getSourceDirectory()+"/org/codehaus/mojo/aspectj/Azpect.java");
-            aSourceFile.setLastModified(System.currentTimeMillis());
-            assertTrue( ajcMojo.checkModifications( ajcMojo.getBuildFiles() ) );
         }
         catch ( Exception e )
         {

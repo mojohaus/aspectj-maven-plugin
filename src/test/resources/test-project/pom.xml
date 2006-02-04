@@ -18,10 +18,10 @@
 		<dependency>
 			<groupId>aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.5.0_M5</version>
+			<version>1.5.0</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -32,13 +32,10 @@
 					<execution>
 						<id>compile</id>
 						<configuration>
-							<options>
-								<option>-1.5</option>
-								<option>-verbose</option>
-								<option>-showWeaveInfo</option>
-							</options>
-							<ajdtBuildDefFile>
-								build-1-5.ajproperties</ajdtBuildDefFile>
+							<complianceLevel>1.5</complianceLevel>
+							<verbose>true</verbose>
+							<showWeaveInfo>true</showWeaveInfo>
+							<ajdtBuildDefFile>build-1-5.ajproperties</ajdtBuildDefFile>
 						</configuration>
 						<goals>
 							<goal>compile</goal>
@@ -47,13 +44,10 @@
 					<execution>
 						<id>test-compile</id>
 						<configuration>
-							<options>
-								<option>-1.5</option>
-								<option>-verbose</option>
-								<option>-showWeaveInfo</option>
-							</options>
-							<ajdtBuildDefFile>
-								test-build-1-5.ajproperties</ajdtBuildDefFile>
+							<complianceLevel>1.5</complianceLevel>
+							<verbose>true</verbose>
+							<showWeaveInfo>true</showWeaveInfo>
+							<ajdtBuildDefFile>test-build-1-5.ajproperties</ajdtBuildDefFile>
 						</configuration>
 						<goals>
 							<goal>test-compile</goal>
@@ -69,14 +63,16 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 	<reporting>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<artifactId>
+					maven-project-info-reports-plugin
+				</artifactId>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -94,15 +90,14 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
 				<configuration>
-					<options>
-						<option>-verbose</option>
-						<option>-private</option>
-						<option>-source</option>
-						<option>1.5</option>
-					</options>
-					<ajdtBuildDefFile>build-1-5.ajproperties</ajdtBuildDefFile>
+					<verbose>true</verbose>
+					<privateScope>true</privateScope>
+					<complianceLevel>1.5</complianceLevel>
+					<ajdtBuildDefFile>
+						build-1-5.ajproperties
+					</ajdtBuildDefFile>
 				</configuration>
-				<reportSets> 
+				<reportSets>
 					<reportSet>
 						<reports>
 							<report>ajdoc-report</report>

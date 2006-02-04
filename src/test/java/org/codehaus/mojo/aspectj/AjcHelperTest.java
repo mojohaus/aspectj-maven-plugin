@@ -1,8 +1,5 @@
 package org.codehaus.mojo.aspectj;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * The MIT License
  *
@@ -26,34 +23,24 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import junit.framework.TestCase;
 
 /**
- * Weaves all main classes.
+ * Tests class {@link org.codehaus.mojo.aspectj.AjcHelper}
  * 
- * @goal compile
- * @requiresDependencyResolution compile
- * @phase compile
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcCompileMojo
-    extends AbstractAjcCompiler
+public class AjcHelperTest
+    extends TestCase
 {
-
     /**
      * 
+     * @throws Exception
      */
-    protected List getOutputDirectories()
+    public void testGetAsCsv()
+        throws Exception
     {
-        return Arrays.asList(new String[]{project.getBuild().getOutputDirectory()});
+        String[] tests = new String[] { "kaare", "java", "aspectJ" };
+        assertEquals( "kaare,java,aspectJ", AjcHelper.getAsCsv( tests ) );
     }
-
-    /**
-     * 
-     */
-    protected List getSourceDirectories()
-    {
-        return project.getCompileSourceRoots();
-    }
-
 }
