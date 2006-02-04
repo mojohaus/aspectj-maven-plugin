@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
@@ -88,9 +89,11 @@ public class AjcReportMojo
     protected String ajdtBuildDefFile;
 
     /**
-     * 
+     * Doxia Site Renderer.
+     *
      * @parameter expression="${component.org.codehaus.doxia.site.renderer.SiteRenderer}"
-     * @required @readonly
+     * @required
+     * @readonly
      */
     private SiteRenderer siteRenderer;
 
@@ -276,6 +279,32 @@ public class AjcReportMojo
             + "links to any advice or declarations that affect the class. "
             + "That means, for example, that you can see everything affecting"
             + " a method when reading the documentation for the method.";
+    }
+    
+    /**
+     * @see org.apache.maven.reporting.MavenReport#getCategoryName()
+     */
+    public String getCategoryName()
+    {
+        return "AspectJ";
+    }
+    
+    /**
+     * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
+     */
+    public boolean canGenerateReport()
+    {
+        // Only execute reports for java projects
+        ArtifactHandler artifactHandler = this.project.getArtifact().getArtifactHandler();
+        return "java".equals( artifactHandler.getLanguage() );
+    }
+    
+    
+
+    public void execute()
+        throws MojoExecutionException
+    {
+        super.execute();
     }
 
     /**
