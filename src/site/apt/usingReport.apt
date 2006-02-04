@@ -51,7 +51,7 @@ Configuring aspectj report
                <reportSets> 
                    <reportSet>
                        <reports>
-                           <report>ajdoc-report</report>
+                           <report>aspectj-report</report>
                        </reports>
                    </reportSet>
                </reportSets>

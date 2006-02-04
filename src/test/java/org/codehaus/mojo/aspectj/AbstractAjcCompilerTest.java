@@ -3,7 +3,7 @@ package org.codehaus.mojo.aspectj;
 /**
  * The MIT License
  *
- * Copyright (c) 2005, Thor Åge Eldby
+ * Copyright (c) 2005, Thor ï¿½ge Eldby
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -39,7 +39,7 @@ import org.apache.maven.project.MavenProject;
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AbstractAjcCompiler}
  * 
- * @author <a href="mailto:tel@objectnet.no">Thor Åge Eldby</a>
+ * @author <a href="mailto:tel@objectnet.no">Thor ï¿½ge Eldby</a>
  */
 public class AbstractAjcCompilerTest
     extends TestCase
@@ -111,6 +111,65 @@ public class AbstractAjcCompilerTest
         assertTrue( args.contains( "-inpath" ) );
         Iterator it = args.iterator();
         while ( !it.next().equals( "-inpath" ) )
+        {
+            // don't do nothing
+        }
+        String weavePath = (String) it.next();
+        assertTrue( weavePath.indexOf( File.pathSeparator ) != -1 );
+        assertTrue( weavePath.indexOf( mod1Artifact ) != -1 );
+        assertTrue( weavePath.indexOf( mod2Artifact ) != -1 );
+    }
+    
+    /**
+     * Tests the artifact weave handling in
+     * {@link AbstractAjcCompiler#execute()}
+     * 
+     * @throws Exception
+     *             any
+     */
+    public void testGetAjcArguments_libraryArtifacts()
+        throws Exception
+    {
+        // First no weave defined
+        List args = ajcCompMojo.getAjcArguments();
+        assertFalse( args.contains( "-aspectpath" ) );
+
+        // ... then weave defined, but not member of project depencies
+        Module module1 = new Module();
+        String mod1Group = "dill.group";
+        module1.setGroupId( mod1Group );
+        String mod1Artifact = "dall.artifact";
+        module1.setArtifactId( mod1Artifact );
+        try
+        {
+            ajcCompMojo.libraryModules= new Module[1];
+            ajcCompMojo.libraryModules[0] = module1;
+            ajcCompMojo.getAjcArguments();
+            fail( "Should fail quite miserably" );
+        }
+        catch ( MojoExecutionException e )
+        {
+            // good thing
+        }
+
+        // ... and now the weave is defined and a member
+        ajcCompMojo.libraryModules = new Module[2];
+        ajcCompMojo.libraryModules[0] = module1;
+        Module module2 = new Module();
+        String mod2Group = "foooup";
+        module2.setGroupId( mod2Group );
+        String mod2Artifact = "bartifact";
+        module2.setArtifactId( mod2Artifact );
+        ajcCompMojo.libraryModules[1] = module2;
+        // Modify project to include depencies
+        Set artifacts = new HashSet();
+        artifacts.add( new MockArtifact( mod1Group, mod1Artifact ) );
+        artifacts.add( new MockArtifact( mod2Group, mod2Artifact ) );
+        ajcCompMojo.project.setArtifacts( artifacts );
+        args = ajcCompMojo.getAjcArguments();
+        assertTrue( args.contains( "-aspectpath" ) );
+        Iterator it = args.iterator();
+        while ( !it.next().equals( "-aspectpath" ) )
         {
             // don't do nothing
         }

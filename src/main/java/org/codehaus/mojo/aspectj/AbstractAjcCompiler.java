@@ -90,6 +90,15 @@ public abstract class AbstractAjcCompiler
      * @parameter expression="${weave.modules}"
      */
     protected Module[] weaveModules;
+    
+    /**
+     * Weave binary aspects from the jars. 
+     * The aspects should have been output by the same version of the compiler. 
+     * The modules must also be dependencies of the project.
+     * 
+     * @parameter expression="${weave.libraries}"
+     */
+    protected Module[] libraryModules;
 
     /**
      * Generate aop.xml file for load-time weaving with default name.(/META-INF/aop.xml)
@@ -315,30 +324,50 @@ public abstract class AbstractAjcCompiler
         // Add artifacts to weave
         if ( weaveModules != null && weaveModules.length > 0)
         { 
-            arguments.add( "-inpath" );
-            StringBuffer buf = new StringBuffer();
-            for ( int i = 0; i < weaveModules.length; ++i )
-            {
-                Module module = weaveModules[i];
-                String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
-                Artifact artifact = (Artifact) project.getArtifactMap().get( key );
-                if ( artifact == null )
-                {
-                    throw new MojoExecutionException( "The artifact " + key + " referenced in aspectj plugin "
-                        + "is not found the project dependencies" );
-                }
-                if ( buf.length() != 0 )
-                    buf.append( File.pathSeparatorChar );
-                buf.append( artifact.getFile().getPath() );
-            }
-            String inpathString = buf.toString();
-            arguments.add( inpathString );
-            getLog().info( "Adding inpath: " + inpathString );
+            addModulesArgument("-inpath", arguments, weaveModules );
+        }
+        
+        // Add library artifacts
+        if ( libraryModules != null && libraryModules.length > 0)
+        { 
+            addModulesArgument("-aspectpath", arguments, libraryModules );
         }
 
+        
         arguments.addAll( ajcOptions );
 
         return arguments;
+    }
+
+    /**
+     * Finds all artifacts in the weavemodule property,
+     * and adds them to the ajc options.
+     *  
+     * @param arguments
+     * @throws MojoExecutionException
+     */
+    private void addModulesArgument(String argument, List arguments, Module[] modules )
+        throws MojoExecutionException
+    {
+        arguments.add( argument );
+        StringBuffer buf = new StringBuffer();
+        for ( int i = 0; i < modules.length; ++i )
+        {
+            Module module = modules[i];
+            String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
+            Artifact artifact = (Artifact) project.getArtifactMap().get( key );
+            if ( artifact == null )
+            {
+                throw new MojoExecutionException( "The artifact " + key + " referenced in aspectj plugin "
+                    + "is not found the project dependencies" );
+            }
+            if ( buf.length() != 0 )
+                buf.append( File.pathSeparatorChar );
+            buf.append( artifact.getFile().getPath() );
+        }
+        String pathString = buf.toString();
+        arguments.add( pathString );
+        getLog().debug( "Adding " + argument + ": " + pathString );
     }
 
     /**

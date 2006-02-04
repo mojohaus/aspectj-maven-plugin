@@ -72,7 +72,7 @@ public class AjcReportMojoTest
             ajcMojo.setPrivateScope(true);
             ajcMojo.setComplianceLevel("1.5");
             ajcMojo.executeReport( Locale.ENGLISH );
-            assertTrue( FileUtils.fileExists( project.getBuild().getDirectory() + "/site/aspectj-doc/index.html" ) );
+            assertTrue( FileUtils.fileExists( project.getBuild().getDirectory() + "/site/aspectj-report/index.html" ) );
         }
         catch ( Exception e )
         {

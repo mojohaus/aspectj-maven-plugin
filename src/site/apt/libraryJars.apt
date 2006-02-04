@@ -1,8 +1,8 @@
-Using includes/excludes
-
-  The AspectJ plugin will by default add all .java and .aj files in the
-  project sourcedirectories. Below you will find an example of how
-  to add a include/excludefiltering on top of that.
+Applying already compiled aspect jars,
+  
+  In order to apply already compiled aspects to your own sources you need do setup all the jar
+  files you would like to weave in the plugin configuration as shown below.
+  Note. The artifact you reference must exist as dependencies in the module.
   
 +------------------------------------------+
 <project>
@@ -24,13 +24,16 @@ Using includes/excludes
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
-                    <includes>
-                    	<include>**/TransationAspect.java</include>
-                    	<include>**/SecurityAspect.aj</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/logging/*.aj</exclude>
-                    </excludes>
+                    <libraryModules>
+                        <libraryModule>
+                            <groupId>org.agroup</groupId>
+                            <artifactId>to-weave</artifactId>
+                        </libraryModule>
+                        <libraryModule>
+                            <groupId>org.anothergroup</groupId>
+                            <artifactId>gen</artifactId>
+                        </libraryModule>
+                    </libraryModules>
                 </configuration>
                 <executions>
                     <execution>

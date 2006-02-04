@@ -35,7 +35,21 @@
 							<complianceLevel>1.5</complianceLevel>
 							<verbose>true</verbose>
 							<showWeaveInfo>true</showWeaveInfo>
-							<ajdtBuildDefFile>build-1-5.ajproperties</ajdtBuildDefFile>
+							<ajdtBuildDefFile>
+								build-1-5.ajproperties
+							</ajdtBuildDefFile>
+							<weaveModules>
+								<weaveModule>
+									<groupId>aspectj</groupId>
+									<artifactId>aspectjrt</artifactId>
+								</weaveModule>
+							</weaveModules>
+							<libraryModules>
+								<libraryModule>
+									<groupId>aspectj</groupId>
+									<artifactId>aspectjrt</artifactId>
+								</libraryModule>
+							</libraryModules>
 						</configuration>
 						<goals>
 							<goal>compile</goal>
@@ -47,7 +61,9 @@
 							<complianceLevel>1.5</complianceLevel>
 							<verbose>true</verbose>
 							<showWeaveInfo>true</showWeaveInfo>
-							<ajdtBuildDefFile>test-build-1-5.ajproperties</ajdtBuildDefFile>
+							<ajdtBuildDefFile>
+								test-build-1-5.ajproperties
+							</ajdtBuildDefFile>
 						</configuration>
 						<goals>
 							<goal>test-compile</goal>
@@ -100,7 +116,7 @@
 				<reportSets>
 					<reportSet>
 						<reports>
-							<report>ajdoc-report</report>
+							<report>aspectj-report</report>
 						</reports>
 					</reportSet>
 				</reportSets>

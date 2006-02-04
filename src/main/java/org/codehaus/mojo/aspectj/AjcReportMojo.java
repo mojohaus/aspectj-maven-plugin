@@ -41,11 +41,10 @@ import org.codehaus.doxia.site.renderer.SiteRenderer;
 
 /**
  * Creates a ajdoc report in html format.
- * 
- * @goal ajdoc-report
  *
  * @description A Maven 2.0 ajdoc report
- * @author       <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>  
+ * @author       <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ * @goal aspectj-report
  */
 public class AjcReportMojo
     extends AbstractMavenReport
@@ -234,7 +233,7 @@ public class AjcReportMojo
      */
     protected String getOutputDirectory()
     {
-        return project.getBuild().getDirectory() + "/site/aspectj-doc";
+        return project.getBuild().getDirectory() + "/site/aspectj-report";
     }
 
     /**
@@ -252,7 +251,7 @@ public class AjcReportMojo
      */
     public String getOutputName()
     {
-        return "aspectj-doc/index";
+        return "aspectj-report";
     }
 
     /**
@@ -260,7 +259,7 @@ public class AjcReportMojo
      */
     public String getName( Locale locale )
     {
-        return "AspectJ";
+        return "aspectj-report";
     }
 
     /**
@@ -289,11 +288,11 @@ public class AjcReportMojo
 
     /**
      * 
-     */
+     *
     public boolean isExternalReport()
     {
         return true;
-    }
+    }*/
 
     /**
      * Get the maven project.

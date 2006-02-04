@@ -1,5 +1,5 @@
-Using includes/excludes
-  
+Weaving already compiled jar artifacts  
+
   AspectJ gives a possibility to weave already compiled classes in a jar file.
   In order to do this with the AspectJ plugin you need do setup all the jar
   files you would like to weave in the plugin configuration as shown below.
@@ -26,15 +26,15 @@ Using includes/excludes
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
                     <weaveModules>
-                        <module>
+                        <weaveModule>
                             <groupId>org.agroup</groupId>
                             <artifactId>to-weave</artifactId>
-                        </module>
-                        <module>
+                        </weaveModule>
+                        <weaveModule>
                             <groupId>org.anothergroup</groupId>
                             <artifactId>gen</artifactId>
-                        </module>
-                    <weaveModules>
+                        </weaveModule>
+                    </weaveModules>
                 </configuration>
                 <executions>
                     <execution>
