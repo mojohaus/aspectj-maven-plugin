@@ -3,7 +3,7 @@ package org.codehaus.mojo.aspectj;
 /**
  * The MIT License
  *
- * Copyright (c) 2005, Thor Åge Eldby
+ * Copyright 2005-2006 The Codehaus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -27,7 +27,7 @@ package org.codehaus.mojo.aspectj;
 /**
  * Module to be referenced through AJC-mojo 
  * 
- * @author <a href="mailto:tel@objectnet.no">Thor Åge Eldby</a>
+ * @author <a href="mailto:tel@objectnet.no">Thor ï¿½ge Eldby</a>
  */
 public class Module
 {
