@@ -52,6 +52,7 @@ import org.codehaus.plexus.util.StringUtils;
 /**
  * A Plugin for generating stubs for WSDL files using Axis WSDL2Java.
  * 
+ * @requiresDependencyResolution test
  * @goal wsdl2java
  * @phase generate-sources
  * @description WSDL2Java plugin
@@ -286,6 +287,13 @@ public class WSDL2JavaMojo
      */
     private ArtifactFactory artifactFactory;
     
+    
+    /**
+     * @parameter expression="${plugin.artifacts}"
+     * @required
+     */
+    private List pluginArtifacts;
+    
     public void execute()
         throws MojoExecutionException
     {
@@ -358,6 +366,8 @@ public class WSDL2JavaMojo
         if (runTestCasesAsUnitTests) {
             migrateTestSource();
         }
+        
+        addAxisDependencyToCompileClasspath();
     }
 
     /**
@@ -932,4 +942,32 @@ public class WSDL2JavaMojo
         return strbuf.toString();
     }
     
+    private void addAxisDependencyToCompileClasspath()
+        throws MojoExecutionException
+    {
+        Artifact axisArtifact = null;
+        Iterator artifacts = this.pluginArtifacts.iterator();
+        while ( artifacts.hasNext() && axisArtifact == null )
+        {
+            Artifact artifact = (Artifact) artifacts.next();
+            if ( "axis".equalsIgnoreCase( artifact.getArtifactId() ) )
+            {
+                axisArtifact = artifact;
+            }
+        }
+
+        if ( axisArtifact == null )
+        {
+            throw new MojoExecutionException( "Couldn't find 'axis' artifact in plugin dependencies" );
+        }
+
+        axisArtifact = artifactFactory.createArtifact( axisArtifact.getGroupId(), axisArtifact.getArtifactId(),
+                                                       axisArtifact.getVersion(), Artifact.SCOPE_COMPILE, axisArtifact
+                                                           .getType() );
+
+        // TODO: use addArtifacts
+        Set set = new HashSet( this.project.getDependencyArtifacts() );
+        set.add( axisArtifact );
+        this.project.setDependencyArtifacts( set );
+    }
 }
