@@ -366,8 +366,7 @@ public class WSDL2JavaMojo
         if (runTestCasesAsUnitTests) {
             migrateTestSource();
         }
-        
-        addAxisDependencyToCompileClasspath();
+      
     }
 
     /**
@@ -942,32 +941,4 @@ public class WSDL2JavaMojo
         return strbuf.toString();
     }
     
-    private void addAxisDependencyToCompileClasspath()
-        throws MojoExecutionException
-    {
-        Artifact axisArtifact = null;
-        Iterator artifacts = this.pluginArtifacts.iterator();
-        while ( artifacts.hasNext() && axisArtifact == null )
-        {
-            Artifact artifact = (Artifact) artifacts.next();
-            if ( "axis".equalsIgnoreCase( artifact.getArtifactId() ) )
-            {
-                axisArtifact = artifact;
-            }
-        }
-
-        if ( axisArtifact == null )
-        {
-            throw new MojoExecutionException( "Couldn't find 'axis' artifact in plugin dependencies" );
-        }
-
-        axisArtifact = artifactFactory.createArtifact( axisArtifact.getGroupId(), axisArtifact.getArtifactId(),
-                                                       axisArtifact.getVersion(), Artifact.SCOPE_COMPILE, axisArtifact
-                                                           .getType() );
-
-        // TODO: use addArtifacts
-        Set set = new HashSet( this.project.getDependencyArtifacts() );
-        set.add( axisArtifact );
-        this.project.setDependencyArtifacts( set );
-    }
 }
