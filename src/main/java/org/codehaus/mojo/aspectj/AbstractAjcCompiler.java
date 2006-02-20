@@ -139,6 +139,18 @@ public abstract class AbstractAjcCompiler
      *  @parameter
      */
     protected String target;
+    
+    /**
+     * Toggle assertions (1.3, 1.4, or 1.5 - default is 1.4). 
+     * When using -source 1.3, an assert() statement valid under Java 1.4 
+     * will result in a compiler error. When using -source 1.4, 
+     * treat assert as a keyword and implement assertions 
+     * according to the 1.4 language spec. 
+     * When using -source 1.5, Java 5 language features are permitted.
+     * 
+     *  @parameter
+     */
+    protected String source;
 
     /**
      * Specify compiler compliance setting (1.3 to 1.5)
@@ -491,6 +503,12 @@ public abstract class AbstractAjcCompiler
     {
     	ajcOptions.add( "-target" );
         ajcOptions.add( target );
+    }
+    
+    public void setSource( String source ) 
+    {
+    	ajcOptions.add( "-source" );
+        ajcOptions.add( source );
     }
 
     public void setVerbose( boolean verbose )

@@ -41,5 +41,6 @@ public class ATestCase
         throws Exception
     {
         System.out.println( "I was executed" );
+        assert(true);
     }
 }
