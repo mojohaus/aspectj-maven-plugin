@@ -83,8 +83,8 @@ public class AbstractAjcCompilerTest
         module1.setArtifactId( mod1Artifact );
         try
         {
-            ajcCompMojo.weaveModules = new Module[1];
-            ajcCompMojo.weaveModules[0] = module1;
+            ajcCompMojo.weaveDependencies = new Module[1];
+            ajcCompMojo.weaveDependencies[0] = module1;
             ajcCompMojo.getAjcArguments();
             fail( "Should fail quite miserably" );
         }
@@ -94,14 +94,14 @@ public class AbstractAjcCompilerTest
         }
 
         // ... and now the weave is defined and a member
-        ajcCompMojo.weaveModules = new Module[2];
-        ajcCompMojo.weaveModules[0] = module1;
+        ajcCompMojo.weaveDependencies = new Module[2];
+        ajcCompMojo.weaveDependencies[0] = module1;
         Module module2 = new Module();
         String mod2Group = "foooup";
         module2.setGroupId( mod2Group );
         String mod2Artifact = "bartifact";
         module2.setArtifactId( mod2Artifact );
-        ajcCompMojo.weaveModules[1] = module2;
+        ajcCompMojo.weaveDependencies[1] = module2;
         // Modify project to include depencies
         Set artifacts = new HashSet();
         artifacts.add( new MockArtifact( mod1Group, mod1Artifact ) );
@@ -142,8 +142,8 @@ public class AbstractAjcCompilerTest
         module1.setArtifactId( mod1Artifact );
         try
         {
-            ajcCompMojo.libraryModules= new Module[1];
-            ajcCompMojo.libraryModules[0] = module1;
+            ajcCompMojo.aspectLibraries= new Module[1];
+            ajcCompMojo.aspectLibraries[0] = module1;
             ajcCompMojo.getAjcArguments();
             fail( "Should fail quite miserably" );
         }
@@ -153,14 +153,14 @@ public class AbstractAjcCompilerTest
         }
 
         // ... and now the weave is defined and a member
-        ajcCompMojo.libraryModules = new Module[2];
-        ajcCompMojo.libraryModules[0] = module1;
+        ajcCompMojo.aspectLibraries = new Module[2];
+        ajcCompMojo.aspectLibraries[0] = module1;
         Module module2 = new Module();
         String mod2Group = "foooup";
         module2.setGroupId( mod2Group );
         String mod2Artifact = "bartifact";
         module2.setArtifactId( mod2Artifact );
-        ajcCompMojo.libraryModules[1] = module2;
+        ajcCompMojo.aspectLibraries[1] = module2;
         // Modify project to include depencies
         Set artifacts = new HashSet();
         artifacts.add( new MockArtifact( mod1Group, mod1Artifact ) );

@@ -87,18 +87,19 @@ public abstract class AbstractAjcCompiler
      * List of of modules to weave (into target directory). Corresponds to ajc
      * -inpath option (or -injars for pre-1.2 (which is not supported)).
      * 
-     * @parameter expression="${weave.modules}"
+     * @parameter
      */
-    protected Module[] weaveModules;
+    protected Module[] weaveDependencies;
     
     /**
      * Weave binary aspects from the jars. 
      * The aspects should have been output by the same version of the compiler. 
      * The modules must also be dependencies of the project.
+     * Corresponds to ajc -aspectpath option
      * 
-     * @parameter expression="${weave.libraries}"
+     * @parameter
      */
-    protected Module[] libraryModules;
+    protected Module[] aspectLibraries;
 
     /**
      * Generate aop.xml file for load-time weaving with default name.(/META-INF/aop.xml)
@@ -115,7 +116,9 @@ public abstract class AbstractAjcCompiler
     protected String outxmlfile;
 
     /**
-     * Generate .ajesym symbol files for emacs support 
+     * Generate .ajesym symbol files for emacs support
+     * 
+     *  @parameter
      */
     protected boolean emacssym;
 
@@ -124,21 +127,23 @@ public abstract class AbstractAjcCompiler
      * programming mistakes in crosscutting code. 
      * {level} may be ignore, warning, or error. 
      * This overrides entries in org/aspectj/weaver/XlintDefault.properties 
-     * from aspectjtools.jar. 
+     * from aspectjtools.jar.
+     * 
+     *  @parameter
      */
     protected String Xlint;
 
     /**
-     * Specify classfile target setting (1.1 to 1.4, default is 1.2)
+     * Specify classfile target setting (1.1 to 1.4)
      * 
-     *  @parameter
+     *  @parameter default-value="1.2"
      */
     protected String target;
 
     /**
-     * Specify compiler compliance setting (1.3 to 1.5, default is 1.4)
+     * Specify compiler compliance setting (1.3 to 1.5)
      * 
-     *  @parameter
+     *  @parameter default-value="1.4"
      */
     protected String complianceLevel;
 
@@ -179,7 +184,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Specify default source encoding format. 
-     *      * 
+     *      
      * @parameter
      */
     protected String encoding;
@@ -322,15 +327,15 @@ public abstract class AbstractAjcCompiler
         arguments.add( AjcHelper.createClassPath( project, getOutputDirectories() ) );
 
         // Add artifacts to weave
-        if ( weaveModules != null && weaveModules.length > 0)
+        if ( weaveDependencies != null && weaveDependencies.length > 0)
         { 
-            addModulesArgument("-inpath", arguments, weaveModules );
+            addModulesArgument("-inpath", arguments, weaveDependencies,"a dependency to weave" );
         }
         
         // Add library artifacts
-        if ( libraryModules != null && libraryModules.length > 0)
+        if ( aspectLibraries != null && aspectLibraries.length > 0)
         { 
-            addModulesArgument("-aspectpath", arguments, libraryModules );
+            addModulesArgument("-aspectpath", arguments, aspectLibraries, "an aspect library");
         }
 
         
@@ -346,7 +351,7 @@ public abstract class AbstractAjcCompiler
      * @param arguments
      * @throws MojoExecutionException
      */
-    private void addModulesArgument(String argument, List arguments, Module[] modules )
+    private void addModulesArgument(String argument, List arguments, Module[] modules, String role )
         throws MojoExecutionException
     {
         arguments.add( argument );
@@ -358,8 +363,8 @@ public abstract class AbstractAjcCompiler
             Artifact artifact = (Artifact) project.getArtifactMap().get( key );
             if ( artifact == null )
             {
-                throw new MojoExecutionException( "The artifact " + key + " referenced in aspectj plugin "
-                    + "is not found the project dependencies" );
+                throw new MojoExecutionException( "The artifact " + key + " referenced in aspectj plugin as " + role 
+                    + ", is not found the project dependencies" );
             }
             if ( buf.length() != 0 )
                 buf.append( File.pathSeparatorChar );

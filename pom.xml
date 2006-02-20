@@ -18,6 +18,8 @@
       <id>kaare</id>
       <name>Kaare Nilsen</name>
       <email>kaare.nilsen@gmail.com</email>
+      <organization>Objectware</organization>
+      <organizationUrl>http://www.objectware.no</organizationUrl>
       <roles>
         <role>Java Developer</role>
       </roles>

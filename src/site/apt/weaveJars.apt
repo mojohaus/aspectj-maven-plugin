@@ -25,16 +25,16 @@ Weaving already compiled jar artifacts
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
-                    <weaveModules>
-                        <weaveModule>
+                    <weaveDependencies>
+                        <weaveDependency>
                             <groupId>org.agroup</groupId>
                             <artifactId>to-weave</artifactId>
-                        </weaveModule>
-                        <weaveModule>
+                        </weaveDependency>
+                        <weaveDependency>
                             <groupId>org.anothergroup</groupId>
                             <artifactId>gen</artifactId>
-                        </weaveModule>
-                    </weaveModules>
+                        </weaveDependency>
+                    </weaveDependencies>
                 </configuration>
                 <executions>
                     <execution>

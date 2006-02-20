@@ -32,7 +32,7 @@ import java.util.List;
  * 
  * @goal test-compile
  * @requiresDependencyResolution test
- * @phase test-compile
+ * @phase process-test-sources
  * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */

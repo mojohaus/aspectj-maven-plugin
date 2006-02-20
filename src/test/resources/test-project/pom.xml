@@ -38,18 +38,18 @@
 							<ajdtBuildDefFile>
 								build-1-5.ajproperties
 							</ajdtBuildDefFile>
-							<weaveModules>
-								<weaveModule>
+							<weaveDependencies>
+								<weaveDependency>
 									<groupId>aspectj</groupId>
 									<artifactId>aspectjrt</artifactId>
-								</weaveModule>
-							</weaveModules>
-							<libraryModules>
-								<libraryModule>
+								</weaveDependency>
+							</weaveDependencies>
+							<aspectLibraries>
+								<aspectLibrary>
 									<groupId>aspectj</groupId>
 									<artifactId>aspectjrt</artifactId>
-								</libraryModule>
-							</libraryModules>
+								</aspectLibrary>
+							</aspectLibraries>
 						</configuration>
 						<goals>
 							<goal>compile</goal>

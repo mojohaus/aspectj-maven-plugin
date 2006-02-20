@@ -24,16 +24,16 @@ Applying already compiled aspect jars,
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
-                    <libraryModules>
-                        <libraryModule>
+                    <aspectLibraries>
+                        <aspectLibrary>
                             <groupId>org.agroup</groupId>
                             <artifactId>to-weave</artifactId>
-                        </libraryModule>
-                        <libraryModule>
+                        </aspectLibrary>
+                        <aspectLibrary>
                             <groupId>org.anothergroup</groupId>
                             <artifactId>gen</artifactId>
-                        </libraryModule>
-                    </libraryModules>
+                        </aspectLibrary>
+                    </aspectLibraries>
                 </configuration>
                 <executions>
                     <execution>

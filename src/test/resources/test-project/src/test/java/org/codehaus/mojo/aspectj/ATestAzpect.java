@@ -25,6 +25,8 @@ package org.codehaus.mojo.aspectj;
  */
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.DeclareError;
+import org.aspectj.lang.annotation.DeclareWarning;
 
 /**
  * Testing of @AspectJ code style.
@@ -34,6 +36,10 @@ import org.aspectj.lang.annotation.Before;
 @Aspect
 public class ATestAzpect
 {
+	@SuppressWarnings("unused")
+	@DeclareWarning("call (* java.io.PrintStream.print*(..)) && !within(org.codehaus.mojo.aspectj.ATestAzpect)")
+	private final String errorMessage = "Do not use sytem.out, use logger";
+	
     @Before ("execution (* Clazz.print(..))")
     public void traceInMain()
     {
