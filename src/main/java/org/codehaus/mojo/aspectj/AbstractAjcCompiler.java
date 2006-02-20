@@ -134,9 +134,9 @@ public abstract class AbstractAjcCompiler
     protected String Xlint;
 
     /**
-     * Specify classfile target setting (1.1 to 1.4)
+     * Specify classfile target setting (1.1 to 1.5)
      * 
-     *  @parameter default-value="1.2"
+     *  @parameter
      */
     protected String target;
 
@@ -387,8 +387,9 @@ public abstract class AbstractAjcCompiler
 
     /** 
      * Setters which when called sets compiler arguments
+     * @throws MojoExecutionException 
      */
-    public void setComplianceLevel( String complianceLevel )
+    public void setComplianceLevel( String complianceLevel ) 
     {
         if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) )
         {
@@ -486,9 +487,9 @@ public abstract class AbstractAjcCompiler
 
     }
 
-    public void setTarget( String target )
+    public void setTarget( String target ) 
     {
-        ajcOptions.add( "-target" );
+    	ajcOptions.add( "-target" );
         ajcOptions.add( target );
     }
 
