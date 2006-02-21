@@ -23,6 +23,10 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 /**
@@ -42,5 +46,18 @@ public class AjcHelperTest
     {
         String[] tests = new String[] { "kaare", "java", "aspectJ" };
         assertEquals( "kaare,java,aspectJ", AjcHelper.getAsCsv( tests ) );
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
+    public void testGetSourcesEmptyBaseDir()
+    	throws Exception
+    {
+    	List baseDirs = new ArrayList();
+    	baseDirs.add("src/shouldNotExist");
+    	HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs(baseDirs,new String[]{AjcHelper.DEFAULT_INCLUDES}, new String[]{AjcHelper.DEFAULT_EXCLUDES});
+    	assertTrue(sources.isEmpty());
     }
 }

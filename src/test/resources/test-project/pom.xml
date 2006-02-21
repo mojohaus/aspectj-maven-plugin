@@ -32,7 +32,7 @@
 					<execution>
 						<id>compile</id>
 						<configuration>
-							<!--complianceLevel>1.5</complianceLevel--> 
+							<complianceLevel>1.5</complianceLevel> 
 							<verbose>true</verbose>
 							<showWeaveInfo>true</showWeaveInfo>
 							<ajdtBuildDefFile>

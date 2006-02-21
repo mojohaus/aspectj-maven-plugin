@@ -134,7 +134,7 @@ public abstract class AbstractAjcCompiler
     protected String Xlint;
 
     /**
-     * Specify classfile target setting (1.1 to 1.5)
+     * Specify classfile target setting (1.1 to 1.5) default is 1.2
      * 
      *  @parameter
      */
@@ -154,8 +154,9 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Specify compiler compliance setting (1.3 to 1.5)
+     * default is 1.4
      * 
-     *  @parameter default-value="1.4"
+     *  @parameter
      */
     protected String complianceLevel;
 
