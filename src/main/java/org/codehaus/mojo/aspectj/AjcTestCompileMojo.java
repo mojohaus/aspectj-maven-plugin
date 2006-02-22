@@ -1,5 +1,6 @@
 package org.codehaus.mojo.aspectj;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +54,10 @@ public class AjcTestCompileMojo
      */
     protected List getSourceDirectories()
     {
-        return project.getTestCompileSourceRoots();
+    	List sourceDirs = new ArrayList();
+    	sourceDirs.addAll(project.getTestCompileSourceRoots());
+    	sourceDirs.addAll(project.getCompileSourceRoots());
+        return sourceDirs;
     }
 
 
