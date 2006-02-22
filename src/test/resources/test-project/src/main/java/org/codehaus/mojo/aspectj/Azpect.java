@@ -40,4 +40,10 @@ public class Azpect
         System.out.println("Trace");
     }
     
+    @Before ("execution (* ATestCase.*(..))")
+    public void testTrace()
+    {
+        System.out.println("Test-Trace");
+    }
+    
 }
