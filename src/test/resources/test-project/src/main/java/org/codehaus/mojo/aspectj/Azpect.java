@@ -36,7 +36,7 @@ public class Azpect
 {
     @Before ("execution (* Clazz.print(..))")
     public void trace()
-    {
+    { 
         System.out.println("Trace");
     }
     

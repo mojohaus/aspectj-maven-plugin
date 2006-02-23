@@ -30,7 +30,7 @@ package org.codehaus.mojo.aspectj;
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 public class Clazz
-{
+{ 
 
     public void print()
     {

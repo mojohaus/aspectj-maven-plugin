@@ -23,9 +23,12 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import org.codehaus.plexus.util.FileUtils;
 
 import junit.framework.TestCase;
 
@@ -47,17 +50,51 @@ public class AjcHelperTest
         String[] tests = new String[] { "kaare", "java", "aspectJ" };
         assertEquals( "kaare,java,aspectJ", AjcHelper.getAsCsv( tests ) );
     }
-    
+
     /**
      * 
      * @throws Exception
      */
     public void testGetSourcesEmptyBaseDir()
-    	throws Exception
+        throws Exception
     {
-    	List baseDirs = new ArrayList();
-    	baseDirs.add("src/shouldNotExist");
-    	HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs(baseDirs,new String[]{AjcHelper.DEFAULT_INCLUDES}, new String[]{AjcHelper.DEFAULT_EXCLUDES});
-    	assertTrue(sources.isEmpty());
+        List baseDirs = new ArrayList();
+        baseDirs.add( "src/shouldNotExist" );
+        HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs( baseDirs,
+            new String[] { AjcHelper.DEFAULT_INCLUDES },
+            new String[] { AjcHelper.DEFAULT_EXCLUDES } );
+        assertTrue( sources.isEmpty() );
+    }
+
+    /**
+     * 
+     * @throws Exception
+     */
+    public void testBuildConfigFile()
+    {
+        final File baseDir = new File(".");
+        final String fileName = "test.lst";
+        final String fileAbsolutePath = baseDir.getAbsolutePath() + fileName;
+        
+        List args = new ArrayList();
+        args.add("-classpath");
+        args.add("a:b:c");
+        args.add("-showWeaveInfo");
+        args.add("/home/aspectj/AFile");
+        args.add("/home/aspectj/AnotherFile");
+        try
+        {
+            AjcHelper.writeBuildConfigToFile(args,fileName,baseDir);
+            assertTrue("Config file not written to disk",FileUtils.fileExists(fileAbsolutePath));
+            List readArgs = AjcHelper.readBuildConfigFile(fileName,baseDir);
+            assertEquals(args,readArgs);
+        } catch (Exception e)
+        {
+            fail("Unexpected exception: " + e.toString());
+            if (FileUtils.fileExists(fileAbsolutePath))
+            {
+                FileUtils.fileDelete(fileAbsolutePath);
+            }
+        }
     }
 }

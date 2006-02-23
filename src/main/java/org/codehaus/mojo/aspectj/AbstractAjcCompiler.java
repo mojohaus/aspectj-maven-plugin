@@ -24,6 +24,7 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +37,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.tools.ajc.Main;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Base class for the two aspectJ compiletime weaving mojos.
@@ -90,7 +92,7 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected Module[] weaveDependencies;
-    
+
     /**
      * Weave binary aspects from the jars. 
      * The aspects should have been output by the same version of the compiler. 
@@ -139,7 +141,7 @@ public abstract class AbstractAjcCompiler
      *  @parameter
      */
     protected String target;
-    
+
     /**
      * Toggle assertions (1.3, 1.4, or 1.5 - default is 1.4). 
      * When using -source 1.3, an assert() statement valid under Java 1.4 
@@ -248,9 +250,26 @@ public abstract class AbstractAjcCompiler
     protected boolean XserializableAspects;
 
     /**
+     * The filename to store build configuration in.
+     * This file will be placed in the project build output
+     * directory, and will contain all the arguments
+     * passed to the compiler in the last run, and also
+     * all the filenames included in the build. Aspects as
+     * well as java files.
+     * 
+     * @parameter default-value="builddef.lst"
+     */
+    protected String argumentFileName;
+
+    /**
      * Holder for ajc compiler options
      */
     protected List ajcOptions = new ArrayList();
+    
+    /**
+     * Holds all files found using the includes, excludes parameters.
+     */
+    protected Set resolvedIncludes;
 
     /**
      * Abstract method used by child classes to spesify the correct output
@@ -275,86 +294,88 @@ public abstract class AbstractAjcCompiler
     public void execute()
         throws MojoExecutionException
     {
-        getLog().info( "Starting compiling aspects" );
         Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
-        List arguments = getAjcArguments();
+        assembleArguments();
 
-        Set includes;
-
-        if ( null != ajdtBuildDefFile )
+        if ( !isBuildNeeded() )
         {
-            includes = AjcHelper.getBuildFilesForAjdtFile( ajdtBuildDefFile, basedir );
-        }
-        else
-        {
-            includes = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes,this.excludes );
+            getLog().info( "No modifications found skipping aspectJ compile" );
+            return;
         }
 
-        if ( checkModifications( includes ) )
+        getLog().info( "Starting compiling aspects" );
+        if ( getLog().isDebugEnabled() )
         {
-            // add target dir argument
-            arguments.add( "-d" );
-            
-            arguments.add( getOutputDirectories().get(getOutputDirectories().size()-1) );
-
-            arguments.addAll( includes );
-
-            if ( getLog().isDebugEnabled() )
+            String command = "Running : ajc ";
+            Iterator iter = ajcOptions.iterator();
+            while ( iter.hasNext() )
             {
-                String command = "Running : ajc ";
-                Iterator iter = arguments.iterator();
-                while ( iter.hasNext() )
-                {
-                    command += ( iter.next() + " " );
-                }
-                getLog().debug( command );
+                command += ( iter.next() + " " );
             }
-            Main main = new Main();
-            MavenMessageHandler mavenMessageHandler = new MavenMessageHandler( getLog() );
-            main.setHolder( mavenMessageHandler );
+            getLog().debug( command );
+        }
+        try
+        {
+            File outDir = new File( (String) getOutputDirectories().get( getOutputDirectories().size() - 1 ) );
+            AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, outDir );
+            getLog().info(
+                           "Argumentsfile written : "
+                               + new File( outDir.getAbsolutePath() + argumentFileName ).getAbsolutePath() );
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Could not write arguments file to the target area" );
+        }
+        Main main = new Main();
+        MavenMessageHandler mavenMessageHandler = new MavenMessageHandler( getLog() );
+        main.setHolder( mavenMessageHandler );
 
-            main.runMain( (String[]) arguments.toArray( new String[0] ), false );
-            IMessage[] errors = mavenMessageHandler.getErrors();
-            if ( errors.length > 0 )
+        main.runMain( (String[]) ajcOptions.toArray( new String[0] ), false );
+        IMessage[] errors = mavenMessageHandler.getErrors();
+        if ( errors.length > 0 )
+        {
+            String errorMessage = "";
+            for ( int i = 0; i < errors.length; i++ )
             {
-                String errorMessage = "";
-                for ( int i = 0; i < errors.length; i++ )
-                {
-                    errorMessage += errors[i] + "\n";
-                }
-                throw new MojoExecutionException( "Compiler errors : \n" + errorMessage );
+                errorMessage += errors[i] + "\n";
             }
+            throw new MojoExecutionException( "Compiler errors : \n" + errorMessage );
         }
     }
 
     /**
+     * Assembles a complete ajc compiler arguments list.
+     * 
      * @return aspectj compiler arguments
      * @throws MojoExecutionException error in configuration
      */
-    protected List getAjcArguments()
+    protected void assembleArguments()
         throws MojoExecutionException
     {
-        ArrayList arguments = new ArrayList();
         // Add classpath
-        arguments.add( "-classpath" );
-        arguments.add( AjcHelper.createClassPath( project, getOutputDirectories() ) );
+        ajcOptions.add( "-classpath" );
+        ajcOptions.add( AjcHelper.createClassPath( project, getOutputDirectories() ) );
 
         // Add artifacts to weave
-        if ( weaveDependencies != null && weaveDependencies.length > 0)
-        { 
-            addModulesArgument("-inpath", arguments, weaveDependencies,"a dependency to weave" );
-        }
-        
-        // Add library artifacts
-        if ( aspectLibraries != null && aspectLibraries.length > 0)
-        { 
-            addModulesArgument("-aspectpath", arguments, aspectLibraries, "an aspect library");
-        }
+        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, "a dependency to weave" );
 
-        
-        arguments.addAll( ajcOptions );
+        // Add library artifacts 
+        addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, "an aspect library" );
 
-        return arguments;
+        //add target dir argument
+        ajcOptions.add( "-d" );
+        ajcOptions.add( getOutputDirectories().get( getOutputDirectories().size() - 1 ) );
+
+        // Add all the files to be included in the build,
+        if ( null != ajdtBuildDefFile )
+        {
+            resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile( ajdtBuildDefFile, basedir );
+        }
+        else
+        {
+            resolvedIncludes = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
+        }
+        ajcOptions.addAll( resolvedIncludes );
     }
 
     /**
@@ -364,45 +385,90 @@ public abstract class AbstractAjcCompiler
      * @param arguments
      * @throws MojoExecutionException
      */
-    private void addModulesArgument(String argument, List arguments, Module[] modules, String role )
+    private void addModulesArgument( String argument, List arguments, Module[] modules, String role )
         throws MojoExecutionException
     {
-        arguments.add( argument );
-        StringBuffer buf = new StringBuffer();
-        for ( int i = 0; i < modules.length; ++i )
+        if ( modules != null && modules.length > 0 )
         {
-            Module module = modules[i];
-            String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
-            Artifact artifact = (Artifact) project.getArtifactMap().get( key );
-            if ( artifact == null )
+            arguments.add( argument );
+            StringBuffer buf = new StringBuffer();
+            for ( int i = 0; i < modules.length; ++i )
             {
-                throw new MojoExecutionException( "The artifact " + key + " referenced in aspectj plugin as " + role 
-                    + ", is not found the project dependencies" );
+                Module module = modules[i];
+                String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
+                Artifact artifact = (Artifact) project.getArtifactMap().get( key );
+                if ( artifact == null )
+                {
+                    throw new MojoExecutionException( "The artifact " + key + " referenced in aspectj plugin as "
+                        + role + ", is not found the project dependencies" );
+                }
+                if ( buf.length() != 0 )
+                {
+                    buf.append( File.pathSeparatorChar );
+                }
+                buf.append( artifact.getFile().getPath() );
             }
-            if ( buf.length() != 0 )
-                buf.append( File.pathSeparatorChar );
-            buf.append( artifact.getFile().getPath() );
+            String pathString = buf.toString();
+            arguments.add( pathString );
+            getLog().debug( "Adding " + argument + ": " + pathString );
         }
-        String pathString = buf.toString();
-        arguments.add( pathString );
-        getLog().debug( "Adding " + argument + ": " + pathString );
     }
 
     /**
      * Checks all included files for modifications. If one of the files has changed, we need
-     * to reweave everything, since a pointcut may have changed. 
+     * to reweave everything, since a pointcut may have changed.
+     * 
+     * The rules for doing a new build are :
+     * 1) If no previous build definition file is found.
+     * 2) If previous build arguments is not equal to the current args
+     * 3) If Some of the files in the affected filelist is changed since last build
+     * @throws MojoExecutionException 
      *
      */
-    protected boolean checkModifications( Set files )
+    protected boolean isBuildNeeded()
+        throws MojoExecutionException
     {
-        return true;
+        File outDir = new File(getOutputDirectories().get( getOutputDirectories().size() - 1 ).toString());   
+        // 1)
+        if ( !FileUtils.fileExists( outDir.getAbsolutePath()
+            + argumentFileName ) )
+        {
+            return true;
+        }
+        // 2)
+        try
+        {
+            if ( !ajcOptions.equals( AjcHelper.readBuildConfigFile( argumentFileName, outDir ) ) )
+            {
+                return true;
+            }
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Error during reading of previous argumentsfile " );
+        }
+        // 3)
+        Iterator sourceIter = resolvedIncludes.iterator();
+        long lastBuild = new File(outDir.getAbsolutePath()
+                                  + argumentFileName ).lastModified();
+        while (sourceIter.hasNext())
+        {
+            File sourceFile = new File((String) sourceIter.next());
+            long sourceModified = sourceFile.lastModified(); 
+            if ( sourceModified >= lastBuild)
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /** 
      * Setters which when called sets compiler arguments
      * @throws MojoExecutionException 
      */
-    public void setComplianceLevel( String complianceLevel ) 
+    public void setComplianceLevel( String complianceLevel )
     {
         if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) )
         {
@@ -500,15 +566,15 @@ public abstract class AbstractAjcCompiler
 
     }
 
-    public void setTarget( String target ) 
+    public void setTarget( String target )
     {
-    	ajcOptions.add( "-target" );
+        ajcOptions.add( "-target" );
         ajcOptions.add( target );
     }
-    
-    public void setSource( String source ) 
+
+    public void setSource( String source )
     {
-    	ajcOptions.add( "-source" );
+        ajcOptions.add( "-source" );
         ajcOptions.add( source );
     }
 
@@ -551,6 +617,12 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-XserializableAspects" );
         }
+
+    }
+
+    public void setArgumentFileName( String argumentFileName )
+    {
+        this.argumentFileName = argumentFileName;
 
     }
 

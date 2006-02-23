@@ -42,7 +42,7 @@ public class ATestAzpect
 	
     @Before ("execution (* Clazz.print(..))")
     public void traceInMain()
-    {
+    { 
         System.out.println("Trace");
     }
 
