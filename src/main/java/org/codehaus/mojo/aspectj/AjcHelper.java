@@ -281,8 +281,12 @@ public class AjcHelper
                     }
                     else
                     {
-                        inclExlSet.addAll( FileUtils.getFileNames( new File( basedir, element ), DEFAULT_INCLUDES, "",
+                        File lookupBaseDir = new File( basedir, element );
+                        if ( FileUtils.fileExists( lookupBaseDir.getAbsolutePath() ) )
+                        {
+                            inclExlSet.addAll( FileUtils.getFileNames( lookupBaseDir, DEFAULT_INCLUDES, "",
                                                                    true ) );
+                        }
                     }
                 }
             }

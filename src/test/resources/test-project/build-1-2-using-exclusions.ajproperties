@@ -1,2 +1,2 @@
 src.includes = src/main/
-src.excludes = src/main/java/org/codehaus/mojo/aspectj/Azpect.java
+src.excludes = src/main/aspect/org/codehaus/mojo/aspectj/Azpect.java

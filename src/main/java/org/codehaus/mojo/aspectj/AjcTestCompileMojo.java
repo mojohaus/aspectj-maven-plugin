@@ -39,8 +39,7 @@ import java.util.List;
  */
 public class AjcTestCompileMojo
     extends AbstractAjcCompiler
-{
-
+{   
     /**
      * 
      */

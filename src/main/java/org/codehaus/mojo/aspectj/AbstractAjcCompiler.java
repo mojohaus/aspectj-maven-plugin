@@ -62,7 +62,20 @@ public abstract class AbstractAjcCompiler
      * @required @readonly
      */
     protected File basedir;
+    
+    /**
+     * The source directory for the aspects
+     * @parameter default-value="src/main/aspect"
+     */
+    protected String aspectDirectory;
+    
 
+    /**
+     * The source directory for the test aspects
+     * @parameter default-value="src/test/aspect"
+     */
+    protected String testAspectDirectory;
+    
     /**
      * List of ant-style patterns used to specify the aspects that should be included when 
      * compiling. When none specified all .java and .aj files in the project source directories, or
@@ -285,7 +298,7 @@ public abstract class AbstractAjcCompiler
      * @return where sources may be found.
      */
     protected abstract List getSourceDirectories();
-
+    
     /**
      * Do the AspectJ compiling.
      * 
@@ -295,6 +308,8 @@ public abstract class AbstractAjcCompiler
         throws MojoExecutionException
     {
         Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
+        project.getCompileSourceRoots().add(basedir.getAbsolutePath()  + "/" +  aspectDirectory);
+        project.getTestCompileSourceRoots().add(basedir.getAbsolutePath()  + "/" +  testAspectDirectory);
         assembleArguments();
 
         if ( !isBuildNeeded() )

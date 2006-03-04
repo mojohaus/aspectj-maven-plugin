@@ -51,7 +51,7 @@ public class AjcCompilerMojoTest
      * @throws Exception
      */
     public void testUsingBuildConfigFileAndAspectJ5()
-        throws Exception
+        throws Exception                        
     {
         try
         {
@@ -103,6 +103,25 @@ public class AjcCompilerMojoTest
             fail( "Exception : " + e.toString() );
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public void testUsingBuildConfigFileWithBaseDirThatDoesNotExist()
+        throws Exception
+    {
+        try
+        {
+            ajcMojo.ajdtBuildDefFile = basedir + "test-build-1-5.ajproperties";
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.execute();
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            fail( "Exception : " + e.toString() );
+        }
+    }
 
     /**
      * @throws Exception
@@ -132,11 +151,13 @@ public class AjcCompilerMojoTest
         try
         {
             ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.execute();
         }
         catch ( Exception e )
         {
-            fail();
+            e.printStackTrace();
+            fail(e.toString());
         }
     }
     
@@ -148,12 +169,14 @@ public class AjcCompilerMojoTest
     {
         try
         {
+            ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.setComplianceLevel( "1.4" );
             ajcMojo.includes= new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
             ajcMojo.execute();
         }
         catch ( Exception e )
         {
+            e.printStackTrace();
             fail();
         }
     }
@@ -166,6 +189,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
+            ajcMojo.aspectDirectory = "src/main/aspect";
             final String[] includes = new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
             ajcMojo.setArgumentFileName("builddef.lst");
             FileUtils.fileDelete(project.getBuild().getDirectory() + ajcMojo.argumentFileName);
@@ -195,7 +219,7 @@ public class AjcCompilerMojoTest
             ajcMojo.assembleArguments();
             assertFalse("A build has compleeted. No modifications done. no new build needed",ajcMojo.isBuildNeeded());
             String currentDir = new File(".").getAbsolutePath();
-            File aspect = new File(currentDir.substring(0,currentDir.length()-1)+"src/test/resources/test-project/src/main/java/org/codehaus/mojo/aspectj/OldStyleAspect.aj");
+            File aspect = new File(currentDir.substring(0,currentDir.length()-1)+"src/test/resources/test-project/src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj");
             long timeStamp = System.currentTimeMillis();
             assertTrue("Could not touch file: " + aspect.getAbsolutePath(), aspect.setLastModified(timeStamp));
             assertTrue("One of the included files has changed. a new build is needed",ajcMojo.isBuildNeeded());
@@ -205,6 +229,7 @@ public class AjcCompilerMojoTest
         }
         catch ( Exception e )
         {
+            e.printStackTrace();
             fail(e.toString());
         }
     }
@@ -217,12 +242,14 @@ public class AjcCompilerMojoTest
     {
         try
         {
+            ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.setComplianceLevel( "1.4" );
             ajcMojo.includes= new String[]{"**/Old*eAspect.aj"};
             ajcMojo.execute();
         }
         catch ( Exception e )
         {
+            e.printStackTrace();
             fail();
         }
     }
@@ -235,6 +262,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
+            ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.setComplianceLevel( "1.4" );
             ajcMojo.excludes= new String[]{"org/codehaus/mojo/aspectj/Azpect.java"};
             ajcMojo.execute();
@@ -253,6 +281,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
+            ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.setComplianceLevel( "1.4" );
             ajcMojo.excludes= new String[]{"**/Az*.*"};
             ajcMojo.execute();
@@ -271,6 +300,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
+            ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.setOutxml( true );
             ajcMojo.execute();
@@ -290,6 +320,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
+            ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.setOutxmlfile( "/META-INF/customaop.xml" );
             ajcMojo.execute();
@@ -300,5 +331,29 @@ public class AjcCompilerMojoTest
             fail();
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public void testCheckAspectDirectoryAddedToSourceDirs()
+        throws Exception
+    {
+        try
+        {
+            ajcMojo.aspectDirectory = "src/main/aspect";
+            ajcMojo.testAspectDirectory = "src/test/aspect";
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.execute();
+            assertTrue( project.getCompileSourceRoots().contains(new File(basedir).getAbsolutePath()  + "/" +  "src/main/aspect") );
+            assertTrue( project.getTestCompileSourceRoots().contains(new File(basedir).getAbsolutePath()  + "/" +  "src/test/aspect") );
+        }
+        catch ( Exception e )
+        {
+            fail();
+        }
+    }
+    
+
+
 
 }

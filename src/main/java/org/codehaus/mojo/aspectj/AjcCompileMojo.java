@@ -39,7 +39,6 @@ import java.util.List;
 public class AjcCompileMojo
     extends AbstractAjcCompiler
 {
-
     /**
      * 
      */
