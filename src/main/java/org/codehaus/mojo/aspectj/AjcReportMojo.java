@@ -254,7 +254,7 @@ public class AjcReportMojo
      */
     public String getOutputName()
     {
-        return "aspectj-report";
+        return "aspectj-report/index";
     }
 
     /**
@@ -262,7 +262,7 @@ public class AjcReportMojo
      */
     public String getName( Locale locale )
     {
-        return "aspectj-report";
+        return "aspectJ";
     }
 
     /**
@@ -282,11 +282,11 @@ public class AjcReportMojo
     }
     
     /**
-     * @see org.apache.maven.reporting.MavenReport#getCategoryName()
+     * @see org.apache.maven.reporting.AbstractMavenReport#isExternalReport()
      */
-    public String getCategoryName()
+    public boolean isExternalReport()
     {
-        return "AspectJ";
+        return true;
     }
     
     /**
@@ -299,13 +299,6 @@ public class AjcReportMojo
         return "java".equals( artifactHandler.getLanguage() );
     }
     
-    
-
-    public void execute()
-        throws MojoExecutionException
-    {
-        super.execute();
-    }
 
     /**
      * Get the site renderer.
@@ -315,13 +308,6 @@ public class AjcReportMojo
         return siteRenderer;
     }
 
-    /**
-     * 
-     *
-    public boolean isExternalReport()
-    {
-        return true;
-    }*/
 
     /**
      * Get the maven project.
