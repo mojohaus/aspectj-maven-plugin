@@ -1,4 +1,4 @@
-package org.codehaus.mojo.axistools;
+package org.codehaus.mojo.axistools.axis;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,24 +21,26 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * bean for axis mapping in the plugin configuration for emitter use
+ *
  * @author <a href="mailto:Olivier.LAMY@accor.com">olamy</a>
- * created 29 nov. 2005
+ *         created 29 nov. 2005
  */
-public class Mapping 
+public class Mapping
 {
 
-    Log log = LogFactory.getLog(Mapping.class);
-    
-    public Mapping() {
+    Log log = LogFactory.getLog( Mapping.class );
+
+    public Mapping()
+    {
         // nothing
-        log.debug("new Mapping");
+        log.debug( "new Mapping" );
     }
-    
+
     /**
      * the namespace to map
      */
     private String namespace;
-    
+
     /**
      * the target package for namespace
      */
@@ -76,16 +78,15 @@ public class Mapping
         this.targetPackage = targetPackage;
     }
 
-    
-    
-    /** 
-     * @see java.lang.Object#toString()
+
+    /**
+     * @see Object#toString()
      */
     public String toString()
     {
-        return new StringBuffer("namespace : ").append(this.namespace)
-                .append(", targetPackage ").append(this.targetPackage).toString();
+        return new StringBuffer( "namespace : " ).append( this.namespace )
+            .append( ", targetPackage " ).append( this.targetPackage ).toString();
     }
-    
-    
+
+
 }

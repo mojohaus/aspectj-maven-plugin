@@ -16,39 +16,40 @@ package org.codehaus.mojo.axistools;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.codehaus.mojo.axistools.axis.AxisPluginException;
+import org.codehaus.mojo.axistools.java2wsdl.DefaultJava2WSDLPlugin;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * A Plugin for generating stubs for WSDL files using Axis WSDL2Java.
- * 
+ *
+ * @author jesse <jesse.mcconnell@gmail.com>
+ * @version $Id$
  * @goal java2wsdl
  * @phase process-classes
  * @description Java2WSDL plugin
- * @author jesse <jesse.mcconnell@gmail.com>
- * @version $Id$
  */
 public class Java2WSDLMojo
     extends AbstractMojo
 {
 
+
     /**
      * the directory the compile objects will be located for java2wsdl to source from
-     * 
+     *
      * @parameter expression="${project.build.directory}/classes
      */
     private File classesDirectory;
-    
+
     /**
      * @parameter expression="${project.build.directory}/generated-sources/axistools/java2wsdl"
-     *
      */
     private File outputDirectory;
 
@@ -57,58 +58,58 @@ public class Java2WSDLMojo
      * @required
      */
     private String filename;
-    
+
     /**
      * @parameter expression="${classOfPortType}"
      */
     private String classOfPortType;
-    
+
     /**
      * @parameter expression="${input}"
      */
     private String input;
-    
+
     /**
      * @parameter expression="${location}"
      */
     private String location;
-    
+
     /**
      * @parameter expression="${portTypeName}"
      */
     private String portTypeName;
-    
+
     /**
      * @parameter expression="${bindingName}"
      */
     private String bindingName;
-    
-    /** 
+
+    /**
      * @parameter expression="${serviceElementName}"
      */
     private String serviceElementName;
-    
-    /** 
+
+    /**
      * @parameter expression="${servicePortName}"
      */
     private String servicePortName;
-    
+
     /**
      * @parameter expression="${namespace}"
      */
     private String namespace;
-    
+
     /**
      * @parameter expression="${packageToNamespace}"
      */
     private String packageToNamespace;
-    
+
     /**
      * @parameter expression="${methods}"
      */
     private ArrayList methods;
-    
-    /** 
+
+    /**
      * @parameter expression="false"
      */
     private boolean all;
@@ -117,67 +118,67 @@ public class Java2WSDLMojo
      * @parameter expression="${outputWSDLMode}"
      */
     private String outputWSDLMode;
-    
+
     /**
      * @parameter expression="${locationImport}"
      */
     private String locationImport;
-    
+
     /**
      * @parameter expression="${namespaceImpl}"
      */
     private String namespaceImpl;
-    
+
     /**
-     * @parameter expression="${outputImpl}" 
+     * @parameter expression="${outputImpl}"
      */
     private String outputImpl;
-    
+
     /**
      * @parameter expression="${implClass}"
      */
     private String implClass;
-    
+
     /**
      * @parameter expression="${exclude}"
      */
     private ArrayList excludes;
-    
+
     /**
      * @parameter expression="${stopClasses}"
      */
     private ArrayList stopClasses;
-    
+
     /**
      * @parameter expression="${typeMappingVersion}"
      */
     private String typeMappingVersion;
-    
+
     /**
      * @parameter expression="${soapAction}"
      */
     private String soapAction;
-    
+
     /**
      * @parameter expression="${style}"
      */
     private String style;
-    
+
     /**
      * @parameter expression="${use}"
      */
     private String use;
-    
+
     /**
      * @parameter expression="${extraClasses}"
      */
     private ArrayList extraClasses;
-    
+
     /**
      * @parameter expression="${importSchema}"
      */
     private String importSchema;
-    
+
     /**
      * @parameter expression="${project}"
      * @required
@@ -189,241 +190,48 @@ public class Java2WSDLMojo
      */
     private MavenProjectHelper projectHelper;
 
-    
+
     public void execute()
-        throws MojoExecutionException
+        throws MojoExecutionException, MojoFailureException
     {
+        DefaultJava2WSDLPlugin plugin = new DefaultJava2WSDLPlugin();
 
-        if ( !outputDirectory.exists() )
-        {
-            outputDirectory.mkdirs();
+        plugin.setClassesDirectory( classesDirectory );
+        plugin.setAll( all );
+        plugin.setBindingName( bindingName );
+        plugin.setClassOfPortType( classOfPortType );
+        plugin.setExcludes( excludes );
+        plugin.setExtraClasses( extraClasses );
+        plugin.setFilename( filename );
+        plugin.setImplClass( implClass );
+        plugin.setImportSchema( importSchema );
+        plugin.setInput( input );
+        plugin.setLocation( location );
+        plugin.setLocationImport( locationImport );
+        plugin.setMethods( methods );
+        plugin.setNamespace( namespace );
+        plugin.setNamespaceImpl( namespaceImpl );
+        plugin.setOutputDirectory( outputDirectory );
+        plugin.setOutputImpl( outputImpl );
+        plugin.setOutputWSDLMode( outputWSDLMode );
+        plugin.setPackageToNamespace( packageToNamespace );
+        plugin.setPortTypeName( portTypeName );
+        plugin.setServiceElementName( serviceElementName );
+        plugin.setServicePortName( servicePortName );
+        plugin.setSoapAction( soapAction );
+        plugin.setStopClasses( stopClasses );
+        plugin.setStyle( style );
+        plugin.setTypeMappingVersion( typeMappingVersion );
+        plugin.setUse( use );
+
+        try {
+            plugin.execute();
         }
-        try 
+        catch ( AxisPluginException e)
         {
-            MojoJava2WSDL mojo = new MojoJava2WSDL();
-            mojo.execute( generateArgumentList() );
-        } 
-        catch (Throwable t)
-        {
-            throw new MojoExecutionException( "Java2WSDL execution failed", t);
+            throw new MojoExecutionException("error executing plugin", e);
         }
-        
-        projectHelper.addResource(project, outputDirectory.getAbsolutePath(), Collections.singletonList("**/*.wsdl"), Collections.EMPTY_LIST);
-        
+
     }
 
-  
-    /**
-     * generate the parameter String[] to be passed into the main method 
-     * 
-     * @return argument array for the invocation of {@link MojoJava2WSDL}
-     */
-    private String[] generateArgumentList() throws MojoExecutionException
-    {
-
-        ArrayList argsList = new ArrayList();
-        argsList.add( "-o" );
-        argsList.add( outputDirectory.getAbsolutePath() + File.separator + filename );
-
-        if ( input != null )
-        {
-            argsList.add( "-I" );
-            argsList.add( input );
-        }
-        
-        if ( location != null )
-        {
-            argsList.add( "-l" );
-            argsList.add( location );
-        }
-        
-        if ( portTypeName != null )
-        {
-            argsList.add( "-P" );
-            argsList.add( portTypeName );
-        }
-        
-        if ( bindingName != null )
-        {
-            argsList.add( "-b" );
-            argsList.add( bindingName );
-        }
-        
-        if ( serviceElementName != null )
-        {
-            argsList.add( "-S" );
-            argsList.add( serviceElementName );
-        }
-        
-        if ( servicePortName != null )
-        {
-            argsList.add( "-s" );
-            argsList.add( servicePortName );
-        }
-
-        if ( namespace != null )
-        {
-            argsList.add( "-n" );
-            argsList.add( namespace );
-        }
-
-        if ( packageToNamespace != null )
-        {
-            argsList.add( "-p" );
-            argsList.add( packageToNamespace );
-        }
-        
-        if ( methods != null && methods.size() > 0)
-        {
-            argsList.add( "-m" );
-            
-            for (Iterator i = methods.iterator(); i.hasNext();)
-            {    
-                argsList.add( (String)i.next() );
-            }
-        }
-        
-        if ( all )
-        { 
-            argsList.add( "-a" );
-        }
-        
-        if ( outputWSDLMode != null ) 
-        {
-            if ("All".equalsIgnoreCase(outputWSDLMode) 
-                || "Interface".equalsIgnoreCase(outputWSDLMode) 
-                || "Implementation".equalsIgnoreCase(outputWSDLMode))
-            {
-                argsList.add( "-w" );
-                argsList.add( outputWSDLMode );
-            } 
-            else 
-            {
-                throw new MojoExecutionException("invalid outputWSDLMode setting");
-            }
-        }
-        
-        if ( locationImport != null )
-        {
-            argsList.add( "-L" );
-            argsList.add( locationImport );
-        }
-        
-        if ( namespaceImpl != null )
-        {
-            argsList.add( "-N" );
-            argsList.add( namespaceImpl );
-        }
-        
-        if ( outputImpl != null ) 
-        {
-            argsList.add( "-O" );
-            argsList.add( outputImpl );
-        }
-        
-        if ( implClass != null ) 
-        {
-            argsList.add( "-i" );
-            argsList.add( implClass );
-        }
-        
-        if ( excludes != null && excludes.size() > 0) 
-        {
-            argsList.add( "-x" );
-            
-            for (Iterator i = excludes.iterator(); i.hasNext();)
-            {
-                argsList.add( (String)i.next() );
-            }
-        }
-        
-        if ( stopClasses != null && stopClasses.size() > 0 ) 
-        {
-            argsList.add( "-c" );
-            
-            for (Iterator i = stopClasses.iterator(); i.hasNext();)
-            {
-                argsList.add( (String)i.next() );
-            }
-        }
-        
-        if ( typeMappingVersion != null ) 
-        {
-            if ("1.1".equals(typeMappingVersion) || "1.2".equals(typeMappingVersion) )
-            {
-                argsList.add( "-T" );
-                argsList.add( typeMappingVersion );
-            } 
-            else 
-            {
-                throw new MojoExecutionException("invalid typeMappingVersion (1.1 or 1.2)");
-            }
-        }
-        
-        if ( soapAction != null )
-        {
-            if ( "DEFAULT".equalsIgnoreCase(soapAction) 
-                || "OPERATION".equalsIgnoreCase(soapAction) 
-                || "NONE".equalsIgnoreCase(soapAction) )
-            {    
-                argsList.add( "-A" );
-                argsList.add( soapAction.toUpperCase() );
-            }
-        }
-        
-        if ( style != null )
-        {
-            if ("RPC".equalsIgnoreCase(style)
-                || "DOCUMENT".equalsIgnoreCase(style)
-                || "WRAPPED".equalsIgnoreCase(style))
-            {
-                argsList.add( "-y" );
-                argsList.add( style.toUpperCase() );
-            }
-        }
-        
-        if ( use != null )
-        {
-            if ("LITERAL".equalsIgnoreCase(use)
-                || "ENCODED".equalsIgnoreCase(use))
-            {
-                argsList.add( "-u" );
-                argsList.add( use.toUpperCase() );
-            }
-        }
-            
-        if ( extraClasses != null && extraClasses.size() > 0 ) 
-        {
-            for (Iterator i = extraClasses.iterator(); i.hasNext();) 
-            {
-                argsList.add( "-e" );
-                argsList.add( (String)i.next() );
-            }
-        }
-        
-        if ( importSchema != null )
-        {
-            argsList.add( "-C" );
-            argsList.add( importSchema );   
-        }
-        
-        argsList.add( "--classpath" );
-        argsList.add( classesDirectory.getAbsolutePath() );
-        
-        if ( classOfPortType != null ) 
-        {
-            if ( portTypeName == null ) 
-            {
-                argsList.add ( classOfPortType );
-            } 
-            else
-            {
-                throw new MojoExecutionException("invalid parameters, can not use portTypeName and classOfPortType together");
-            }
-        }
-        
-        getLog().debug( "argslist: " + argsList.toString() );
-
-        return (String[]) argsList.toArray( new String[argsList.size()] );
-    }
 }

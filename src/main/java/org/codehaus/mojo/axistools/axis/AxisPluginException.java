@@ -1,4 +1,4 @@
-package org.codehaus.mojo.axistools;
+package org.codehaus.mojo.axistools.axis;
 
 /*
  * Copyright 2005 The Codehaus.
@@ -16,20 +16,24 @@ package org.codehaus.mojo.axistools;
  * limitations under the License.
  */
 
+/**
+ * @author: jesse
+ * @version: $Id:$
+ */
+public class AxisPluginException extends Exception
+{
+    public AxisPluginException( String message )
+    {
+        super(message);
+    }
 
-import org.apache.axis.wsdl.Java2WSDL;
-import org.apache.maven.plugin.MojoExecutionException;
+    public AxisPluginException( Throwable cause )
+    {
+        super(cause);
+    }
 
-
-public class MojoJava2WSDL extends Java2WSDL {
-
-   public void execute(String args[]) throws Exception {
-       MojoJava2WSDL j = new MojoJava2WSDL();
-       
-       int status = j.run(args);
-       
-       if (status == 1) {
-           throw new MojoExecutionException("Java2WSDL had a problem, it returned a failure status");
-       }
-   }    
+    public AxisPluginException( String message, Throwable cause )
+    {
+        super(message, cause);
+    }
 }
