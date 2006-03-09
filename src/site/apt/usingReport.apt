@@ -1,11 +1,13 @@
 Configuring aspectj report
 
 
-  Example of ajdoc report creation. notice that we need to configure
-  the maven-project-info-reports-plugin so that the dependency-report does
-  not run. this due to a bug in that report causing a NPE when using
-  system scope dependencies. The ajdoc tool needs tools.jar, and will
-  cause the problem in the dependency-report.
+  Example of ajdoc report creation. 
+  
+  Note : Since this report is using tools.jar as a system scoped dependency 
+  you will need to make sure that your JAVA_HOME environment variable 
+  are set to a jdk, before you could use this report.
+  Also we discovered that it does not work with jdk1.5.0, and you would
+  need to upgrade your vm if this is the one you currently are using.
   
 +------------------------------------------+
 <project>
@@ -23,22 +25,6 @@ Configuring aspectj report
     ...
     <reporting>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>cim</report>
-                            <report>issue-tracking</report>
-                            <report>license</report>
-                            <report>mailing-list</report>
-                            <report>scm</report>
-                            <report>project-team</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>

@@ -1,5 +1,4 @@
 package org.codehaus.mojo.aspectj;
-
 /**
  * The MIT License
  *
@@ -23,41 +22,78 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import org.apache.maven.artifact.handler.ArtifactHandler;
 
 /**
- * Weaves all test classes.
+ * Used in unittests.
  * 
- * @goal test-compile
- * @requiresDependencyResolution test
- * @phase process-test-sources
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
-{   
-    /**
-     * 
-     */
-    protected List getOutputDirectories()
+public class MockArtifactHandler implements ArtifactHandler
+{
+    private String extension;
+
+    private String type;
+
+    private String classifier;
+
+    private String directory;
+
+    private String packaging;
+
+    private boolean includesDependencies;
+
+    private boolean addedToClasspath;
+
+    public String getExtension()
     {
-        return Arrays.asList(new String[]{project.getBuild().getOutputDirectory(),project.getBuild().getTestOutputDirectory()});
+        if ( extension == null )
+        {
+            extension = type;
+        }
+        return extension;
     }
 
-    /**
-     * 
-     */
-    protected List getSourceDirectories()
+    public String getType()
     {
-    	List sourceDirs = new ArrayList();
-    	sourceDirs.addAll(project.getTestCompileSourceRoots());
-    	sourceDirs.addAll(project.getCompileSourceRoots());
-        return sourceDirs;
+        return type;
     }
 
+    public String getClassifier()
+    {
+        return classifier;
+    }
 
+    public String getDirectory()
+    {
+        if ( directory == null )
+        {
+            directory = getPackaging() + "s";
+        }
+        return directory;
+    }
+
+    public String getPackaging()
+    {
+        if ( packaging == null )
+        {
+            packaging = type;
+        }
+        return packaging;
+    }
+
+    public boolean isIncludesDependencies()
+    {
+        return includesDependencies;
+    }
+
+    public String getLanguage()
+    {
+        return "java";
+    }
+
+    public boolean isAddedToClasspath()
+    {
+        return addedToClasspath;
+    }
 }

@@ -49,6 +49,8 @@ public class MockArtifact
     private String groupId;
 
     private String artifactId;
+    
+    private ArtifactHandler artifactHandler;
 
     /**
      * Constructor
@@ -70,6 +72,16 @@ public class MockArtifact
     public String getArtifactId()
     {
         return artifactId;
+    }
+    
+    public ArtifactHandler getArtifactHandler()
+    {
+        return artifactHandler;
+    }
+    
+    public void setArtifactHandler( ArtifactHandler artifactHandler )
+    {
+        this.artifactHandler = artifactHandler;
     }
 
     public String getVersion()
@@ -180,11 +192,6 @@ public class MockArtifact
         throw new RuntimeException( "Not implemented" );
     }
 
-    public ArtifactHandler getArtifactHandler()
-    {
-        throw new RuntimeException( "Not implemented" );
-    }
-
     public List getDependencyTrail()
     {
         throw new RuntimeException( "Not implemented" );
@@ -241,11 +248,6 @@ public class MockArtifact
     }
 
     public void setResolvedVersion( String arg0 )
-    {
-        throw new RuntimeException( "Not implemented" );
-    }
-
-    public void setArtifactHandler( ArtifactHandler arg0 )
     {
         throw new RuntimeException( "Not implemented" );
     }

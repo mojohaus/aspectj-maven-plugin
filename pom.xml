@@ -116,6 +116,7 @@
           <skip>false</skip>
           <excludes>
             <exclude> **/test-project/**/*.java</exclude>
+            <exclude> **/parent-child-test-project/**/*.java</exclude>
             <exclude> **/AbstractAjcMojoTest.java</exclude>
           </excludes>
         </configuration>

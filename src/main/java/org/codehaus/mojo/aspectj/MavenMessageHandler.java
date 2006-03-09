@@ -23,6 +23,7 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 import org.apache.maven.plugin.logging.Log;
 import org.aspectj.bridge.AbortException;
 import org.aspectj.bridge.IMessage;

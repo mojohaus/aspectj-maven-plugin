@@ -23,6 +23,7 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

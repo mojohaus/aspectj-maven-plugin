@@ -31,6 +31,7 @@ import junit.framework.TestCase;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.versioning.VersionRange;
@@ -80,9 +81,11 @@ public abstract class CompilerMojoTestBase
         project.addCompileSourceRoot(project.getBuild().getSourceDirectory());
         project.addTestCompileSourceRoot(project.getBuild().getTestSourceDirectory());
         ajcMojo.basedir = new File( basedir );
-
+        ArtifactHandler artifactHandler = new MockArtifactHandler();
+        Artifact artifact = new MockArtifact("dill","dall");
+        artifact.setArtifactHandler(artifactHandler);
+        project.setArtifact(artifact);
         Set artifacts = new HashSet();
-
         Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange
                                                      .createFromVersion( "3.8.1" ), "test", "jar", "", new DefaultArtifactHandler( "" ) );
         Artifact aspectJTools = new DefaultArtifact( "aspectj", "aspectjtools", VersionRange
@@ -113,6 +116,11 @@ public abstract class CompilerMojoTestBase
         throws Exception
     {
         super.tearDown();
-        FileUtils.deleteDirectory( project.getBuild().getDirectory() );
+        try {
+            FileUtils.deleteDirectory( project.getBuild().getDirectory() );
+        } catch( Exception ex ) {
+            // Only a problem on windows. we really do not care.. if we cant delete the file
+            // It is probably not there
+        }
     }
 }

@@ -1,8 +1,5 @@
 package org.codehaus.mojo.aspectj;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * The MIT License
  *
@@ -26,6 +23,9 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Weaves all main classes.

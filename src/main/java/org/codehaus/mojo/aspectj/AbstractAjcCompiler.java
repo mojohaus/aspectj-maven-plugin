@@ -23,6 +23,7 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,9 +33,8 @@ import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.ArtifactUtils;
-import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.tools.ajc.Main;
 import org.codehaus.plexus.util.FileUtils;
@@ -45,31 +45,15 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 public abstract class AbstractAjcCompiler
-    extends AbstractMojo
+    extends AbstractAjcMojo
 {
-    /**
-     * The maven project.
-     * 
-     * @parameter expression="${project}"
-     * @required @readonly
-     */
-    protected MavenProject project;
 
-    /**
-     * The basedir of the project.
-     * 
-     * @parameter expression="${basedir}"
-     * @required @readonly
-     */
-    protected File basedir;
-    
     /**
      * The source directory for the aspects
      * @parameter default-value="src/main/aspect"
      */
     protected String aspectDirectory;
     
-
     /**
      * The source directory for the test aspects
      * @parameter default-value="src/test/aspect"
@@ -80,6 +64,8 @@ public abstract class AbstractAjcCompiler
      * List of ant-style patterns used to specify the aspects that should be included when 
      * compiling. When none specified all .java and .aj files in the project source directories, or
      * directories spesified by the ajdtDefFile property are included.
+     * 
+     * * @parameter
      */
     protected String[] includes;
 
@@ -87,6 +73,8 @@ public abstract class AbstractAjcCompiler
      * List of ant-style patterns used to specify the aspects that should be excluded when 
      * compiling. When none specified all .java and .aj files in the project source directories, or
      * directories spesified by the ajdtDefFile property are included.
+     * 
+     * * @parameter
      */
     protected String[] excludes;
 
@@ -307,6 +295,13 @@ public abstract class AbstractAjcCompiler
     public void execute()
         throws MojoExecutionException
     {
+        ArtifactHandler artifactHandler = project.getArtifact().getArtifactHandler();
+        if ( !"java".equals( artifactHandler.getLanguage() ) )
+        {
+            getLog().info( "Not executing aspectJ compiler as the project is not a Java classpath-capable package" );
+            return;
+        }
+        
         Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
         project.getCompileSourceRoots().add(basedir.getAbsolutePath()  + "/" +  aspectDirectory);
         project.getTestCompileSourceRoots().add(basedir.getAbsolutePath()  + "/" +  testAspectDirectory);

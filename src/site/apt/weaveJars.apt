@@ -14,7 +14,18 @@ Weaving already compiled jar artifacts
             <groupId>aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.5.0</version>
-            <scope>compile</scope>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.agroup</groupId>
+            <artifactId>to-weave</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.anothergroup</groupId>
+            <artifactId>gen</artifactId>
+            <version>1.0</version>
         </dependency>
         ...
     </dependencies>

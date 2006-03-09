@@ -35,7 +35,7 @@ import org.aspectj.lang.annotation.DeclareWarning;
  */
 @Aspect
 public class ATestAzpect
-{
+{ 
 	@SuppressWarnings("unused")
 	@DeclareWarning("call (* java.io.PrintStream.print*(..)) && !within(org.codehaus.mojo.aspectj.ATestAzpect)")
 	private final String errorMessage = "Do not use sytem.out, use logger";

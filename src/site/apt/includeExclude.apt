@@ -13,7 +13,6 @@ Using includes/excludes
             <groupId>aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.5.0</version>
-            <scope>compile</scope>
         </dependency>
         ...
     </dependencies>

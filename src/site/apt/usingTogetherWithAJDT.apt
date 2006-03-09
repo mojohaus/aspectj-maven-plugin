@@ -14,7 +14,6 @@ Using together with AJDT
             <groupId>aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.5.0</version>
-            <scope>compile</scope>
         </dependency>
         ...
     </dependencies>
@@ -42,7 +41,9 @@ Using together with AJDT
 </project>
 +------------------------------------------+
 
-Example of a valid build propertiesfile
+Example of a valid build propertiesfile 
+  
+  note that in this file paths are relative to the project basedir.
   
 +------------------------------------------+
 src.includes = src/main/aspect,\

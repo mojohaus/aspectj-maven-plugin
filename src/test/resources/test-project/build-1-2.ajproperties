@@ -1,1 +1,2 @@
-src.includes = src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj
+src.includes = src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj,\
+               src/main/java/

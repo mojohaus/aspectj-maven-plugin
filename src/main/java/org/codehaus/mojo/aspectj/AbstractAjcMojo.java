@@ -24,40 +24,52 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.project.MavenProject;
 
 /**
- * Weaves all test classes.
+ * The base class.
  * 
- * @goal test-compile
- * @requiresDependencyResolution test
- * @phase process-test-sources
- * @description AspectJ Compiler Plugin.
- * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ * @author Juraj Burian
+ * @version $Revision:$ by $Author:$
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
-{   
+abstract public class AbstractAjcMojo extends AbstractMojo
+{
     /**
+     * The maven project.
      * 
+     * @parameter expression="${project}"
+     * @required @readonly
      */
-    protected List getOutputDirectories()
-    {
-        return Arrays.asList(new String[]{project.getBuild().getOutputDirectory(),project.getBuild().getTestOutputDirectory()});
-    }
+    protected MavenProject project;
 
     /**
+     * The basedir of the project.
      * 
+     * @parameter expression="${basedir}"
+     * @required @readonly
      */
-    protected List getSourceDirectories()
-    {
-    	List sourceDirs = new ArrayList();
-    	sourceDirs.addAll(project.getTestCompileSourceRoots());
-    	sourceDirs.addAll(project.getCompileSourceRoots());
-        return sourceDirs;
-    }
+    protected File basedir;
+    
+    /**
+     * List of of modules to weave (into target directory). Corresponds to ajc
+     * -inpath option (or -injars for pre-1.2 (which is not supported)).
+     * 
+     * @parameter
+     */
+    protected Module[] weaveDependencies;
+
+    /**
+     * Weave binary aspects from the jars. 
+     * The aspects should have been output by the same version of the compiler. 
+     * The modules must also be dependencies of the project.
+     * Corresponds to ajc -aspectpath option
+     * 
+     * @parameter
+     */
+    protected Module[] aspectLibraries;
 
 
 }
