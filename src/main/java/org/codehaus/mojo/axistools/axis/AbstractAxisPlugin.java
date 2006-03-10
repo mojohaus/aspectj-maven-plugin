@@ -26,6 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Convience baseclass for shared parameters, getters and setters, and methods
+ * for the Axis Plugins
+ *
  * @author: jesse
  * @version: $Id:$
  */
@@ -66,6 +69,12 @@ public abstract class AbstractAxisPlugin
         return aName.replaceAll( "[^\\p{Alnum}\\.]", "-" );
     }
 
+    /**
+     * Converts a list to a comma delimited string
+     *
+     * @param list
+     * @return
+     */
     protected String listToCommaDelimitedString( List list )
     {
         StringBuffer strbuf = new StringBuffer();

@@ -27,11 +27,10 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /**
- * Created by IntelliJ IDEA.
+ *
  * User: jesse
  * Date: Feb 21, 2006
  * Time: 9:52:39 AM
- * To change this template use File | Settings | File Templates.
  */
 public class DefaultJava2WSDLPlugin
     extends AbstractAxisPlugin
@@ -41,7 +40,6 @@ public class DefaultJava2WSDLPlugin
     /**
      * the directory the compile objects will be located for java2wsdl to source from
      *
-     * @parameter expression="${project.build.directory}/classes
      */
     private File classesDirectory;
 

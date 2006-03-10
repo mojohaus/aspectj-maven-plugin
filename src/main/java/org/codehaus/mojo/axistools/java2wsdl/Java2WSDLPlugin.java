@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author: jesse
  * @date: Feb 21, 2006
- * @version: $ID:$
+ * @version: $Id:$
  */
 public interface Java2WSDLPlugin
 {
