@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
  * @author Juraj Burian
  * @version $Revision:$ by $Author:$
  * 
- * @goal eclipse
+ * (at)goal eclipse
  * @requiresDependencyResolution compile
  * @description create eclipse configuration of aspectJ
  */
