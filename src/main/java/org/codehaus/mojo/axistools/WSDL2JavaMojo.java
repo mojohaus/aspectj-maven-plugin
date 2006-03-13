@@ -321,6 +321,4 @@ public class WSDL2JavaMojo
         }
 
     }
-
-
 }
