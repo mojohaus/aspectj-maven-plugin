@@ -196,9 +196,10 @@ public class Java2WSDLMojo
     {
         DefaultJava2WSDLPlugin plugin = new DefaultJava2WSDLPlugin();
 
-        plugin.setClassesDirectory( classesDirectory );
+
         plugin.setAll( all );
         plugin.setBindingName( bindingName );
+        plugin.setClassesDirectory( classesDirectory );
         plugin.setClassOfPortType( classOfPortType );
         plugin.setExcludes( excludes );
         plugin.setExtraClasses( extraClasses );
@@ -223,6 +224,9 @@ public class Java2WSDLMojo
         plugin.setStyle( style );
         plugin.setTypeMappingVersion( typeMappingVersion );
         plugin.setUse( use );
+        plugin.setLog (getLog ());
+        plugin.setProjectHelper (projectHelper);
+        plugin.setProject (project);
 
         try {
             plugin.execute();

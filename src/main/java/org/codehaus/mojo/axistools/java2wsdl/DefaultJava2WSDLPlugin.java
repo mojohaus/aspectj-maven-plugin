@@ -180,6 +180,7 @@ public class DefaultJava2WSDLPlugin
      */
     private MavenProject project;
 
+
     /**
      * @component
      */
@@ -556,4 +557,15 @@ public class DefaultJava2WSDLPlugin
     {
         this.importSchema = importSchema;
     }
+
+    public void setProject( MavenProject project )
+    {
+        this.project = project;
+    }
+
+    public void setProjectHelper( MavenProjectHelper projectHelper )
+    {
+        this.projectHelper = projectHelper;
+    }
+
 }
