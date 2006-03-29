@@ -569,6 +569,7 @@ public class DefaultWSDL2JavaPlugin
         if ( skeletonDeploy )
         {
             argsList.add( "-S" );
+            argsList.add( "true" );
         }
 
         if ( namespaceToPackage != null )
@@ -646,7 +647,7 @@ public class DefaultWSDL2JavaPlugin
 
         if ( implementationClassName != null )
         {
-            argsList.add( "c" );
+            argsList.add( "-c" );
             argsList.add( implementationClassName );
         }
 
