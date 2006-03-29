@@ -20,10 +20,13 @@ package org.codehaus.mojo.axistools.wsdl2java;
 import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.utils.CLOption;
 import org.apache.axis.utils.Messages;
+import org.apache.axis.utils.CLOptionDescriptor;
 import org.apache.axis.wsdl.WSDL2Java;
+import org.apache.axis.wsdl.gen.WSDL2;
 import org.codehaus.mojo.axistools.axis.AxisPluginException;
 
 import java.util.List;
+import java.lang.reflect.Field;
 
 /**
  * @author: jesse
@@ -37,37 +40,48 @@ public class WSDL2JavaWrapper
     public void execute( String args[] )
         throws AxisPluginException
     {
-        // Parse the arguments
-        CLArgsParser argsParser = new CLArgsParser( args, options );
-
-        // Print parser errors, if any
-        if ( null != argsParser.getErrorString() )
-        {
-            System.err.println( Messages.getMessage( "error01", argsParser.getErrorString() ) );
-            printUsage();
-        }
-
-        // Get a list of parsed options
-        List clOptions = argsParser.getArguments();
-        int size = clOptions.size();
-
-        // Parse the options and configure the emitter as appropriate.
-        for ( int i = 0; i < size; i++ )
-        {
-            parseOption( (CLOption) clOptions.get( i ) );
-        }
-
-        // validate argument combinations
-
-        validateOptions();
 
         try
         {
+            // Extremely ugly hack because the "options" static field in WSDL2Java
+            // shadows the "options" instance field in WSDL2. It is the field
+            // in WSDL2 that we need because the command line options
+            // defined in subclasses get copied to it.
+            // The result is that options defined in WSDL2 ( timeout, Debug )
+            // are not available otherwise.  (MOJO-318)
+            Field field = WSDL2.class.getDeclaredField( "options" );
+
+            CLOptionDescriptor[] options = (CLOptionDescriptor[]) field.get( this );
+
+            // Parse the arguments
+            CLArgsParser argsParser = new CLArgsParser( args, options );
+
+            // Print parser errors, if any
+            if ( null != argsParser.getErrorString() )
+            {
+                System.err.println( Messages.getMessage( "error01", argsParser.getErrorString() ) );
+                printUsage();
+            }
+
+            // Get a list of parsed options
+            List clOptions = argsParser.getArguments();
+            int size = clOptions.size();
+
+            // Parse the options and configure the emitter as appropriate.
+            for ( int i = 0; i < size; i++ )
+            {
+                parseOption( (CLOption) clOptions.get( i ) );
+            }
+
+            // validate argument combinations
+
+            validateOptions();
+
             parser.run( wsdlURI );
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
-            throw new AxisPluginException(e);
+            throw new AxisPluginException( e );
         }
     }
 }

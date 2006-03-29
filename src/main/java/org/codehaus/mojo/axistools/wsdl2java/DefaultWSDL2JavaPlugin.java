@@ -558,7 +558,7 @@ public class DefaultWSDL2JavaPlugin
         if ( timeout != null )
         {
             argsList.add( "-O" );
-            argsList.add( timeout );
+            argsList.add( timeout.toString() );
         }
 
         if ( noWrapped )
