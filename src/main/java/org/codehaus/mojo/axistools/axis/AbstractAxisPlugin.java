@@ -66,7 +66,13 @@ public abstract class AbstractAxisPlugin
      */
     protected String createSafeFileName( String aName )
     {
-        return aName.replaceAll( "[^\\p{Alnum}\\.]", "-" );
+        String fileName = aName.replaceAll( "[^\\p{Alnum}\\.]", "-" );
+
+        if ( !fileName.endsWith( ".wsdl" ) )
+        {
+            fileName += ".wsdl";
+        }
+        return fileName;
     }
 
     /**
