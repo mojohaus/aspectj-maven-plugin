@@ -65,4 +65,9 @@ public class AjcTestCompilerMojoTest
             fail( "Exception : " + e.toString() );
         }
     }
+
+    String getProjectName()
+    {
+        return "test-project";
+    }
 }

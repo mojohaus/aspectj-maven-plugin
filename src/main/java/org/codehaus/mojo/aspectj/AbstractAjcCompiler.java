@@ -53,13 +53,13 @@ public abstract class AbstractAjcCompiler
      * @parameter default-value="src/main/aspect"
      */
     protected String aspectDirectory;
-    
+
     /**
      * The source directory for the test aspects
      * @parameter default-value="src/test/aspect"
      */
     protected String testAspectDirectory;
-    
+
     /**
      * List of ant-style patterns used to specify the aspects that should be included when 
      * compiling. When none specified all .java and .aj files in the project source directories, or
@@ -266,7 +266,7 @@ public abstract class AbstractAjcCompiler
      * Holder for ajc compiler options
      */
     protected List ajcOptions = new ArrayList();
-    
+
     /**
      * Holds all files found using the includes, excludes parameters.
      */
@@ -286,7 +286,7 @@ public abstract class AbstractAjcCompiler
      * @return where sources may be found.
      */
     protected abstract List getSourceDirectories();
-    
+
     /**
      * Do the AspectJ compiling.
      * 
@@ -301,12 +301,18 @@ public abstract class AbstractAjcCompiler
             getLog().info( "Not executing aspectJ compiler as the project is not a Java classpath-capable package" );
             return;
         }
-        
+
         Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
-        project.getCompileSourceRoots().add(basedir.getAbsolutePath()  + "/" +  aspectDirectory);
-        project.getTestCompileSourceRoots().add(basedir.getAbsolutePath()  + "/" +  testAspectDirectory);
+        project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
+        project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
         assembleArguments();
 
+        if ( !hasSourcesToCompile() )
+        {
+            getLog().info( "No sources found skipping aspectJ compile" );
+            return;
+        }
+        
         if ( !isBuildNeeded() )
         {
             getLog().info( "No modifications found skipping aspectJ compile" );
@@ -383,7 +389,8 @@ public abstract class AbstractAjcCompiler
         }
         else
         {
-            resolvedIncludes = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
+            resolvedIncludes = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes,
+                                                                     this.excludes );
         }
         ajcOptions.addAll( resolvedIncludes );
     }
@@ -425,52 +432,61 @@ public abstract class AbstractAjcCompiler
     }
 
     /**
-     * Checks all included files for modifications. If one of the files has changed, we need
-     * to reweave everything, since a pointcut may have changed.
+     * Checks modifications that would make us need a build
      * 
-     * The rules for doing a new build are :
-     * 1) If no previous build definition file is found.
-     * 2) If previous build arguments is not equal to the current args
-     * 3) If Some of the files in the affected filelist is changed since last build
      * @throws MojoExecutionException 
      *
      */
     protected boolean isBuildNeeded()
         throws MojoExecutionException
     {
-        File outDir = new File(getOutputDirectories().get( getOutputDirectories().size() - 1 ).toString());   
-        // 1)
-        if ( !FileUtils.fileExists( outDir.getAbsolutePath()
-            + argumentFileName ) )
-        {
-            return true;
-        }
-        // 2)
+        File outDir = new File( getOutputDirectories().get( getOutputDirectories().size() - 1 ).toString() );
+        return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) 
+            || hasSourcesChanged( outDir );
+
+    }
+
+    private boolean hasNoPreviousBuild( File outDir )
+    {
+        return ( !FileUtils.fileExists( outDir.getAbsolutePath() + argumentFileName ) );
+    }
+
+    private boolean hasArgumentsChanged( File outDir )
+        throws MojoExecutionException
+    {
         try
         {
-            if ( !ajcOptions.equals( AjcHelper.readBuildConfigFile( argumentFileName, outDir ) ) )
-            {
-                return true;
-            }
+            return ( !ajcOptions.equals( AjcHelper.readBuildConfigFile( argumentFileName, outDir ) ) );
         }
         catch ( IOException e )
         {
             throw new MojoExecutionException( "Error during reading of previous argumentsfile " );
         }
-        // 3)
+    }
+
+    /**
+     * Not entirely safe, assembleArguments() must be run 
+     * @return
+     */
+    private boolean hasSourcesToCompile()
+    {
+        return resolvedIncludes.size() > 0;
+    }
+
+    private boolean hasSourcesChanged( File outDir )
+    {
         Iterator sourceIter = resolvedIncludes.iterator();
-        long lastBuild = new File(outDir.getAbsolutePath()
-                                  + argumentFileName ).lastModified();
-        while (sourceIter.hasNext())
+        long lastBuild = new File( outDir.getAbsolutePath() + argumentFileName ).lastModified();
+        while ( sourceIter.hasNext() )
         {
-            File sourceFile = new File((String) sourceIter.next());
-            long sourceModified = sourceFile.lastModified(); 
-            if ( sourceModified >= lastBuild)
+            File sourceFile = new File( (String) sourceIter.next() );
+            long sourceModified = sourceFile.lastModified();
+            if ( sourceModified >= lastBuild )
             {
                 return true;
             }
+
         }
-        
         return false;
     }
 

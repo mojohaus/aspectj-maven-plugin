@@ -71,31 +71,29 @@ public abstract class CompilerMojoTestBase
         ArtifactRepository localRepository = embedder.getLocalRepository();
 
         ajcMojo.project = project;
-        String temp = new File(".").getAbsolutePath();
-        basedir = temp.substring(0,temp.length()-2) + "/src/test/resources/test-project/";
-        project.getBuild().setDirectory(basedir + "/target");
+        String temp = new File( "." ).getAbsolutePath();
+        basedir = temp.substring( 0, temp.length() - 2 ) + "/src/test/projects/" + getProjectName() + "/";
+        project.getBuild().setDirectory( basedir + "/target" );
         project.getBuild().setOutputDirectory( basedir + "/target/classes" );
         project.getBuild().setTestOutputDirectory( basedir + "/target/test-classes" );
         project.getBuild().setSourceDirectory( basedir + "/src/main/java" );
         project.getBuild().setTestSourceDirectory( basedir + "/src/test/java" );
-        project.addCompileSourceRoot(project.getBuild().getSourceDirectory());
-        project.addTestCompileSourceRoot(project.getBuild().getTestSourceDirectory());
+        project.addCompileSourceRoot( project.getBuild().getSourceDirectory() );
+        project.addTestCompileSourceRoot( project.getBuild().getTestSourceDirectory() );
         ajcMojo.basedir = new File( basedir );
         ArtifactHandler artifactHandler = new MockArtifactHandler();
-        Artifact artifact = new MockArtifact("dill","dall");
-        artifact.setArtifactHandler(artifactHandler);
-        project.setArtifact(artifact);
+        Artifact artifact = new MockArtifact( "dill", "dall" );
+        artifact.setArtifactHandler( artifactHandler );
+        project.setArtifact( artifact );
         Set artifacts = new HashSet();
-        Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange
-                                                     .createFromVersion( "3.8.1" ), "test", "jar", "", new DefaultArtifactHandler( "" ) );
+        Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange.createFromVersion( "3.8.1" ), "test",
+                                              "jar", "", new DefaultArtifactHandler( "" ) );
         Artifact aspectJTools = new DefaultArtifact( "aspectj", "aspectjtools", VersionRange
             .createFromVersion( "1.5.0" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
-        Artifact aspectJTRt = new DefaultArtifact( "aspectj", "aspectjrt",
-                                                   VersionRange.createFromVersion( "1.5.0" ), "compile", "jar", "",
-                                                   new DefaultArtifactHandler( "" ) );
+        Artifact aspectJTRt = new DefaultArtifact( "aspectj", "aspectjrt", VersionRange.createFromVersion( "1.5.0" ),
+                                                   "compile", "jar", "", new DefaultArtifactHandler( "" ) );
 
-        junit.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( junit )
-                                        + ".jar" ) );
+        junit.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( junit ) + ".jar" ) );
         aspectJTools.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTools )
             + ".jar" ) );
         aspectJTRt.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTRt )
@@ -116,11 +114,16 @@ public abstract class CompilerMojoTestBase
         throws Exception
     {
         super.tearDown();
-        try {
+        try
+        {
             FileUtils.deleteDirectory( project.getBuild().getDirectory() );
-        } catch( Exception ex ) {
-            // Only a problem on windows. we really do not care.. if we cant delete the file
+        }
+        catch ( Exception ex )
+        {
+            ;// Only a problem on windows. we really do not care.. if we cant delete the file
             // It is probably not there
         }
     }
+
+    abstract String getProjectName();
 }

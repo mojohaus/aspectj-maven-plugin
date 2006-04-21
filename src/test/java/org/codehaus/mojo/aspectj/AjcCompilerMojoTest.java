@@ -219,7 +219,7 @@ public class AjcCompilerMojoTest
             ajcMojo.assembleArguments();
             assertFalse("A build has compleeted. No modifications done. no new build needed",ajcMojo.isBuildNeeded());
             String currentDir = new File(".").getAbsolutePath();
-            File aspect = new File(currentDir.substring(0,currentDir.length()-1)+"src/test/resources/test-project/src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj");
+            File aspect = new File(currentDir.substring(0,currentDir.length()-1)+"src/test/projects/test-project/src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj");
             long timeStamp = System.currentTimeMillis();
             assertTrue("Could not touch file: " + aspect.getAbsolutePath(), aspect.setLastModified(timeStamp));
             assertTrue("One of the included files has changed. a new build is needed",ajcMojo.isBuildNeeded());
@@ -351,6 +351,11 @@ public class AjcCompilerMojoTest
         {
             fail();
         }
+    }
+
+    String getProjectName()
+    {
+        return "test-project";
     }
     
 

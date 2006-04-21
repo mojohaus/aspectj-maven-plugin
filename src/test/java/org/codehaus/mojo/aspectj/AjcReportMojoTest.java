@@ -97,7 +97,7 @@ public class AjcReportMojoTest
 
         ajcMojo.project = project;
         String temp = new File( "." ).getAbsolutePath();
-        basedir = temp.substring( 0, temp.length() - 2 ) + "/src/test/resources/test-project/";
+        basedir = temp.substring( 0, temp.length() - 2 ) + "/src/test/projects/test-project/";
         project.getBuild().setDirectory( basedir + "/target" );
         project.getBuild().setOutputDirectory( basedir + "/target/classes" );
         project.getBuild().setTestOutputDirectory( basedir + "/target/test-classes" );
