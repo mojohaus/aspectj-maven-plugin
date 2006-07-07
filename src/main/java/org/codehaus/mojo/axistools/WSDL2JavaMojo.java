@@ -143,6 +143,12 @@ public class WSDL2JavaMojo
     private boolean noWrapped;
 
     /**
+     * @parameter expression="true"
+     * NJS 6 July 2006
+     */
+    private boolean wrapArrays;
+
+    /**
      * @parameter expression="false"
      */
     private boolean skeletonDeploy;
@@ -283,6 +289,7 @@ public class WSDL2JavaMojo
         plugin.setNamespaceToPackage( namespaceToPackage );
         plugin.setNoImports( noImports );
         plugin.setNoWrapped( noWrapped );
+        plugin.setWrapArrays( wrapArrays ); //NJS 6 July 2006
         plugin.setNsExcludes( nsExcludes );
         plugin.setNsIncludes( nsIncludes );
         plugin.setPackageSpace( packageSpace );

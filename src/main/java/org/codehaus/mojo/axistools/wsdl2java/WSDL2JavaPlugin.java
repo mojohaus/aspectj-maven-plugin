@@ -66,6 +66,8 @@ public interface WSDL2JavaPlugin
 
     void setNoWrapped( boolean noWrapped );
 
+    void setWrapArrays( boolean wrapArrays ); //NJS 6 July 2006
+
     void setSkeletonDeploy( boolean skeletonDeploy );
 
     void setNamespaceToPackage( String namespaceToPackage );

@@ -51,6 +51,7 @@ import java.util.jar.JarEntry;
  * @author: jesse
  * @version: $Id:$
  */
+
 public class DefaultWSDL2JavaPlugin
     extends AbstractAxisPlugin
     implements WSDL2JavaPlugin
@@ -154,6 +155,12 @@ public class DefaultWSDL2JavaPlugin
      * @parameter expression="false"
      */
     private boolean noWrapped;
+
+    /**
+     * @parameter expression="true"
+     * NJS 6 July 2006
+     */
+    private boolean wrapArrays;
 
     /**
      * @parameter expression="false"
@@ -566,6 +573,11 @@ public class DefaultWSDL2JavaPlugin
             argsList.add( "-W" );
         }
 
+        if ( wrapArrays )
+        {
+            argsList.add( "-w" );
+        }
+
         if ( skeletonDeploy )
         {
             argsList.add( "-S" );
@@ -816,8 +828,8 @@ public class DefaultWSDL2JavaPlugin
         emitter.setTypeMappingVersion( typeMappingVersion );
         emitter.setUsername( username );
         emitter.setVerbose( verbose );
-// not in the mojo but needed ?
-//emitter.setWrapArrays(mojo.is)
+        // not in the mojo but needed ?
+        emitter.setWrapArrays(wrapArrays); //NJS 6 July 2006
         try
         {
             emitter.run( wsdlUrl.toExternalForm() );
@@ -919,6 +931,11 @@ public class DefaultWSDL2JavaPlugin
     public void setNoWrapped( boolean noWrapped )
     {
         this.noWrapped = noWrapped;
+    }
+
+    public void setWrapArrays( boolean wrapArrays )
+    {
+	this.wrapArrays = wrapArrays;
     }
 
     public void setSkeletonDeploy( boolean skeletonDeploy )
