@@ -23,54 +23,33 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import java.util.ArrayList;
-import java.util.List;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.DeclareError;
+import org.aspectj.lang.annotation.DeclareWarning;
 
 /**
- * Weaves all test classes.
+ * Testing of @AspectJ code style.
  * 
- * @goal test-compile
- * @requiresDependencyResolution test
- * @phase process-test-sources
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
-{
-    /**
-     * Flag to indicate if the main source dirs
-     * should be a part of the compile process
-     * @parameter default-value="true"
-     */
-    protected boolean weaveMainSourceFolder = true;
-
-    /**
-     * 
-     */
-    protected List getOutputDirectories()
-    {
-        List outputDirectories = new ArrayList();
-        outputDirectories.add( project.getBuild().getTestOutputDirectory() );
-        if ( weaveMainSourceFolder )
-        {
-            outputDirectories.add( project.getBuild().getOutputDirectory() );
-        }
-        return outputDirectories;
+@Aspect
+public class ATestAzpect
+{ 
+	@SuppressWarnings("unused")
+	@DeclareWarning("call (* java.io.PrintStream.print*(..)) && !within(org.codehaus.mojo.aspectj.ATestAzpect)")
+	private final String errorMessage = "Do not use sytem.out, use logger";
+	
+    @Before ("execution (* Clazz.print(..))")
+    public void traceInMain()
+    { 
+        System.out.println("Trace");
     }
 
-    /**
-     * 
-     */
-    protected List getSourceDirectories()
+    @Before ("execution (* ATestCase.testCp(..))")
+    public void traceInTestCase()
     {
-        List sourceDirs = new ArrayList();
-        sourceDirs.addAll( project.getTestCompileSourceRoots() );
-        if ( weaveMainSourceFolder )
-        {
-            sourceDirs.addAll( project.getCompileSourceRoots() );
-        }
-        return sourceDirs;
+        System.out.println("Trace");
     }
+    
 }

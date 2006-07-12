@@ -24,53 +24,16 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Weaves all test classes.
+ * The Class to get weaved
  * 
- * @goal test-compile
- * @requiresDependencyResolution test
- * @phase process-test-sources
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
-{
-    /**
-     * Flag to indicate if the main source dirs
-     * should be a part of the compile process
-     * @parameter default-value="true"
-     */
-    protected boolean weaveMainSourceFolder = true;
+public class Clazz
+{ 
 
-    /**
-     * 
-     */
-    protected List getOutputDirectories()
+    public void print()
     {
-        List outputDirectories = new ArrayList();
-        outputDirectories.add( project.getBuild().getTestOutputDirectory() );
-        if ( weaveMainSourceFolder )
-        {
-            outputDirectories.add( project.getBuild().getOutputDirectory() );
-        }
-        return outputDirectories;
-    }
-
-    /**
-     * 
-     */
-    protected List getSourceDirectories()
-    {
-        List sourceDirs = new ArrayList();
-        sourceDirs.addAll( project.getTestCompileSourceRoots() );
-        if ( weaveMainSourceFolder )
-        {
-            sourceDirs.addAll( project.getCompileSourceRoots() );
-        }
-        return sourceDirs;
+        System.out.println( "Weave me" );
     }
 }

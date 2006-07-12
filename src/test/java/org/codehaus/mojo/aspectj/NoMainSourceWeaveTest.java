@@ -24,53 +24,48 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Weaves all test classes.
+ * Tests project with no sources
  * 
- * @goal test-compile
- * @requiresDependencyResolution test
- * @phase process-test-sources
- * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcTestCompileMojo
-    extends AbstractAjcCompiler
+
+public class NoMainSourceWeaveTest
+    extends CompilerMojoTestBase
 {
     /**
-     * Flag to indicate if the main source dirs
-     * should be a part of the compile process
-     * @parameter default-value="true"
-     */
-    protected boolean weaveMainSourceFolder = true;
-
-    /**
      * 
      */
-    protected List getOutputDirectories()
+    protected void setUp()
+        throws Exception
     {
-        List outputDirectories = new ArrayList();
-        outputDirectories.add( project.getBuild().getTestOutputDirectory() );
-        if ( weaveMainSourceFolder )
-        {
-            outputDirectories.add( project.getBuild().getOutputDirectory() );
-        }
-        return outputDirectories;
+        ajcMojo = new AjcTestCompileMojo();
+        super.setUp();
     }
 
     /**
-     * 
+     * @throws Exception
      */
-    protected List getSourceDirectories()
+    public void testWithNoSources()
+        throws Exception
     {
-        List sourceDirs = new ArrayList();
-        sourceDirs.addAll( project.getTestCompileSourceRoots() );
-        if ( weaveMainSourceFolder )
+        try
         {
-            sourceDirs.addAll( project.getCompileSourceRoots() );
+            ajcMojo.setComplianceLevel( "1.5" );
+            ajcMojo.aspectDirectory = "src/main/aspect";
+            ((AjcTestCompileMojo)ajcMojo).weaveMainSourceFolder = false;
+            ajcMojo.execute();
         }
-        return sourceDirs;
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            fail( e.toString() );
+        }
     }
+
+    String getProjectName()
+    {
+        return "no-main-weave-project";
+    }
+
 }
