@@ -51,12 +51,9 @@ public class AjcTestCompileMojo
      */
     protected List getOutputDirectories()
     {
-        List outputDirectories = new ArrayList();
+        List outputDirectories = new ArrayList();        
         outputDirectories.add( project.getBuild().getTestOutputDirectory() );
-        if ( weaveMainSourceFolder )
-        {
-            outputDirectories.add( project.getBuild().getOutputDirectory() );
-        }
+        outputDirectories.add( project.getBuild().getOutputDirectory() );
         return outputDirectories;
     }
 

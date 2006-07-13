@@ -67,7 +67,7 @@ public class AjcReportMojoTest
     {
         try
         {
-            ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
+            ajcMojo.ajdtBuildDefFile = "build-1-5.ajproperties";
             ajcMojo.setVerbose(true);
             ajcMojo.setPrivateScope(true);
             ajcMojo.setComplianceLevel("1.5");

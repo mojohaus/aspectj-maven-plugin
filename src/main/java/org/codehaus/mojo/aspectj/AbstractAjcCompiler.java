@@ -52,13 +52,13 @@ public abstract class AbstractAjcCompiler
      * The source directory for the aspects
      * @parameter default-value="src/main/aspect"
      */
-    protected String aspectDirectory;
+    protected String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
      * @parameter default-value="src/test/aspect"
      */
-    protected String testAspectDirectory;
+    protected String testAspectDirectory = "src/test/aspect";
 
     /**
      * List of ant-style patterns used to specify the aspects that should be included when 
@@ -260,7 +260,7 @@ public abstract class AbstractAjcCompiler
      * 
      * @parameter default-value="builddef.lst"
      */
-    protected String argumentFileName;
+    protected String argumentFileName = "builddef.lst";
 
     /**
      * Holder for ajc compiler options
@@ -312,7 +312,7 @@ public abstract class AbstractAjcCompiler
             getLog().info( "No sources found skipping aspectJ compile" );
             return;
         }
-        
+
         if ( !isBuildNeeded() )
         {
             getLog().info( "No modifications found skipping aspectJ compile" );
@@ -332,7 +332,7 @@ public abstract class AbstractAjcCompiler
         }
         try
         {
-            File outDir = new File( (String) getOutputDirectories().get( getOutputDirectories().size() - 1 ) );
+            File outDir = new File( (String) getOutputDirectories().get( 0 ) );
             AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, outDir );
             getLog().info(
                            "Argumentsfile written : "
@@ -380,7 +380,7 @@ public abstract class AbstractAjcCompiler
 
         //add target dir argument
         ajcOptions.add( "-d" );
-        ajcOptions.add( getOutputDirectories().get( getOutputDirectories().size() - 1 ) );
+        ajcOptions.add( getOutputDirectories().get( 0 ) );
 
         // Add all the files to be included in the build,
         if ( null != ajdtBuildDefFile )
@@ -440,15 +440,14 @@ public abstract class AbstractAjcCompiler
     protected boolean isBuildNeeded()
         throws MojoExecutionException
     {
-        File outDir = new File( getOutputDirectories().get( getOutputDirectories().size() - 1 ).toString() );
-        return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) 
-            || hasSourcesChanged( outDir );
+        File outDir = new File( getOutputDirectories().get( 0 ).toString() );
+        return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) || hasSourcesChanged( outDir );
 
     }
 
     private boolean hasNoPreviousBuild( File outDir )
     {
-        return ( !FileUtils.fileExists( outDir.getAbsolutePath() + argumentFileName ) );
+        return ( !FileUtils.fileExists( new File( outDir.getAbsolutePath(), argumentFileName ).getAbsolutePath() ) );
     }
 
     private boolean hasArgumentsChanged( File outDir )
@@ -476,7 +475,7 @@ public abstract class AbstractAjcCompiler
     private boolean hasSourcesChanged( File outDir )
     {
         Iterator sourceIter = resolvedIncludes.iterator();
-        long lastBuild = new File( outDir.getAbsolutePath() + argumentFileName ).lastModified();
+        long lastBuild = new File( outDir.getAbsolutePath(),argumentFileName ).lastModified();
         while ( sourceIter.hasNext() )
         {
             File sourceFile = new File( (String) sourceIter.next() );

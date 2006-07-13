@@ -107,7 +107,7 @@ public class AjcHelper
         Properties ajdtBuildProperties = new Properties();
         try
         {
-            ajdtBuildProperties.load( new FileInputStream( ajdtBuildDefFile ) );
+            ajdtBuildProperties.load( new FileInputStream( new File(basedir,ajdtBuildDefFile) ) );
         }
         catch ( FileNotFoundException e )
         {
@@ -173,8 +173,8 @@ public class AjcHelper
     public static void writeBuildConfigToFile( List arguments, String fileName, File outputDir )
         throws IOException
     {
-        File argFile = new File( outputDir.getAbsolutePath() + fileName );
         FileUtils.forceMkdir( outputDir );
+        File argFile = new File( outputDir.getAbsolutePath() ,  fileName );
         argFile.createNewFile();
         FileWriter writer = new FileWriter( argFile );
         Iterator iter = arguments.iterator();
@@ -199,7 +199,7 @@ public class AjcHelper
         throws IOException
     {
         List arguments = new ArrayList();
-        File argFile = new File( outputDir.getAbsolutePath() + fileName );
+        File argFile = new File( outputDir.getAbsolutePath(),fileName );
         if ( FileUtils.fileExists( argFile.getAbsolutePath() ) )
         {
             FileReader reader = new FileReader( argFile );

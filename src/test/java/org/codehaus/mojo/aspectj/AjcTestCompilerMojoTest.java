@@ -52,7 +52,7 @@ public class AjcTestCompilerMojoTest
     {
         try
         {
-            ajcMojo.ajdtBuildDefFile = basedir + "test-build-1-5.ajproperties";
+            ajcMojo.ajdtBuildDefFile = "test-build-1-5.ajproperties";
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.setVerbose( true );
             ajcMojo.setShowWeaveInfo( true );

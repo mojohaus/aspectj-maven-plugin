@@ -55,7 +55,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
+            ajcMojo.ajdtBuildDefFile = "build-1-5.ajproperties";
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.execute();
         }
@@ -74,7 +74,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.ajdtBuildDefFile = basedir + "build-1-2.ajproperties";
+            ajcMojo.ajdtBuildDefFile = "build-1-2.ajproperties";
             ajcMojo.setComplianceLevel( "1.4" );
             ajcMojo.execute();
         }
@@ -93,7 +93,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.ajdtBuildDefFile = basedir + "build-1-2-using-exclusions.ajproperties";
+            ajcMojo.ajdtBuildDefFile = "build-1-2-using-exclusions.ajproperties";
             ajcMojo.setComplianceLevel( "1.4" );
             ajcMojo.execute();
         }
@@ -112,7 +112,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.ajdtBuildDefFile = basedir + "test-build-1-5.ajproperties";
+            ajcMojo.ajdtBuildDefFile = "test-build-1-5.ajproperties";
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.execute();
         }
@@ -131,7 +131,7 @@ public class AjcCompilerMojoTest
     {
         try
         {
-            ajcMojo.ajdtBuildDefFile = basedir + "build-1-5.ajproperties";
+            ajcMojo.ajdtBuildDefFile = "build-1-5.ajproperties";
             ajcMojo.setComplianceLevel( "1.4" );
             ajcMojo.execute();
             fail();
