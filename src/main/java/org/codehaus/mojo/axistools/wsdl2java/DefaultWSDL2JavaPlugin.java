@@ -49,7 +49,7 @@ import java.util.jar.JarEntry;
 
 /**
  * @author: jesse
- * @version: $Id:$
+ * @version: $Id$
  */
 
 public class DefaultWSDL2JavaPlugin

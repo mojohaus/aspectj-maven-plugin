@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * @author: jesse
- * @version: $Id:$
+ * @version: $Id$
  */
 public interface WSDL2JavaPlugin
 {
