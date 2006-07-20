@@ -1,11 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project>
-    <parent>
-        <artifactId>mojo</artifactId>
-        <groupId>org.codehaus.mojo</groupId>
-        <version>9</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>mojo</artifactId>
+    <groupId>org.codehaus.mojo</groupId>
+    <version>11</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
     <artifactId>aspectj-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>AspectJ compiler Maven Plugin</name>
