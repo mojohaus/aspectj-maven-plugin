@@ -41,17 +41,27 @@ public class AjcTestCompileMojo
 {
     /**
      * Flag to indicate if the main source dirs
+     * should be a part of the compile process. Note 
+     * this will make all classes in main source dir
+     * appare in the test output dir also, 
+     * potentially overwriting test resources.
+     * @parameter default-value="false"
+     */
+    protected boolean weaveMainSourceFolder = false;
+
+    /**
+     * Flag to indicate if aspects in the the main source dirs
      * should be a part of the compile process
      * @parameter default-value="true"
      */
-    protected boolean weaveMainSourceFolder = true;
+    protected boolean weaveWithAspectsInMainSourceFolder = true;
 
     /**
      * 
      */
     protected List getOutputDirectories()
     {
-        List outputDirectories = new ArrayList();        
+        List outputDirectories = new ArrayList();
         outputDirectories.add( project.getBuild().getTestOutputDirectory() );
         outputDirectories.add( project.getBuild().getOutputDirectory() );
         return outputDirectories;
@@ -69,5 +79,15 @@ public class AjcTestCompileMojo
             sourceDirs.addAll( project.getCompileSourceRoots() );
         }
         return sourceDirs;
+    }
+
+    protected String getAdditionalAspectPaths()
+    {
+        String additionalPath = null;
+        if ( weaveWithAspectsInMainSourceFolder )
+        {
+            additionalPath = project.getBuild().getOutputDirectory();
+        }
+        return additionalPath;
     }
 }

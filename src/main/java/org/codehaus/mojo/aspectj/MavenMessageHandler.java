@@ -77,17 +77,17 @@ public class MavenMessageHandler
         {
             log.error( (CharSequence) message.getMessage() );
         }
-        else if ( message.getKind().equals( IMessage.INFO ) && !isIgnoring( IMessage.INFO ) )
+        else if ( message.getKind().equals( IMessage.INFO ) && !isIgnoring( IMessage.INFO ))
         {
-            log.info( (CharSequence) message.getMessage() );
+            log.debug( (CharSequence) message.getMessage() );
         }
         else if ( message.getKind().equals( IMessage.WEAVEINFO ) && !isIgnoring( IMessage.WEAVEINFO ) )
         {
-            log.info( (CharSequence) message.getMessage() );
+            log.debug( (CharSequence) message.getMessage() );
         }
         else if ( message.getKind().equals( IMessage.TASKTAG ) && !isIgnoring( IMessage.TASKTAG ) )
         {
-            log.info( (CharSequence) message.getMessage() );
+            log.debug( (CharSequence) message.getMessage() );
         }
         return super.handleMessage( message );
     }

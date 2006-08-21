@@ -54,7 +54,7 @@ public class AjcReportMojoTest
 {
     MavenProject project = new MavenProject( new Model() );
 
-    AjcReportMojo ajcMojo = new AjcReportMojo();;
+    AjcReportMojo ajcMojo = new AjcReportMojo();
 
     String basedir = "";
 

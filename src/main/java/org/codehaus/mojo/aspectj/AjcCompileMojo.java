@@ -55,4 +55,9 @@ public class AjcCompileMojo
         return project.getCompileSourceRoots();
     }
 
+    protected String getAdditionalAspectPaths()
+    {
+        return null;
+    }
+
 }

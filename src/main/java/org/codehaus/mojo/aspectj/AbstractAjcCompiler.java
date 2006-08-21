@@ -288,6 +288,12 @@ public abstract class AbstractAjcCompiler
     protected abstract List getSourceDirectories();
 
     /**
+     * Abstract method used by cild classes to specify aditional aspect paths.
+     * @return
+     */
+    protected abstract String getAdditionalAspectPaths();
+
+    /**
      * Do the AspectJ compiling.
      * 
      * @throws MojoExecutionException
@@ -298,7 +304,7 @@ public abstract class AbstractAjcCompiler
         ArtifactHandler artifactHandler = project.getArtifact().getArtifactHandler();
         if ( !"java".equals( artifactHandler.getLanguage() ) )
         {
-            getLog().info( "Not executing aspectJ compiler as the project is not a Java classpath-capable package" );
+            getLog().debug( "Not executing aspectJ compiler as the project is not a Java classpath-capable package" );
             return;
         }
 
@@ -309,17 +315,17 @@ public abstract class AbstractAjcCompiler
 
         if ( !hasSourcesToCompile() )
         {
-            getLog().info( "No sources found skipping aspectJ compile" );
+            getLog().debug( "No sources found skipping aspectJ compile" );
             return;
         }
 
         if ( !isBuildNeeded() )
         {
-            getLog().info( "No modifications found skipping aspectJ compile" );
+            getLog().debug( "No modifications found skipping aspectJ compile" );
             return;
         }
 
-        getLog().info( "Starting compiling aspects" );
+        getLog().debug( "Starting compiling aspects" );
         if ( getLog().isDebugEnabled() )
         {
             String command = "Running : ajc ";
@@ -334,9 +340,9 @@ public abstract class AbstractAjcCompiler
         {
             File outDir = new File( (String) getOutputDirectories().get( 0 ) );
             AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, outDir );
-            getLog().info(
-                           "Argumentsfile written : "
-                               + new File( outDir.getAbsolutePath() + argumentFileName ).getAbsolutePath() );
+            getLog().debug(
+                            "Argumentsfile written : "
+                                + new File( outDir.getAbsolutePath() + argumentFileName ).getAbsolutePath() );
         }
         catch ( IOException e )
         {
@@ -361,8 +367,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Assembles a complete ajc compiler arguments list.
-     * 
-     * @return aspectj compiler arguments
+     *
      * @throws MojoExecutionException error in configuration
      */
     protected void assembleArguments()
@@ -373,10 +378,10 @@ public abstract class AbstractAjcCompiler
         ajcOptions.add( AjcHelper.createClassPath( project, getOutputDirectories() ) );
 
         // Add artifacts to weave
-        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, "a dependency to weave" );
+        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, null, "a dependency to weave" );
 
         // Add library artifacts 
-        addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, "an aspect library" );
+        addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(), "an aspect library" );
 
         //add target dir argument
         ajcOptions.add( "-d" );
@@ -402,13 +407,24 @@ public abstract class AbstractAjcCompiler
      * @param arguments
      * @throws MojoExecutionException
      */
-    private void addModulesArgument( String argument, List arguments, Module[] modules, String role )
+    private void addModulesArgument( String argument, List arguments, Module[] modules, String aditionalpath,
+                                     String role )
         throws MojoExecutionException
     {
-        if ( modules != null && modules.length > 0 )
+        StringBuffer buf = new StringBuffer();
+
+        if ( null != aditionalpath )
         {
             arguments.add( argument );
-            StringBuffer buf = new StringBuffer();
+            buf.append( aditionalpath );
+        }
+        if ( modules != null && modules.length > 0 )
+        {
+            if ( !arguments.contains( argument ) )
+            {
+                arguments.add( argument );
+            }
+
             for ( int i = 0; i < modules.length; ++i )
             {
                 Module module = modules[i];
@@ -425,6 +441,9 @@ public abstract class AbstractAjcCompiler
                 }
                 buf.append( artifact.getFile().getPath() );
             }
+        }
+        if ( buf.length() > 0 )
+        {
             String pathString = buf.toString();
             arguments.add( pathString );
             getLog().debug( "Adding " + argument + ": " + pathString );
@@ -465,7 +484,6 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Not entirely safe, assembleArguments() must be run 
-     * @return
      */
     private boolean hasSourcesToCompile()
     {
@@ -475,7 +493,7 @@ public abstract class AbstractAjcCompiler
     private boolean hasSourcesChanged( File outDir )
     {
         Iterator sourceIter = resolvedIncludes.iterator();
-        long lastBuild = new File( outDir.getAbsolutePath(),argumentFileName ).lastModified();
+        long lastBuild = new File( outDir.getAbsolutePath(), argumentFileName ).lastModified();
         while ( sourceIter.hasNext() )
         {
             File sourceFile = new File( (String) sourceIter.next() );
@@ -491,7 +509,6 @@ public abstract class AbstractAjcCompiler
 
     /** 
      * Setters which when called sets compiler arguments
-     * @throws MojoExecutionException 
      */
     public void setComplianceLevel( String complianceLevel )
     {

@@ -33,13 +33,12 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.maven.artifact.handler.ArtifactHandler;
-import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.aspectj.tools.ajdoc.Main;
-
+import org.codehaus.doxia.site.renderer.SiteRenderer;
 
 /**
  * Creates a ajdoc report in html format.
@@ -92,11 +91,11 @@ public class AjcReportMojo
     /**
      * Doxia Site Renderer.
      *
-     * @parameter expression="${component.org.apache.doxia.siterenderer.Renderer}"
+     * @parameter expression="${component.org.codehaus.doxia.site.renderer.SiteRenderer}"
      * @required
      * @readonly
      */
-    private Renderer renderer;
+    private SiteRenderer siteRenderer;
 
     /**
      * Shows only package, protected, and public classes and members.
@@ -302,11 +301,11 @@ public class AjcReportMojo
     
 
     /**
-     * Get the  renderer.
+     * Get the site renderer.
      */
-    protected Renderer getSiteRenderer()
+    protected SiteRenderer getSiteRenderer()
     {
-        return renderer;
+        return siteRenderer;
     }
 
 
