@@ -631,8 +631,7 @@ public abstract class AbstractAjcCompiler
 
     public void setXlint( String xlint )
     {
-        ajcOptions.add( "-Xlint" );
-        ajcOptions.add( xlint );
+        ajcOptions.add( "-Xlint:" + xlint );
     }
 
     public void setXnoInline( boolean xnoInline )
