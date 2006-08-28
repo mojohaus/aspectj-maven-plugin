@@ -74,7 +74,7 @@ public class AjcHelperTest
     {
         final File baseDir = new File(".");
         final String fileName = "test.lst";
-        final String fileAbsolutePath = baseDir.getAbsolutePath() + fileName;
+        final String fileAbsolutePath = baseDir.getAbsolutePath() + File.separator + fileName;
         
         List args = new ArrayList();
         args.add("-classpath");

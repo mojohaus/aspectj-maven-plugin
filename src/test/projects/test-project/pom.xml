@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.5.2</version>
+			<version>1.5.2a</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
