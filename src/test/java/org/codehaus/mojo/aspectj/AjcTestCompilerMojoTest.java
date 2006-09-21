@@ -1,5 +1,7 @@
 package org.codehaus.mojo.aspectj;
 
+import java.util.Collections;
+
 /**
  * The MIT License
  *
@@ -56,7 +58,7 @@ public class AjcTestCompilerMojoTest
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.setVerbose( true );
             ajcMojo.setShowWeaveInfo( true );
-            assertTrue(AjcHelper.createClassPath(ajcMojo.project,ajcMojo.getOutputDirectories()).indexOf("junit") != -1);
+            assertTrue(AjcHelper.createClassPath(ajcMojo.project, Collections.EMPTY_LIST, ajcMojo.getOutputDirectories()).indexOf("junit") != -1);
             ajcMojo.execute();
         }
         catch ( Exception e )

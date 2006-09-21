@@ -167,6 +167,12 @@ public class AjcReportMojo
     private List ajcOptions = new ArrayList();
 
     /**
+     * @parameter expression="${plugin.artifacts}"
+     * @required
+     */
+    private List pluginArtifacts;
+    
+    /**
      * Executes this ajdoc-report generation.
      * 
      */
@@ -178,7 +184,7 @@ public class AjcReportMojo
         ArrayList arguments = new ArrayList();
         // Add classpath
         arguments.add( "-classpath" );
-        arguments.add( AjcHelper.createClassPath( project, getOutputDirectories() ) );
+        arguments.add( AjcHelper.createClassPath( project, pluginArtifacts, getOutputDirectories() ) );
 
         arguments.addAll( ajcOptions );
 
@@ -381,4 +387,9 @@ public class AjcReportMojo
 
     }
 
+    public void setPluginArtifacts( List pluginArtifacts )
+    {
+        this.pluginArtifacts = pluginArtifacts;
+
+    }    
 }

@@ -61,11 +61,13 @@ public class AjcHelper
      * 
      * @return a os spesific classpath string
      */
-    public static String createClassPath( MavenProject project, List outDirs )
+    public static String createClassPath( MavenProject project, List pluginArtifacts, List outDirs )
     {
         String cp = new String();
-        Set classPathElements = Collections.synchronizedSet( new TreeSet( project.getDependencyArtifacts() ) );
+        Set classPathElements = Collections.synchronizedSet( new TreeSet() );
+        classPathElements.addAll( project.getDependencyArtifacts() );
         classPathElements.addAll( project.getArtifacts() );
+        classPathElements.addAll( pluginArtifacts == null ? Collections.EMPTY_LIST : pluginArtifacts);
         Iterator iter = classPathElements.iterator();
         while ( iter.hasNext() )
         {
