@@ -584,19 +584,25 @@ public class DefaultWSDL2JavaPlugin
             argsList.add( "true" );
         }
 
-        if ( namespaceToPackage != null )
+        if ( mappings != null && mappings.size() > 0 )
         {
             if ( packageSpace == null )
             {
-                argsList.add( "-N" );
-                argsList.add( namespaceToPackage );
+                Iterator iter = mappings.iterator();
+                while(iter.hasNext()){
+                    Mapping mapping = (Mapping)iter.next();
+	                argsList.add( "-N"
+	                              + mapping.getNamespace()
+	                              +"="
+	                              + mapping.getTargetPackage());
+                }
             }
             else
             {
-                throw new AxisPluginException( "NStoPkg and packageSpace can not be used together" );
+                throw new AxisPluginException( "mappings and packageSpace can not be used together" );
             }
         }
-
+        
         if ( fileNamespaceToPackage != null )
         {
             argsList.add( "-f" );
