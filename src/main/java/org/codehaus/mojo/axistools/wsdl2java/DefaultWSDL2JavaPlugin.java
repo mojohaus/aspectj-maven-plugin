@@ -792,12 +792,16 @@ public class DefaultWSDL2JavaPlugin
         {
             emitter.setImplementationClassName( implementationClassName );
         }
+        
         // ?? is it correct ?
         emitter.setImports( !noImports );
+        
 // TODO:  is it comma separated in the mojo -> no documentation provided
-        emitter.setNamespaceExcludes( nsExcludes );
+        emitter.setNamespaceExcludes( nsExcludes == null ? java.util.Collections.EMPTY_LIST : nsExcludes );
+        
 // TODO:  is it comma separated in the mojo -> no documentation provided
-        emitter.setNamespaceIncludes( nsIncludes );
+        emitter.setNamespaceIncludes( nsIncludes == null ? java.util.Collections.EMPTY_LIST : nsIncludes );
+        
         emitter.setNowrap( noWrapped );
 
         if ( StringUtils.isNotEmpty( namespaceToPackage ) )
