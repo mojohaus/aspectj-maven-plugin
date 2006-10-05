@@ -25,7 +25,7 @@
       <version>2.0</version>
     </dependency>
     <dependency>
-      <groupId>axis</groupId>
+      <groupId>org.apache.axis</groupId>
       <artifactId>axis</artifactId>
       <version>1.4</version>
     </dependency>
@@ -35,7 +35,7 @@
       <version>1.0.1</version>
     </dependency>
     <dependency>
-      <groupId>axis</groupId>
+      <groupId>org.apache.axis</groupId>
       <artifactId>axis-jaxrpc</artifactId>
       <version>1.4</version>
     </dependency>
@@ -55,7 +55,7 @@
       <version>1.5.1</version>
     </dependency>
     <dependency>
-      <groupId>axis</groupId>
+      <groupId>org.apache.axis</groupId>
       <artifactId>axis-saaj</artifactId>
       <version>1.4</version>
     </dependency>
