@@ -28,7 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * A Plugin for generating stubs for WSDL files using Axis WSDL2Java.
+ * A Plugin for generating WSDL files using Axis Java2WSDL.
  *
  * @author jesse <jesse.mcconnell@gmail.com>
  * @version $Id$
