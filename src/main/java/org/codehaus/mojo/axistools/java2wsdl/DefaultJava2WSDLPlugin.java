@@ -276,10 +276,13 @@ public class DefaultJava2WSDLPlugin
         {
             argsList.add( "-m" );
 
+            String methodList = "";
             for ( Iterator i = methods.iterator(); i.hasNext(); )
             {
-                argsList.add( (String) i.next() );
+            	methodList += i.next() + " ";
             }
+            
+            argsList.add( methodList );
         }
 
         if ( all )
