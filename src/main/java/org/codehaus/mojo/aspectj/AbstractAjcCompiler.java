@@ -265,6 +265,13 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected String bootclasspath;
+    
+    /**
+     * Emit warnings for any instances of the comma-delimited list of questionable code (eg 'unusedLocals,deprecation'):
+     * see http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc for available settings
+     * @parameter
+     */
+    protected String warn;
 
     /**
      * The filename to store build configuration in.
@@ -398,6 +405,13 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-bootclasspath" );
             ajcOptions.add( bootclasspath );
+        }
+        
+        // Add warn option
+        if (null != warn )
+        {
+            ajcOptions.add( "-warn:" );
+            ajcOptions.add( warn );
         }
 
         // Add artifacts to weave
@@ -694,6 +708,11 @@ public abstract class AbstractAjcCompiler
     public void setBootClassPath( String bootclasspath )
     {
         this.bootclasspath = bootclasspath;
+    }
+    
+    public void setWarn( String warn )
+    {
+        this.warn = warn;
     }
 
     public void setArgumentFileName( String argumentFileName )

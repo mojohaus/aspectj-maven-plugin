@@ -17,6 +17,9 @@
       <action dev="kaare" type="fix" due-to="nicolas de loof" issue="MOJO-606">
         added possibility to set bootclasspath
       </action>
+      <action dev="kaare" type="fix" due-to="Eric Lessard" issue="MOJO-616">
+        added possibility to set -warn: option
+      </action>
     </release>
   </body>
 </document>
