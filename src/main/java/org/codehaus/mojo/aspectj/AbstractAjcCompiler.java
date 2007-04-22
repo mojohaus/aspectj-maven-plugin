@@ -249,14 +249,22 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected boolean XserializableAspects;
-    
+
     /**
      * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing Serializable that is affected by an aspect. 
      * The field is calculated based on the class before weaving has taken place.
      * 
      * @parameter
      */
-    protected boolean XaddSerialVersionUID;    
+    protected boolean XaddSerialVersionUID;
+
+    /**
+     * Override location of VM's bootclasspath for purposes of evaluating types when compiling. 
+     * Path is a single argument containing a list of paths to zip files or directories, delimited by the platform-specific path delimiter.
+     *
+     * @parameter
+     */
+    protected String bootclasspath;
 
     /**
      * The filename to store build configuration in.
@@ -300,8 +308,7 @@ public abstract class AbstractAjcCompiler
      * @return
      */
     protected abstract String getAdditionalAspectPaths();
-    
-    
+
     /**
      * Do the AspectJ compiling.
      * 
@@ -384,7 +391,14 @@ public abstract class AbstractAjcCompiler
     {
         // Add classpath
         ajcOptions.add( "-classpath" );
-        ajcOptions.add( AjcHelper.createClassPath( project,  null, getOutputDirectories() ) );
+        ajcOptions.add( AjcHelper.createClassPath( project, null, getOutputDirectories() ) );
+
+        // Add boot classpath
+        if ( null != bootclasspath )
+        {
+            ajcOptions.add( "-bootclasspath" );
+            ajcOptions.add( bootclasspath );
+        }
 
         // Add artifacts to weave
         addModulesArgument( "-inpath", ajcOptions, weaveDependencies, null, "a dependency to weave" );
@@ -668,7 +682,7 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-XserializableAspects" );
         }
     }
-    
+
     public void setXaddSerialVersionUID( boolean xaddSerialVersionUID )
     {
         if ( xaddSerialVersionUID )
@@ -676,14 +690,16 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-XaddSerialVersionUID" );
         }
     }
-    
-    
+
+    public void setBootClassPath( String bootclasspath )
+    {
+        this.bootclasspath = bootclasspath;
+    }
 
     public void setArgumentFileName( String argumentFileName )
     {
         this.argumentFileName = argumentFileName;
 
     }
-    
 
 }

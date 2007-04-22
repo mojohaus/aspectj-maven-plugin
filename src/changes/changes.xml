@@ -14,6 +14,9 @@
       <action dev="kaare" type="fix" due-to="Bartlomiej Zdanowski" issue="MOJO-746">
         added possibility to set -XaddSerialVersionUID
       </action>
+      <action dev="kaare" type="fix" due-to="nicolas de loof" issue="MOJO-606">
+        added possibility to set bootclasspath
+      </action>
     </release>
   </body>
 </document>
