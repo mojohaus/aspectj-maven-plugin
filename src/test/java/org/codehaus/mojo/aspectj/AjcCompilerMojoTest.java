@@ -304,7 +304,7 @@ public class AjcCompilerMojoTest
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.setOutxml( true );
             ajcMojo.execute();
-            assertTrue( FileUtils.fileExists( project.getBuild().getOutputDirectory() + "/META-INF/aop.xml" ) );
+            assertTrue( FileUtils.fileExists( project.getBuild().getOutputDirectory() + "/META-INF/aop-ajc.xml" ) );
         }
         catch ( Exception e )
         {

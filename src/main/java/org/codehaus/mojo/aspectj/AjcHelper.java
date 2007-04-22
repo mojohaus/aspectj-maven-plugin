@@ -90,6 +90,8 @@ public class AjcHelper
         {
             cp = cp.substring( 0, cp.length() - 1 );
         }
+        
+        cp = cp.replace( "//", "/" );
         return cp;
     }
 

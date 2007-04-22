@@ -293,11 +293,6 @@ public abstract class AbstractAjcCompiler
      */
     protected abstract String getAdditionalAspectPaths();
     
-    /**
-     * @parameter expression="${plugin.artifacts}"
-     * @required
-     */
-    private List pluginArtifacts;
     
     /**
      * Do the AspectJ compiling.
@@ -381,7 +376,7 @@ public abstract class AbstractAjcCompiler
     {
         // Add classpath
         ajcOptions.add( "-classpath" );
-        ajcOptions.add( AjcHelper.createClassPath( project, pluginArtifacts, getOutputDirectories() ) );
+        ajcOptions.add( AjcHelper.createClassPath( project,  null, getOutputDirectories() ) );
 
         // Add artifacts to weave
         addModulesArgument( "-inpath", ajcOptions, weaveDependencies, null, "a dependency to weave" );
@@ -673,10 +668,5 @@ public abstract class AbstractAjcCompiler
 
     }
     
-    public void setPluginArtifacts( List pluginArtifacts )
-    {
-        this.pluginArtifacts = pluginArtifacts;
-
-    }
 
 }

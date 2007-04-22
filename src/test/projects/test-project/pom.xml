@@ -18,59 +18,38 @@
 		<dependency>
 			<groupId>aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.5.2a</version>
+			<version>1.5.3</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>aspectj-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>compile</id>
-						<configuration>
-							<complianceLevel>1.5</complianceLevel> 
-							<verbose>true</verbose>
-							<showWeaveInfo>true</showWeaveInfo>
-							<ajdtBuildDefFile>
-								build-1-5.ajproperties
-							</ajdtBuildDefFile>
-							<weaveDependencies>
-								<weaveDependency>
-									<groupId>aspectj</groupId>
-									<artifactId>aspectjrt</artifactId>
-								</weaveDependency>
-							</weaveDependencies>
-							<aspectLibraries>
-								<aspectLibrary>
-									<groupId>aspectj</groupId>
-									<artifactId>aspectjrt</artifactId>
-								</aspectLibrary>
-							</aspectLibraries>
-						</configuration>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>test-compile</id>
-						<configuration>
-							<source>1.5</source>
-							<verbose>true</verbose>
-							<showWeaveInfo>true</showWeaveInfo>
-							<ajdtBuildDefFile>
-								test-build-1-5.ajproperties
-							</ajdtBuildDefFile>
-						</configuration>
-						<goals>
-							<goal>test-compile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
+               <groupId>org.codehaus.mojo</groupId>
+               <artifactId>aspectj-maven-plugin</artifactId>
+               <configuration>
+                   <source>1.5</source>
+                   <target>1.5</target>
+                   <verbose>true</verbose>
+                   <complianceLevel>1.5</complianceLevel>
+                   <showWeaveInfo>true</showWeaveInfo>
+                   <aspectLibraries>
+                       <aspectLibrary>
+                           <groupId>org.springframework</groupId>
+                           <artifactId>spring-aspects</artifactId>
+                       </aspectLibrary>
+                   </aspectLibraries>
+               </configuration>
+               <executions>
+                   <execution>
+                       <goals>
+                           <goal>compile</goal>
+                           <goal>test-compile</goal>
+                       </goals>
+                   </execution>
+               </executions>
+           </plugin>
+           <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>

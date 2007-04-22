@@ -207,13 +207,13 @@ public class AjcReportMojo
 
         // add target dir argument
         arguments.add( "-d" );
-        arguments.add( getOutputDirectory() );
+        arguments.add( getOutputDirectory().replace( "//", "/" ) );
 
         arguments.addAll( includes );
 
         if ( getLog().isDebugEnabled() )
         {
-            String command = "Running : ajc ";
+            String command = "Running : ajdoc ";
             Iterator iter = arguments.iterator();
             while ( iter.hasNext() )
             {
@@ -382,7 +382,7 @@ public class AjcReportMojo
         if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) )
         {
             ajcOptions.add( "-source" );
-            ajcOptions.add( "-" + complianceLevel );
+            ajcOptions.add( complianceLevel );
         }
 
     }

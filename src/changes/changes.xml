@@ -1,0 +1,13 @@
+<document>
+  <properties>
+    <title>Changes aspectj-maven-plugin</title>
+    <author email="kaare.nilsen@gmail.com">Kaare Nilsen</author>
+  </properties>
+  <body>
+    <release version="1.0-beta-4" date="2007-05-01" description="Bugfix release">
+      <action dev="kaare" type="fix" due-to="Ken Geis" issue="MOJO-664">
+        Upgrading plugin to aspectJ 1.5.3
+      </action>
+    </release>
+  </body>
+</document>
