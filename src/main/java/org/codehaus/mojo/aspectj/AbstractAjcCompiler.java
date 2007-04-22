@@ -249,6 +249,14 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected boolean XserializableAspects;
+    
+    /**
+     * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing Serializable that is affected by an aspect. 
+     * The field is calculated based on the class before weaving has taken place.
+     * 
+     * @parameter
+     */
+    protected boolean XaddSerialVersionUID;    
 
     /**
      * The filename to store build configuration in.
@@ -659,8 +667,17 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-XserializableAspects" );
         }
-
     }
+    
+    public void setXaddSerialVersionUID( boolean xaddSerialVersionUID )
+    {
+        if ( xaddSerialVersionUID )
+        {
+            ajcOptions.add( "-XaddSerialVersionUID" );
+        }
+    }
+    
+    
 
     public void setArgumentFileName( String argumentFileName )
     {

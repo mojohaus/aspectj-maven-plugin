@@ -8,6 +8,12 @@
       <action dev="kaare" type="fix" due-to="Ken Geis" issue="MOJO-664">
         Upgrading plugin to aspectJ 1.5.3
       </action>
+      <action dev="kaare" type="fix" due-to="Ken Geis" issue="MOJO-683">
+        Removing plugin artifacts in classpath for ajc
+      </action>
+      <action dev="kaare" type="fix" due-to="Bartlomiej Zdanowski" issue="MOJO-746">
+        added possibility to set -XaddSerialVersionUID
+      </action>
     </release>
   </body>
 </document>
