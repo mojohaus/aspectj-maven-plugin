@@ -20,6 +20,10 @@
       <action dev="kaare" type="fix" due-to="Eric Lessard" issue="MOJO-616">
         added possibility to set -warn: option
       </action>
+      <action dev="kaare" type="fix" due-to="Vincenz Braun" issue="MOJO-555">
+        aspectJ report now also honours the src/main/aspect and src/test/aspect paths in the same way
+        as the compiler does
+      </action>
     </release>
   </body>
 </document>

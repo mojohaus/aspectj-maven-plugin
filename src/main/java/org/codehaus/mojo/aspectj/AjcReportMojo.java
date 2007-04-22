@@ -51,6 +51,18 @@ public class AjcReportMojo
     extends AbstractMavenReport
 {
     /**
+     * The source directory for the aspects
+     * @parameter default-value="src/main/aspect"
+     */
+    protected String aspectDirectory = "src/main/aspect";
+
+    /**
+     * The source directory for the test aspects
+     * @parameter default-value="src/test/aspect"
+     */
+    protected String testAspectDirectory = "src/test/aspect";
+    
+    /**
      * The maven project.
      * 
      * @parameter expression="${project}"
@@ -181,6 +193,9 @@ public class AjcReportMojo
     {
         getLog().info( "Starting generating ajdoc" );
         Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
+        project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
+        project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
+        
         ArrayList arguments = new ArrayList();
         // Add classpath
         arguments.add( "-classpath" );
