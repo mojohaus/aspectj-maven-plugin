@@ -771,7 +771,7 @@ public class DefaultWSDL2JavaPlugin
 
         try
         {
-            wsdlUrl = new URL( "file:///" + wsdl.getAbsolutePath() );
+            wsdlUrl = wsdl.toURL();
         }
         catch ( MalformedURLException e )
         {
