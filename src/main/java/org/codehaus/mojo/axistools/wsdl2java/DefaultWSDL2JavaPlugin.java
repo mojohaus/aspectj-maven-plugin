@@ -65,7 +65,14 @@ public class DefaultWSDL2JavaPlugin
      */
     private ArrayList urls;
 
-    /**
+	/**
+	 * List of wsdl files from {@link #sourceDirectory} to process
+	 *
+	 * @parameter expression=""
+	 */
+	private ArrayList wsdlFiles;
+
+	/**
      * list of source dependencies in the format groupId:artifactId:version:file
      *
      * @parameter expression=""
@@ -283,7 +290,12 @@ public class DefaultWSDL2JavaPlugin
             {
                 File wsdl = (File) i.next();
 
-                getLog().info( "processing wsdl: " + wsdl.toString() );
+				if (wsdlFiles != null && !wsdlFiles.contains(wsdl.getName())) {
+					getLog().info( "Skipping wsdl: " + wsdl.toString() + " as not listed." );
+					continue;
+				}
+
+				getLog().info( "processing wsdl: " + wsdl.toString() );
 
                 try
                 {
@@ -864,11 +876,16 @@ public class DefaultWSDL2JavaPlugin
     }
 
     public void setUrls( ArrayList urls )
-    {
-        this.urls = urls;
-    }
+	{
+		this.urls = urls;
+	}
 
-    public void setSourceDependencies( ArrayList sourceDependencies )
+	public void setWsdlFiles(ArrayList wsdlFiles) 
+	{
+		this.wsdlFiles = wsdlFiles;
+	}
+
+	public void setSourceDependencies( ArrayList sourceDependencies )
     {
         this.sourceDependencies = sourceDependencies;
     }

@@ -120,4 +120,6 @@ public interface WSDL2JavaPlugin
     public void setArtifactFactory( ArtifactFactory artifactFactory );
 
     void execute() throws AxisPluginException;
+
+	void setWsdlFiles(ArrayList wsdlFiles);
 }

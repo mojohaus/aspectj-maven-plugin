@@ -51,7 +51,14 @@ public class WSDL2JavaMojo
      */
     private ArrayList urls;
 
-    /**
+	/**
+	 * List of wsdl files from {@link #sourceDirectory} to process
+	 *
+	 * @parameter expression=""
+	 */
+	private ArrayList wsdlFiles;
+
+	/**
      * list of source dependencies in the format groupId:artifactId:version:file
      *
      * @parameter expression=""
@@ -306,7 +313,8 @@ public class WSDL2JavaMojo
         plugin.setTypeMappingVersion( typeMappingVersion );
         plugin.setUrlDownloadDirectory( urlDownloadDirectory );
         plugin.setUrls( urls );
-        plugin.setUseEmitter( useEmitter );
+		plugin.setWsdlFiles(wsdlFiles);
+		plugin.setUseEmitter( useEmitter );
         plugin.setUsername( username );
         plugin.setVerbose( verbose );
         plugin.setProject( project );
