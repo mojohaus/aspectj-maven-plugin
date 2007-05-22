@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>mojo</artifactId>
     <groupId>org.codehaus.mojo</groupId>
@@ -11,7 +8,7 @@
   <artifactId>axistools-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Maven Axis Tools Plugin</name>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.1</version>
   <inceptionYear>2005</inceptionYear>
   <dependencies>
     <dependency>
@@ -60,4 +57,10 @@
       <version>1.4</version>
     </dependency>
   </dependencies>
+
+  <scm>
+    <connection>scm:svn:https://svn.codehaus.org/mojo/tags/axistools-maven-plugin-1.1</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/axistools-maven-plugin-1.1</developerConnection>
+    <url>https://svn.codehaus.org/mojo/tags/axistools-maven-plugin-1.1</url>
+  </scm>
 </project>
