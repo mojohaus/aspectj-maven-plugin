@@ -96,30 +96,26 @@ public interface WSDL2JavaPlugin
 
     void setTestSourceDirectory( File testSourceDirectory );
 
-     public void setPluginArtifacts( List pluginArtifacts );
+    void setPluginArtifacts( List pluginArtifacts );
 
+    void setSourceDirectory( File sourceDirectory );
 
-    public void setSourceDirectory( File sourceDirectory );
+    void setOutputDirectory( File outputDirectory );
 
+    void setTimestampDirectory( File timestampDirectory );
 
-    public void setOutputDirectory( File outputDirectory );
+    void setStaleMillis( int staleMillis );
 
+    void setProject( MavenProject project );
 
-    public void setTimestampDirectory( File timestampDirectory );
+    void setLog( Log log );
 
+    void setLocalRepository( ArtifactRepository localRepository );
 
-    public void setStaleMillis( int staleMillis );
+    void setArtifactFactory( ArtifactFactory artifactFactory );
 
+    void execute()
+        throws AxisPluginException;
 
-    public void setProject( MavenProject project );
-
-    public void setLog( Log log );
-
-    public void setLocalRepository( ArtifactRepository localRepository );
-
-    public void setArtifactFactory( ArtifactFactory artifactFactory );
-
-    void execute() throws AxisPluginException;
-
-	void setWsdlFiles(ArrayList wsdlFiles);
+    void setWsdlFiles( ArrayList wsdlFiles );
 }

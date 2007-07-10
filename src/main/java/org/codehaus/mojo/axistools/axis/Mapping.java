@@ -1,8 +1,5 @@
 package org.codehaus.mojo.axistools.axis;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /*
  * Copyright 2005 The Codehaus.
  *
@@ -23,19 +20,9 @@ import org.apache.commons.logging.LogFactory;
  * bean for axis mapping in the plugin configuration for emitter use
  *
  * @author <a href="mailto:Olivier.LAMY@accor.com">olamy</a>
- *         created 29 nov. 2005
  */
 public class Mapping
 {
-
-    Log log = LogFactory.getLog( Mapping.class );
-
-    public Mapping()
-    {
-        // nothing
-        log.debug( "new Mapping" );
-    }
-
     /**
      * the namespace to map
      */
@@ -78,7 +65,6 @@ public class Mapping
         this.targetPackage = targetPackage;
     }
 
-
     /**
      * @see Object#toString()
      */
@@ -87,6 +73,4 @@ public class Mapping
         return new StringBuffer( "namespace : " ).append( this.namespace )
             .append( ", targetPackage " ).append( this.targetPackage ).toString();
     }
-
-
 }

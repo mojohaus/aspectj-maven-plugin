@@ -19,28 +19,25 @@ package org.codehaus.mojo.axistools.wsdl2java;
 
 import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.utils.CLOption;
-import org.apache.axis.utils.Messages;
 import org.apache.axis.utils.CLOptionDescriptor;
+import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.WSDL2Java;
 import org.apache.axis.wsdl.gen.WSDL2;
 import org.codehaus.mojo.axistools.axis.AxisPluginException;
 
-import java.util.List;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * @author: jesse
- * @version: $Id:$
+ * @version: $Id$
  */
 public class WSDL2JavaWrapper
     extends WSDL2Java
 {
-
-
     public void execute( String args[] )
         throws AxisPluginException
     {
-
         try
         {
             // Extremely ugly hack because the "options" static field in WSDL2Java
@@ -81,7 +78,7 @@ public class WSDL2JavaWrapper
         }
         catch ( Exception e )
         {
-            throw new AxisPluginException( e );
+            throw new AxisPluginException( "Error running Axis", e );
         }
     }
 }

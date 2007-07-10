@@ -30,11 +30,10 @@ import java.util.List;
  * for the Axis Plugins
  *
  * @author: jesse
- * @version: $Id:$
+ * @version: $Id$
  */
 public abstract class AbstractAxisPlugin
 {
-
     protected File sourceDirectory;
 
     protected File outputDirectory;
@@ -76,10 +75,7 @@ public abstract class AbstractAxisPlugin
     }
 
     /**
-     * Converts a list to a comma delimited string
-     *
-     * @param list
-     * @return
+     * Converts a list to a comma delimited string.
      */
     protected String listToCommaDelimitedString( List list )
     {
@@ -104,9 +100,9 @@ public abstract class AbstractAxisPlugin
         return log;
     }
 
-    public void setLog(Log log)
+    public void setLog( Log log )
     {
-         this.log = log;
+        this.log = log;
     }
 
     public void setSourceDirectory( File sourceDirectory )

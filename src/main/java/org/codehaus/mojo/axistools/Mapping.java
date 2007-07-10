@@ -20,13 +20,10 @@ package org.codehaus.mojo.axistools;
  * This class is here in order to allow configuration of mapping elements in the
  * WSDL2JavaMojo configuration. Maven looks for the Mapping class in the same
  * package as the Mojo, so we just duplicate that class here.
- * 
+ *
  * @author mlaurie
- * 
  */
-
-public class Mapping 
-    extends org.codehaus.mojo.axistools.axis.Mapping 
+public class Mapping
+    extends org.codehaus.mojo.axistools.axis.Mapping
 {
-
 }

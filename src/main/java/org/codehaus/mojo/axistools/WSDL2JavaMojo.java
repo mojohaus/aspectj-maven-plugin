@@ -51,14 +51,14 @@ public class WSDL2JavaMojo
      */
     private ArrayList urls;
 
-	/**
-	 * List of wsdl files from {@link #sourceDirectory} to process
-	 *
-	 * @parameter expression=""
-	 */
-	private ArrayList wsdlFiles;
+    /**
+     * List of wsdl files from {@link #sourceDirectory} to process
+     *
+     * @parameter expression=""
+     */
+    private ArrayList wsdlFiles;
 
-	/**
+    /**
      * list of source dependencies in the format groupId:artifactId:version:file
      *
      * @parameter expression=""
@@ -296,7 +296,7 @@ public class WSDL2JavaMojo
         plugin.setNamespaceToPackage( namespaceToPackage );
         plugin.setNoImports( noImports );
         plugin.setNoWrapped( noWrapped );
-        plugin.setWrapArrays( wrapArrays ); //NJS 6 July 2006
+        plugin.setWrapArrays( wrapArrays );
         plugin.setNsExcludes( nsExcludes );
         plugin.setNsIncludes( nsIncludes );
         plugin.setPackageSpace( packageSpace );
@@ -313,8 +313,8 @@ public class WSDL2JavaMojo
         plugin.setTypeMappingVersion( typeMappingVersion );
         plugin.setUrlDownloadDirectory( urlDownloadDirectory );
         plugin.setUrls( urls );
-		plugin.setWsdlFiles(wsdlFiles);
-		plugin.setUseEmitter( useEmitter );
+        plugin.setWsdlFiles( wsdlFiles );
+        plugin.setUseEmitter( useEmitter );
         plugin.setUsername( username );
         plugin.setVerbose( verbose );
         plugin.setProject( project );
@@ -330,10 +330,9 @@ public class WSDL2JavaMojo
         {
             plugin.execute();
         }
-        catch ( AxisPluginException e)
+        catch ( AxisPluginException e )
         {
-            throw new MojoExecutionException("error executing plugin", e);
+            throw new MojoExecutionException( "Error generating Java code from WSDL.", e );
         }
-
     }
 }

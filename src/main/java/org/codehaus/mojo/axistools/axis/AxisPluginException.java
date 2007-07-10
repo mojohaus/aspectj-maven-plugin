@@ -18,22 +18,23 @@ package org.codehaus.mojo.axistools.axis;
 
 /**
  * @author: jesse
- * @version: $Id:$
+ * @version: $Id$
  */
-public class AxisPluginException extends Exception
+public class AxisPluginException
+    extends Exception
 {
     public AxisPluginException( String message )
     {
-        super(message);
+        super( message );
     }
 
     public AxisPluginException( Throwable cause )
     {
-        super(cause);
+        super( cause );
     }
 
     public AxisPluginException( String message, Throwable cause )
     {
-        super(message, cause);
+        super( message, cause );
     }
 }

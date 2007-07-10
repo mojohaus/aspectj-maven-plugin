@@ -16,10 +16,8 @@ package org.codehaus.mojo.axistools.java2wsdl;
  * limitations under the License.
  */
 
-
 import org.apache.axis.wsdl.Java2WSDL;
 import org.codehaus.mojo.axistools.axis.AxisPluginException;
-
 
 public class Java2WSDLWrapper
     extends Java2WSDL
@@ -35,6 +33,5 @@ public class Java2WSDLWrapper
         {
             throw new AxisPluginException( "Java2WSDL had a problem, it returned a failure status" );
         }
-
     }
 }

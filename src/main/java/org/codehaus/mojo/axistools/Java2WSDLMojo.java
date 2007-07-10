@@ -39,8 +39,6 @@ import java.util.ArrayList;
 public class Java2WSDLMojo
     extends AbstractMojo
 {
-
-
     /**
      * the directory the compile objects will be located for java2wsdl to source from
      *
@@ -190,12 +188,10 @@ public class Java2WSDLMojo
      */
     private MavenProjectHelper projectHelper;
 
-
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
         DefaultJava2WSDLPlugin plugin = new DefaultJava2WSDLPlugin();
-
 
         plugin.setAll( all );
         plugin.setBindingName( bindingName );
@@ -224,18 +220,17 @@ public class Java2WSDLMojo
         plugin.setStyle( style );
         plugin.setTypeMappingVersion( typeMappingVersion );
         plugin.setUse( use );
-        plugin.setLog (getLog ());
-        plugin.setProjectHelper (projectHelper);
-        plugin.setProject (project);
+        plugin.setLog( getLog() );
+        plugin.setProjectHelper( projectHelper );
+        plugin.setProject( project );
 
-        try {
+        try
+        {
             plugin.execute();
         }
-        catch ( AxisPluginException e)
+        catch ( AxisPluginException e )
         {
-            throw new MojoExecutionException("error executing plugin", e);
+            throw new MojoExecutionException( "Error executing creating WSDL from the Java code.", e );
         }
-
     }
-
 }

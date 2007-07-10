@@ -86,5 +86,6 @@ public interface Java2WSDLPlugin
 
     void setImportSchema( String importSchema );
 
-    void execute() throws AxisPluginException;
+    void execute()
+        throws AxisPluginException;
 }

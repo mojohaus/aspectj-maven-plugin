@@ -1,4 +1,5 @@
 package org.codehaus.mojo.axistools;
+
 /*
  * Copyright 2005 The Codehaus.
  *
@@ -29,15 +30,15 @@ import java.util.ArrayList;
  * Utility for turning xml into Axis deployment operations
  * (wraps org.apache.axis.utils.Admin)
  *
- *
  * @author mlake <mlake@netvue.com>
  * @version $Id: AdminMojo.java 2483 2006-10-07 18:18:29Z mlake $
  * @goal admin
  * @phase process-classes
  * @description Axis Admin plugin
  */
-public class AdminMojo extends AbstractMojo {
-
+public class AdminMojo
+    extends AbstractMojo
+{
     /**
      * Where the server-config.wsdd or client-config.wsdd should go
      *
@@ -47,6 +48,7 @@ public class AdminMojo extends AbstractMojo {
 
     /**
      * Generate a server or client deployment file
+     *
      * @parameter expression="true"
      * @required
      */
@@ -54,7 +56,8 @@ public class AdminMojo extends AbstractMojo {
     private boolean isServerConfig;
 
     /**
-     * Files used to create deployment file 
+     * Files used to create deployment file
+     *
      * @parameter expression="${inputFile}"
      * @required
      */
@@ -65,28 +68,26 @@ public class AdminMojo extends AbstractMojo {
      * @parameter expression="${project}"
      * @required
      */
-
     private MavenProject project;
 
-
     public void execute()
-            throws MojoExecutionException, MojoFailureException {
+        throws MojoExecutionException, MojoFailureException
+    {
         DefaultAdminPlugin plugin = new DefaultAdminPlugin();
 
+        plugin.setConfigOutputDirectory( configOutputDirectory );
+        plugin.setLog( getLog() );
+        plugin.setProject( project );
+        plugin.setServerConfig( isServerConfig );
+        plugin.setInputFiles( inputFiles );
 
-        plugin.setConfigOutputDirectory(configOutputDirectory);
-        plugin.setLog(getLog());
-        plugin.setProject(project);
-        plugin.setServerConfig(isServerConfig);
-        plugin.setInputFiles(inputFiles);
-        try {
+        try
+        {
             plugin.execute();
         }
-        catch (AxisPluginException e) {
-            throw new MojoExecutionException("error executing plugin", e);
+        catch ( AxisPluginException e )
+        {
+            throw new MojoExecutionException( "error executing plugin", e );
         }
-
     }
-
-
 }

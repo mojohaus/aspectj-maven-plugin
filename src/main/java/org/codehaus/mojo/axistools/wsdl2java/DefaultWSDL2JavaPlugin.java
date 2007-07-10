@@ -51,13 +51,10 @@ import java.util.jar.JarEntry;
  * @author: jesse
  * @version: $Id$
  */
-
 public class DefaultWSDL2JavaPlugin
     extends AbstractAxisPlugin
     implements WSDL2JavaPlugin
 {
-
-
     /**
      * list of urls to process
      *
@@ -65,14 +62,14 @@ public class DefaultWSDL2JavaPlugin
      */
     private ArrayList urls;
 
-	/**
-	 * List of wsdl files from {@link #sourceDirectory} to process
-	 *
-	 * @parameter expression=""
-	 */
-	private ArrayList wsdlFiles;
+    /**
+     * List of wsdl files from {@link #sourceDirectory} to process
+     *
+     * @parameter expression=""
+     */
+    private ArrayList wsdlFiles;
 
-	/**
+    /**
      * list of source dependencies in the format groupId:artifactId:version:file
      *
      * @parameter expression=""
@@ -165,7 +162,6 @@ public class DefaultWSDL2JavaPlugin
 
     /**
      * @parameter expression="true"
-     * NJS 6 July 2006
      */
     private boolean wrapArrays;
 
@@ -243,11 +239,9 @@ public class DefaultWSDL2JavaPlugin
      */
     private File testSourceDirectory;
 
-
     public void execute()
         throws AxisPluginException
     {
-
         if ( !outputDirectory.exists() )
         {
             outputDirectory.mkdirs();
@@ -290,30 +284,31 @@ public class DefaultWSDL2JavaPlugin
             {
                 File wsdl = (File) i.next();
 
-				if (wsdlFiles != null && !wsdlFiles.contains(wsdl.getName())) {
-					getLog().info( "Skipping wsdl: " + wsdl.toString() + " as not listed." );
-					continue;
-				}
+                if ( wsdlFiles != null && !wsdlFiles.contains( wsdl.getName() ) )
+                {
+                    getLog().info( "Skipping wsdl: " + wsdl.toString() + " as not listed." );
+                    continue;
+                }
 
-				getLog().info( "processing wsdl: " + wsdl.toString() );
+                getLog().info( "Processing wsdl: " + wsdl.toString() );
+
+                if ( !useEmitter )
+                {
+                    WSDL2JavaWrapper wsdlWrapper = new WSDL2JavaWrapper();
+                    wsdlWrapper.execute( generateWSDLArgumentList( wsdl.getAbsolutePath() ) );
+                }
+                else
+                {
+                    runEmitter( wsdl );
+                }
 
                 try
                 {
-                    if ( !useEmitter )
-                    {
-                        WSDL2JavaWrapper wsdlWrapper = new WSDL2JavaWrapper();
-                        wsdlWrapper.execute( generateWSDLArgumentList( wsdl.getAbsolutePath() ) );
-                    }
-                    else
-                    {
-                        runEmitter( wsdl );
-                    }
-
                     FileUtils.copyFileToDirectory( wsdl, timestampDirectory );
                 }
-                catch ( Throwable t )
+                catch ( IOException e )
                 {
-                    throw new AxisPluginException( "WSDL2Java execution failed", t );
+                    throw new AxisPluginException( "Error while copying the WSDL to timestamp directory.", e );
                 }
             }
         }
@@ -322,24 +317,22 @@ public class DefaultWSDL2JavaPlugin
         {
             migrateTestSource();
         }
-
     }
 
     /**
      * Downloads a missing or stale WSDL from the given URL to the directory
      * {@link #urlDownloadDirectory}.
+     * <ul>
+     * <li>if the syntax of a URL is invalid
+     * <li>if the URL cannot be opened to check the modification timestamp
+     * <li>if the URL cannot be downloaded
+     * </ul>
      *
      * @param urlStr the WSDL URL
-     * @throws org.apache.maven.plugin.MojoExecutionException
-     *          <li>if the syntax of a URL is invalid
-     *          <li>if the URL cannot be opened to check the modification
-     *          timestamp
-     *          <li>if the URL cannot be downloaded
      */
     private void downloadWSDLFromUrl( String urlStr )
         throws AxisPluginException
     {
-
         URLConnection urlConnection;
         try
         {
@@ -400,19 +393,18 @@ public class DefaultWSDL2JavaPlugin
      * Extracts a stale or missing WSDL from the artifact referenced via the
      * given source dependency name to the directory
      * {@link #sourceDependencyDirectory}.
+     * <p/>
+     * <ul>
+     * <li>if the sourceDependency format is invalid
+     * <li>if the referenced artifact JAR file cannot be opened
+     * <li>if the referenced WSDL file cannot be found or retrieved from the referenced artifact
+     * </ul>
      *
-     * @param sourceDependencyString the source dependency (format should be
-     *                               <code>groupId:artifactId:version:file</code>)
-     * @throws org.apache.maven.plugin.MojoExecutionException
-     *          <li>if the sourceDependency format is invalid
-     *          <li>if the referenced artifact JAR file cannot be opened
-     *          <li>if the referenced WSDL file cannot be found or retrieved
-     *          from the referenced artifact
+     * @param sourceDependencyString the source dependency (format should be <code>groupId:artifactId:version:file</code>)
      */
     private void extractWSDLFromSourceDependency( String sourceDependencyString )
         throws AxisPluginException
     {
-
         StringTokenizer strtok = new StringTokenizer( sourceDependencyString, ":" );
 
         if ( strtok.countTokens() != 4 )
@@ -503,7 +495,6 @@ public class DefaultWSDL2JavaPlugin
     private void migrateTestSource()
         throws AxisPluginException
     {
-
         if ( !testSourceDirectory.exists() )
         {
             testSourceDirectory.mkdirs();
@@ -538,7 +529,6 @@ public class DefaultWSDL2JavaPlugin
     private String[] generateWSDLArgumentList( String wsdl )
         throws AxisPluginException
     {
-
         ArrayList argsList = new ArrayList();
 
         if ( debug )
@@ -601,12 +591,10 @@ public class DefaultWSDL2JavaPlugin
             if ( packageSpace == null )
             {
                 Iterator iter = mappings.iterator();
-                while(iter.hasNext()){
-                    Mapping mapping = (Mapping)iter.next();
-	                argsList.add( "-N"
-	                              + mapping.getNamespace()
-	                              +"="
-	                              + mapping.getTargetPackage());
+                while ( iter.hasNext() )
+                {
+                    Mapping mapping = (Mapping) iter.next();
+                    argsList.add( "-N" + mapping.getNamespace() + "=" + mapping.getTargetPackage() );
                 }
             }
             else
@@ -614,7 +602,7 @@ public class DefaultWSDL2JavaPlugin
                 throw new AxisPluginException( "mappings and packageSpace can not be used together" );
             }
         }
-        
+
         if ( fileNamespaceToPackage != null )
         {
             argsList.add( "-f" );
@@ -703,8 +691,6 @@ public class DefaultWSDL2JavaPlugin
      * scans for the test cases that might have been generated by the call to wsdl2java
      *
      * @return Set of test case File objects
-     * @throws org.apache.maven.plugin.MojoExecutionException
-     *
      */
     private Set locateTestSources()
         throws AxisPluginException
@@ -779,7 +765,7 @@ public class DefaultWSDL2JavaPlugin
             emitter.setNamespaceMap( mappingMap );
         }
 
-        URL wsdlUrl = null;
+        URL wsdlUrl;
 
         try
         {
@@ -810,16 +796,16 @@ public class DefaultWSDL2JavaPlugin
         {
             emitter.setImplementationClassName( implementationClassName );
         }
-        
+
         // ?? is it correct ?
         emitter.setImports( !noImports );
-        
-// TODO:  is it comma separated in the mojo -> no documentation provided
+
+        // TODO:  is it comma separated in the mojo -> no documentation provided
         emitter.setNamespaceExcludes( nsExcludes == null ? java.util.Collections.EMPTY_LIST : nsExcludes );
-        
-// TODO:  is it comma separated in the mojo -> no documentation provided
+
+        // TODO:  is it comma separated in the mojo -> no documentation provided
         emitter.setNamespaceIncludes( nsIncludes == null ? java.util.Collections.EMPTY_LIST : nsIncludes );
-        
+
         emitter.setNowrap( noWrapped );
 
         if ( StringUtils.isNotEmpty( namespaceToPackage ) )
@@ -827,7 +813,7 @@ public class DefaultWSDL2JavaPlugin
             emitter.setNStoPkg( namespaceToPackage );
         }
         emitter.setOutputDir( outputDirectory.getPath() );
-// TODO: is it the right mojo parameter certainly yes ;-)
+        // TODO: is it the right mojo parameter certainly yes ;-)
         if ( StringUtils.isNotEmpty( packageSpace ) )
         {
             emitter.setPackageName( packageSpace );
@@ -851,7 +837,7 @@ public class DefaultWSDL2JavaPlugin
         emitter.setUsername( username );
         emitter.setVerbose( verbose );
         // not in the mojo but needed ?
-        emitter.setWrapArrays(wrapArrays); //NJS 6 July 2006
+        emitter.setWrapArrays( wrapArrays );
         try
         {
             emitter.run( wsdlUrl.toExternalForm() );
@@ -876,16 +862,16 @@ public class DefaultWSDL2JavaPlugin
     }
 
     public void setUrls( ArrayList urls )
-	{
-		this.urls = urls;
-	}
+    {
+        this.urls = urls;
+    }
 
-	public void setWsdlFiles(ArrayList wsdlFiles) 
-	{
-		this.wsdlFiles = wsdlFiles;
-	}
+    public void setWsdlFiles( ArrayList wsdlFiles )
+    {
+        this.wsdlFiles = wsdlFiles;
+    }
 
-	public void setSourceDependencies( ArrayList sourceDependencies )
+    public void setSourceDependencies( ArrayList sourceDependencies )
     {
         this.sourceDependencies = sourceDependencies;
     }
@@ -962,7 +948,7 @@ public class DefaultWSDL2JavaPlugin
 
     public void setWrapArrays( boolean wrapArrays )
     {
-	this.wrapArrays = wrapArrays;
+        this.wrapArrays = wrapArrays;
     }
 
     public void setSkeletonDeploy( boolean skeletonDeploy )
@@ -1034,7 +1020,4 @@ public class DefaultWSDL2JavaPlugin
     {
         this.testSourceDirectory = testSourceDirectory;
     }
-
-
 }
-

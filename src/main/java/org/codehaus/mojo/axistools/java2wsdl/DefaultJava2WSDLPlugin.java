@@ -27,19 +27,14 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /**
- *
- * User: jesse
- * Date: Feb 21, 2006
- * Time: 9:52:39 AM
+ * @author jesse
  */
 public class DefaultJava2WSDLPlugin
     extends AbstractAxisPlugin
     implements Java2WSDLPlugin
 {
-
     /**
      * the directory the compile objects will be located for java2wsdl to source from
-     *
      */
     private File classesDirectory;
 
@@ -180,17 +175,14 @@ public class DefaultJava2WSDLPlugin
      */
     private MavenProject project;
 
-
     /**
      * @component
      */
     private MavenProjectHelper projectHelper;
 
-
     public void execute()
         throws AxisPluginException
     {
-
         if ( !outputDirectory.exists() )
         {
             outputDirectory.mkdirs();
@@ -207,9 +199,7 @@ public class DefaultJava2WSDLPlugin
 
         projectHelper.addResource( project, outputDirectory.getAbsolutePath(), Collections.singletonList( "**/*.wsdl" ),
                                    Collections.EMPTY_LIST );
-
     }
-
 
     /**
      * generate the parameter String[] to be passed into the main method
@@ -219,7 +209,6 @@ public class DefaultJava2WSDLPlugin
     private String[] generateArgumentList()
         throws AxisPluginException
     {
-
         ArrayList argsList = new ArrayList();
         argsList.add( "-o" );
         argsList.add( outputDirectory.getAbsolutePath() + File.separator + filename );
@@ -279,9 +268,9 @@ public class DefaultJava2WSDLPlugin
             String methodList = "";
             for ( Iterator i = methods.iterator(); i.hasNext(); )
             {
-            	methodList += i.next() + " ";
+                methodList += i.next() + " ";
             }
-            
+
             argsList.add( methodList );
         }
 
@@ -334,7 +323,7 @@ public class DefaultJava2WSDLPlugin
 
             for ( Iterator i = excludes.iterator(); i.hasNext(); )
             {
-                argsList.add( (String) i.next() );
+                argsList.add( i.next() );
             }
         }
 
@@ -344,7 +333,7 @@ public class DefaultJava2WSDLPlugin
 
             for ( Iterator i = stopClasses.iterator(); i.hasNext(); )
             {
-                argsList.add( (String) i.next() );
+                argsList.add( i.next() );
             }
         }
 
@@ -395,7 +384,7 @@ public class DefaultJava2WSDLPlugin
             for ( Iterator i = extraClasses.iterator(); i.hasNext(); )
             {
                 argsList.add( "-e" );
-                argsList.add( (String) i.next() );
+                argsList.add( i.next() );
             }
         }
 
@@ -570,5 +559,4 @@ public class DefaultJava2WSDLPlugin
     {
         this.projectHelper = projectHelper;
     }
-
 }
