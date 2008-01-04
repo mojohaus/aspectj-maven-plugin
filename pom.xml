@@ -9,6 +9,10 @@
   <packaging>maven-plugin</packaging>
   <name>Maven Axis Tools Plugin</name>
   <version>1.2-SNAPSHOT</version>
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://jira.codehaus.org/browse/MAXISTOOLS</url>
+  </issueManagement>
   <inceptionYear>2005</inceptionYear>
   <dependencies>
     <dependency>
