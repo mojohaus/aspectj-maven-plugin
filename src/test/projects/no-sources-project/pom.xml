@@ -10,9 +10,9 @@
 	<name>aspectj-compiler-no-sources-testproject</name>
 	<dependencies>
 		<dependency>
-			<groupId>aspectj</groupId>
+			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.5.3</version>
+			<version>1.5.4</version>
 			<scope>compile</scope>
 		</dependency>
 
