@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * (wraps org.apache.axis.utils.Admin)
  *
  * @author mlake <mlake@netvue.com>
- * @version $Id: AdminMojo.java 2483 2006-10-07 18:18:29Z mlake $
+ * @version $Id$
  * @goal admin
  * @phase process-classes
  * @description Axis Admin plugin
