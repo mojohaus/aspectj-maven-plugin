@@ -379,12 +379,7 @@ public abstract class AbstractAjcCompiler
         IMessage[] errors = mavenMessageHandler.getErrors();
         if ( errors.length > 0 )
         {
-            String errorMessage = "";
-            for ( int i = 0; i < errors.length; i++ )
-            {
-                errorMessage += errors[i] + "\n";
-            }
-            throw new MojoExecutionException( "Compiler errors : \n" + errorMessage );
+            throw new CompilationFailedException( errors );
         }
     }
 
