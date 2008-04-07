@@ -1,29 +1,43 @@
 <document>
-  <properties>
-    <title>Changes aspectj-maven-plugin</title>
-    <author email="kaare.nilsen@gmail.com">Kaare Nilsen</author>
-  </properties>
-  <body>
-    <release version="1.0-beta-4" date="2007-05-01" description="Bugfix release">
-      <action dev="kaare" type="fix" due-to="Ken Geis" issue="MOJO-664">
-        Upgrading plugin to aspectJ 1.5.3
-      </action>
-      <action dev="kaare" type="fix" due-to="Ken Geis" issue="MOJO-683">
-        Removing plugin artifacts in classpath for ajc
-      </action>
-      <action dev="kaare" type="fix" due-to="Bartlomiej Zdanowski" issue="MOJO-746">
-        added possibility to set -XaddSerialVersionUID
-      </action>
-      <action dev="kaare" type="fix" due-to="nicolas de loof" issue="MOJO-606">
-        added possibility to set bootclasspath
-      </action>
-      <action dev="kaare" type="fix" due-to="Eric Lessard" issue="MOJO-616">
-        added possibility to set -warn: option
-      </action>
-      <action dev="kaare" type="fix" due-to="Vincenz Braun" issue="MOJO-555">
-        aspectJ report now also honours the src/main/aspect and src/test/aspect paths in the same way
-        as the compiler does
-      </action>
-    </release>
-  </body>
+	<properties>
+		<title>Changes aspectj-maven-plugin</title>
+		<author email="kaare.nilsen@gmail.com">Kaare Nilsen</author>
+	</properties>
+	<body>
+		<release version="1.0" date="2008-04-07"
+			description="Major release">
+			<action dev="kaare" type="fix">
+				Upgrading plugin to aspectJ 1.5.4
+			</action>
+		</release>
+		<release version="1.0-beta-4" date="2007-05-01"
+			description="Bugfix release">
+			<action dev="kaare" type="fix" due-to="Ken Geis"
+				issue="MOJO-664">
+				Upgrading plugin to aspectJ 1.5.3
+			</action>
+			<action dev="kaare" type="fix" due-to="Ken Geis"
+				issue="MOJO-683">
+				Removing plugin artifacts in classpath for ajc
+			</action>
+			<action dev="kaare" type="fix" due-to="Bartlomiej Zdanowski"
+				issue="MOJO-746">
+				added possibility to set -XaddSerialVersionUID
+			</action>
+			<action dev="kaare" type="fix" due-to="nicolas de loof"
+				issue="MOJO-606">
+				added possibility to set bootclasspath
+			</action>
+			<action dev="kaare" type="fix" due-to="Eric Lessard"
+				issue="MOJO-616">
+				added possibility to set -warn: option
+			</action>
+			<action dev="kaare" type="fix" due-to="Vincenz Braun"
+				issue="MOJO-555">
+				aspectJ report now also honours the src/main/aspect and
+				src/test/aspect paths in the same way as the compiler
+				does
+			</action>
+		</release>
+	</body>
 </document>
