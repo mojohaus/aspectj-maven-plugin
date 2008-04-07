@@ -70,4 +70,9 @@ public class Module
         this.groupId = groupId;
     }
 
+    public String toString()
+    {
+        return getGroupId() + ":" + getArtifactId();
+    }
+
 }
