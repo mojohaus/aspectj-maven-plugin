@@ -30,9 +30,7 @@ import org.aspectj.bridge.IMessage;
 import org.aspectj.bridge.MessageHandler;
 
 /**
- * A Ajc message handler. gets all compiler messages from the
- * ajc compiler, and uses maven plugin logger to print them.
- * 
+ * A Ajc message handler. gets all compiler messages from the ajc compiler, and uses maven plugin logger to print them.
  * 
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
@@ -43,7 +41,8 @@ public class MavenMessageHandler
 
     /**
      * Constructs a MessageHandler with a Maven plugin logger.
-     * @param log 
+     * 
+     * @param log
      */
     public MavenMessageHandler( Log log )
     {
@@ -83,7 +82,7 @@ public class MavenMessageHandler
         }
         else if ( message.getKind().equals( IMessage.WEAVEINFO ) && !isIgnoring( IMessage.WEAVEINFO ) )
         {
-            log.debug( (CharSequence) message.getMessage() );
+            log.info( (CharSequence) message.getMessage() );
         }
         else if ( message.getKind().equals( IMessage.TASKTAG ) && !isIgnoring( IMessage.TASKTAG ) )
         {
