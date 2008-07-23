@@ -87,24 +87,6 @@ public abstract class AbstractAjcCompiler
     protected String ajdtBuildDefFile;
 
     /**
-     * List of of modules to weave (into target directory). Corresponds to ajc
-     * -inpath option (or -injars for pre-1.2 (which is not supported)).
-     * 
-     * @parameter
-     */
-    protected Module[] weaveDependencies;
-
-    /**
-     * Weave binary aspects from the jars. 
-     * The aspects should have been output by the same version of the compiler. 
-     * The modules must also be dependencies of the project.
-     * Corresponds to ajc -aspectpath option
-     * 
-     * @parameter
-     */
-    protected Module[] aspectLibraries;
-
-    /**
      * Generate aop.xml file for load-time weaving with default name.(/META-INF/aop.xml)
      * 
      * @parameter
