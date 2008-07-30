@@ -40,7 +40,7 @@
          <item name="Goals" href="plugin-info.html"/>
       </menu>
       <menu name="Examples">
-         <item name="Simple" href="execute-examples.html"/>
+         <item name="Simple" href="examples/simple.html"/>
       </menu>
       <menu ref="reports" inherit="bottom" />
    </body>
