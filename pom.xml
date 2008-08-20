@@ -11,6 +11,10 @@
     <version>1.1-SNAPSHOT</version>
     <url>http://mojo.codehaus.org/aspectj-maven-plugin</url>
     <inceptionYear>2005</inceptionYear>
+    <ciManagement>
+      <system>hudson</system>
+      <url>http://www.davidkarlsen.com/hudson/</url>
+    </ciManagement>
     <developers>
         <developer>
             <id>kaare</id>
