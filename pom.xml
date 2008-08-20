@@ -33,6 +33,17 @@
             </roles>
             <timezone>+1</timezone>
         </contributor>
+        <contributor>
+          <name>David J. M. Karlsen</name>
+          <email>david@codehaus.org</email>
+          <organization>davidkarlsen.com</organization>
+          <organizationUrl>http://www.davidkarlsen.com</organizationUrl>
+          <url>http://xircles.codehaus.org/users/david</url>
+          <roles>
+            <role>Java Developer</role>
+          </roles>
+          <timezone>+1</timezone>
+        </contributor>
     </contributors>
     <licenses>
         <license>
