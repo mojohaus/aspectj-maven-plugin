@@ -38,6 +38,9 @@
 				src/test/aspect paths in the same way as the compiler
 				does
 			</action>
+            <action dev="david" type="fix" due-to="akuhtz" issue="MOJO-1115">
+                Upgrade to aspectj 1.6.1
+            </action>
 		</release>
 	</body>
 </document>

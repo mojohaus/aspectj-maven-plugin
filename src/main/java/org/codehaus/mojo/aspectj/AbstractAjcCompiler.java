@@ -119,26 +119,26 @@ public abstract class AbstractAjcCompiler
     protected String Xlint;
 
     /**
-     * Specify classfile target setting (1.1 to 1.5) default is 1.2
+     * Specify classfile target setting (1.1 to 1.6) default is 1.2
      * 
      *  @parameter
      */
     protected String target;
 
     /**
-     * Toggle assertions (1.3, 1.4, or 1.5 - default is 1.4). 
+     * Toggle assertions (1.3, 1.4, or 1.6 - default is 1.4). 
      * When using -source 1.3, an assert() statement valid under Java 1.4 
      * will result in a compiler error. When using -source 1.4, 
      * treat assert as a keyword and implement assertions 
      * according to the 1.4 language spec. 
-     * When using -source 1.5, Java 5 language features are permitted.
+     * When using -source 1.5 or higher, Java 5 language features are permitted.
      * 
      *  @parameter
      */
     protected String source;
 
     /**
-     * Specify compiler compliance setting (1.3 to 1.5)
+     * Specify compiler compliance setting (1.3 to 1.6)
      * default is 1.4
      * 
      *  @parameter
@@ -526,7 +526,7 @@ public abstract class AbstractAjcCompiler
      */
     public void setComplianceLevel( String complianceLevel )
     {
-        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) )
+        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) || complianceLevel.equals( "1.6" ) )
         {
             ajcOptions.add( "-" + complianceLevel );
         }
