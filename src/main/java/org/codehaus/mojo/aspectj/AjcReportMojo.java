@@ -39,6 +39,7 @@ import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.aspectj.tools.ajdoc.Main;
 import org.codehaus.doxia.site.renderer.SiteRenderer;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Creates a ajdoc report in html format.
@@ -222,7 +223,7 @@ public class AjcReportMojo
 
         // add target dir argument
         arguments.add( "-d" );
-        arguments.add( getOutputDirectory().replace( "//", "/" ) );
+        arguments.add( StringUtils.replace( getOutputDirectory(), "//", "/" ) );
 
         arguments.addAll( includes );
 

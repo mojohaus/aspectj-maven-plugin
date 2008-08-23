@@ -45,6 +45,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.plexus.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -54,7 +55,7 @@ import org.xml.sax.SAXException;
  * Create eclipse configuration of aspectJ
  * 
  * @author Juraj Burian
- * @version $Revision:$ by $Author:$
+ * @version $Revision$ by $Author$
  * 
  * (at)goal eclipse
  * @requiresDependencyResolution compile
@@ -107,7 +108,7 @@ public class EclipseAjcMojo extends AbstractAjcMojo
         PrintWriter out = null;
         try
         {
-            out = new PrintWriter( prefs );
+            out = new PrintWriter( new FileOutputStream( prefs ) );
         } catch ( FileNotFoundException e )
         {
             // can't happen
@@ -175,7 +176,8 @@ public class EclipseAjcMojo extends AbstractAjcMojo
         {
             out.print( "org.eclipse.ajdt.ui.aspectPath" + i + "=" );
             String path = paths[i];
-            path = path.replace( "\\", "/" ).replace( ":", "\\:" );
+            path = StringUtils.replace( path, "\\", "/" );
+            path = StringUtils.replace( path, ":", "\\:" );
             out.println( path );
         }
     }
@@ -231,13 +233,13 @@ public class EclipseAjcMojo extends AbstractAjcMojo
             for( int j = 0; j < nameList.getLength(); j++ )
             {
                 Element name = (Element) nameList.item( j );
-                if( name.getTextContent().equals( AJ_BUILDER ) )
+                if( name.getNodeValue().equals( AJ_BUILDER ) )
                 {
                     return false;
                 }
                 // if maven2 builder is used we don't need
                 // use aspectJ builder
-                if( name.getTextContent().equals( M2_BUILDER ) )
+                if( name.getNodeValue().equals( M2_BUILDER ) )
                 {
                     return false;
                 }
@@ -262,7 +264,7 @@ public class EclipseAjcMojo extends AbstractAjcMojo
 
         // create & append <name/>
         Element name = document.createElement( "name" );
-        name.setTextContent( AJ_BUILDER );
+        name.setNodeValue( AJ_BUILDER );
         buildCommand.appendChild( name );
 
         // create & append <arguments/>
@@ -284,7 +286,7 @@ public class EclipseAjcMojo extends AbstractAjcMojo
             for( int j = 0; j < natureList.getLength(); j++ )
             {
                 Element nature = (Element) natureList.item( j );
-                if( nature.getTextContent().equals( AJ_NATURE ) )
+                if( nature.getNodeValue().equals( AJ_NATURE ) )
                 {
                     return false;
                 }
@@ -292,7 +294,7 @@ public class EclipseAjcMojo extends AbstractAjcMojo
         }
         Element natures = (Element) naturesList.item( 0 );
         Element nature = document.createElement( "nature" );
-        nature.setTextContent( AJ_NATURE );
+        nature.setNodeValue( AJ_NATURE );
         natures.appendChild( nature );
         return true;
     }
@@ -308,11 +310,10 @@ public class EclipseAjcMojo extends AbstractAjcMojo
     private void writeDocument( Document document, File file )
             throws TransformerException, FileNotFoundException
     {
-        document.normalizeDocument();
+        document.normalize();
         DOMSource source = new DOMSource( document );
         StreamResult result = new StreamResult( new FileOutputStream( file ) );
-        Transformer transformer = //
-        TransformerFactory.newInstance().newTransformer();
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform( source, result );
     }

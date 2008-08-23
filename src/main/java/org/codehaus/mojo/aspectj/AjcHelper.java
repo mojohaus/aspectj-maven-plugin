@@ -44,6 +44,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * A helper class for creating classpaths for the compilers and report mojos
@@ -91,7 +92,7 @@ public class AjcHelper
             cp = cp.substring( 0, cp.length() - 1 );
         }
         
-        cp = cp.replace( "//", "/" );
+        cp = StringUtils.replace( cp, "//", "/" );
         return cp;
     }
 
