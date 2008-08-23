@@ -387,8 +387,7 @@ public abstract class AbstractAjcCompiler
         // Add warn option
         if (null != warn )
         {
-            ajcOptions.add( "-warn:" );
-            ajcOptions.add( warn );
+            ajcOptions.add( "-warn:" + warn );
         }
 
         // Add artifacts to weave
