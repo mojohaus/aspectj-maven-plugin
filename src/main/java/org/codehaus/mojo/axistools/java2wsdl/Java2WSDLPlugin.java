@@ -32,8 +32,6 @@ public interface Java2WSDLPlugin
 {
     String ROLE = Java2WSDLPlugin.class.getName();
 
-    void setClassesDirectory( File classesDirectory );
-
     void setOutputDirectory( File outputDirectory );
 
     void setFilename( String filename );
@@ -85,6 +83,8 @@ public interface Java2WSDLPlugin
     void setExtraClasses( ArrayList extraClasses );
 
     void setImportSchema( String importSchema );
+    
+    void setClasspath( String classpath );
 
     void execute()
         throws AxisPluginException;

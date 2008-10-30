@@ -203,7 +203,6 @@ public class Java2WSDLMojo
         plugin.setAll( all );
         plugin.setBindingName( bindingName );
         plugin.setClasspath( classpath );
-        plugin.setClassesDirectory( classesDirectory );
         plugin.setClassOfPortType( classOfPortType );
         plugin.setExcludes( excludes );
         plugin.setExtraClasses( extraClasses );
