@@ -33,10 +33,6 @@ public class DefaultJava2WSDLPlugin
     extends AbstractAxisPlugin
     implements Java2WSDLPlugin
 {
-    /**
-     * the directory the compile objects will be located for java2wsdl to source from
-     */
-    private File classesDirectory;
 
     /**
      * @parameter expression="${project.build.directory}/generated-sources/axistools/java2wsdl"
@@ -179,6 +175,11 @@ public class DefaultJava2WSDLPlugin
      * @component
      */
     private MavenProjectHelper projectHelper;
+    
+    /**
+     * Compile classpath for axis
+     */
+    private String classpath;
 
     public void execute()
         throws AxisPluginException
@@ -395,7 +396,7 @@ public class DefaultJava2WSDLPlugin
         }
 
         argsList.add( "--classpath" );
-        argsList.add( classesDirectory.getAbsolutePath() );
+        argsList.add( classpath );
 
         if ( classOfPortType != null )
         {
@@ -413,11 +414,6 @@ public class DefaultJava2WSDLPlugin
         getLog().debug( "argslist: " + argsList.toString() );
 
         return (String[]) argsList.toArray( new String[argsList.size()] );
-    }
-
-    public void setClassesDirectory( File classesDirectory )
-    {
-        this.classesDirectory = classesDirectory;
     }
 
     public void setOutputDirectory( File outputDirectory )
@@ -559,4 +555,8 @@ public class DefaultJava2WSDLPlugin
     {
         this.projectHelper = projectHelper;
     }
+    
+    public void setClasspath( String classpath ) {
+		this.classpath = classpath;
+	}
 }

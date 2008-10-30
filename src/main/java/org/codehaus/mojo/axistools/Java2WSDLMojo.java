@@ -16,6 +16,8 @@ package org.codehaus.mojo.axistools;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -26,6 +28,8 @@ import org.codehaus.mojo.axistools.java2wsdl.DefaultJava2WSDLPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Plugin for generating WSDL files using Axis Java2WSDL.
@@ -34,6 +38,7 @@ import java.util.ArrayList;
  * @version $Id$
  * @goal java2wsdl
  * @phase process-classes
+ * @requiresDependencyResolution compile
  * @description Java2WSDL plugin
  */
 public class Java2WSDLMojo
@@ -192,9 +197,12 @@ public class Java2WSDLMojo
         throws MojoExecutionException, MojoFailureException
     {
         DefaultJava2WSDLPlugin plugin = new DefaultJava2WSDLPlugin();
+        
+        String classpath = getRuntimeClasspath();
 
         plugin.setAll( all );
         plugin.setBindingName( bindingName );
+        plugin.setClasspath( classpath );
         plugin.setClassesDirectory( classesDirectory );
         plugin.setClassOfPortType( classOfPortType );
         plugin.setExcludes( excludes );
@@ -233,4 +241,31 @@ public class Java2WSDLMojo
             throw new MojoExecutionException( "Error executing creating WSDL from the Java code.", e );
         }
     }
+    
+    /**
+     * Computes the runtime classpath.
+     * 
+     * @return A representation of the computed runtime classpath.
+     * @throws MojoExecutionException in case of dependency resolution failure
+     */
+    private String getRuntimeClasspath()
+        throws MojoExecutionException
+    {
+        try
+        {
+            // get the union of compile- and runtime classpath elements
+            Set dependencySet = new HashSet();
+            dependencySet.addAll( project.getCompileClasspathElements() );
+            dependencySet.addAll( project.getRuntimeClasspathElements() );
+            dependencySet.add( classesDirectory.getAbsolutePath() );
+            String compileClasspath = StringUtils.join( dependencySet, File.pathSeparator );
+
+            return compileClasspath;
+        }
+        catch ( DependencyResolutionRequiredException e )
+        {
+            throw new MojoExecutionException( e.getMessage(), e );
+        }
+    }
+
 }
