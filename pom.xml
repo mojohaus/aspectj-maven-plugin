@@ -9,6 +9,12 @@
   <packaging>maven-plugin</packaging>
   <name>Maven Axis Tools Plugin</name>
   <version>1.2-SNAPSHOT</version>
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</developerConnection>
+    <tag>http://svn.codehaus.org/mojo/tags/</tag>
+    <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/axistools-maven-plugin</url>
+  </scm>
   <description>
     This plugin supports the wsdl2java and java2wsdl tools from the Apache Axis (1) project.
   </description>
@@ -62,4 +68,17 @@
       <url>http://www.davidkarlsen.com</url>
     </developer>
   </developers>
+  <ciManagement>
+    <system>hudson</system>
+    <url>http://davidkarlsen.com/hudson/job/axistools-maven-plugin</url>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <sendOnError>true</sendOnError>
+        <sendOnFailure>true</sendOnFailure>
+        <sendOnSuccess>true</sendOnSuccess>
+        <sendOnWarning>true</sendOnWarning>
+      </notifier>
+    </notifiers>
+  </ciManagement>
 </project>
