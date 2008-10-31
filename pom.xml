@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>mojo-parent</artifactId>
     <groupId>org.codehaus.mojo</groupId>
@@ -48,14 +49,14 @@
       <version>1.5.6</version>
     </dependency>
     <dependency>
-	  <!-- POM under org.apache.axis groupId doesn't declare meta-datas 
-	       and cannot be overriden in <plugin><dependencies> to use an 
-		   older axis release.
-	  -->
+      <!--
+        POM under org.apache.axis groupId doesn't declare meta-datas and cannot be overriden in <plugin><dependencies>
+        to use an older axis release.
+      -->
       <groupId>axis</groupId>
       <artifactId>axis</artifactId>
       <version>1.4</version>
-    </dependency>    
+    </dependency>
   </dependencies>
   <developers>
     <developer>
@@ -81,4 +82,35 @@
       </notifier>
     </notifiers>
   </ciManagement>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+        <version>2.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-changes-plugin</artifactId>
+        <configuration>
+          <columnNames>Key,Summary,Status,Resolution,Assignee,Type,Version,Fix Version</columnNames>
+          <toAddresses>
+            <toAddress>dev@mojo.codehaus.org</toAddress>
+            <toAddress>user@mojo.codehaus.org</toAddress>
+            <toAddress>users@maven.apache.org</toAddress>
+          </toAddresses>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <configuration>
+          <threshold>Normal</threshold>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jdepend-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
