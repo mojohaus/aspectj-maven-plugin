@@ -58,6 +58,13 @@
       <version>1.4</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-plugin-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
   <developers>
     <developer>
       <id>david</id>
