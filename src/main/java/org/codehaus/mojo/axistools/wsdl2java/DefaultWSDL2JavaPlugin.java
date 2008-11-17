@@ -636,14 +636,18 @@ public class DefaultWSDL2JavaPlugin
 
         if ( nsIncludes != null )
         {
+           for ( Iterator i = nsIncludes.iterator(); i.hasNext(); ) {
             argsList.add( "-i" );
-            argsList.add( listToCommaDelimitedString( nsIncludes ) );
+            argsList.add( i.next() );
+           }
         }
 
         if ( nsExcludes != null )
         {
+           for ( Iterator i = nsExcludes.iterator(); i.hasNext(); ) {
             argsList.add( "-x" );
-            argsList.add( listToCommaDelimitedString( nsExcludes ) );
+            argsList.add( i.next() );
+           }
         }
 
         if ( helperGen )
