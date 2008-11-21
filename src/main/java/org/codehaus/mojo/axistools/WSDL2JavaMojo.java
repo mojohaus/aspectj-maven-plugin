@@ -238,11 +238,13 @@ public class WSDL2JavaMojo
 
     /**
      * @parameter expression="${project.build.directory}/generated-sources/axistools/wsdl2java"
+     * @required
      */
     private File outputDirectory;
 
     /**
      * @parameter expression="${basedir}/target"
+     * @required
      */
     private File timestampDirectory;
 

@@ -295,7 +295,7 @@ public class DefaultWSDL2JavaPlugin
                 if ( !useEmitter )
                 {
                     WSDL2JavaWrapper wsdlWrapper = new WSDL2JavaWrapper();
-                    wsdlWrapper.execute( generateWSDLArgumentList( wsdl.getAbsolutePath() ) );
+                    wsdlWrapper.execute( generateWSDLArgumentList( wsdl.toURI().toString() ) );
                 }
                 else
                 {
@@ -733,17 +733,17 @@ public class DefaultWSDL2JavaPlugin
 
         try
         {
-            if ( sourceDirectory.exists() )
+            if ( ( sourceDirectory != null ) && sourceDirectory.exists() )
             {
                 staleSources.addAll( scanner.getIncludedSources( sourceDirectory, timestampDirectory ) );
             }
 
-            if ( urlDownloadDirectory.exists() )
+            if ( ( urlDownloadDirectory != null ) && urlDownloadDirectory.exists() )
             {
                 staleSources.addAll( scanner.getIncludedSources( urlDownloadDirectory, timestampDirectory ) );
             }
 
-            if ( sourceDependencyDirectory.exists() )
+            if ( ( sourceDependencyDirectory != null ) && sourceDependencyDirectory.exists() )
             {
                 staleSources.addAll( scanner.getIncludedSources( sourceDependencyDirectory, timestampDirectory ) );
             }
