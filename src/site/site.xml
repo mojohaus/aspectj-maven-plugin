@@ -1,6 +1,6 @@
-<project name="Mojo">
+<project>
    <body>
-      <menu>
+      <menu name="AspectJ plugin Quickstart">
          <item name="Standard usage" href="./usage.html"/>
          <item name="Seperate test/compile settings" href="./differentTestAndCompile.html"/>
          <item name="Using includes/excludes" href="./includeExclude.html"/>
