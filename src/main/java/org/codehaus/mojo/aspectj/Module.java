@@ -37,12 +37,6 @@ public class Module
 
     /** Artifact's id */
     private String artifactId;
-    
-    /** Artifact's classifier */
-    private String classifier;
-    
-    /** Aritfact's type */
-    private String type;
 
     /**
      * @return id of artifact
@@ -75,39 +69,10 @@ public class Module
     {
         this.groupId = groupId;
     }
-    
-    public String getClassifier()
-    {
-        return classifier;
-    }
-    
-    public void setClassifier( String classifier )
-    {
-        this.classifier = classifier;
-    }
-    
-    public String getType()
-    {
-        return type;
-    }
-    
-    public void setType( String type )
-    {
-        this.type = type;
-    }
 
     public String toString()
     {
-       return getGroupId() + ":" + getArtifactId() + ":" + getType() + getClassifier() != null ? ":" + getClassifier() : "";
-    }
-    
-    /**
-     * The maven artifact key.
-     * @return
-     */
-    public String toKey()
-    {
-        return toString();
+        return getGroupId() + ":" + getArtifactId();
     }
 
 }
