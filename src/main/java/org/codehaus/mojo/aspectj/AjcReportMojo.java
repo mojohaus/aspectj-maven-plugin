@@ -182,6 +182,7 @@ public class AjcReportMojo
     /**
      * @parameter expression="${plugin.artifacts}"
      * @required
+     * @readonly
      */
     private List pluginArtifacts;
     
