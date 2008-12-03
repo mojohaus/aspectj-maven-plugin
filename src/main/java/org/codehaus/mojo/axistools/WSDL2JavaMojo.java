@@ -243,7 +243,7 @@ public class WSDL2JavaMojo
     private File outputDirectory;
 
     /**
-     * @parameter expression="${basedir}/target"
+     * @parameter expression="${project.build.directory}"
      * @required
      */
     private File timestampDirectory;
@@ -259,6 +259,7 @@ public class WSDL2JavaMojo
     /**
      * @parameter expression="${project}"
      * @required
+     * @readonly
      */
     private MavenProject project;
 
@@ -279,6 +280,7 @@ public class WSDL2JavaMojo
     /**
      * @parameter expression="${plugin.artifacts}"
      * @required
+     * @readonly
      */
     private List pluginArtifacts;
 

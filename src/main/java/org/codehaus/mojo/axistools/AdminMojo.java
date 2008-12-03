@@ -67,6 +67,7 @@ public class AdminMojo
     /**
      * @parameter expression="${project}"
      * @required
+     * @readonly
      */
     private MavenProject project;
 

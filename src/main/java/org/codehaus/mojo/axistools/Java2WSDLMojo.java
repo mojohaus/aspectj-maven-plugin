@@ -16,6 +16,11 @@ package org.codehaus.mojo.axistools;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -25,11 +30,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.mojo.axistools.axis.AxisPluginException;
 import org.codehaus.mojo.axistools.java2wsdl.DefaultJava2WSDLPlugin;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A Plugin for generating WSDL files using Axis Java2WSDL.
@@ -47,7 +47,7 @@ public class Java2WSDLMojo
     /**
      * the directory the compile objects will be located for java2wsdl to source from
      *
-     * @parameter expression="${project.build.directory}/classes
+     * @parameter expression="${project.build.outputDirectory}"
      */
     private File classesDirectory;
 
@@ -185,6 +185,7 @@ public class Java2WSDLMojo
     /**
      * @parameter expression="${project}"
      * @required
+     * @readonly
      */
     private MavenProject project;
 
@@ -198,7 +199,7 @@ public class Java2WSDLMojo
     {
         DefaultJava2WSDLPlugin plugin = new DefaultJava2WSDLPlugin();
         
-        String classpath = getRuntimeClasspath();
+        String classpath = getCompileClasspath();
 
         plugin.setAll( all );
         plugin.setBindingName( bindingName );
@@ -247,15 +248,14 @@ public class Java2WSDLMojo
      * @return A representation of the computed runtime classpath.
      * @throws MojoExecutionException in case of dependency resolution failure
      */
-    private String getRuntimeClasspath()
+    private String getCompileClasspath()
         throws MojoExecutionException
     {
         try
         {
             // get the union of compile- and runtime classpath elements
-            Set dependencySet = new HashSet();
+            Set dependencySet = new LinkedHashSet();
             dependencySet.addAll( project.getCompileClasspathElements() );
-            dependencySet.addAll( project.getRuntimeClasspathElements() );
             dependencySet.add( classesDirectory.getAbsolutePath() );
             String compileClasspath = StringUtils.join( dependencySet, File.pathSeparator );
 
