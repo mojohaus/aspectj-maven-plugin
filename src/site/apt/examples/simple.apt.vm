@@ -19,6 +19,7 @@ Example:
             <plugin>
                <groupId>org.codehaus.mojo</groupId>
                <artifactId>axistools-maven-plugin</artifactId>
+               <version>${project.version}</version>
                <configuration>
                   <urls>
                   	<url>http://host/server/sample.wsdl</url>

@@ -135,7 +135,9 @@ Notes:
   
 ------------
   <plugin>
+  	<groupId>org.codehaus.mojo</groupId>
     <artifactId>axistools-maven-plugin</artifactId>
+    <version>${project.version}</version>
 	<dependencies>
 	  <dependency>
 		<groupId>axis</groupId>
