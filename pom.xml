@@ -22,6 +22,10 @@
       <system>hudson</system>
       <url>http://www.davidkarlsen.com/hudson/</url>
     </ciManagement>
+   <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/MAXISTOOLS</url>
+   </issueManagement>
     <developers>
         <developer>
             <id>kaare</id>
