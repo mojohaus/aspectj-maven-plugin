@@ -10,6 +10,10 @@ import org.aspectj.bridge.IMessage;
  */
 public class CompilationFailedException extends MojoExecutionException
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2558168648061612263L;
     private IMessage[] errors;
 
     public CompilationFailedException( IMessage[] errors )
