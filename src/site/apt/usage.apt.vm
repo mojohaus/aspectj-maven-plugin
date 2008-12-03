@@ -1,0 +1,42 @@
+Usage
+
+  This plugin weaves aspectJ aspects with your classes using the AspectJ ajc compiler.
+  Please do remember to add aspectjrt dependency to your project. aspectj needs it to weave
+  and ultimatly to run your code. to have it compile aspects found in your project source directories
+  simply use the configuration below
+  
++------------------------------------------+
+<project>
+    ...
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        ...
+    </dependencies>
+    ...
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>       <!-- use this goal to weave all your main classes -->
+                            <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
+                        </goals>
+                    </execution>
+               </executions>
+           </plugin>
+           ...
+       </plugins>
+   <build>
+...
+</project>
++------------------------------------------+
+

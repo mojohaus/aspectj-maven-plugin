@@ -1,0 +1,48 @@
+Using includes/excludes
+
+  The AspectJ plugin will by default add all .java and .aj files in the
+  project sourcedirectories. Below you will find an example of how
+  to add a include/excludefiltering on top of that.
+  
++------------------------------------------+
+<project>
+    ...
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        ...
+    </dependencies>
+    ...
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <includes>
+                    	<include>**/TransationAspect.java</include>
+                    	<include>**/SecurityAspect.aj</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/logging/*.aj</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+               </executions>
+           </plugin>
+           ...
+       </plugins>in
+   <build>
+...
+</project>
++------------------------------------------+
