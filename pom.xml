@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>mojo-parent</artifactId>
     <groupId>org.codehaus.mojo</groupId>
@@ -26,12 +25,12 @@
   <artifactId>axistools-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Maven Axis Tools Plugin</name>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/mojo/tags/axistools-maven-plugin-1.2</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/axistools-maven-plugin-1.2</developerConnection>
     <tag>http://svn.codehaus.org/mojo/tags/</tag>
-    <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/axistools-maven-plugin</url>
+    <url>http://fisheye.codehaus.org/browse/mojo/tags/axistools-maven-plugin-1.2</url>
   </scm>
   <description>
     This plugin supports the wsdl2java and java2wsdl tools from the Apache Axis (1) project.
