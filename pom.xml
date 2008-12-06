@@ -126,6 +126,9 @@
         <sendOnFailure>true</sendOnFailure>
         <sendOnSuccess>true</sendOnSuccess>
         <sendOnWarning>true</sendOnWarning>
+        <configuration>
+          <address>david@codehaus.org</address>
+        </configuration>
       </notifier>
     </notifiers>
   </ciManagement>
