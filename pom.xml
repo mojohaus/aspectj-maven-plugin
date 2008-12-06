@@ -21,6 +21,18 @@
     <ciManagement>
       <system>hudson</system>
       <url>http://www.davidkarlsen.com/hudson/</url>
+      <notifiers>
+        <notifier>
+          <type>mail</type>
+          <sendOnError>true</sendOnError>
+          <sendOnFailure>true</sendOnFailure>
+          <sendOnSuccess>true</sendOnSuccess>
+          <sendOnWarning>true</sendOnWarning>
+          <configuration>
+            <address>david@codehaus.org</address>
+          </configuration>
+        </notifier>
+      </notifiers>
     </ciManagement>
    <issueManagement>
     <system>jira</system>
