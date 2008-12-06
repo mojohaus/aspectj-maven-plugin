@@ -183,7 +183,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Specify default source encoding format. 
      *      
-     * @parameter
+     * @parameter expression="${project.build.sourceEncoding}"
      */
     protected String encoding;
 
