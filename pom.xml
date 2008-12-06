@@ -24,7 +24,7 @@
     </ciManagement>
    <issueManagement>
     <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MAXISTOOLS</url>
+    <url>http://jira.codehaus.org/browse/MASPECTJ</url>
    </issueManagement>
     <developers>
         <developer>
