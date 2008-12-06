@@ -166,42 +166,24 @@
     </dependencies>
     <reporting>
         <plugins>
-            <plugin>
-                <artifactId>maven-plugin-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>
-                    maven-project-info-reports-plugin
-                </artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>cim</report>
-                            <report>issue-tracking</report>
-                            <report>license</report>
-                            <report>mailing-list</report>
-                            <report>scm</report>
-                            <report>project-team</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-changes-plugin</artifactId>
-                <configuration>
-                    <issueLinkTemplate>
-                        %URL%/%ISSUE%
-                    </issueLinkTemplate>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>changes-report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
+          <plugin>
+            <artifactId>maven-plugin-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-changes-plugin</artifactId>
+            <version>2.1</version>
+            <configuration>
+              <urlDownload>${project.url}</urlDownload>
+              <columnNames>Key,Summary,Status,Resolution,Assignee,Type,Version,Fix Version</columnNames>
+              <generateJiraAnnouncement>true</generateJiraAnnouncement>
+              <toAddresses>
+                <toAddress>dev@mojo.codehaus.org</toAddress>
+                <toAddress>user@mojo.codehaus.org</toAddress>
+                <toAddress>users@maven.apache.org</toAddress>
+              </toAddresses>
+            </configuration>
+          </plugin>
         </plugins>
     </reporting>
 </project>
