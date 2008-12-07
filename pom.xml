@@ -143,6 +143,8 @@
         <version>2.1</version>
         <configuration>
           <columnNames>Key,Summary,Status,Resolution,Assignee,Type,Version,Fix Version</columnNames>
+	  <generateJiraAnnouncement>true</generateJiraAnnouncement>
+	  <urlDownload>${project.url}</urlDownload>
           <toAddresses>
             <toAddress>dev@mojo.codehaus.org</toAddress>
             <toAddress>user@mojo.codehaus.org</toAddress>
