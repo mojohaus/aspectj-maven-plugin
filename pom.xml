@@ -1,21 +1,22 @@
-<!--
-/*
- * Copyright 2005-2008 The Codehaus.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <!--
+    /* 
+    * Copyright 2005-2008 The Codehaus. 
+    * 
+    * Licensed under the Apache License, Version 2.0 (the "License"); 
+    * you may not use this file except in compliance with the License. 
+    * You may obtain a copy of the License at 
+    * 
+    * http://www.apache.org/licenses/LICENSE-2.0 
+    * 
+    * Unless required by applicable law or agreed to in writing, software 
+    * distributed under the License is distributed on an "AS IS" BASIS, 
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+    * See the License for the specific language governing permissions and 
+    * limitations under the License. 
+    */
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>mojo-parent</artifactId>
     <groupId>org.codehaus.mojo</groupId>
@@ -96,6 +97,29 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <profiles>
+    <profile>
+      <id>integration-test</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>shitty-maven-plugin</artifactId>
+            <version>1.0-alpha-3</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>clean</goal>
+                  <goal>install</goal>
+                  <goal>test</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
   <build>
     <plugins>
       <plugin>
@@ -142,9 +166,10 @@
         <artifactId>maven-changes-plugin</artifactId>
         <version>2.1</version>
         <configuration>
-          <columnNames>Key,Summary,Status,Resolution,Assignee,Type,Version,Fix Version</columnNames>
-	  <generateJiraAnnouncement>true</generateJiraAnnouncement>
-	  <urlDownload>${project.url}</urlDownload>
+          <columnNames>Key,Summary,Status,Resolution,Assignee,Type,Version,Fix
+            Version</columnNames>
+          <generateJiraAnnouncement>true</generateJiraAnnouncement>
+          <urlDownload>${project.url}</urlDownload>
           <toAddresses>
             <toAddress>dev@mojo.codehaus.org</toAddress>
             <toAddress>user@mojo.codehaus.org</toAddress>
