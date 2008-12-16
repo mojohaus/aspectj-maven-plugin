@@ -37,9 +37,8 @@ import org.codehaus.mojo.axistools.java2wsdl.DefaultJava2WSDLPlugin;
  * @author jesse <jesse.mcconnell@gmail.com>
  * @version $Id$
  * @goal java2wsdl
- * @phase generate-resources
+ * @phase process-classes
  * @requiresDependencyResolution compile
- * @execute phase="compile"
  * @description Java2WSDL plugin
  */
 public class Java2WSDLMojo
