@@ -178,7 +178,7 @@ public class DefaultWSDL2JavaPlugin
     /**
      * @parameter expression="${fileNamespaceToPackage}"
      */
-    private String fileNamespaceToPackage;
+    private File fileNamespaceToPackage;
 
     /**
      * @parameter expression="${deployScope}"
@@ -606,7 +606,7 @@ public class DefaultWSDL2JavaPlugin
         if ( fileNamespaceToPackage != null )
         {
             argsList.add( "-f" );
-            argsList.add( fileNamespaceToPackage );
+            argsList.add( fileNamespaceToPackage.getAbsolutePath() );
         }
 
         if ( deployScope != null )
@@ -965,7 +965,7 @@ public class DefaultWSDL2JavaPlugin
         this.namespaceToPackage = namespaceToPackage;
     }
 
-    public void setFileNamespaceToPackage( String fileNamespaceToPackage )
+    public void setFileNamespaceToPackage( File fileNamespaceToPackage )
     {
         this.fileNamespaceToPackage = fileNamespaceToPackage;
     }

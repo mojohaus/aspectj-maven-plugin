@@ -72,7 +72,7 @@ public interface WSDL2JavaPlugin
 
     void setNamespaceToPackage( String namespaceToPackage );
 
-    void setFileNamespaceToPackage( String fileNamespaceToPackage );
+    void setFileNamespaceToPackage( File fileNamespaceToPackage );
 
     void setDeployScope( String deployScope );
 
