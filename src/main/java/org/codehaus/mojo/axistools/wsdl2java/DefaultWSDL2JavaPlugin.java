@@ -295,7 +295,7 @@ public class DefaultWSDL2JavaPlugin
                 if ( !useEmitter )
                 {
                     WSDL2JavaWrapper wsdlWrapper = new WSDL2JavaWrapper();
-                    wsdlWrapper.execute( generateWSDLArgumentList( wsdl.toURI().toString() ) );
+                    wsdlWrapper.execute( generateWSDLArgumentList( wsdl.getAbsoluteFile() ) );
                 }
                 else
                 {
@@ -526,7 +526,7 @@ public class DefaultWSDL2JavaPlugin
      * @param wsdl path of the wsdl file to process
      * @return argument array for the invocation of {@link org.codehaus.mojo.axistools.WSDL2JavaMojo}
      */
-    private String[] generateWSDLArgumentList( String wsdl )
+    private String[] generateWSDLArgumentList( File wsdl )
         throws AxisPluginException
     {
         ArrayList argsList = new ArrayList();
@@ -681,10 +681,10 @@ public class DefaultWSDL2JavaPlugin
         else if ( packageSpace != null && subPackageByFileName )
         {
             argsList.add( "-p" );
-            argsList.add( packageSpace + "." + FileUtils.basename( wsdl, ".wsdl" ) );
+            argsList.add( packageSpace + "." + FileUtils.basename( wsdl.getAbsolutePath(), ".wsdl" ) );
         }
 
-        argsList.add( wsdl );
+        argsList.add( wsdl.toURI().toString() );
 
         getLog().debug( "argslist: " + argsList.toString() );
 
