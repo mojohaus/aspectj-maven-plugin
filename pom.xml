@@ -99,7 +99,7 @@
   </dependencies>
   <profiles>
     <profile>
-      <id>integration-test</id>
+      <id>run-its</id>
       <activation>
         <property>
           <name>shit</name>
