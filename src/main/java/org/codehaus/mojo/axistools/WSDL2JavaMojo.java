@@ -45,49 +45,49 @@ public class WSDL2JavaMojo
     extends AbstractMojo
 {
     /**
-     * list of urls to process
+     * List of URLs to process.
      *
      * @parameter expression=""
      */
     private ArrayList urls;
 
     /**
-     * List of wsdl files from {@link #sourceDirectory} to process
+     * List of WSDL files from {@link #sourceDirectory} to process.
      *
      * @parameter expression=""
      */
     private ArrayList wsdlFiles;
 
     /**
-     * list of source dependencies in the format groupId:artifactId:version:file
+     * List of source dependencies in the format groupId:artifactId:version:file.
      *
      * @parameter expression=""
      */
     private ArrayList sourceDependencies;
 
     /**
-     * Cache directory for WSDLs from URLs
+     * Cache directory for WSDLs from URLs.
      *
-     * @parameter expression="${project.build.directory}/axistools/wsdl2java/urlDownloads"
+     * @parameter default-value="${project.build.directory}/axistools/wsdl2java/urlDownloads"
      */
     private File urlDownloadDirectory;
 
     /**
-     * Cache directory for WSDLs from sourceDependencies
+     * Cache directory for WSDLs from sourceDependencies.
      *
-     * @parameter expression="${project.build.directory}/axistools/wsdl2java/sourceDependencies"
+     * @parameter default-value="${project.build.directory}/axistools/wsdl2java/sourceDependencies"
      */
     private File sourceDependencyDirectory;
 
     /**
-     * use the Emitter for generating the java files as opposed to the commandline wsdl2java tool
+     * Use the Emitter for generating the java files as opposed to the commandline wsdl2java tool.
      *
-     * @parameter expression="false"
+     * @parameter default-value="false"
      */
     private boolean useEmitter;
 
     /**
-     * mappings are only used when useEmitter is set to true
+     * Mappings are only used when useEmitter is set to true.
      *
      * @parameter expression=""
      */
@@ -95,12 +95,13 @@ public class WSDL2JavaMojo
 
     /**
      * Emit server-side bindings for web service.
+     *
      * @parameter expression="${serverSide}"
      */
     private boolean serverSide;
 
     /**
-     * package to create the java files under
+     * Package to create the java files under.
      *
      * @parameter expression="${packageSpace}"
      */
@@ -108,32 +109,34 @@ public class WSDL2JavaMojo
 
     /**
      * See what the tool is generating as it is generating it.
+     *
      * @parameter expression="${verbose}"
      */
     private boolean verbose;
 
     /**
-     * generate the test cases
+     * Generate the test cases.
      *
      * @parameter expression="${testCases}"
      */
     private boolean testCases;
 
     /**
-     * copy the generated test cases to a generated-sources test directory to be compiled and run as normal surefire unit tests
+     * Copy the generated test cases to a generated-sources test directory to be
+     * compiled and run as normal surefire unit tests.
      *
-     * @parameter expression="false"
+     * @parameter default-value="false"
      */
     private boolean runTestCasesAsUnitTests;
 
     /**
-     * Generate code for all elements, even unreferenced ones. 
+     * Generate code for all elements, even unreferenced ones.
      * By default, WSDL2Java only generates code for those elements in the WSDL file that are referenced.
-     * A note about what it means to be referenced. 
-     * We cannot simply say: start with the services, generate all bindings referenced by the service, 
-     * generate all portTypes referenced by the referenced bindings, etc. 
-     * What if we're generating code from a WSDL file that only contains portTypes, messages, and types? 
-     * If WSDL2Java used service as an anchor, and there's no service in the file, then nothing will be generated. 
+     * A note about what it means to be referenced.
+     * We cannot simply say: start with the services, generate all bindings referenced by the service,
+     * generate all portTypes referenced by the referenced bindings, etc.
+     * What if we're generating code from a WSDL file that only contains portTypes, messages, and types?
+     * If WSDL2Java used service as an anchor, and there's no service in the file, then nothing will be generated.
      * So the anchor is the lowest element that exists in the WSDL file in the order:
      * <ol>
      *   <li>types
@@ -141,74 +144,82 @@ public class WSDL2JavaMojo
      *   <li>bindings
      *   <li>services
      * </ol>
-     * For example, if a WSDL file only contained types, then all the listed types would be generated. 
-     * But if a WSDL file contained types and a portType, 
+     * For example, if a WSDL file only contained types, then all the listed types would be generated.
+     * But if a WSDL file contained types and a portType,
      * then that portType will be generated and only those types that are referenced by that portType.
-     * Note that the anchor is searched for in the WSDL file appearing on the command line, not in imported WSDL files. 
+     * Note that the anchor is searched for in the WSDL file appearing on the command line, not in imported WSDL files.
      * This allows one WSDL file to import constructs defined in another WSDL file without the nuisance of having all the imported WSDL file's constructs generated.
+     *
      * @parameter expression="${allElements}"
      */
     private boolean allElements;
 
     /**
-     * Print debug information, which currently is WSDL2Java's symbol table. 
+     * Print debug information, which currently is WSDL2Java's symbol table.
      * Note that this is only printed after the symbol table is complete, ie., after the WSDL is parsed successfully.
-     * @parameter expression="false"
+     *
+     * @parameter default-value="false"
      */
     private boolean debug;
 
     /**
      * Timeout in seconds (default is 45, specify -1 to disable).
+     *
      * @parameter expression="${timeout}"
      */
     private Integer timeout;
 
     /**
      * Only generate code for the immediate WSDL document.
-     * @parameter expression="false"
+     *
+     * @parameter default-value="false"
      */
     private boolean noImports;
 
     /**
      * Turn off support for "wrapped" document/literal.
-     * @parameter expression="false"
+     *
+     * @parameter default-value="false"
      */
     private boolean noWrapped;
 
     /**
-     * @parameter expression="true"
+     * @parameter default-value="true"
      * NJS 6 July 2006
      */
     private boolean wrapArrays;
 
     /**
      * Deploy skeleton (true) or implementation (false) in deploy.wsdd.
-     * @parameter expression="false"
+     *
+     * @parameter default-value="false"
      */
     private boolean skeletonDeploy;
 
     /**
-     * Mapping of namespace to package
+     * Mapping of namespace to package.
+     *
      * @parameter expression="${namespaceToPackage}"
      */
     private String namespaceToPackage;
 
     /**
-     * file of NStoPkg mappings
-     * @parameter expression="${fileNamespaceToPackage}" 
+     * File containing NStoPkg mappings.
+     * @parameter expression="${fileNamespaceToPackage}"
      */
     private File fileNamespaceToPackage;
 
     /**
-     * Add scope to deploy.xml: "Application", "Request", "Session"
+     * Add scope to deploy.xml: "Application", "Request", "Session".
+     *
      * @parameter expression="${deployScope}"
      */
     private String deployScope;
 
     /**
      * Indicate 1.1 or 1.2. The default is 1.1 (SOAP 1.1 JAX-RPC compliant.
-     * 1.2 indicates SOAP 1.1 encoded.)
-     * 
+     * 1.2 indicates SOAP 1.1 encoded.).
+     *
      * @parameter expression="${typeMappingVersion}"
      */
     private String typeMappingVersion;
@@ -216,44 +227,51 @@ public class WSDL2JavaMojo
     /**
      * Name of a custom class that implements GeneratorFactory interface
      * (for extending Java generation functions).
+     *
      * @parameter expression="${factory}"
      */
     private String factory;
 
     /**
-     * Namescape to specifically include in the generated code (defaults to 
-     * all namespaces unless specifically excluded with the {@linkplain #nsExcludes} option)
-     * @parameter 
+     * Namescape to specifically include in the generated code (defaults to
+     * all namespaces unless specifically excluded with the {@linkplain #nsExcludes} option).
+     *
+     * @parameter
      */
     private ArrayList nsIncludes;
 
     /**
-     * Namespace to specifically exclude from the generated code (defaults to 
-     * none excluded until first namespace included with {@linkplain #nsIncludes} option)
-     * @parameter 
+     * Namespace to specifically exclude from the generated code (defaults to
+     * none excluded until first namespace included with {@linkplain #nsIncludes} option).
+     *
+     * @parameter
      */
     private ArrayList nsExcludes;
 
     /**
      * Emits separate Helper classes for meta data.
+     *
      * @parameter expression="false"
      */
     private boolean helperGen;
 
     /**
      * Username to access the WSDL-URI.
+     *
      * @parameter expression="${username}"
      */
     private String username;
 
     /**
      * Password to access the WSDL-URI.
+     *
      * @parameter expression="${password}"
      */
     private String password;
 
     /**
      * Use this as the implementation class.
+     *
      * @parameter expression="${implementationClassName}"
      */
     private String implementationClassName;
@@ -266,34 +284,36 @@ public class WSDL2JavaMojo
     private boolean subPackageByFileName;
 
     /**
-     * location to place generated test source
+     * Location to place generated test source files.
      *
-     * @parameter expression="${project.build.directory}/generated-test-sources/wsdl"
+     * @parameter default-value="${project.build.directory}/generated-test-sources/wsdl"
      */
     private File testSourceDirectory;
 
     /**
-     * source directory that contains .wsdl files
+     * Source directory that contains .wsdl files.
      *
-     * @parameter expression="${basedir}/src/main/wsdl"
+     * @parameter default-value="${basedir}/src/main/wsdl"
      */
     private File sourceDirectory;
 
     /**
-     * @parameter expression="${project.build.directory}/generated-sources/axistools/wsdl2java"
+     * Location to place generated java source files.
+     *
+     * @parameter default-value="${project.build.directory}/generated-sources/axistools/wsdl2java"
      * @required
      */
     private File outputDirectory;
 
     /**
-     * @parameter expression="${project.build.directory}"
+     * @parameter default-value="${project.build.directory}"
      * @required
      */
     private File timestampDirectory;
 
     /**
      * The granularity in milliseconds of the last modification
-     * date for testing whether a source needs recompilation
+     * date for testing whether a source needs recompilation.
      *
      * @parameter expression="${lastModGranularityMs}" default-value="0"
      */
