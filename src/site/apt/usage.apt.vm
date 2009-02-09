@@ -5,20 +5,21 @@
  ------
  12 November 2005
  ------
- 
- 
-WSDL2Java Supported Configuration Options:
+
+Usage
+
+*WSDL2Java Supported Configuration Options:
 
  * sourceDirectory - src/main/wsdl
 
  * outputDirectory - target/generated-sources/wsdl
 
  * packageSpace - com.company.wsdl
- 
+
  * serverSide - true/false
- 
+
  * verbose - true/false
- 
+
  * noImports - true/false
 
  * timeout - int
@@ -27,7 +28,7 @@ WSDL2Java Supported Configuration Options:
 
  * noWrapped - true/false
 
- * skeletonDeploy - 
+ * skeletonDeploy -
 
  * NStoPkg - name=value
 
@@ -47,24 +48,24 @@ WSDL2Java Supported Configuration Options:
 
  * helperGen - true/false
 
- * username - 
+ * username -
 
- * password - 
- 
+ * password -
+
  * testCases - true/false
 
  * runTestCasesAsUnitTests - true/false
 
  * allElements - true/false
- 
+
  * subPackageByFileName - true/false
- 
+
  * multiple url specification
 
  []
 
-Java2WSDL Supported Configuration Options
- 
+*Java2WSDL Supported Configuration Options
+
  * filename - required
 
  * input - wsdl file
@@ -82,7 +83,7 @@ Java2WSDL Supported Configuration Options
  * PkgtoNS - name=value
 
  * methods - List <methods><method>x</method><method>y</method></methods>
- 
+
  * all
 
  * outputWsdlMode - All, Interface, Implementation
@@ -113,18 +114,18 @@ Java2WSDL Supported Configuration Options
 
  []
 
-Notes:
+*Notes
 
  The wsdl2java goal will process all .wsdl files in the source directory.
 
- The subPackageByFileName configuration option will futher nest the generated files into a 
- subproject based on the filename of the .wsdl file.  (ex. foo.bar.wsdl will go 
+ The subPackageByFileName configuration option will futher nest the generated files into a
+ subproject based on the filename of the .wsdl file.  (ex. foo.bar.wsdl will go
  into a packagespace of packageSpace.foo.bar)
- 
- If the urls configuration is used then new files will be used every execution of the plugin, they aren't 
- timestamped like the file based wsdls to avoid regeneration.  Also you run the risk of breaking your build 
+
+ If the urls configuration is used then new files will be used every execution of the plugin, they aren't
+ timestamped like the file based wsdls to avoid regeneration.  Also you run the risk of breaking your build
  if the remote server is down and you can't get the wsdl file.
- 
+
  As a side note, if your environment requires you to make use of development wsdls in conjuction with production wsdls
  then investigate the usage of m2 profiles for conditionally executing this plugin based on your current execution environment.
 
@@ -132,20 +133,20 @@ Notes:
 
   By default, the wsdl2java goal uses axis 1.4. You may use another version of the library by setting dependencies in the
   plugin configuration :
-  
+
 ------------
-  <plugin>
-  	<groupId>org.codehaus.mojo</groupId>
-    <artifactId>axistools-maven-plugin</artifactId>
-    <version>${project.version}</version>
-	<dependencies>
-	  <dependency>
-		<groupId>axis</groupId>
-		<artifactId>axis</artifactId>
-		<version>1.2.1</version>
-   	  </dependency>
-	</dependencies>
-  </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>axistools-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.2.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
 ------------
-   
+
 
