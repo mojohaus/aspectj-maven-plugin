@@ -217,10 +217,10 @@ public class WSDL2JavaMojo
     private String deployScope;
 
     /**
-     * Indicate 1.1 or 1.2. The default is 1.1 (SOAP 1.1 JAX-RPC compliant.
-     * 1.2 indicates SOAP 1.1 encoded.).
+     * Indicate either 1.1 or 1.2, where 1.1 means SOAP 1.1 JAX-RPC compliant
+     * and 1.2 indicates SOAP 1.1 encoded.
      *
-     * @parameter expression="${typeMappingVersion}"
+     * @parameter expression="${typeMappingVersion}" default-value="1.1"
      */
     private String typeMappingVersion;
 
