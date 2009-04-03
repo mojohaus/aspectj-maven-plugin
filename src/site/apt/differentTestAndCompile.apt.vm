@@ -9,7 +9,7 @@ Example of different configuration for compile and test-compile goal
     <dependencies>
         ...
         <dependency>
-            <groupId>aspectj</groupId>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.6.2</version>
         </dependency>

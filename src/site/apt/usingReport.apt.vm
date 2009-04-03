@@ -15,7 +15,7 @@ Configuring aspectj report
     <dependencies>
         ...
         <dependency>
-            <groupId>aspectj</groupId>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.6.2</version>
             <scope>compile</scope>
