@@ -24,7 +24,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>axistools-maven-plugin</artifactId>
-        <version>testing</version>
+        <version>@pom.version@</version>
         <executions>
           <execution>
             <id>java2wsdl</id>
