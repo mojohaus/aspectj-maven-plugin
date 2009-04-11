@@ -120,7 +120,6 @@
               <settingsFile>src/it/settings.xml</settingsFile>
                
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-              <cloneAllFiles>true</cloneAllFiles>
               
             </configuration>
             <executions>
