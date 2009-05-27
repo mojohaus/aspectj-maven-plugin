@@ -166,13 +166,13 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.6.2</version>
+            <version>1.6.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjtools</artifactId>
-            <version>1.6.2</version>
+            <version>1.6.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
