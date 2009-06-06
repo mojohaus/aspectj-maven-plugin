@@ -163,6 +163,7 @@
           <artifactId>maven-model</artifactId>
           <version>2.0</version>
         </dependency>
+        <!-- NOTE: If the AspectJ dependencies are updated, be sure to update the tests CompilerMojoTestBase and AjcReportMojoTest as well! -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
