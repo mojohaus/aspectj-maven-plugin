@@ -89,8 +89,8 @@ public abstract class CompilerMojoTestBase
         Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange.createFromVersion( "3.8.2" ), "test",
                                               "jar", "", new DefaultArtifactHandler( "" ) );
         Artifact aspectJTools = new DefaultArtifact( "org.aspectj", "aspectjtools", VersionRange
-            .createFromVersion( "1.6.4" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
-        Artifact aspectJTRt = new DefaultArtifact( "org.aspectj", "aspectjrt", VersionRange.createFromVersion( "1.6.4" ),
+            .createFromVersion( "1.6.5" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
+        Artifact aspectJTRt = new DefaultArtifact( "org.aspectj", "aspectjrt", VersionRange.createFromVersion( "1.6.5" ),
                                                    "compile", "jar", "", new DefaultArtifactHandler( "" ) );
 
         junit.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( junit ) + ".jar" ) );
