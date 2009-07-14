@@ -8,7 +8,7 @@
     <artifactId>aspectj-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>AspectJ compiler Maven Plugin</name>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <url>http://mojo.codehaus.org/aspectj-maven-plugin</url>
     <inceptionYear>2005</inceptionYear>
     <description>
@@ -223,4 +223,10 @@
           </plugin>
         </plugins>
     </reporting>
+
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/mojo/tags/aspectj-maven-plugin-1.2</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/aspectj-maven-plugin-1.2</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/mojo/tags/aspectj-maven-plugin-1.2</url>
+  </scm>
 </project>
