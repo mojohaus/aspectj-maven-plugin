@@ -1,0 +1,64 @@
+Weaving already compiled jar artifacts  
+
+  AspectJ gives a possibility to weave already compiled classes in a jar file.
+  In order to do this with the AspectJ plugin you need do setup all the jar
+  files you would like to weave in the plugin configuration as shown below.
+  Note. The artifact you reference must exist as dependencies in the module.
+  
++------------------------------------------+
+<project>
+    ...
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.agroup</groupId>
+            <artifactId>to-weave</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.anothergroup</groupId>
+            <artifactId>gen</artifactId>
+            <version>1.0</version>
+        </dependency>
+        ...
+    </dependencies>
+    ...
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <weaveDependencies>
+                        <weaveDependency>
+                            <groupId>org.agroup</groupId>
+                            <artifactId>to-weave</artifactId>
+                        </weaveDependency>
+                        <weaveDependency>
+                            <groupId>org.anothergroup</groupId>
+                            <artifactId>gen</artifactId>
+                        </weaveDependency>
+                    </weaveDependencies>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+               </executions>
+           </plugin>
+           ...
+       </plugins>in
+   <build>
+...
+</project>
++------------------------------------------+

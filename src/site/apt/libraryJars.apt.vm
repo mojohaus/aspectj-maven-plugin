@@ -1,0 +1,63 @@
+Applying already compiled aspect jars,
+  
+  In order to apply already compiled aspects to your own sources you need do setup all the jar
+  files you would like to weave in the plugin configuration as shown below.
+  Note. The artifact you reference must exist as dependencies in the module.
+  
++------------------------------------------+
+<project>
+    ...
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.agroup</groupId>
+            <artifactId>to-weave</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.anothergroup</groupId>
+            <artifactId>gen</artifactId>
+            <version>1.0</version>
+        </dependency>
+        ...
+    </dependencies>
+    ...
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>org.agroup</groupId>
+                            <artifactId>to-weave</artifactId>
+                        </aspectLibrary>
+                        <aspectLibrary>
+                            <groupId>org.anothergroup</groupId>
+                            <artifactId>gen</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+               </executions>
+           </plugin>
+           ...
+       </plugins>in
+   <build>
+...
+</project>
++------------------------------------------+

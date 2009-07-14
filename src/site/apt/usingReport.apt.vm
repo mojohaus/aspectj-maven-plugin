@@ -1,0 +1,49 @@
+Configuring aspectj report
+
+
+  Example of ajdoc report creation. 
+  
+  Note : Since this report is using tools.jar as a system scoped dependency 
+  you will need to make sure that your JAVA_HOME environment variable 
+  are set to a jdk, before you could use this report.
+  Also we discovered that it does not work with jdk1.5.0, and you would
+  need to upgrade your vm if this is the one you currently are using.
+  
++------------------------------------------+
+<project>
+    ...
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.2</version>
+            <scope>compile</scope>
+        </dependency>
+        ...
+    </dependencies>
+    ...
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <privateScope>true</privateScope>
+                    <complianceLevel>1.5</complianceLevel>
+                    <ajdtBuildDefFile>build.ajproperties</ajdtBuildDefFile>
+                </configuration>
+               <reportSets> 
+                   <reportSet>
+                       <reports>
+                           <report>aspectj-report</report>
+                       </reports>
+                   </reportSet>
+               </reportSets>
+           </plugin>
+      </plugins>
+	</reporting>
+...
+</project>
