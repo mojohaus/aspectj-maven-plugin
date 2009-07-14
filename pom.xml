@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <artifactId>mojo-parent</artifactId>
-        <groupId>org.codehaus.mojo</groupId>
-        <version>21</version>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>mojo-parent</artifactId>
+      <version>21</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>aspectj-maven-plugin</artifactId>
@@ -11,6 +11,11 @@
     <version>1.2-SNAPSHOT</version>
     <url>http://mojo.codehaus.org/aspectj-maven-plugin</url>
     <inceptionYear>2005</inceptionYear>
+    <scm>
+      <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</connection>
+      <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</developerConnection>
+      <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/axistools-maven-plugin</url>
+    </scm>
     <description>
       Handles AspectJ usage within maven.
       Functionality provided is: weaving of aspects (or existing aspects from libraries) with the test and/or main classes, weaving of pre-existing jars and ajdoc reporting.
