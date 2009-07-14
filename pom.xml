@@ -12,9 +12,9 @@
     <url>http://mojo.codehaus.org/aspectj-maven-plugin</url>
     <inceptionYear>2005</inceptionYear>
     <scm>
-      <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</connection>
-      <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/axistools-maven-plugin/</developerConnection>
-      <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/axistools-maven-plugin</url>
+      <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</connection>
+      <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</developerConnection>
+      <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/aspectj-maven-plugin</url>
     </scm>
     <description>
       Handles AspectJ usage within maven.
