@@ -170,7 +170,7 @@ public class AjcReportMojo
     /**
      * Specify compiler compliance setting (1.3 to 1.6, default is 1.4)
      * 
-     *  @parameter
+     *  @parameter default-value="${project.build.java.target}"
      */
     protected String complianceLevel;
 

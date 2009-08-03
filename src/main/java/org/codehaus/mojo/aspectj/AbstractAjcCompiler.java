@@ -121,7 +121,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Specify classfile target setting (1.1 to 1.6) default is 1.2
      * 
-     *  @parameter
+     *  @parameter default-value="${project.build.java.target}"
      */
     protected String target;
 
@@ -133,7 +133,7 @@ public abstract class AbstractAjcCompiler
      * according to the 1.4 language spec. 
      * When using -source 1.5 or higher, Java 5 language features are permitted.
      * 
-     *  @parameter
+     *  @parameter default-value="${project.build.java.target}"
      */
     protected String source;
 
