@@ -127,6 +127,7 @@ public abstract class AbstractAjcCompiler
      * and because it doesn't yet take into account ITDs. 
      *  
      * @parameter
+     * @since 1.3
      */
     protected boolean XhasMember;
 
