@@ -117,6 +117,18 @@ public abstract class AbstractAjcCompiler
      *  @parameter
      */
     protected String Xlint;
+    
+    /**
+     * Enables the compiler to support hasmethod(method_pattern) 
+     * and hasfield(field_pattern) type patterns,
+     * but only within declare statements. 
+     * 
+     * It's experimental and undocumented because it may change, 
+     * and because it doesn't yet take into account ITDs. 
+     *  
+     * @parameter
+     */
+    protected boolean XhasMember;
 
     /**
      * Specify classfile target setting (1.1 to 1.6) default is 1.2
@@ -373,6 +385,10 @@ public abstract class AbstractAjcCompiler
     protected void assembleArguments()
         throws MojoExecutionException
     {
+        if ( XhasMember ) {
+          ajcOptions.add( "-XhasMember" );
+        }
+        
         // Add classpath
         ajcOptions.add( "-classpath" );
         ajcOptions.add( AjcHelper.createClassPath( project, null, getOutputDirectories() ) );
@@ -639,7 +655,11 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-verbose" );
         }
-
+    }
+    
+    public void setXhasMember( boolean xhasMember )
+    {
+        XhasMember = xhasMember;
     }
 
     public void setXlint( String xlint )
