@@ -322,7 +322,7 @@ public abstract class AbstractAjcCompiler
         ArtifactHandler artifactHandler = project.getArtifact().getArtifactHandler();
         if ( !"java".equals( artifactHandler.getLanguage() ) )
         {
-            getLog().debug( "Not executing aspectJ compiler as the project is not a Java classpath-capable package" );
+            getLog().warn( "Not executing aspectJ compiler as the project is not a Java classpath-capable package" );
             return;
         }
 
@@ -333,17 +333,16 @@ public abstract class AbstractAjcCompiler
 
         if ( !hasSourcesToCompile() )
         {
-            getLog().debug( "No sources found skipping aspectJ compile" );
+            getLog().warn( "No sources found skipping aspectJ compile" );
             return;
         }
 
         if ( !isBuildNeeded() )
         {
-            getLog().debug( "No modifications found skipping aspectJ compile" );
+            getLog().info( "No modifications found skipping aspectJ compile" );
             return;
         }
 
-        getLog().debug( "Starting compiling aspects" );
         if ( getLog().isDebugEnabled() )
         {
             String command = "Running : ajc ";
@@ -356,6 +355,7 @@ public abstract class AbstractAjcCompiler
         }
         try
         {
+            getLog().debug( "Compiling and weaving " + resolvedIncludes.size() + " sources to " + getOutputDirectories().get( 0 ) );
             File outDir = new File( (String) getOutputDirectories().get( 0 ) );
             AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, outDir );
             getLog().debug(
@@ -364,7 +364,7 @@ public abstract class AbstractAjcCompiler
         }
         catch ( IOException e )
         {
-            throw new MojoExecutionException( "Could not write arguments file to the target area" );
+            throw new MojoExecutionException( "Could not write arguments file to the target area", e );
         }
         Main main = new Main();
         MavenMessageHandler mavenMessageHandler = new MavenMessageHandler( getLog() );
