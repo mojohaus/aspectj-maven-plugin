@@ -372,7 +372,7 @@ public abstract class AbstractAjcCompiler
 
         main.runMain( (String[]) ajcOptions.toArray( new String[0] ), false );
         IMessage[] errors = mavenMessageHandler.getMessages( IMessage.ERROR, true );
-        if ( errors.length > 0 )
+        if ( !proceedOnError && errors.length > 0 )
         {
             throw new CompilationFailedException( errors );
         }
@@ -611,7 +611,7 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-proceedOnError" );
         }
-
+        this.proceedOnError = proceedOnError;
     }
 
     public void setReferenceInfo( boolean referenceInfo )
