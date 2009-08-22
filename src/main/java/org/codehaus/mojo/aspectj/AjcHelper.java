@@ -40,6 +40,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -187,7 +188,7 @@ public class AjcHelper
         while ( iter.hasNext() )
         {
             String argument = (String) iter.next();
-            writer.write( argument + "\n" );
+            writer.write( argument + SystemUtils.LINE_SEPARATOR );
         }
         writer.flush();
         writer.close();

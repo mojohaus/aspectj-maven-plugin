@@ -1,5 +1,6 @@
 package org.codehaus.mojo.aspectj;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.aspectj.bridge.IMessage;
 
@@ -30,11 +31,11 @@ public class CompilationFailedException extends MojoExecutionException
     private static final String composeMessage( IMessage[] errors ) {
         StringBuffer sb = new StringBuffer();
 
-        sb.append( "Compiler errors : \n" );
+        sb.append( "Compiler errors:" + SystemUtils.LINE_SEPARATOR );
         for ( int i = 0; i < errors.length; i++ )
         {
             sb.append( errors[i].toString() );
-            sb.append( "\n" );
+            sb.append( SystemUtils.LINE_SEPARATOR );
         }
 
         return sb.toString();
