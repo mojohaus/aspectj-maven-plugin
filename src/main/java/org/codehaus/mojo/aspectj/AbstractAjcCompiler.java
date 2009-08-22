@@ -371,7 +371,7 @@ public abstract class AbstractAjcCompiler
         main.setHolder( mavenMessageHandler );
 
         main.runMain( (String[]) ajcOptions.toArray( new String[0] ), false );
-        IMessage[] errors = mavenMessageHandler.getErrors();
+        IMessage[] errors = mavenMessageHandler.getMessages( IMessage.ERROR, true );
         if ( errors.length > 0 )
         {
             throw new CompilationFailedException( errors );
