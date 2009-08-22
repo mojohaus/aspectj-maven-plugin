@@ -179,7 +179,8 @@ public class AjcHelper
         throws IOException
     {
         FileUtils.forceMkdir( outputDir );
-        File argFile = new File( outputDir.getAbsolutePath() ,  fileName );
+        File argFile = new File( outputDir.getAbsolutePath(), fileName );
+        argFile.getParentFile().mkdirs();
         argFile.createNewFile();
         FileWriter writer = new FileWriter( argFile );
         Iterator iter = arguments.iterator();
