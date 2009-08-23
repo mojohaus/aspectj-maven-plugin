@@ -279,6 +279,14 @@ public abstract class AbstractAjcCompiler
      * @parameter default-value="builddef.lst"
      */
     protected String argumentFileName = "builddef.lst";
+    
+    /**
+     * Forces re-compilation, regardless of whether the compiler arguments or
+     * the sources have changed.
+     * 
+     * @parameter
+     */
+    protected boolean forceAjcCompile;
 
     /**
      * Holder for ajc compiler options
@@ -337,7 +345,7 @@ public abstract class AbstractAjcCompiler
             return;
         }
 
-        if ( !isBuildNeeded() )
+        if ( !forceAjcCompile && !isBuildNeeded() )
         {
             getLog().info( "No modifications found skipping aspectJ compile" );
             return;
