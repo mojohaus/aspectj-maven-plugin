@@ -195,7 +195,7 @@ public class AjcHelper
     }
 
     /**
-     * Reads a buld config file, and retuns the List of all compiler arguments.
+     * Reads a build config file, and returns the List of all compiler arguments.
      * 
      * @param fileName the filename of the argfile
      * @param outputDir the build output area
