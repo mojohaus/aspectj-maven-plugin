@@ -219,7 +219,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-changes-plugin</artifactId>
-            <version>2.1</version>
+            <version>2.2</version>
             <configuration>
               <urlDownload>${project.url}</urlDownload>
               <columnNames>Key,Summary,Status,Resolution,Assignee,Type,Version,Fix Version</columnNames>
