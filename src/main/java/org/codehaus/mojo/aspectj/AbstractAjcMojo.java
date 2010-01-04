@@ -33,7 +33,7 @@ import org.apache.maven.project.MavenProject;
  * The base class.
  * 
  * @author Juraj Burian
- * @version $Revision:$ by $Author:$
+ * @version $Revision$ by $Author$
  */
 abstract public class AbstractAjcMojo extends AbstractMojo
 {
@@ -41,7 +41,8 @@ abstract public class AbstractAjcMojo extends AbstractMojo
      * The maven project.
      * 
      * @parameter expression="${project}"
-     * @required @readonly
+     * @required 
+     * @readonly
      */
     protected MavenProject project;
 
@@ -49,7 +50,8 @@ abstract public class AbstractAjcMojo extends AbstractMojo
      * The basedir of the project.
      * 
      * @parameter expression="${basedir}"
-     * @required @readonly
+     * @required 
+     * @readonly
      */
     protected File basedir;
     

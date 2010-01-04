@@ -67,7 +67,8 @@ public class AjcReportMojo
      * The maven project.
      * 
      * @parameter expression="${project}"
-     * @required @readonly
+     * @required 
+     * @readonly
      */
     protected MavenProject project;
 
@@ -75,7 +76,8 @@ public class AjcReportMojo
      * The basedir of the project.
      * 
      * @parameter expression="${basedir}"
-     * @required @readonly
+     * @required 
+     * @readonly
      */
     protected File basedir;
 
