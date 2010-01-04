@@ -65,7 +65,7 @@ public abstract class AbstractAjcCompiler
      * compiling. When none specified all .java and .aj files in the project source directories, or
      * directories spesified by the ajdtDefFile property are included.
      * 
-     * * @parameter
+     * @parameter
      */
     protected String[] includes;
 
@@ -74,7 +74,7 @@ public abstract class AbstractAjcCompiler
      * compiling. When none specified all .java and .aj files in the project source directories, or
      * directories spesified by the ajdtDefFile property are included.
      * 
-     * * @parameter
+     * @parameter
      */
     protected String[] excludes;
 
