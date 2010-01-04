@@ -40,7 +40,7 @@ abstract public class AbstractAjcMojo extends AbstractMojo
     /**
      * The maven project.
      * 
-     * @parameter expression="${project}"
+     * @parameter default-value="${project}"
      * @required 
      * @readonly
      */

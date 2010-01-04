@@ -66,7 +66,7 @@ public class AjcReportMojo
     /**
      * The maven project.
      * 
-     * @parameter expression="${project}"
+     * @parameter default-value="${project}"
      * @required 
      * @readonly
      */
@@ -106,7 +106,7 @@ public class AjcReportMojo
     /**
      * Doxia Site Renderer.
      *
-     * @parameter expression="${component.org.codehaus.doxia.site.renderer.SiteRenderer}"
+     * @parameter default-value="${component.org.codehaus.doxia.site.renderer.SiteRenderer}"
      * @required
      * @readonly
      */
