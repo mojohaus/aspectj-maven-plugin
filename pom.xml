@@ -231,6 +231,7 @@
                 <toAddress>dev@mojo.codehaus.org</toAddress>
                 <toAddress>user@mojo.codehaus.org</toAddress>
                 <toAddress>users@maven.apache.org</toAddress>
+                <toAddress>aspectj-users@eclipse.org</toAddress>
               </toAddresses>
             </configuration>
           </plugin>
