@@ -33,12 +33,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
@@ -66,7 +65,7 @@ public class AjcHelper
     public static String createClassPath( MavenProject project, List pluginArtifacts, List outDirs )
     {
         String cp = new String();
-        Set classPathElements = Collections.synchronizedSet( new TreeSet() );
+        Set classPathElements = Collections.synchronizedSet( new LinkedHashSet() );
         classPathElements.addAll( project.getDependencyArtifacts() );
         classPathElements.addAll( project.getArtifacts() );
         classPathElements.addAll( pluginArtifacts == null ? Collections.EMPTY_LIST : pluginArtifacts);
@@ -108,7 +107,7 @@ public class AjcHelper
     public static Set getBuildFilesForAjdtFile( String ajdtBuildDefFile, File basedir )
         throws MojoExecutionException
     {
-        Set result = new HashSet();
+        Set result = new LinkedHashSet();
 
         Properties ajdtBuildProperties = new Properties();
         try
@@ -140,7 +139,7 @@ public class AjcHelper
     public static Set getBuildFilesForSourceDirs( List sourceDirs, String[] includes, String[] excludes )
         throws MojoExecutionException
     {
-        Set result = new HashSet();
+        Set result = new LinkedHashSet();
 
         Iterator it = sourceDirs.iterator();
         while ( it.hasNext() )
@@ -269,7 +268,7 @@ public class AjcHelper
     protected static Set resolveIncludeExcludeString( String input, File basedir )
         throws MojoExecutionException
     {
-        Set inclExlSet = new HashSet();
+        Set inclExlSet = new LinkedHashSet();
         try
         {
             if ( null == input || input.trim().equals( "" ) )

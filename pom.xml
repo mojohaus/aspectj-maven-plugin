@@ -79,6 +79,11 @@
           </roles>
           <timezone>+1</timezone>
         </contributor>
+        <contributor>
+            <name>Marvin Froeder</name>
+            <email>velo.br@gmail.com</email>
+            <timezone>-3</timezone>
+        </contributor>
     </contributors>
     <licenses>
         <license>
