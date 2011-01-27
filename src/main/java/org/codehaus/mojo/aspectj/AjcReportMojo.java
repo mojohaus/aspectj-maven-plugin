@@ -75,7 +75,7 @@ public class AjcReportMojo
     /**
      * The basedir of the project.
      * 
-     * @parameter expression="${basedir}"
+     * @parameter default-value="${basedir}"
      * @required 
      * @readonly
      */
@@ -106,9 +106,7 @@ public class AjcReportMojo
     /**
      * Doxia Site Renderer.
      *
-     * @parameter default-value="${component.org.codehaus.doxia.site.renderer.SiteRenderer}"
-     * @required
-     * @readonly
+     * @component
      */
     private SiteRenderer siteRenderer;
 
@@ -172,7 +170,7 @@ public class AjcReportMojo
     /**
      * Specify compiler compliance setting (1.3 to 1.6, default is 1.4)
      * 
-     *  @parameter default-value="${project.build.java.target}"
+     *  @parameter default-value="${mojo.java.target}"
      */
     protected String complianceLevel;
 
@@ -182,7 +180,7 @@ public class AjcReportMojo
     private List ajcOptions = new ArrayList();
 
     /**
-     * @parameter expression="${plugin.artifacts}"
+     * @parameter default-value="${plugin.artifacts}"
      * @required
      * @readonly
      */

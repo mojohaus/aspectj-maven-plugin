@@ -49,7 +49,7 @@ abstract public class AbstractAjcMojo extends AbstractMojo
     /**
      * The basedir of the project.
      * 
-     * @parameter expression="${basedir}"
+     * @parameter default-value="${basedir}"
      * @required 
      * @readonly
      */

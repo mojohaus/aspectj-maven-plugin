@@ -146,7 +146,7 @@ public abstract class AbstractAjcCompiler
      * according to the 1.4 language spec. 
      * When using -source 1.5 or higher, Java 5 language features are permitted.
      * 
-     *  @parameter default-value="${project.build.java.target}"
+     *  @parameter default-value="${mojo.java.target}"
      */
     protected String source;
 
