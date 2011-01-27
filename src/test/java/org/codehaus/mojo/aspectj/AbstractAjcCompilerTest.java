@@ -39,7 +39,7 @@ import org.apache.maven.project.MavenProject;
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AbstractAjcCompiler}
  * 
- * @author <a href="mailto:tel@objectnet.no">Thor �ge Eldby</a>
+ * @author <a href="mailto:tel@objectnet.no">Thor Age Eldby</a>
  */
 public class AbstractAjcCompilerTest
     extends TestCase
@@ -62,8 +62,7 @@ public class AbstractAjcCompilerTest
     }
 
     /**
-     * Verifies that if not stated no -inpath argument should
-     * be found in the ajc arguments
+     * Verifies that if not stated no -inpath argument should be found in the ajc arguments
      * {@link AbstractAjcCompiler#execute()}
      * 
      * @throws Exception
@@ -75,14 +74,14 @@ public class AbstractAjcCompilerTest
         List args = ajcCompMojo.ajcOptions;
         assertFalse( args.contains( "-inpath" ) );
     }
-    
+
     /**
-     * Tests that the compiler fails as it should if told to weave an
-     * artifact not listed in the project dependencies.
+     * Tests that the compiler fails as it should if told to weave an artifact not listed in the project dependencies.
+     * 
      * @throws Exception
      */
     public void testGetAjcArguments_weaveArtifactsNotProjectDependecy()
-    throws Exception
+        throws Exception
     {
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -101,15 +100,15 @@ public class AbstractAjcCompilerTest
             // good thing
         }
     }
-    
+
     /**
-     * Tests if modules told to weave that are found in the 
-     * project dependencies actually are found in the .inpath
-     * ajc argument,.
+     * Tests if modules told to weave that are found in the project dependencies actually are found in the .inpath ajc
+     * argument,.
+     * 
      * @throws Exception
      */
     public void testGetAjcArguments_weaveArtifacts()
-    throws Exception
+        throws Exception
     {
         ajcCompMojo.weaveDependencies = new Module[2];
         Module module1 = new Module();
@@ -142,26 +141,103 @@ public class AbstractAjcCompilerTest
         assertTrue( weavePath.indexOf( mod1Artifact ) != -1 );
         assertTrue( weavePath.indexOf( mod2Artifact ) != -1 );
     }
-    
+
     /**
-     * Verifies that if not stated no -aspectpath argument should
-     * be found in the ajc arguments
+     * Tests if modules told to weave that are found in the project dependencies actually are found in the .inpath ajc
+     * argument, considering classifiers.
+     * 
+     * @throws Exception
+     */
+    public void testGetAjcArguments_weaveArtifactsWithClassifier()
+        throws Exception
+    {
+        ajcCompMojo.weaveDependencies = new Module[1];
+        Module module1 = new Module();
+        String mod1Group = "dill.group";
+        module1.setGroupId( mod1Group );
+        String mod1Artifact = "dall.artifact";
+        module1.setArtifactId( mod1Artifact );
+        String mod1classifier = "dev";
+        module1.setClassifier( mod1classifier );
+        ajcCompMojo.weaveDependencies[0] = module1;
+        String mod2classifier = "stable";
+        // Modify project to include dependencies
+        Set artifacts = new HashSet();
+        artifacts.add( new MockArtifact( mod1Group, mod1Artifact, mod1classifier, "jar" ) );
+        artifacts.add( new MockArtifact( mod1Group, mod1Artifact, mod2classifier, "jar" ) );
+        ajcCompMojo.project.setArtifacts( artifacts );
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+        assertTrue( args.contains( "-inpath" ) );
+        Iterator it = args.iterator();
+        while ( !it.next().equals( "-inpath" ) )
+        {
+            // don't do nothing
+        }
+        String weavePath = (String) it.next();
+        assertTrue( weavePath.indexOf( mod1Artifact ) != -1 );
+        assertTrue( weavePath.indexOf( mod1classifier ) != -1 );
+        assertFalse( weavePath.indexOf( mod2classifier ) != -1 );
+    }
+
+    /**
+     * Tests if modules told to weave that are found in the project dependencies actually are found in the .inpath ajc
+     * argument, considering type.
+     * 
+     * @throws Exception
+     */
+    public void testGetAjcArguments_weaveArtifactsWithType()
+        throws Exception
+    {
+        ajcCompMojo.weaveDependencies = new Module[1];
+        Module module1 = new Module();
+        String mod1Group = "dill.group";
+        module1.setGroupId( mod1Group );
+        String mod1Artifact = "dall.artifact";
+        module1.setArtifactId( mod1Artifact );
+        String mod1type = "foo";
+        module1.setType( mod1type );
+        ajcCompMojo.weaveDependencies[0] = module1;
+        String mod2type = "bar";
+        // Modify project to include dependencies
+        Set artifacts = new HashSet();
+        artifacts.add( new MockArtifact( mod1Group, mod1Artifact, null, mod1type ) );
+        artifacts.add( new MockArtifact( mod1Group, mod1Artifact, null, mod2type ) );
+        ajcCompMojo.project.setArtifacts( artifacts );
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+        assertTrue( args.contains( "-inpath" ) );
+        Iterator it = args.iterator();
+        while ( !it.next().equals( "-inpath" ) )
+        {
+            // don't do nothing
+        }
+        String weavePath = (String) it.next();
+        assertTrue( weavePath.indexOf( mod1Artifact ) != -1 );
+        assertTrue( weavePath.indexOf( "." + mod1type ) != -1 );
+        assertFalse( weavePath.indexOf( mod2type ) != -1 );
+    }
+
+    /**
+     * Verifies that if not stated no -aspectpath argument should be found in the ajc arguments
      * {@link AbstractAjcCompiler#execute()}
      * 
      * @throws Exception
-     */    public void testGetAjcArguments_noLibraryArtifacts()
+     */
+    public void testGetAjcArguments_noLibraryArtifacts()
         throws Exception
     {
         ajcCompMojo.assembleArguments();
         List args = ajcCompMojo.ajcOptions;
         assertFalse( args.contains( "-aspectpath" ) );
     }
-    
-     /**
-      * Tests that the compiler fails as it should if told to weave an
-      * library artifact not listed in the project dependencies.
-      * @throws Exception
-      */
+
+    /**
+     * Tests that the compiler fails as it should if told to weave an library artifact not listed in the project
+     * dependencies.
+     * 
+     * @throws Exception
+     */
     public void testGetAjcArguments_libraryArtifactsNotProjectDependecy()
     {
         Module module1 = new Module();
@@ -171,7 +247,7 @@ public class AbstractAjcCompilerTest
         module1.setArtifactId( mod1Artifact );
         try
         {
-            ajcCompMojo.aspectLibraries= new Module[1];
+            ajcCompMojo.aspectLibraries = new Module[1];
             ajcCompMojo.aspectLibraries[0] = module1;
             ajcCompMojo.assembleArguments();
             fail( "Should fail quite miserably" );
@@ -181,11 +257,11 @@ public class AbstractAjcCompilerTest
             // good thing
         }
     }
-    
+
     /**
-     * Tests if modules told to weave that are found in the 
-     * project dependencies actually are found in the .inpath
-     * ajc argument,.
+     * Tests if modules told to weave that are found in the project dependencies actually are found in the .inpath ajc
+     * argument,.
+     * 
      * @throws Exception
      */
     public void testGetAjc_libraryArtifacts()

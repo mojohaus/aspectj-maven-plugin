@@ -25,9 +25,9 @@ package org.codehaus.mojo.aspectj;
  */
 
 /**
- * Module to be referenced through AJC-mojo 
+ * Module to be referenced through AJC-mojo
  * 
- * @author <a href="mailto:tel@objectnet.no">Thor �ge Eldby</a>
+ * @author <a href="mailto:tel@objectnet.no">Thor Age Eldby</a>
  */
 public class Module
 {
@@ -37,6 +37,12 @@ public class Module
 
     /** Artifact's id */
     private String artifactId;
+
+    /** Artifact's classifier */
+    private String classifier;
+
+    /** Artifact's type */
+    private String type;
 
     /**
      * @return id of artifact
@@ -72,7 +78,43 @@ public class Module
 
     public String toString()
     {
-        return getGroupId() + ":" + getArtifactId();
+        String ts = getGroupId() + ":" + getArtifactId();
+        if ( getType() != null )
+            ts += ":" + getType();
+        // TODO where to place the classifier?
+        return ts;
+    }
+
+    /**
+     * @return classifier of artifact
+     */
+    public String getClassifier()
+    {
+        return classifier;
+    }
+
+    /**
+     * @param classifier classifier of artifact
+     */
+    public void setClassifier( String classifier )
+    {
+        this.classifier = classifier;
+    }
+
+    /**
+     * @return type of artifact
+     */
+    public String getType()
+    {
+        return type;
+    }
+
+    /**
+     * @param type type fo artifact
+     */
+    public void setType( String type )
+    {
+        this.type = type;
     }
 
 }

@@ -39,8 +39,8 @@ import org.apache.maven.artifact.versioning.VersionRange;
 
 /**
  * Fake implementation of artifict to test with
- *
- * @author <a href="mailto:tel@objectnet.no">Thor �ge Eldby</a>
+ * 
+ * @author <a href="mailto:tel@objectnet.no">Thor Age Eldby</a>
  */
 public class MockArtifact
     implements Artifact
@@ -49,7 +49,11 @@ public class MockArtifact
     private String groupId;
 
     private String artifactId;
-    
+
+    private String type = "jar";
+
+    private String classifier;
+
     private ArtifactHandler artifactHandler;
 
     /**
@@ -64,6 +68,22 @@ public class MockArtifact
         this.artifactId = artifactId;
     }
 
+    /**
+     * Construstor with type and classifier
+     * 
+     * @param groupId
+     * @param artifactId
+     * @param classifier
+     * @param type
+     */
+    public MockArtifact( String groupId, String artifactId, String classifier, String type )
+    {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.classifier = classifier;
+        this.type = type;
+    }
+
     public String getGroupId()
     {
         return groupId;
@@ -73,12 +93,12 @@ public class MockArtifact
     {
         return artifactId;
     }
-    
+
     public ArtifactHandler getArtifactHandler()
     {
         return artifactHandler;
     }
-    
+
     public void setArtifactHandler( ArtifactHandler artifactHandler )
     {
         this.artifactHandler = artifactHandler;
@@ -101,17 +121,17 @@ public class MockArtifact
 
     public String getType()
     {
-        throw new RuntimeException( "Not implemented" );
+        return this.type;
     }
 
     public String getClassifier()
     {
-        throw new RuntimeException( "Not implemented" );
+        return this.classifier;
     }
 
     public boolean hasClassifier()
     {
-        throw new RuntimeException( "Not implemented" );
+        return this.classifier != null;
     }
 
     /**
@@ -119,7 +139,11 @@ public class MockArtifact
      */
     public File getFile()
     {
-        return new File( getGroupId() + '/' + getArtifactId() + ".jar" );
+        String path = getGroupId() + '/' + getArtifactId();
+        if ( getClassifier() != null )
+            path += "-" + getClassifier();
+        path += "." + getType();
+        return new File( path );
     }
 
     public void setFile( File arg0 )

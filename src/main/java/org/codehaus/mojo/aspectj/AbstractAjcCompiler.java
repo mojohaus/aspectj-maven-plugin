@@ -32,12 +32,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.tools.ajc.Main;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Base class for the two aspectJ compiletime weaving mojos.
@@ -50,37 +50,38 @@ public abstract class AbstractAjcCompiler
 
     /**
      * The source directory for the aspects
+     * 
      * @parameter default-value="src/main/aspect"
      */
     protected String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
+     * 
      * @parameter default-value="src/test/aspect"
      */
     protected String testAspectDirectory = "src/test/aspect";
 
     /**
-     * List of ant-style patterns used to specify the aspects that should be included when 
-     * compiling. When none specified all .java and .aj files in the project source directories, or
-     * directories spesified by the ajdtDefFile property are included.
+     * List of ant-style patterns used to specify the aspects that should be included when compiling. When none
+     * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
+     * property are included.
      * 
      * @parameter
      */
     protected String[] includes;
 
     /**
-     * List of ant-style patterns used to specify the aspects that should be excluded when 
-     * compiling. When none specified all .java and .aj files in the project source directories, or
-     * directories spesified by the ajdtDefFile property are included.
+     * List of ant-style patterns used to specify the aspects that should be excluded when compiling. When none
+     * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
+     * property are included.
      * 
      * @parameter
      */
     protected String[] excludes;
 
     /**
-     * Where to find the ajdt build definition file.
-     * <i>If set this will override the use of project sourcedirs</i>.
+     * Where to find the ajdt build definition file. <i>If set this will override the use of project sourcedirs</i>.
      * 
      * @parameter
      */
@@ -103,29 +104,23 @@ public abstract class AbstractAjcCompiler
     /**
      * Generate .ajesym symbol files for emacs support
      * 
-     *  @parameter
+     * @parameter
      */
     protected boolean emacssym;
 
     /**
-     * Set default level for messages about potential 
-     * programming mistakes in crosscutting code. 
-     * {level} may be ignore, warning, or error. 
-     * This overrides entries in org/aspectj/weaver/XlintDefault.properties 
-     * from aspectjtools.jar.
+     * Set default level for messages about potential programming mistakes in crosscutting code. {level} may be ignore,
+     * warning, or error. This overrides entries in org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar.
      * 
-     *  @parameter
+     * @parameter
      */
     protected String Xlint;
-    
+
     /**
-     * Enables the compiler to support hasmethod(method_pattern) 
-     * and hasfield(field_pattern) type patterns,
-     * but only within declare statements. 
+     * Enables the compiler to support hasmethod(method_pattern) and hasfield(field_pattern) type patterns, but only
+     * within declare statements. It's experimental and undocumented because it may change, and because it doesn't yet
+     * take into account ITDs.
      * 
-     * It's experimental and undocumented because it may change, 
-     * and because it doesn't yet take into account ITDs. 
-     *  
      * @parameter
      * @since 1.3
      */
@@ -134,27 +129,24 @@ public abstract class AbstractAjcCompiler
     /**
      * Specify classfile target setting (1.1 to 1.6) default is 1.2
      * 
-     *  @parameter default-value="${project.build.java.target}"
+     * @parameter default-value="${project.build.java.target}"
      */
     protected String target;
 
     /**
-     * Toggle assertions (1.3, 1.4, or 1.6 - default is 1.4). 
-     * When using -source 1.3, an assert() statement valid under Java 1.4 
-     * will result in a compiler error. When using -source 1.4, 
-     * treat assert as a keyword and implement assertions 
-     * according to the 1.4 language spec. 
-     * When using -source 1.5 or higher, Java 5 language features are permitted.
+     * Toggle assertions (1.3, 1.4, or 1.6 - default is 1.4). When using -source 1.3, an assert() statement valid under
+     * Java 1.4 will result in a compiler error. When using -source 1.4, treat assert as a keyword and implement
+     * assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java 5 language features are
+     * permitted.
      * 
-     *  @parameter default-value="${mojo.java.target}"
+     * @parameter default-value="${mojo.java.target}"
      */
     protected String source;
 
     /**
-     * Specify compiler compliance setting (1.3 to 1.6)
-     * default is 1.4
+     * Specify compiler compliance setting (1.3 to 1.6) default is 1.4
      * 
-     *  @parameter
+     * @parameter
      */
     protected String complianceLevel;
 
@@ -194,8 +186,8 @@ public abstract class AbstractAjcCompiler
     protected boolean referenceInfo;
 
     /**
-     * Specify default source encoding format. 
-     *      
+     * Specify default source encoding format.
+     * 
      * @parameter expression="${project.build.sourceEncoding}"
      */
     protected String encoding;
@@ -222,10 +214,9 @@ public abstract class AbstractAjcCompiler
     protected int repeat;
 
     /**
-     * (Experimental) runs weaver in reweavable mode which causes it to create 
-     * woven classes that can be rewoven, subject to the restriction 
-     * that on attempting a reweave all the types that advised the woven 
-     * type must be accessible.
+     * (Experimental) runs weaver in reweavable mode which causes it to create woven classes that can be rewoven,
+     * subject to the restriction that on attempting a reweave all the types that advised the woven type must be
+     * accessible.
      * 
      * @parameter
      */
@@ -246,43 +237,41 @@ public abstract class AbstractAjcCompiler
     protected boolean XserializableAspects;
 
     /**
-     * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing Serializable that is affected by an aspect. 
-     * The field is calculated based on the class before weaving has taken place.
+     * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing Serializable that is
+     * affected by an aspect. The field is calculated based on the class before weaving has taken place.
      * 
      * @parameter
      */
     protected boolean XaddSerialVersionUID;
 
     /**
-     * Override location of VM's bootclasspath for purposes of evaluating types when compiling. 
-     * Path is a single argument containing a list of paths to zip files or directories, delimited by the platform-specific path delimiter.
-     *
+     * Override location of VM's bootclasspath for purposes of evaluating types when compiling. Path is a single
+     * argument containing a list of paths to zip files or directories, delimited by the platform-specific path
+     * delimiter.
+     * 
      * @parameter
      */
     protected String bootclasspath;
-    
+
     /**
      * Emit warnings for any instances of the comma-delimited list of questionable code (eg 'unusedLocals,deprecation'):
      * see http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc for available settings
+     * 
      * @parameter
      */
     protected String warn;
 
     /**
-     * The filename to store build configuration in.
-     * This file will be placed in the project build output
-     * directory, and will contain all the arguments
-     * passed to the compiler in the last run, and also
-     * all the filenames included in the build. Aspects as
-     * well as java files.
+     * The filename to store build configuration in. This file will be placed in the project build output directory, and
+     * will contain all the arguments passed to the compiler in the last run, and also all the filenames included in the
+     * build. Aspects as well as java files.
      * 
      * @parameter default-value="builddef.lst"
      */
     protected String argumentFileName = "builddef.lst";
-    
+
     /**
-     * Forces re-compilation, regardless of whether the compiler arguments or
-     * the sources have changed.
+     * Forces re-compilation, regardless of whether the compiler arguments or the sources have changed.
      * 
      * @parameter
      */
@@ -299,8 +288,7 @@ public abstract class AbstractAjcCompiler
     protected Set resolvedIncludes;
 
     /**
-     * Abstract method used by child classes to spesify the correct output
-     * directory for compiled classes.
+     * Abstract method used by child classes to spesify the correct output directory for compiled classes.
      * 
      * @return where compiled classes should be put.
      */
@@ -315,6 +303,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Abstract method used by cild classes to specify aditional aspect paths.
+     * 
      * @return
      */
     protected abstract String getAdditionalAspectPaths();
@@ -363,11 +352,11 @@ public abstract class AbstractAjcCompiler
         }
         try
         {
-            getLog().debug( "Compiling and weaving " + resolvedIncludes.size() + " sources to " + getOutputDirectories().get( 0 ) );
+            getLog().debug( "Compiling and weaving " + resolvedIncludes.size() + " sources to "
+                                + getOutputDirectories().get( 0 ) );
             File outDir = new File( (String) getOutputDirectories().get( 0 ) );
             AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, outDir );
-            getLog().debug(
-                            "Argumentsfile written : "
+            getLog().debug( "Argumentsfile written : "
                                 + new File( outDir.getAbsolutePath() + argumentFileName ).getAbsolutePath() );
         }
         catch ( IOException e )
@@ -388,16 +377,17 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Assembles a complete ajc compiler arguments list.
-     *
+     * 
      * @throws MojoExecutionException error in configuration
      */
     protected void assembleArguments()
         throws MojoExecutionException
     {
-        if ( XhasMember ) {
-          ajcOptions.add( "-XhasMember" );
+        if ( XhasMember )
+        {
+            ajcOptions.add( "-XhasMember" );
         }
-        
+
         // Add classpath
         ajcOptions.add( "-classpath" );
         ajcOptions.add( AjcHelper.createClassPath( project, null, getOutputDirectories() ) );
@@ -408,9 +398,9 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-bootclasspath" );
             ajcOptions.add( bootclasspath );
         }
-        
+
         // Add warn option
-        if (null != warn )
+        if ( null != warn )
         {
             ajcOptions.add( "-warn:" + warn );
         }
@@ -418,10 +408,10 @@ public abstract class AbstractAjcCompiler
         // Add artifacts to weave
         addModulesArgument( "-inpath", ajcOptions, weaveDependencies, null, "a dependency to weave" );
 
-        // Add library artifacts 
+        // Add library artifacts
         addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(), "an aspect library" );
 
-        //add target dir argument
+        // add target dir argument
         ajcOptions.add( "-d" );
         ajcOptions.add( getOutputDirectories().get( 0 ) );
 
@@ -432,16 +422,15 @@ public abstract class AbstractAjcCompiler
         }
         else
         {
-            resolvedIncludes = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes,
-                                                                     this.excludes );
+            resolvedIncludes =
+                AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
         }
         ajcOptions.addAll( resolvedIncludes );
     }
 
     /**
-     * Finds all artifacts in the weavemodule property,
-     * and adds them to the ajc options.
-     *  
+     * Finds all artifacts in the weavemodule property, and adds them to the ajc options.
+     * 
      * @param arguments
      * @throws MojoExecutionException
      */
@@ -466,12 +455,26 @@ public abstract class AbstractAjcCompiler
             for ( int i = 0; i < modules.length; ++i )
             {
                 Module module = modules[i];
-                String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
-                Artifact artifact = (Artifact) project.getArtifactMap().get( key );
+                // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
+                // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
+                Artifact artifact = null;
+                Set allArtifacts = project.getArtifacts();
+                for ( Iterator iterator = allArtifacts.iterator(); iterator.hasNext(); )
+                {
+                    Artifact art = (Artifact) iterator.next();
+                    if ( art.getGroupId().equals( module.getGroupId() )
+                        && art.getArtifactId().equals( module.getArtifactId() )
+                        && StringUtils.equals( module.getClassifier(), art.getClassifier() )
+                        && StringUtils.equals( module.getType(), module.getType() ) )
+                    {
+                        artifact = art;
+                        break;
+                    }
+                }
                 if ( artifact == null )
                 {
-                    throw new MojoExecutionException( "The artifact " + key + " referenced in aspectj plugin as "
-                        + role + ", is not found the project dependencies" );
+                    throw new MojoExecutionException( "The artifact " + module.toString()
+                        + " referenced in aspectj plugin as " + role + ", is not found the project dependencies" );
                 }
                 if ( buf.length() != 0 )
                 {
@@ -491,8 +494,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Checks modifications that would make us need a build
      * 
-     * @throws MojoExecutionException 
-     *
+     * @throws MojoExecutionException
      */
     protected boolean isBuildNeeded()
         throws MojoExecutionException
@@ -521,7 +523,7 @@ public abstract class AbstractAjcCompiler
     }
 
     /**
-     * Not entirely safe, assembleArguments() must be run 
+     * Not entirely safe, assembleArguments() must be run
      */
     private boolean hasSourcesToCompile()
     {
@@ -545,12 +547,13 @@ public abstract class AbstractAjcCompiler
         return false;
     }
 
-    /** 
+    /**
      * Setters which when called sets compiler arguments
      */
     public void setComplianceLevel( String complianceLevel )
     {
-        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) || complianceLevel.equals( "1.6" ) )
+        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" )
+            || complianceLevel.equals( "1.6" ) )
         {
             ajcOptions.add( "-" + complianceLevel );
         }
@@ -665,7 +668,7 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-verbose" );
         }
     }
-    
+
     public void setXhasMember( boolean xhasMember )
     {
         XhasMember = xhasMember;
@@ -714,7 +717,7 @@ public abstract class AbstractAjcCompiler
     {
         this.bootclasspath = bootclasspath;
     }
-    
+
     public void setWarn( String warn )
     {
         this.warn = warn;
