@@ -112,8 +112,8 @@ public class AjcReportMojoTest
         Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange.createFromVersion( "3.8.2" ), "test",
                                               "jar", "", new DefaultArtifactHandler( "" ) );
         Artifact aspectJTools = new DefaultArtifact( "org.aspectj", "aspectjtools", VersionRange
-            .createFromVersion( "1.6.7" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
-        Artifact aspectJTRt = new DefaultArtifact( "org.aspectj", "aspectjrt", VersionRange.createFromVersion( "1.6.7" ),
+            .createFromVersion( "1.6.10" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
+        Artifact aspectJTRt = new DefaultArtifact( "org.aspectj", "aspectjrt", VersionRange.createFromVersion( "1.6.10" ),
                                                    "compile", "jar", "", new DefaultArtifactHandler( "" ) );
 
         junit.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( junit ) + ".jar" ) );
