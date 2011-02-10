@@ -1,5 +1,3 @@
-package org.codehaus.mojo.aspectj;
-
 /**
  * The MIT License
  *
@@ -25,47 +23,16 @@ package org.codehaus.mojo.aspectj;
  */
 
 /**
- * Verifies use of the Xlint parameter does not kill ajc.
+ * Testing of pre @AspectJ code style.
  * 
- * @author Nick Veys
+ * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-
-public class XlintTest
-    extends CompilerMojoTestBase
+public aspect OldStyleAspect
 {
-    /**
-     * 
-     */
-    protected void setUp()
-        throws Exception
-    {
-        ajcMojo = new AjcCompileMojo();
-        super.setUp();
-    }
 
-    /**
-     * @throws Exception
-     */
-    public void testWithNoSources()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.setComplianceLevel( "1.5" );
-            ajcMojo.aspectDirectory = "src/main/aspect";
-            ajcMojo.setXlint("ignore");
-            ajcMojo.execute();
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            fail( e.toString() );
-        }
-    }
+    pointcut oldStylePointcut():execution(* Clazz.print(..));
 
-    String getProjectName()
-    {
-        return "test-project";
+    before() : oldStylePointcut(){
+        System.out.println( "before print()" );
     }
-
 }
