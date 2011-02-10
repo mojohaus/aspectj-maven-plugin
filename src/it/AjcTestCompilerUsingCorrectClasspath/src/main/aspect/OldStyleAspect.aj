@@ -1,7 +1,3 @@
-package org.codehaus.mojo.aspectj;
-
-import java.util.Collections;
-
 /**
  * The MIT License
  *
@@ -27,49 +23,16 @@ import java.util.Collections;
  */
 
 /**
- * Plugin testcases.
+ * Testing of pre @AspectJ code style.
  * 
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
- *
  */
-public class AjcTestCompilerMojoTest
-    extends CompilerMojoTestBase
+public aspect OldStyleAspect
 {
-    
-    /**
-     * 
-     */
-    protected void setUp()
-        throws Exception
-    {
-        ajcMojo = new AjcTestCompileMojo();
-        super.setUp();
-    }
 
-    /**
-     * @throws Exception
-     */
-    public void testUsingCorrectClasspath()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.ajdtBuildDefFile = "test-build-1-5.ajproperties";
-            ajcMojo.setComplianceLevel( "1.5" );
-            ajcMojo.setVerbose( true );
-            ajcMojo.setShowWeaveInfo( true );
-            assertTrue(AjcHelper.createClassPath(ajcMojo.project, Collections.EMPTY_LIST, ajcMojo.getOutputDirectories()).indexOf("junit") != -1);
-            ajcMojo.execute();
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            fail( "Exception : " + e.toString() );
-        }
-    }
+    pointcut oldStylePointcut():execution(* Clazz.print(..));
 
-    String getProjectName()
-    {
-        return "test-project";
+    before() : oldStylePointcut(){
+        System.out.println( "before print()" );
     }
 }
