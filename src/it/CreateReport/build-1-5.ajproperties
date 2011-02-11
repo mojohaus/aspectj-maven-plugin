@@ -1,0 +1,2 @@
+src.includes = src/main/aspect/,\
+               src/main/java/

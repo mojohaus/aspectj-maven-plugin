@@ -43,8 +43,9 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Creates a ajdoc report in html format.
- *
+ * requiresDependencyResolution compile
  * @description A Maven 2.0 ajdoc report
+ * 
  * @author       <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  * @goal aspectj-report
  */
