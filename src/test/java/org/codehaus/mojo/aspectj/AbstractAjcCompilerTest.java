@@ -27,6 +27,7 @@ package org.codehaus.mojo.aspectj;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -200,7 +201,7 @@ public class AbstractAjcCompilerTest
         ajcCompMojo.weaveDependencies[0] = module1;
         String mod2type = "bar";
         // Modify project to include dependencies
-        Set artifacts = new HashSet();
+        Set artifacts = new LinkedHashSet();
         artifacts.add( new MockArtifact( mod1Group, mod1Artifact, null, mod1type ) );
         artifacts.add( new MockArtifact( mod1Group, mod1Artifact, null, mod2type ) );
         ajcCompMojo.project.setArtifacts( artifacts );
