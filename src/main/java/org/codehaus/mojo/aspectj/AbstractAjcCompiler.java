@@ -328,7 +328,7 @@ public abstract class AbstractAjcCompiler
         project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
         assembleArguments();
 
-        if ( !hasSourcesToCompile() )
+        if ( !forceAjcCompile && !hasSourcesToCompile() )
         {
             getLog().warn( "No sources found skipping aspectJ compile" );
             return;
