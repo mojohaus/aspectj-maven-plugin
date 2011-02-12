@@ -69,25 +69,6 @@ public class AjcCompilerMojoTest
     /**
      * @throws Exception
      */
-    public void testWithWrongCompilerVersion()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.ajdtBuildDefFile = "build-1-5.ajproperties";
-            ajcMojo.setComplianceLevel( "1.4" );
-            ajcMojo.execute();
-            fail();
-        }
-        catch ( Exception e )
-        {
-            // success
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
     public void testWithSourceDir()
         throws Exception
     {
