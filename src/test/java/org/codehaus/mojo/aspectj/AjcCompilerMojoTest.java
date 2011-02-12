@@ -50,25 +50,6 @@ public class AjcCompilerMojoTest
     /**
      * @throws Exception
      */
-    public void testUsingBuildConfigFileUsingOldStyle()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.ajdtBuildDefFile = "build-1-2.ajproperties";
-            ajcMojo.setComplianceLevel( "1.4" );
-            ajcMojo.execute();
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            fail( "Exception : " + e.toString() );
-        }
-    }
-
-    /**
-     * @throws Exception
-     */
     public void testUsingBuildConfigFileWithBaseDirThatDoesNotExist()
         throws Exception
     {
