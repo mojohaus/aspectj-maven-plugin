@@ -157,25 +157,6 @@ public class AjcCompilerMojoTest
             fail(e.toString());
         }
     }
-    
-    /**
-     * @throws Exception
-     */
-    public void testWithExclutionsAntStyle()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.aspectDirectory = "src/main/aspect";
-            ajcMojo.setComplianceLevel( "1.4" );
-            ajcMojo.excludes= new String[]{"**/Az*.*"};
-            ajcMojo.execute();
-        }
-        catch ( Exception e )
-        {
-            fail();
-        }
-    }
 
     /**
      * @throws Exception
