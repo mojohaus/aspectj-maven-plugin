@@ -69,25 +69,6 @@ public class AjcCompilerMojoTest
     /**
      * @throws Exception
      */
-    public void testWithSourceDir()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.setComplianceLevel( "1.5" );
-            ajcMojo.aspectDirectory = "src/main/aspect";
-            ajcMojo.execute();
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            fail(e.toString());
-        }
-    }
-    
-    /**
-     * @throws Exception
-     */
     public void testModificationSet()
         throws Exception
     {
