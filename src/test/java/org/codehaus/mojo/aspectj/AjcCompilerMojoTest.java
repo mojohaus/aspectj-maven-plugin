@@ -181,25 +181,6 @@ public class AjcCompilerMojoTest
     /**
      * @throws Exception
      */
-    public void testWithExclutionsFullClassName()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.aspectDirectory = "src/main/aspect";
-            ajcMojo.setComplianceLevel( "1.4" );
-            ajcMojo.excludes= new String[]{"org/codehaus/mojo/aspectj/Azpect.java"};
-            ajcMojo.execute();
-        }
-        catch ( Exception e )
-        {
-            fail();
-        }
-    }
-    
-    /**
-     * @throws Exception
-     */
     public void testWithExclutionsAntStyle()
         throws Exception
     {
