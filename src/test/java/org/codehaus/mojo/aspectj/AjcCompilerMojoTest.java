@@ -103,26 +103,6 @@ public class AjcCompilerMojoTest
     /**
      * @throws Exception
      */
-    public void testCreateCustomLoadTimeWeaveXml()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.aspectDirectory = "src/main/aspect";
-            ajcMojo.setComplianceLevel( "1.5" );
-            ajcMojo.setOutxmlfile( "/META-INF/customaop.xml" );
-            ajcMojo.execute();
-            assertTrue( FileUtils.fileExists( project.getBuild().getOutputDirectory() + "/META-INF/customaop.xml" ) );
-        }
-        catch ( Exception e )
-        {
-            fail();
-        }
-    }
-    
-    /**
-     * @throws Exception
-     */
     public void testCheckAspectDirectoryAddedToSourceDirs()
         throws Exception
     {
