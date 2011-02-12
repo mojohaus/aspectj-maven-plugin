@@ -88,26 +88,6 @@ public class AjcCompilerMojoTest
     /**
      * @throws Exception
      */
-    public void testWithInclutionsFullClassName()
-        throws Exception
-    {
-        try
-        {
-            ajcMojo.aspectDirectory = "src/main/aspect";
-            ajcMojo.setComplianceLevel( "1.4" );
-            ajcMojo.includes= new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
-            ajcMojo.execute();
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            fail();
-        }
-    }
-    
-    /**
-     * @throws Exception
-     */
     public void testModificationSet()
         throws Exception
     {
