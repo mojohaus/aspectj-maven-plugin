@@ -1,7 +1,11 @@
 <project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
    <body>
-      <menu name="AspectJ plugin Quickstart">
-         <item name="Standard usage" href="./usage.html"/>
+      <menu name="Overview">
+         <item name="Introduction" href="./index.html"/>
+         <item name="Usage" href="./usage.html"/>
+         <item name="Goals" href="./plugin-info.html"/>
+      </menu>
+      <menu name="Examples">
          <item name="Seperate test/compile settings" href="./differentTestAndCompile.html"/>
          <item name="Using includes/excludes" href="./includeExclude.html"/>
          <item name="Using with AJDT" href="./usingTogetherWithAJDT.html"/>
