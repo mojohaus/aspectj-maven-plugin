@@ -28,7 +28,8 @@ public class CompilationFailedException extends MojoExecutionException
         return errors;
     }
 
-    private static final String composeMessage( IMessage[] errors ) {
+    private static String composeMessage( IMessage[] errors ) 
+    {
         StringBuffer sb = new StringBuffer();
 
         sb.append( "Compiler errors:" + SystemUtils.LINE_SEPARATOR );

@@ -25,7 +25,6 @@ package org.codehaus.mojo.aspectj;
  */
 
 import org.apache.maven.plugin.logging.Log;
-import org.aspectj.bridge.AbortException;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.bridge.MessageHandler;
 
@@ -54,7 +53,6 @@ public class MavenMessageHandler
      * Hook into the maven logger.
      */
     public boolean handleMessage( IMessage message )
-        throws AbortException
     {
         if ( message.getKind().equals( IMessage.WARNING ) && !isIgnoring( IMessage.WARNING ) )
         {
@@ -76,7 +74,7 @@ public class MavenMessageHandler
         {
             log.error( (CharSequence) message.getMessage() );
         }
-        else if ( message.getKind().equals( IMessage.INFO ) && !isIgnoring( IMessage.INFO ))
+        else if ( message.getKind().equals( IMessage.INFO ) && !isIgnoring( IMessage.INFO ) )
         {
             log.debug( (CharSequence) message.getMessage() );
         }

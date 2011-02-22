@@ -42,11 +42,10 @@ import org.codehaus.doxia.site.renderer.SiteRenderer;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * Creates a ajdoc report in html format.
- * requiresDependencyResolution compile
- * @description A Maven 2.0 ajdoc report
+ * Creates a ajdoc report in html format. requiresDependencyResolution compile
  * 
- * @author       <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ * @description A Maven 2.0 ajdoc report
+ * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  * @goal aspectj-report
  */
 public class AjcReportMojo
@@ -54,21 +53,23 @@ public class AjcReportMojo
 {
     /**
      * The source directory for the aspects
+     * 
      * @parameter default-value="src/main/aspect"
      */
     protected String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
+     * 
      * @parameter default-value="src/test/aspect"
      */
     protected String testAspectDirectory = "src/test/aspect";
-    
+
     /**
      * The maven project.
      * 
      * @parameter default-value="${project}"
-     * @required 
+     * @required
      * @readonly
      */
     protected MavenProject project;
@@ -77,28 +78,27 @@ public class AjcReportMojo
      * The basedir of the project.
      * 
      * @parameter default-value="${basedir}"
-     * @required 
+     * @required
      * @readonly
      */
     protected File basedir;
 
     /**
-     * List of ant-style patterns used to specify the aspects that should be included when 
-     * compiling. When none specified all .java and .aj files in the project source directories, or
-     * directories spesified by the ajdtDefFile property are included.
+     * List of ant-style patterns used to specify the aspects that should be included when compiling. When none
+     * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
+     * property are included.
      */
     protected String[] includes;
 
     /**
-     * List of ant-style patterns used to specify the aspects that should be excluded when 
-     * compiling. When none specified all .java and .aj files in the project source directories, or
-     * directories spesified by the ajdtDefFile property are included.
+     * List of ant-style patterns used to specify the aspects that should be excluded when compiling. When none
+     * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
+     * property are included.
      */
     protected String[] excludes;
 
     /**
-     * Where to find the ajdt build definition file.
-     * <i>If set this will override the use of project sourcedirs</i>.
+     * Where to find the ajdt build definition file. <i>If set this will override the use of project sourcedirs</i>.
      * 
      * @parameter
      */
@@ -106,7 +106,7 @@ public class AjcReportMojo
 
     /**
      * Doxia Site Renderer.
-     *
+     * 
      * @component
      */
     private SiteRenderer siteRenderer;
@@ -140,38 +140,44 @@ public class AjcReportMojo
     protected boolean publicScope;
 
     /**
-     * Specifies that javadoc should retrieve the text for the overview documentation from the "source" file specified by path/filename and place it on the Overview page (overview-summary.html). 
-     * The path/filename is relative to the ${basedir}. While you can use any name you want for filename and place it anywhere you want for path,
-     *  a typical thing to do is to name it overview.html and place it in the source tree at the directory that contains the topmost package directories. 
-     *  In this location, no path is needed when documenting packages, since -sourcepath will point to this file. For example, if the source tree for the 
-     *  java.lang package is /src/classes/java/lang/, then you could place the overview file at /src/classes/overview.html. See Real World Example.
-     *  For information about the file specified by path/filename, see overview comment file.Note that the overview page is created only if you pass into javadoc two or more package names. 
-     *  For further explanation, see HTML Frames.) The title on the overview page is set by -doctitle. 
+     * Specifies that javadoc should retrieve the text for the overview documentation from the "source" file specified
+     * by path/filename and place it on the Overview page (overview-summary.html). The path/filename is relative to the
+     * ${basedir}. While you can use any name you want for filename and place it anywhere you want for path, a typical
+     * thing to do is to name it overview.html and place it in the source tree at the directory that contains the
+     * topmost package directories. In this location, no path is needed when documenting packages, since -sourcepath
+     * will point to this file. For example, if the source tree for the java.lang package is /src/classes/java/lang/,
+     * then you could place the overview file at /src/classes/overview.html. See Real World Example. For information
+     * about the file specified by path/filename, see overview comment file.Note that the overview page is created only
+     * if you pass into javadoc two or more package names. For further explanation, see HTML Frames.) The title on the
+     * overview page is set by -doctitle.
      * 
      * @parameter
      */
     protected String overview;
 
     /**
-     * Specifies the title to be placed near the top of the overview summary file. The title will be placed as a centered, 
-     * level-one heading directly beneath the upper navigation bar. The title may contain html tags and white space, though if 
-     * it does, it must be enclosed in quotes. Any internal quotation marks within title may have to be escaped.
+     * Specifies the title to be placed near the top of the overview summary file. The title will be placed as a
+     * centered, level-one heading directly beneath the upper navigation bar. The title may contain html tags and white
+     * space, though if it does, it must be enclosed in quotes. Any internal quotation marks within title may have to be
+     * escaped.
+     * 
      * @parameter
      */
     protected String doctitle;
 
     /**
-     * Provides more detailed messages while javadoc is running. Without the verbose option, messages appear for loading the source files, generating the documentation (one message per source file), 
-     * and sorting. The verbose option causes the printing of additional messages specifying the number of milliseconds to parse each java source file.
+     * Provides more detailed messages while javadoc is running. Without the verbose option, messages appear for loading
+     * the source files, generating the documentation (one message per source file), and sorting. The verbose option
+     * causes the printing of additional messages specifying the number of milliseconds to parse each java source file.
      * 
      * @parameter
      */
     protected boolean verbose;
-    
+
     /**
      * Specify compiler compliance setting (1.3 to 1.6, default is 1.4)
      * 
-     *  @parameter default-value="${mojo.java.target}"
+     * @parameter default-value="${mojo.java.target}"
      */
     protected String complianceLevel;
 
@@ -186,10 +192,9 @@ public class AjcReportMojo
      * @readonly
      */
     private List pluginArtifacts;
-    
+
     /**
      * Executes this ajdoc-report generation.
-     * 
      */
     protected void executeReport( Locale locale )
         throws MavenReportException
@@ -198,7 +203,7 @@ public class AjcReportMojo
         Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
         project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
         project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
-        
+
         ArrayList arguments = new ArrayList();
         // Add classpath
         arguments.add( "-classpath" );
@@ -245,7 +250,7 @@ public class AjcReportMojo
     }
 
     /**
-     * Get the directories containg sources 
+     * Get the directories containg sources
      */
     protected List getSourceDirectories()
     {
@@ -268,8 +273,7 @@ public class AjcReportMojo
      */
     protected List getOutputDirectories()
     {
-        return Arrays.asList( new String[] {
-            project.getBuild().getOutputDirectory(),
+        return Arrays.asList( new String[] { project.getBuild().getOutputDirectory(),
             project.getBuild().getTestOutputDirectory() } );
     }
 
@@ -304,7 +308,7 @@ public class AjcReportMojo
             + "That means, for example, that you can see everything affecting"
             + " a method when reading the documentation for the method.";
     }
-    
+
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#isExternalReport()
      */
@@ -312,7 +316,7 @@ public class AjcReportMojo
     {
         return true;
     }
-    
+
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
@@ -322,7 +326,6 @@ public class AjcReportMojo
         ArtifactHandler artifactHandler = this.project.getArtifact().getArtifactHandler();
         return "java".equals( artifactHandler.getLanguage() );
     }
-    
 
     /**
      * Get the site renderer.
@@ -331,7 +334,6 @@ public class AjcReportMojo
     {
         return siteRenderer;
     }
-
 
     /**
      * Get the maven project.
@@ -392,12 +394,14 @@ public class AjcReportMojo
             ajcOptions.add( "-verbose" );
         }
     }
-    /** 
+
+    /**
      * Setters which when called sets compiler arguments
      */
     public void setComplianceLevel( String complianceLevel )
     {
-        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" ) || complianceLevel.equals( "1.6" ) )
+        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" )
+            || complianceLevel.equals( "1.6" ) )
         {
             ajcOptions.add( "-source" );
             ajcOptions.add( complianceLevel );
@@ -409,5 +413,5 @@ public class AjcReportMojo
     {
         this.pluginArtifacts = pluginArtifacts;
 
-    }    
+    }
 }

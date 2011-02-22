@@ -35,7 +35,7 @@ import org.apache.maven.project.MavenProject;
  * @author Juraj Burian
  * @version $Revision$ by $Author$
  */
-abstract public class AbstractAjcMojo extends AbstractMojo
+public abstract class AbstractAjcMojo extends AbstractMojo
 {
     /**
      * The maven project.

@@ -304,7 +304,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Abstract method used by cild classes to specify aditional aspect paths.
      * 
-     * @return
+     * @return the additional aspect paths
      */
     protected abstract String getAdditionalAspectPaths();
 
@@ -406,10 +406,18 @@ public abstract class AbstractAjcCompiler
         }
 
         // Add artifacts to weave
-        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, null, "a dependency to weave" );
+        addModulesArgument( "-inpath", 
+                            ajcOptions, 
+                            weaveDependencies, 
+                            null, 
+                            "a dependency to weave" );
 
         // Add library artifacts
-        addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(), "an aspect library" );
+        addModulesArgument( "-aspectpath", 
+                            ajcOptions, 
+                            aspectLibraries, 
+                            getAdditionalAspectPaths(), 
+                            "an aspect library" );
 
         // add target dir argument
         ajcOptions.add( "-d" );
@@ -431,7 +439,11 @@ public abstract class AbstractAjcCompiler
     /**
      * Finds all artifacts in the weavemodule property, and adds them to the ajc options.
      * 
+     * @param argument
      * @param arguments
+     * @param modules
+     * @param aditionalpath
+     * @param role
      * @throws MojoExecutionException
      */
     private void addModulesArgument( String argument, List arguments, Module[] modules, String aditionalpath,
@@ -493,7 +505,8 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Checks modifications that would make us need a build
-     * 
+     *
+     * @return <code>true</code> if build is needed, otherwise <code>false</code>
      * @throws MojoExecutionException
      */
     protected boolean isBuildNeeded()
@@ -549,6 +562,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Setters which when called sets compiler arguments
+     * @param complianceLevel the complianceLevel
      */
     public void setComplianceLevel( String complianceLevel )
     {

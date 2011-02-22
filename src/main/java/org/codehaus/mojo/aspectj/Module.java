@@ -80,7 +80,9 @@ public class Module
     {
         String ts = getGroupId() + ":" + getArtifactId();
         if ( getType() != null )
+        {
             ts += ":" + getType();
+        }
         // TODO where to place the classifier?
         return ts;
     }

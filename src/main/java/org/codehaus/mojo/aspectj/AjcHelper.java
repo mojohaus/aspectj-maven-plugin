@@ -60,6 +60,9 @@ public class AjcHelper
     /**
      * Constructs AspectJ compiler classpath string
      * 
+     * @param project the Maven Project
+     * @param pluginArtifacts the plugin Artifacts
+     * @param outDirs the outputDirectories
      * @return a os spesific classpath string
      */
     public static String createClassPath( MavenProject project, List pluginArtifacts, List outDirs )
@@ -68,11 +71,11 @@ public class AjcHelper
         Set classPathElements = Collections.synchronizedSet( new LinkedHashSet() );
         classPathElements.addAll( project.getDependencyArtifacts() );
         classPathElements.addAll( project.getArtifacts() );
-        classPathElements.addAll( pluginArtifacts == null ? Collections.EMPTY_LIST : pluginArtifacts);
+        classPathElements.addAll( pluginArtifacts == null ? Collections.EMPTY_LIST : pluginArtifacts );
         Iterator iter = classPathElements.iterator();
         while ( iter.hasNext() )
         {
-            Artifact classPathElement = (Artifact) iter.next();
+            Artifact classPathElement = ( Artifact ) iter.next();
             File artifact = classPathElement.getFile();
             if ( null != artifact )
             {
@@ -100,7 +103,9 @@ public class AjcHelper
      * Based on a AJDT build properties file resolves the combination of all
      * include and exclude statements and returns a set of all the files to be
      * compiled and weaved.
-     * 
+     *
+     * @param ajdtBuildDefFile the ajdtBuildDefFile
+     * @param basedir the baseDirectory
      * @return
      * @throws MojoExecutionException
      */
@@ -112,7 +117,7 @@ public class AjcHelper
         Properties ajdtBuildProperties = new Properties();
         try
         {
-            ajdtBuildProperties.load( new FileInputStream( new File(basedir,ajdtBuildDefFile) ) );
+            ajdtBuildProperties.load( new FileInputStream( new File( basedir, ajdtBuildDefFile ) ) );
         }
         catch ( FileNotFoundException e )
         {
@@ -122,8 +127,8 @@ public class AjcHelper
         {
             throw new MojoExecutionException( "IO Error reading build properties file spesified", e );
         }
-        result.addAll( resolveIncludeExcludeString( (String) ajdtBuildProperties.get( "src.includes" ), basedir ) );
-        Set exludes = resolveIncludeExcludeString( (String) ajdtBuildProperties.get( "src.excludes" ), basedir );
+        result.addAll( resolveIncludeExcludeString( ( String ) ajdtBuildProperties.get( "src.includes" ), basedir ) );
+        Set exludes = resolveIncludeExcludeString( ( String ) ajdtBuildProperties.get( "src.excludes" ), basedir );
         result.removeAll( exludes );
 
         return result;
@@ -133,6 +138,9 @@ public class AjcHelper
      * Based on a set of sourcedirs, apply include and exclude statements and
      * returns a set of all the files to be compiled and weaved.
      * 
+     * @param sourceDirs
+     * @param includes
+     * @param excludes
      * @return
      * @throws MojoExecutionException
      */
@@ -205,7 +213,7 @@ public class AjcHelper
         throws IOException
     {
         List arguments = new ArrayList();
-        File argFile = new File( outputDir.getAbsolutePath(),fileName );
+        File argFile = new File( outputDir.getAbsolutePath(), fileName );
         if ( FileUtils.fileExists( argFile.getAbsolutePath() ) )
         {
             FileReader reader = new FileReader( argFile );
@@ -261,7 +269,8 @@ public class AjcHelper
      *         src/main/java/com/project/AnAspect.java
      * </pre>
      * 
-     * @param includeList
+     * @param input
+     * @param basedir the baseDirectory
      * @return a list over all files inn the include string
      * @throws IOException
      */
