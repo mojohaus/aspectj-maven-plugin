@@ -1,5 +1,3 @@
-package foo.aspectj;
-
 /**
  * The MIT License
  *
@@ -37,7 +35,7 @@ import org.aspectj.lang.annotation.DeclareWarning;
 public class ATestAzpect
 { 
 	@SuppressWarnings("unused")
-	@DeclareWarning("call (* java.io.PrintStream.print*(..)) && !within(foo.ATestAzpect)")
+	@DeclareWarning("call (* java.io.PrintStream.print*(..)) && !within(ATestAzpect)")
 	private final String errorMessage = "Do not use sytem.out, use logger";
 	
     @Before ("execution (* Clazz.print(..))")

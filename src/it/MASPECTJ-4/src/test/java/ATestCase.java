@@ -1,5 +1,3 @@
-package foo;
-
 /**
  * The MIT License
  *
