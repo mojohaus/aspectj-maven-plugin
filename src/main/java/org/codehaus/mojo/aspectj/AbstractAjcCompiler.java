@@ -41,7 +41,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Base class for the two aspectJ compiletime weaving mojos.
- * 
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 public abstract class AbstractAjcCompiler
@@ -50,14 +50,14 @@ public abstract class AbstractAjcCompiler
 
     /**
      * The source directory for the aspects
-     * 
+     *
      * @parameter default-value="src/main/aspect"
      */
     protected String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
-     * 
+     *
      * @parameter default-value="src/test/aspect"
      */
     protected String testAspectDirectory = "src/test/aspect";
@@ -66,7 +66,7 @@ public abstract class AbstractAjcCompiler
      * List of ant-style patterns used to specify the aspects that should be included when compiling. When none
      * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
      * property are included.
-     * 
+     *
      * @parameter
      */
     protected String[] includes;
@@ -75,35 +75,35 @@ public abstract class AbstractAjcCompiler
      * List of ant-style patterns used to specify the aspects that should be excluded when compiling. When none
      * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
      * property are included.
-     * 
+     *
      * @parameter
      */
     protected String[] excludes;
 
     /**
      * Where to find the ajdt build definition file. <i>If set this will override the use of project sourcedirs</i>.
-     * 
+     *
      * @parameter
      */
     protected String ajdtBuildDefFile;
 
     /**
      * Generate aop.xml file for load-time weaving with default name.(/META-INF/aop.xml)
-     * 
+     *
      * @parameter
      */
     protected boolean outxml;
 
     /**
      * Generate aop.xml file for load-time weaving with custom name.
-     * 
+     *
      * @parameter
      */
     protected String outxmlfile;
 
     /**
      * Generate .ajesym symbol files for emacs support
-     * 
+     *
      * @parameter
      */
     protected boolean emacssym;
@@ -111,7 +111,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Set default level for messages about potential programming mistakes in crosscutting code. {level} may be ignore,
      * warning, or error. This overrides entries in org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar.
-     * 
+     *
      * @parameter
      */
     protected String Xlint;
@@ -120,7 +120,7 @@ public abstract class AbstractAjcCompiler
      * Enables the compiler to support hasmethod(method_pattern) and hasfield(field_pattern) type patterns, but only
      * within declare statements. It's experimental and undocumented because it may change, and because it doesn't yet
      * take into account ITDs.
-     * 
+     *
      * @parameter
      * @since 1.3
      */
@@ -128,7 +128,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Specify classfile target setting (1.1 to 1.6) default is 1.2
-     * 
+     *
      * @parameter default-value="${project.build.java.target}"
      */
     protected String target;
@@ -138,77 +138,77 @@ public abstract class AbstractAjcCompiler
      * Java 1.4 will result in a compiler error. When using -source 1.4, treat assert as a keyword and implement
      * assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java 5 language features are
      * permitted.
-     * 
+     *
      * @parameter default-value="${mojo.java.target}"
      */
     protected String source;
 
     /**
      * Specify compiler compliance setting (1.3 to 1.6) default is 1.4
-     * 
+     *
      * @parameter
      */
     protected String complianceLevel;
 
     /**
      * Toggle warningmessages on deprecations
-     * 
+     *
      * @parameter
      */
     protected boolean deprecation;
 
     /**
      * Emit no errors for unresolved imports;
-     * 
+     *
      * @parameter
      */
     protected boolean noImportError;
 
     /**
      * Keep compiling after error, dumping class files with problem methods
-     * 
+     *
      * @parameter
      */
     protected boolean proceedOnError;
 
     /**
      * Preserve all local variables during code generation (to facilitate debugging).
-     * 
+     *
      * @parameter
      */
     protected boolean preserveAllLocals;
 
     /**
      * Compute reference information.
-     * 
+     *
      * @parameter
      */
     protected boolean referenceInfo;
 
     /**
      * Specify default source encoding format.
-     * 
+     *
      * @parameter expression="${project.build.sourceEncoding}"
      */
     protected String encoding;
 
     /**
      * Emit messages about accessed/processed compilation units
-     * 
+     *
      * @parameter
      */
     protected boolean verbose;
 
     /**
      * Emit messages about weaving
-     * 
+     *
      * @parameter
      */
     protected boolean showWeaveInfo;
 
     /**
      * Repeat compilation process N times (typically to do performance analysis).
-     * 
+     *
      * @parameter
      */
     protected int repeat;
@@ -217,21 +217,21 @@ public abstract class AbstractAjcCompiler
      * (Experimental) runs weaver in reweavable mode which causes it to create woven classes that can be rewoven,
      * subject to the restriction that on attempting a reweave all the types that advised the woven type must be
      * accessible.
-     * 
+     *
      * @parameter
      */
     protected boolean Xreweavable;
 
     /**
      * (Experimental) do not inline around advice
-     * 
+     *
      * @parameter
      */
     protected boolean XnoInline;
 
     /**
      * (Experimental) Normally it is an error to declare aspects Serializable. This option removes that restriction.
-     * 
+     *
      * @parameter
      */
     protected boolean XserializableAspects;
@@ -239,7 +239,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing Serializable that is
      * affected by an aspect. The field is calculated based on the class before weaving has taken place.
-     * 
+     *
      * @parameter
      */
     protected boolean XaddSerialVersionUID;
@@ -248,7 +248,7 @@ public abstract class AbstractAjcCompiler
      * Override location of VM's bootclasspath for purposes of evaluating types when compiling. Path is a single
      * argument containing a list of paths to zip files or directories, delimited by the platform-specific path
      * delimiter.
-     * 
+     *
      * @parameter
      */
     protected String bootclasspath;
@@ -256,7 +256,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Emit warnings for any instances of the comma-delimited list of questionable code (eg 'unusedLocals,deprecation'):
      * see http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc for available settings
-     * 
+     *
      * @parameter
      */
     protected String warn;
@@ -265,14 +265,14 @@ public abstract class AbstractAjcCompiler
      * The filename to store build configuration in. This file will be placed in the project build output directory, and
      * will contain all the arguments passed to the compiler in the last run, and also all the filenames included in the
      * build. Aspects as well as java files.
-     * 
+     *
      * @parameter default-value="builddef.lst"
      */
     protected String argumentFileName = "builddef.lst";
 
     /**
      * Forces re-compilation, regardless of whether the compiler arguments or the sources have changed.
-     * 
+     *
      * @parameter
      */
     protected boolean forceAjcCompile;
@@ -289,33 +289,42 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Abstract method used by child classes to spesify the correct output directory for compiled classes.
-     * 
+     *
      * @return where compiled classes should be put.
      */
     protected abstract List getOutputDirectories();
 
     /**
      * Abstract method used by child classes to spesify the correct source directory for classes.
-     * 
+     *
      * @return where sources may be found.
      */
     protected abstract List getSourceDirectories();
 
     /**
      * Abstract method used by cild classes to specify aditional aspect paths.
-     * 
+     *
      * @return the additional aspect paths
      */
     protected abstract String getAdditionalAspectPaths();
 
     /**
      * Do the AspectJ compiling.
-     * 
+     *
      * @throws MojoExecutionException
      */
     public void execute()
         throws MojoExecutionException
     {
+        if ( isSkip() ) 
+        {
+            if( getLog().isInfoEnabled() )
+            {
+                getLog().info( "Skipping execution because of 'skip' option" );
+            }
+            return;
+        }
+
         ArtifactHandler artifactHandler = project.getArtifact().getArtifactHandler();
         if ( !"java".equals( artifactHandler.getLanguage() ) )
         {
@@ -377,7 +386,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Assembles a complete ajc compiler arguments list.
-     * 
+     *
      * @throws MojoExecutionException error in configuration
      */
     protected void assembleArguments()
@@ -406,17 +415,17 @@ public abstract class AbstractAjcCompiler
         }
 
         // Add artifacts to weave
-        addModulesArgument( "-inpath", 
-                            ajcOptions, 
-                            weaveDependencies, 
-                            null, 
+        addModulesArgument( "-inpath",
+                            ajcOptions,
+                            weaveDependencies,
+                            null,
                             "a dependency to weave" );
 
         // Add library artifacts
-        addModulesArgument( "-aspectpath", 
-                            ajcOptions, 
-                            aspectLibraries, 
-                            getAdditionalAspectPaths(), 
+        addModulesArgument( "-aspectpath",
+                            ajcOptions,
+                            aspectLibraries,
+                            getAdditionalAspectPaths(),
                             "an aspect library" );
 
         // add target dir argument
@@ -438,7 +447,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Finds all artifacts in the weavemodule property, and adds them to the ajc options.
-     * 
+     *
      * @param argument
      * @param arguments
      * @param modules

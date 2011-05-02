@@ -31,7 +31,7 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * The base class.
- * 
+ *
  * @author Juraj Burian
  * @version $Revision$ by $Author$
  */
@@ -39,39 +39,54 @@ public abstract class AbstractAjcMojo extends AbstractMojo
 {
     /**
      * The maven project.
-     * 
+     *
      * @parameter default-value="${project}"
-     * @required 
+     * @required
      * @readonly
      */
     protected MavenProject project;
 
     /**
      * The basedir of the project.
-     * 
+     *
      * @parameter default-value="${basedir}"
-     * @required 
+     * @required
      * @readonly
      */
     protected File basedir;
-    
+
     /**
      * List of of modules to weave (into target directory). Corresponds to ajc
      * -inpath option (or -injars for pre-1.2 (which is not supported)).
-     * 
+     *
      * @parameter
      */
     protected Module[] weaveDependencies;
 
     /**
-     * Weave binary aspects from the jars. 
-     * The aspects should have been output by the same version of the compiler. 
+     * Weave binary aspects from the jars.
+     * The aspects should have been output by the same version of the compiler.
      * The modules must also be dependencies of the project.
      * Corresponds to ajc -aspectpath option
-     * 
+     *
      * @parameter
      */
     protected Module[] aspectLibraries;
 
+    /**
+     * Skip plugin execution.
+     *
+     * @parameter default-value="false" expresssion="${aspectj.skip}"
+     */
+    private boolean skip;
+    
+    /**
+     * 
+     * @return <code>true</code> if execution should be skipped, otherwise <code>false</code>
+     */
+    protected final boolean isSkip()
+    {
+        return skip;
+    }
 
 }
