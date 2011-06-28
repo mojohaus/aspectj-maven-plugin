@@ -14,7 +14,7 @@
   <properties>
     <!-- NOTE: If the AspectJ dependencies are updated, be sure to update 
       the tests CompilerMojoTestBase and AjcReportMojoTest as well! -->
-    <aspectj.version>1.6.10</aspectj.version>
+    <aspectjVersion>1.6.10</aspectjVersion>
   </properties>
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</connection>
@@ -210,13 +210,13 @@
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectj.version}</version>
+      <version>${aspectjVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjtools</artifactId>
-      <version>${aspectj.version}</version>
+      <version>${aspectjVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
