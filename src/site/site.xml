@@ -1,5 +1,8 @@
 <project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
    <body>
+      <links>
+         <item name="AspectJ" href="http://aspectj.org"/>
+      </links>
       <menu name="Overview">
          <item name="Introduction" href="./index.html"/>
          <item name="Usage" href="./usage.html"/>
@@ -12,7 +15,6 @@
          <item name="Weaving jars" href="./weaveJars.html"/>
          <item name="Using aspect libraries" href="./libraryJars.html"/>
          <item name="Configuring Report" href="./usingReport.html"/>
-         <item name="AspectJ home" href="http://aspectj.org"/>
       </menu>
    </body>
 </project>
