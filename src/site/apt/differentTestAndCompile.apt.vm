@@ -11,7 +11,7 @@ Example of different configuration for compile and test-compile goal
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.6.2</version>
+            <version>${aspectjVersion}</version>
         </dependency>
         ...
     </dependencies>
