@@ -1,3 +1,9 @@
+ ------
+ Using includes/excludes
+ ------
+ ------
+ ------
+
 Using includes/excludes
 
   The AspectJ plugin will by default add all .java and .aj files in the

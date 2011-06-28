@@ -1,3 +1,9 @@
+ ------
+ Using aspect libraries
+ ------
+ ------
+ ------
+
 Applying already compiled aspect jars,
   
   In order to apply already compiled aspects to your own sources you need do setup all the jar

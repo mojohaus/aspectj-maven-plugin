@@ -1,4 +1,10 @@
-Weaving already compiled jar artifacts  
+ ------
+ Weaving jars
+ ------
+ ------
+ ------
+
+Weaving already compiled jar artifacts
 
   AspectJ gives a possibility to weave already compiled classes in a jar file.
   In order to do this with the AspectJ plugin you need do setup all the jar

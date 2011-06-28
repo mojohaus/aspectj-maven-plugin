@@ -1,3 +1,9 @@
+ ------
+ Using with AJDT
+ ------
+ ------
+ ------
+
 Using together with AJDT
 
   To use together with AJDT you simply spesify the ajdtBuildDefFile property to point to the

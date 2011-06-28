@@ -1,3 +1,9 @@
+ ------
+ Seperate test/compile settings
+ ------
+ ------
+ ------
+
 Example of different configuration for compile and test-compile goal
 
   To have different weaving configurations for the main and testclasses
