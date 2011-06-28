@@ -35,6 +35,7 @@ import java.util.List;
  * @phase test-compile
  * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ * @threadSafe
  */
 public class AjcTestCompileMojo
     extends AbstractAjcCompiler

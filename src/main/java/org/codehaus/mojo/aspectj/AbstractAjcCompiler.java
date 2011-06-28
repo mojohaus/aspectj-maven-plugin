@@ -302,11 +302,16 @@ public abstract class AbstractAjcCompiler
     protected abstract List getSourceDirectories();
 
     /**
-     * Abstract method used by cild classes to specify aditional aspect paths.
+     * Abstract method used by child classes to specify additional aspect paths.
      *
      * @return the additional aspect paths
      */
     protected abstract String getAdditionalAspectPaths();
+
+    /**
+     * Lock for the call to the AspectJ compiler to make it thread-safe.
+     */
+    private static final Object BIG_ASPECTJ_LOCK = new Object();
 
     /**
      * Do the AspectJ compiling.
@@ -376,7 +381,11 @@ public abstract class AbstractAjcCompiler
         MavenMessageHandler mavenMessageHandler = new MavenMessageHandler( getLog() );
         main.setHolder( mavenMessageHandler );
 
-        main.runMain( (String[]) ajcOptions.toArray( new String[0] ), false );
+        synchronized ( BIG_ASPECTJ_LOCK )
+        {
+        	main.runMain( (String[]) ajcOptions.toArray( new String[ajcOptions.size()] ), false );
+        }
+
         IMessage[] errors = mavenMessageHandler.getMessages( IMessage.ERROR, true );
         if ( !proceedOnError && errors.length > 0 )
         {
