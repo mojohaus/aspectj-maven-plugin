@@ -1,14 +1,14 @@
  ------
- Seperate test/compile settings
+ Separate test/compile settings
  ------
  ------
  ------
 
 Example of different configuration for compile and test-compile goal
 
-  To have different weaving configurations for the main and testclasses
+  To have different weaving configurations for the main and test classes
   you could do as shown below.
-  
+
 +------------------------------------------+
 <project>
     ...
@@ -47,11 +47,11 @@ Example of different configuration for compile and test-compile goal
                             <goal>test-compile</goal>
                         </goals>
                     </execution>
-               </executions>
-           </plugin>
-           ...
-       </plugins>
-   <build>
-...
+                </executions>
+            </plugin>
+            ...
+        </plugins>
+    <build>
+    ...
 </project>
 +------------------------------------------+

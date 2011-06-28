@@ -4,16 +4,16 @@
  ------
  ------
 
-Configuring aspectj report
+Configuring AspectJ report
 
 
   Example of ajdoc report creation. 
   
-  Note : Since this report is using tools.jar as a system scoped dependency 
+  <<Note:>> Since this report is using tools.jar as a system scoped dependency
   you will need to make sure that your JAVA_HOME environment variable 
-  are set to a jdk, before you could use this report.
-  Also we discovered that it does not work with jdk1.5.0, and you would
-  need to upgrade your vm if this is the one you currently are using.
+  are set to a JDK, before you could use this report.
+  Also we discovered that it does not work with JDK 1.5.0, and you would
+  need to upgrade your VM if this is the one you currently are using.
   
 +------------------------------------------+
 <project>
@@ -49,7 +49,7 @@ Configuring aspectj report
                    </reportSet>
                </reportSets>
            </plugin>
-      </plugins>
-	</reporting>
-...
+        </plugins>
+    </reporting>
+    ...
 </project>

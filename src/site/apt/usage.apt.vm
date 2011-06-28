@@ -6,11 +6,11 @@
 
 Usage
 
-  This plugin weaves aspectJ aspects with your classes using the AspectJ ajc compiler.
-  Please do remember to add aspectjrt dependency to your project. aspectj needs it to weave
-  and ultimatly to run your code. to have it compile aspects found in your project source directories
-  simply use the configuration below
-  
+  This plugin weaves AspectJ aspects with your classes using the AspectJ ajc compiler.
+  Please do remember to add aspectjrt as a dependency to your project. AspectJ needs it to weave
+  and ultimately to run your code. To have it compile aspects found in your project source directories
+  simply use the configuration below.
+
 +------------------------------------------+
 <project>
     ...
@@ -37,12 +37,11 @@ Usage
                             <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
                         </goals>
                     </execution>
-               </executions>
-           </plugin>
-           ...
-       </plugins>
-   <build>
-...
+                </executions>
+            </plugin>
+            ...
+        </plugins>
+    <build>
+    ...
 </project>
 +------------------------------------------+
-

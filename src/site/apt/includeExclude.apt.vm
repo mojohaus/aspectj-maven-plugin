@@ -7,9 +7,9 @@
 Using includes/excludes
 
   The AspectJ plugin will by default add all .java and .aj files in the
-  project sourcedirectories. Below you will find an example of how
-  to add a include/excludefiltering on top of that.
-  
+  project source directories. Below you will find an example of how
+  to add an include/exclude filtering on top of that.
+
 +------------------------------------------+
 <project>
     ...
@@ -31,8 +31,8 @@ Using includes/excludes
                 <version>${project.version}</version>
                 <configuration>
                     <includes>
-                    	<include>**/TransationAspect.java</include>
-                    	<include>**/SecurityAspect.aj</include>
+                        <include>**/TransationAspect.java</include>
+                        <include>**/SecurityAspect.aj</include>
                     </includes>
                     <excludes>
                         <exclude>**/logging/*.aj</exclude>
@@ -44,11 +44,11 @@ Using includes/excludes
                             <goal>compile</goal>
                         </goals>
                     </execution>
-               </executions>
-           </plugin>
-           ...
-       </plugins>in
-   <build>
-...
+                </executions>
+            </plugin>
+            ...
+        </plugins>in
+    <build>
+    ...
 </project>
 +------------------------------------------+

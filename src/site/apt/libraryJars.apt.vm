@@ -4,11 +4,12 @@
  ------
  ------
 
-Applying already compiled aspect jars,
+Applying already compiled aspect JARs
   
-  In order to apply already compiled aspects to your own sources you need do setup all the jar
+  In order to apply already compiled aspects to your own sources you need do setup all the JAR
   files you would like to weave in the plugin configuration as shown below.
-  Note. The artifact you reference must exist as dependencies in the module.
+
+  <<Note:>> The artifacts you reference must exist as dependencies in the project.
   
 +------------------------------------------+
 <project>
@@ -59,11 +60,11 @@ Applying already compiled aspect jars,
                             <goal>compile</goal>
                         </goals>
                     </execution>
-               </executions>
-           </plugin>
-           ...
-       </plugins>in
-   <build>
-...
+                </executions>
+            </plugin>
+            ...
+        </plugins>in
+    <build>
+    ...
 </project>
 +------------------------------------------+

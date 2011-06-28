@@ -9,7 +9,7 @@
          <item name="Goals" href="./plugin-info.html"/>
       </menu>
       <menu name="Examples">
-         <item name="Seperate test/compile settings" href="./differentTestAndCompile.html"/>
+         <item name="Separate test/compile settings" href="./differentTestAndCompile.html"/>
          <item name="Using includes/excludes" href="./includeExclude.html"/>
          <item name="Using with AJDT" href="./usingTogetherWithAJDT.html"/>
          <item name="Weaving jars" href="./weaveJars.html"/>
