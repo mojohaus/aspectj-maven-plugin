@@ -26,6 +26,7 @@ package org.codehaus.mojo.aspectj;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +42,8 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Base class for the two aspectJ compiletime weaving mojos.
+ * 
+ * For all available options see {@link http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html}
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
@@ -49,14 +52,14 @@ public abstract class AbstractAjcCompiler
 {
 
     /**
-     * The source directory for the aspects
+     * The source directory for the aspects.
      *
      * @parameter default-value="src/main/aspect"
      */
     protected String aspectDirectory = "src/main/aspect";
 
     /**
-     * The source directory for the test aspects
+     * The source directory for the test aspects.
      *
      * @parameter default-value="src/test/aspect"
      */
@@ -64,7 +67,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * List of ant-style patterns used to specify the aspects that should be included when compiling. When none
-     * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
+     * specified all .java and .aj files in the project source directories, or directories specified by the ajdtDefFile
      * property are included.
      *
      * @parameter
@@ -73,7 +76,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * List of ant-style patterns used to specify the aspects that should be excluded when compiling. When none
-     * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
+     * specified all .java and .aj files in the project source directories, or directories specified by the ajdtDefFile
      * property are included.
      *
      * @parameter
@@ -102,7 +105,7 @@ public abstract class AbstractAjcCompiler
     protected String outxmlfile;
 
     /**
-     * Generate .ajesym symbol files for emacs support
+     * Generate .ajesym symbol files for emacs support.
      *
      * @parameter
      */
@@ -230,14 +233,14 @@ public abstract class AbstractAjcCompiler
     protected boolean XnoInline;
 
     /**
-     * (Experimental) Normally it is an error to declare aspects Serializable. This option removes that restriction.
+     * (Experimental) Normally it is an error to declare aspects {@link Serializable}. This option removes that restriction.
      *
      * @parameter
      */
     protected boolean XserializableAspects;
 
     /**
-     * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing Serializable that is
+     * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing {@link Serializable} that is
      * affected by an aspect. The field is calculated based on the class before weaving has taken place.
      *
      * @parameter
@@ -295,14 +298,14 @@ public abstract class AbstractAjcCompiler
     protected Set resolvedIncludes;
 
     /**
-     * Abstract method used by child classes to spesify the correct output directory for compiled classes.
+     * Abstract method used by child classes to specify the correct output directory for compiled classes.
      *
      * @return where compiled classes should be put.
      */
     protected abstract List getOutputDirectories();
 
     /**
-     * Abstract method used by child classes to spesify the correct source directory for classes.
+     * Abstract method used by child classes to specify the correct source directory for classes.
      *
      * @return where sources may be found.
      */
