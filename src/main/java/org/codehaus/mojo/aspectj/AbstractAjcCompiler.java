@@ -243,6 +243,13 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected boolean XaddSerialVersionUID;
+    
+    /**
+     * Causes compiler to terminate before weaving
+     * 
+     * @parameter
+     */
+    protected boolean XterminateAfterCompilation;
 
     /**
      * Override location of VM's bootclasspath for purposes of evaluating types when compiling. Path is a single
@@ -742,6 +749,14 @@ public abstract class AbstractAjcCompiler
         if ( xaddSerialVersionUID )
         {
             ajcOptions.add( "-XaddSerialVersionUID" );
+        }
+    }
+    
+    public void setXterminateAfterCompilation( boolean xterminateAfterCompilation )
+    {
+        if( xterminateAfterCompilation )
+        {
+            ajcOptions.add( "-XterminateAfterCompilation" );
         }
     }
 
