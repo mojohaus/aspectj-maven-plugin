@@ -56,18 +56,26 @@ public abstract class AbstractAjcMojo extends AbstractMojo
     protected File basedir;
 
     /**
-     * List of of modules to weave (into target directory). Corresponds to ajc
-     * -inpath option (or -injars for pre-1.2 (which is not supported)).
+     * List of of modules to weave (into target directory). Corresponds to <code>ajc
+     * -inpath</code> option (or <code>-injars</code> for pre-1.2 (which is not supported)).
      *
      * @parameter
      */
     protected Module[] weaveDependencies;
+    
+    /**
+     * List of of directories with .class files to weave (into target directory).
+     * Corresponds to <code>ajc -inpath</code> option .
+     * 
+     * @parameter
+     */
+    protected String[] weaveDirectories;
 
     /**
      * Weave binary aspects from the jars.
      * The aspects should have been output by the same version of the compiler.
      * The modules must also be dependencies of the project.
-     * Corresponds to ajc -aspectpath option
+     * Corresponds to <code>ajc -aspectpath</code> option
      *
      * @parameter
      */

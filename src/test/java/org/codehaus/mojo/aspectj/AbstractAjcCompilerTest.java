@@ -220,7 +220,33 @@ public class AbstractAjcCompilerTest
     }
 
     /**
-     * Verifies that if not stated no -aspectpath argument should be found in the ajc arguments
+     * Tests if modules told to weave classes that are found in directories.
+     * 
+     * @throws Exception
+     */
+    public void testGetAjcArguments_weaveDirectories()
+        throws Exception
+    {
+        String dir1 = "target/classes1";
+        String dir2 = "target/classes2";
+        ajcCompMojo.weaveDirectories = new String[] { dir1, dir2 };
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+        assertTrue( args.contains( "-inpath" ) );
+        Iterator it = args.iterator();
+        while ( !it.next().equals( "-inpath" ) )
+        {
+            // don't do nothing
+        }
+        String weavePath = (String) it.next();
+        assertTrue( weavePath.indexOf( File.pathSeparator ) != -1 );
+        assertTrue( weavePath.indexOf( dir1 ) != -1 );
+        assertTrue( weavePath.indexOf( dir2 ) != -1 );
+    }
+    
+    /**
+     * Verifies that if not stated no -aspectpath argument should
+     * be found in the ajc arguments
      * {@link AbstractAjcCompiler#execute()}
      * 
      * @throws Exception

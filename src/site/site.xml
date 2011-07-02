@@ -12,7 +12,8 @@
          <item name="Separate test/compile settings" href="./differentTestAndCompile.html"/>
          <item name="Using includes/excludes" href="./includeExclude.html"/>
          <item name="Using with AJDT" href="./usingTogetherWithAJDT.html"/>
-         <item name="Weaving jars" href="./weaveJars.html"/>
+         <item name="Weaving classes in jars" href="./weaveJars.html"/>
+         <item name="Weaving classes in directories" href="./weaveDirectories.html"/>
          <item name="Using aspect libraries" href="./libraryJars.html"/>
          <item name="Configuring Report" href="./usingReport.html"/>
       </menu>

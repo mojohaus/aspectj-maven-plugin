@@ -91,7 +91,7 @@ public abstract class AbstractAjcCompiler
     protected String ajdtBuildDefFile;
 
     /**
-     * Generate aop.xml file for load-time weaving with default name.(/META-INF/aop.xml)
+     * Generate aop.xml file for load-time weaving with default name (/META-INF/aop.xml).
      *
      * @parameter
      */
@@ -264,7 +264,7 @@ public abstract class AbstractAjcCompiler
     protected String bootclasspath;
 
     /**
-     * Emit warnings for any instances of the comma-delimited list of questionable code (eg 'unusedLocals,deprecation'):
+     * Emit warnings for any instances of the comma-delimited list of questionable code (e.g. 'unusedLocals,deprecation'):
      * see http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc for available settings
      *
      * @parameter
@@ -433,12 +433,13 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-warn:" + warn );
         }
 
-        // Add artifacts to weave
-        addModulesArgument( "-inpath",
-                            ajcOptions,
-                            weaveDependencies,
-                            null,
-                            "a dependency to weave" );
+        // Add artifacts or directories to weave
+        String joinedWeaveDirectories = null;
+        if ( weaveDirectories != null )
+        {
+            joinedWeaveDirectories = StringUtils.join( weaveDirectories, File.pathSeparator );
+        }
+        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, joinedWeaveDirectories, "dependencies and/or directories to weave" );
 
         // Add library artifacts
         addModulesArgument( "-aspectpath",
@@ -541,7 +542,8 @@ public abstract class AbstractAjcCompiler
         throws MojoExecutionException
     {
         File outDir = new File( getOutputDirectories().get( 0 ).toString() );
-        return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) || hasSourcesChanged( outDir );
+        return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) ||
+                hasSourcesChanged( outDir ) || hasNonWeavedClassesChanged( outDir );
 
     }
 
@@ -588,7 +590,29 @@ public abstract class AbstractAjcCompiler
         return false;
     }
 
-    /**
+    private boolean hasNonWeavedClassesChanged( File outDir )
+        throws MojoExecutionException
+    {
+        if ( weaveDirectories != null && weaveDirectories.length > 0 )
+        {
+            Set weaveSources = AjcHelper.getWeaveSourceFiles( weaveDirectories );
+            Iterator sourceIter = weaveSources.iterator();
+            long lastBuild = new File( outDir.getAbsolutePath(), argumentFileName ).lastModified();
+            while ( sourceIter.hasNext() )
+            {
+                File sourceFile = new File( (String) sourceIter.next() );
+                long sourceModified = sourceFile.lastModified();
+                if ( sourceModified >= lastBuild )
+                {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    /** 
      * Setters which when called sets compiler arguments
      * @param complianceLevel the complianceLevel
      */

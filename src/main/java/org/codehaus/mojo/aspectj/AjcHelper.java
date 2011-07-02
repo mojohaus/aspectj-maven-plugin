@@ -33,11 +33,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.LinkedHashSet;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
@@ -121,11 +122,11 @@ public class AjcHelper
         }
         catch ( FileNotFoundException e )
         {
-            throw new MojoExecutionException( "Build properties file spesified not found", e );
+            throw new MojoExecutionException( "Build properties file specified not found", e );
         }
         catch ( IOException e )
         {
-            throw new MojoExecutionException( "IO Error reading build properties file spesified", e );
+            throw new MojoExecutionException( "IO Error reading build properties file specified", e );
         }
         result.addAll( resolveIncludeExcludeString( ( String ) ajdtBuildProperties.get( "src.includes" ), basedir ) );
         Set exludes = resolveIncludeExcludeString( ( String ) ajdtBuildProperties.get( "src.excludes" ), basedir );
@@ -168,6 +169,37 @@ public class AjcHelper
             catch ( IOException e )
             {
                 throw new MojoExecutionException( "IO Error resolving sourcedirs", e );
+            }
+        }
+        // We might need to check if some of these files are already included through the weaveDirectories.
+        
+        return result;
+    }
+
+    /**
+     * Based on a set of weavedirs returns a set of all the files to be weaved.
+     * 
+     * @return
+     * @throws MojoExecutionException
+     */
+    public static Set getWeaveSourceFiles( String[] weaveDirs )
+        throws MojoExecutionException
+    {
+        Set result = new HashSet();
+
+        for ( int i = 0; i < weaveDirs.length; i++ )
+        {
+            String weaveDir = weaveDirs[i];
+            if ( FileUtils.fileExists( weaveDir ) )
+            {
+                try
+                {
+                    result.addAll( FileUtils.getFileNames( new File( weaveDir ), "**/*.class", DEFAULT_EXCLUDES, true ) );
+                }
+                catch ( IOException e )
+                {
+                    throw new MojoExecutionException( "IO Error resolving weavedirs", e );
+                }
             }
         }
         return result;
@@ -233,7 +265,7 @@ public class AjcHelper
     }
 
     /**
-     * Convert a string array to a comma seperated list
+     * Convert a string array to a comma separated list
      * 
      * @param strings
      * @return
@@ -256,9 +288,9 @@ public class AjcHelper
     }
 
     /**
-     * Helper method to find all .java or .aj files spesified by the
-     * includeString. The includeString is a comma seperated list over files, or
-     * directories relative to the spesified basedir. Examples of correct
+     * Helper method to find all .java or .aj files specified by the
+     * includeString. The includeString is a comma separated list over files, or
+     * directories relative to the specified basedir. Examples of correct
      * listings
      * 
      * <pre>
