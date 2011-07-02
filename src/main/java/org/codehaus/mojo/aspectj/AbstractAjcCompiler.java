@@ -300,9 +300,16 @@ public abstract class AbstractAjcCompiler
     /**
      * Abstract method used by child classes to specify the correct output directory for compiled classes.
      *
-     * @return where compiled classes should be put.
+     * @return the directories containing compiled classes.
      */
-    protected abstract List getOutputDirectories();
+    protected abstract List getClasspathDirectories();
+    
+    /**
+     * The directory where compiled classes go.
+     * 
+     * @return the outputDirectory
+     */
+    protected abstract File getOutputDirectory();
 
     /**
      * Abstract method used by child classes to specify the correct source directory for classes.
@@ -377,11 +384,10 @@ public abstract class AbstractAjcCompiler
         try
         {
             getLog().debug( "Compiling and weaving " + resolvedIncludes.size() + " sources to "
-                                + getOutputDirectories().get( 0 ) );
-            File outDir = new File( (String) getOutputDirectories().get( 0 ) );
-            AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, outDir );
+                                + getOutputDirectory() );
+            AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, getOutputDirectory() );
             getLog().debug( "Argumentsfile written : "
-                                + new File( outDir.getAbsolutePath() + argumentFileName ).getAbsolutePath() );
+                                + new File( getOutputDirectory(), argumentFileName ).getAbsolutePath() );
         }
         catch ( IOException e )
         {
@@ -418,7 +424,7 @@ public abstract class AbstractAjcCompiler
 
         // Add classpath
         ajcOptions.add( "-classpath" );
-        ajcOptions.add( AjcHelper.createClassPath( project, null, getOutputDirectories() ) );
+        ajcOptions.add( AjcHelper.createClassPath( project, null, getClasspathDirectories() ) );
 
         // Add boot classpath
         if ( null != bootclasspath )
@@ -450,7 +456,7 @@ public abstract class AbstractAjcCompiler
 
         // add target dir argument
         ajcOptions.add( "-d" );
-        ajcOptions.add( getOutputDirectories().get( 0 ) );
+        ajcOptions.add( getOutputDirectory().getAbsolutePath() );
 
         // Add all the files to be included in the build,
         if ( null != ajdtBuildDefFile )
@@ -541,7 +547,7 @@ public abstract class AbstractAjcCompiler
     protected boolean isBuildNeeded()
         throws MojoExecutionException
     {
-        File outDir = new File( getOutputDirectories().get( 0 ).toString() );
+        File outDir = getOutputDirectory();
         return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) ||
                 hasSourcesChanged( outDir ) || hasNonWeavedClassesChanged( outDir );
 

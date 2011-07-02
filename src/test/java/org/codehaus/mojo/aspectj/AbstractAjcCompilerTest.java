@@ -31,10 +31,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 
 /**
@@ -43,7 +42,7 @@ import org.apache.maven.project.MavenProject;
  * @author <a href="mailto:tel@objectnet.no">Thor Age Eldby</a>
  */
 public class AbstractAjcCompilerTest
-    extends TestCase
+    extends AbstractMojoTestCase
 {
 
     /** Compiler mojo instance */
@@ -59,6 +58,7 @@ public class AbstractAjcCompilerTest
         ajcCompMojo = new AjcTestCompileMojo();
         MavenProject project = new MavenProject( new Model() );
         ajcCompMojo.project = project;
+        setVariableValueToObject( ajcCompMojo, "outputDirectory", getTestFile( "/target/test-classes" ) );
         project.setDependencyArtifacts( new HashSet() );
     }
 

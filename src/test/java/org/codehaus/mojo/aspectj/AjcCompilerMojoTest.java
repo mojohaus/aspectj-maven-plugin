@@ -53,8 +53,6 @@ public class AjcCompilerMojoTest
     public void testModificationSet()
         throws Exception
     {
-        try
-        {
             ajcMojo.aspectDirectory = "src/main/aspect";
             final String[] includes = new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
             ajcMojo.setArgumentFileName("builddef.lst");
@@ -89,15 +87,6 @@ public class AjcCompilerMojoTest
             long timeStamp = System.currentTimeMillis();
             assertTrue("Could not touch file: " + aspect.getAbsolutePath(), aspect.setLastModified(timeStamp));
             assertTrue("One of the included files has changed. a new build is needed",ajcMojo.isBuildNeeded());
-            
-  
-            
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-            fail(e.toString());
-        }
     }
 
     /**
@@ -106,19 +95,12 @@ public class AjcCompilerMojoTest
     public void testCheckAspectDirectoryAddedToSourceDirs()
         throws Exception
     {
-        try
-        {
             ajcMojo.aspectDirectory = "src/main/aspect";
             ajcMojo.testAspectDirectory = "src/test/aspect";
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.execute();
             assertTrue( project.getCompileSourceRoots().contains(new File(basedir).getAbsolutePath()  + "/" +  "src/main/aspect") );
             assertTrue( project.getTestCompileSourceRoots().contains(new File(basedir).getAbsolutePath()  + "/" +  "src/test/aspect") );
-        }
-        catch ( Exception e )
-        {
-            fail();
-        }
     }
 
     String getProjectName()

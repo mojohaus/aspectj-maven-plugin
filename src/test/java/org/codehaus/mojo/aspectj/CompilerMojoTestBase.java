@@ -27,8 +27,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
@@ -38,6 +36,7 @@ import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.embedder.MavenEmbedderConsoleLogger;
 import org.apache.maven.model.Model;
+import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -48,7 +47,7 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 public abstract class CompilerMojoTestBase
-    extends TestCase
+    extends AbstractMojoTestCase
 {
 
     MavenProject project = new MavenProject( new Model() );
@@ -63,6 +62,9 @@ public abstract class CompilerMojoTestBase
     protected void setUp()
         throws Exception
     {
+        // prepare plexus environment
+        super.setUp();
+        
         MavenEmbedder embedder = new MavenEmbedder();
 
         embedder.setClassLoader( Thread.currentThread().getContextClassLoader() );
@@ -81,6 +83,9 @@ public abstract class CompilerMojoTestBase
         project.addCompileSourceRoot( project.getBuild().getSourceDirectory() );
         project.addTestCompileSourceRoot( project.getBuild().getTestSourceDirectory() );
         ajcMojo.basedir = new File( basedir );
+        
+        setVariableValueToObject( ajcMojo, "outputDirectory", new File( project.getBuild().getOutputDirectory() ) );
+        
         ArtifactHandler artifactHandler = new MockArtifactHandler();
         Artifact artifact = new MockArtifact( "dill", "dall" );
         artifact.setArtifactHandler( artifactHandler );

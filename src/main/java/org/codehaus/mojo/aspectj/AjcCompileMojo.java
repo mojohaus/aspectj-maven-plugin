@@ -24,6 +24,7 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,10 +41,25 @@ import java.util.List;
 public class AjcCompileMojo
     extends AbstractAjcCompiler
 {
+    
+    /**
+     * The directory for compiled classes.
+     *
+     * @parameter default-value="${project.build.outputDirectory}"
+     * @required
+     * @readonly
+     */
+    private File outputDirectory;
+    
+    protected File getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+    
     /**
      * 
      */
-    protected List getOutputDirectories()
+    protected List getClasspathDirectories()
     {
         return Arrays.asList(new String[]{project.getBuild().getOutputDirectory()});
     }

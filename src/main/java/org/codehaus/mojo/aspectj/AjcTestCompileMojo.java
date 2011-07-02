@@ -24,6 +24,7 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,16 +57,30 @@ public class AjcTestCompileMojo
      * @parameter default-value="true"
      */
     protected boolean weaveWithAspectsInMainSourceFolder = true;
+    
+    /**
+     * The directory where compiled test classes go.
+     *
+     * @parameter default-value="${project.build.testOutputDirectory}"
+     * @required
+     * @readonly
+     */
+    private File outputDirectory;
 
     /**
      * 
      */
-    protected List getOutputDirectories()
+    protected List getClasspathDirectories()
     {
         List outputDirectories = new ArrayList();
         outputDirectories.add( project.getBuild().getTestOutputDirectory() );
         outputDirectories.add( project.getBuild().getOutputDirectory() );
         return outputDirectories;
+    }
+    
+    protected File getOutputDirectory()
+    {
+        return outputDirectory;
     }
 
     /**
