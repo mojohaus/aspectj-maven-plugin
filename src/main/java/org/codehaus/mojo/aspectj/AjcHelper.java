@@ -219,7 +219,7 @@ public class AjcHelper
         throws IOException
     {
         FileUtils.forceMkdir( outputDir );
-        File argFile = new File( outputDir.getAbsolutePath(), fileName );
+        File argFile = new File( outputDir, fileName );
         argFile.getParentFile().mkdirs();
         argFile.createNewFile();
         FileWriter writer = new FileWriter( argFile );
@@ -245,7 +245,7 @@ public class AjcHelper
         throws IOException
     {
         List arguments = new ArrayList();
-        File argFile = new File( outputDir.getAbsolutePath(), fileName );
+        File argFile = new File( outputDir, fileName );
         if ( FileUtils.fileExists( argFile.getAbsolutePath() ) )
         {
             FileReader reader = new FileReader( argFile );

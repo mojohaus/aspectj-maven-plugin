@@ -99,8 +99,8 @@ public class AjcCompilerMojoTest
             ajcMojo.testAspectDirectory = "src/test/aspect";
             ajcMojo.setComplianceLevel( "1.5" );
             ajcMojo.execute();
-            assertTrue( project.getCompileSourceRoots().contains(new File(basedir).getAbsolutePath()  + "/" +  "src/main/aspect") );
-            assertTrue( project.getTestCompileSourceRoots().contains(new File(basedir).getAbsolutePath()  + "/" +  "src/test/aspect") );
+            assertTrue( project.getCompileSourceRoots().contains( getTestFile( basedir, "src/main/aspect").getAbsolutePath() ) );
+            assertTrue( project.getTestCompileSourceRoots().contains( getTestFile( basedir, "src/test/aspect").getAbsolutePath() ) );
     }
 
     String getProjectName()

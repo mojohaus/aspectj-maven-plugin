@@ -359,8 +359,8 @@ public abstract class AbstractAjcCompiler
         }
 
         Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
-        project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
-        project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
+        project.getCompileSourceRoots().add( FileUtils.resolveFile( basedir, aspectDirectory ).getAbsolutePath() );
+        project.getTestCompileSourceRoots().add( FileUtils.resolveFile( basedir, testAspectDirectory).getAbsolutePath() );
         assembleArguments();
 
         if ( !forceAjcCompile && !hasSourcesToCompile() )
@@ -480,6 +480,10 @@ public abstract class AbstractAjcCompiler
         Set/* <String> */result = new HashSet/* <String> */();
         if ( getJavaSources() == null )
         {
+            List sd = getSourceDirectories();
+            for(int i=0;i<sd.size();i++) {
+                getLog().warn( "sd: " + sd.get(i) );
+            }
             result = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
         }
         else
@@ -490,7 +494,7 @@ public abstract class AbstractAjcCompiler
                 scanner.scan();
                 for ( int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++ )
                 {
-                    result.add( new File( scanner.getBasedir(), scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
+                    result.add( FileUtils.resolveFile( scanner.getBasedir(), scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
                 }
             }
         }
@@ -581,7 +585,7 @@ public abstract class AbstractAjcCompiler
 
     private boolean hasNoPreviousBuild( File outDir )
     {
-        return ( !FileUtils.fileExists( new File( outDir.getAbsolutePath(), argumentFileName ).getAbsolutePath() ) );
+        return !FileUtils.resolveFile( outDir, argumentFileName ).exists();
     }
 
     private boolean hasArgumentsChanged( File outDir )
@@ -608,7 +612,7 @@ public abstract class AbstractAjcCompiler
     private boolean hasSourcesChanged( File outDir )
     {
         Iterator sourceIter = resolvedIncludes.iterator();
-        long lastBuild = new File( outDir.getAbsolutePath(), argumentFileName ).lastModified();
+        long lastBuild = new File( outDir, argumentFileName ).lastModified();
         while ( sourceIter.hasNext() )
         {
             File sourceFile = new File( (String) sourceIter.next() );
@@ -629,7 +633,7 @@ public abstract class AbstractAjcCompiler
         {
             Set weaveSources = AjcHelper.getWeaveSourceFiles( weaveDirectories );
             Iterator sourceIter = weaveSources.iterator();
-            long lastBuild = new File( outDir.getAbsolutePath(), argumentFileName ).lastModified();
+            long lastBuild = new File( outDir, argumentFileName ).lastModified();
             while ( sourceIter.hasNext() )
             {
                 File sourceFile = new File( (String) sourceIter.next() );
