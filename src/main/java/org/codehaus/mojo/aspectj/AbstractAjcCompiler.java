@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.tools.ajc.Main;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.Scanner;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -317,7 +319,9 @@ public abstract class AbstractAjcCompiler
      * @return where sources may be found.
      */
     protected abstract List getSourceDirectories();
-
+    
+    protected abstract Scanner[] getJavaSources();
+    
     /**
      * Abstract method used by child classes to specify additional aspect paths.
      *
@@ -373,11 +377,11 @@ public abstract class AbstractAjcCompiler
 
         if ( getLog().isDebugEnabled() )
         {
-            String command = "Running : ajc ";
+            String command = "Running : ajc";
             Iterator iter = ajcOptions.iterator();
             while ( iter.hasNext() )
             {
-                command += ( iter.next() + " " );
+                command += ( " " + iter.next() );
             }
             getLog().debug( command );
         }
@@ -465,10 +469,32 @@ public abstract class AbstractAjcCompiler
         }
         else
         {
-            resolvedIncludes =
-                AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
+            resolvedIncludes = getIncludedSources();
         }
         ajcOptions.addAll( resolvedIncludes );
+    }
+
+    protected Set/* <String> */getIncludedSources()
+        throws MojoExecutionException
+    {
+        Set/* <String> */result = new HashSet/* <String> */();
+        if ( getJavaSources() == null )
+        {
+            result = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
+        }
+        else
+        {
+            for ( int scannerIndex = 0; scannerIndex < getJavaSources().length; scannerIndex++ )
+            {
+                Scanner scanner = getJavaSources()[scannerIndex];
+                scanner.scan();
+                for ( int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++ )
+                {
+                    result.add( new File( scanner.getBasedir(), scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
+                }
+            }
+        }
+        return result;
     }
 
     /**

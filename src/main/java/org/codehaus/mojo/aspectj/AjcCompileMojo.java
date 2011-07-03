@@ -28,6 +28,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.Scanner;
+
 /**
  * Weaves all main classes.
  * 
@@ -51,6 +54,22 @@ public class AjcCompileMojo
      */
     private File outputDirectory;
     
+    /**
+     * <p>
+     * Set the java source folders to use, specifying the includes and excludes. 
+     * </p>
+     * <p>
+     * If you don't specify this parameter, all java sources of the current project fill be used.
+     * If you specify this parameter as an empty tag (i.e. &lt;sources/&gt;), all source folders will be ignored.
+     * Otherwise specify the source folder(s) to use.
+     * </p>
+     * 
+     * @see DirectoryScanner
+     * @parameter alias="sources"
+     * @since 1.4
+     */
+    private Scanner[] javaSources;
+    
     protected File getOutputDirectory()
     {
         return outputDirectory;
@@ -71,10 +90,15 @@ public class AjcCompileMojo
     {
         return project.getCompileSourceRoots();
     }
+    
+    protected Scanner[] getJavaSources()
+    {
+        return javaSources;
+    }
 
     protected String getAdditionalAspectPaths()
     {
         return null;
     }
-
+    
 }

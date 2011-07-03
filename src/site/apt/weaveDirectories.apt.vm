@@ -21,7 +21,7 @@ Weaving already compiled classes
                       <id>default-compile</id>
                       <configuration>
                           <compilerArguments>
-                              <d>${project.build.directory}/unwoven-classes</d>
+                              <d>\${project.build.directory}/unwoven-classes</d>
                           </compilerArguments>
                       </configuration>
                   </execution>
@@ -32,7 +32,7 @@ Weaving already compiled classes
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
                     <weaveDirectories>
-                        <weaveDirectory>${project.build.directory}/unwoven-classes</weaveDirectory>
+                        <weaveDirectory>\${project.build.directory}/unwoven-classes</weaveDirectory>
                     </weaveDirectories>
                 </configuration>
                 <executions>

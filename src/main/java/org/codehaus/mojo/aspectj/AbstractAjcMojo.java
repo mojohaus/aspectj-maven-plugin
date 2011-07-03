@@ -85,7 +85,7 @@ public abstract class AbstractAjcMojo extends AbstractMojo
     /**
      * Skip plugin execution.
      *
-     * @parameter default-value="false" expresssion="${aspectj.skip}"
+     * @parameter default-value="false" expression="${aspectj.skip}"
      */
     private boolean skip;
     

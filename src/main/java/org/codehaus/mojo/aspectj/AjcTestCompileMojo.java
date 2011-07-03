@@ -28,6 +28,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.Scanner;
+
 /**
  * Weaves all test classes.
  * 
@@ -66,6 +69,22 @@ public class AjcTestCompileMojo
      * @readonly
      */
     private File outputDirectory;
+    
+    /**
+     * <p>
+     * Set the java test source folders to use, specifying the includes and excludes.
+     * </p> 
+     * <p>
+     * If you don't specify this parameter, all java test sources of the current project fill be used.
+     * If you specify this parameter as an empty tag (i.e. &lt;testSources/&gt;), all test source folders will be ignored.
+     * Otherwise specify the test source folder(s) to use.
+     * <p>
+     * 
+     * @see DirectoryScanner
+     * @parameter alias="testSources"
+     * @since 1.4
+     */
+    private Scanner[] javaTestSources;
 
     /**
      * 
@@ -95,6 +114,11 @@ public class AjcTestCompileMojo
             sourceDirs.addAll( project.getCompileSourceRoots() );
         }
         return sourceDirs;
+    }
+
+    protected Scanner[] getJavaSources()
+    {
+        return javaTestSources;
     }
 
     protected String getAdditionalAspectPaths()
