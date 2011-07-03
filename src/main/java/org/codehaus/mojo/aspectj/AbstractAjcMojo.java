@@ -68,6 +68,7 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * Corresponds to <code>ajc -inpath</code> option .
      * 
      * @parameter
+     * @since 1.4
      */
     protected String[] weaveDirectories;
 
