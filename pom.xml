@@ -11,11 +11,14 @@
   <version>1.4-SNAPSHOT</version>
   <url>http://mojo.codehaus.org/aspectj-maven-plugin</url>
   <inceptionYear>2005</inceptionYear>
+
   <properties>
     <!-- NOTE: If the AspectJ dependencies are updated, be sure to update 
       the tests CompilerMojoTestBase and AjcReportMojoTest as well! -->
     <aspectjVersion>1.6.10</aspectjVersion>
+    <mavenVersion>2.0</mavenVersion>
   </properties>
+
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</developerConnection>
@@ -24,10 +27,12 @@
   <description>
       Handles AspectJ usage within maven.
       Functionality provided is: weaving of aspects (or existing aspects from libraries) with the test and/or main classes, weaving of pre-existing jars and ajdoc reporting.
-    </description>
+  </description>
+
   <prerequisites>
     <maven>2.0.6</maven> <!-- due to plex utils 1.5.6 -->
   </prerequisites>
+
   <ciManagement>
     <system>hudson</system>
     <url>http://www.davidkarlsen.com/hudson/</url>
@@ -94,6 +99,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
   <build>
     <plugins>
       <plugin>
@@ -137,6 +143,7 @@
       </plugin>
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>default-tools.jar</id>
@@ -184,6 +191,7 @@
       </build>
     </profile>
   </profiles>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -198,12 +206,12 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-project</artifactId>
-      <version>2.0</version>
+      <version>${mavenVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
-      <version>2.0</version>
+      <version>${mavenVersion}</version>
     </dependency>
     <!-- NOTE: If the AspectJ dependencies are updated, be sure to update 
       the tests CompilerMojoTestBase and AjcReportMojoTest as well! -->
@@ -225,7 +233,7 @@
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-api</artifactId>
-      <version>2.0</version>
+      <version>${mavenVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -241,7 +249,7 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
-      <version>2.0</version>
+      <version>${mavenVersion}</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -255,6 +263,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <reporting>
     <plugins>
       <plugin>
