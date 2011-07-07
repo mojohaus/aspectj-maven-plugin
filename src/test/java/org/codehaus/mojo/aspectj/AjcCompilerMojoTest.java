@@ -61,10 +61,15 @@ public class AjcCompilerMojoTest
             ajcMojo.includes= new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
             ajcMojo.assembleArguments();
             assertTrue("Build should be needed when no previous files are found",ajcMojo.isBuildNeeded());
-            
-            ajcMojo.ajcOptions.clear();
-            ajcMojo.includes = includes; 
-            ajcMojo.execute();
+          
+            try {
+                ajcMojo.ajcOptions.clear();
+                ajcMojo.includes = includes; 
+                ajcMojo.execute();
+            }
+            catch(CompilationFailedException cfe) {
+                //we're only testing modifications, don't care if it won't compile
+            }
             
             ajcMojo.ajcOptions.clear();
             ajcMojo.includes = includes;
@@ -87,20 +92,6 @@ public class AjcCompilerMojoTest
             long timeStamp = System.currentTimeMillis();
             assertTrue("Could not touch file: " + aspect.getAbsolutePath(), aspect.setLastModified(timeStamp));
             assertTrue("One of the included files has changed. a new build is needed",ajcMojo.isBuildNeeded());
-    }
-
-    /**
-     * @throws Exception
-     */
-    public void testCheckAspectDirectoryAddedToSourceDirs()
-        throws Exception
-    {
-            ajcMojo.aspectDirectory = "src/main/aspect";
-            ajcMojo.testAspectDirectory = "src/test/aspect";
-            ajcMojo.setComplianceLevel( "1.5" );
-            ajcMojo.execute();
-            assertTrue( project.getCompileSourceRoots().contains( getTestFile( basedir, "src/main/aspect").getAbsolutePath() ) );
-            assertTrue( project.getTestCompileSourceRoots().contains( getTestFile( basedir, "src/test/aspect").getAbsolutePath() ) );
     }
 
     String getProjectName()

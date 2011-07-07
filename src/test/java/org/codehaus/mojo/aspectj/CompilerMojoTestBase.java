@@ -24,6 +24,7 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 import java.io.File;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,10 +32,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.versioning.VersionRange;
-import org.apache.maven.embedder.MavenEmbedder;
-import org.apache.maven.embedder.MavenEmbedderConsoleLogger;
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
@@ -65,13 +63,6 @@ public abstract class CompilerMojoTestBase
         // prepare plexus environment
         super.setUp();
         
-        MavenEmbedder embedder = new MavenEmbedder();
-
-        embedder.setClassLoader( Thread.currentThread().getContextClassLoader() );
-        embedder.setLogger( new MavenEmbedderConsoleLogger() );
-        embedder.start();
-        ArtifactRepository localRepository = embedder.getLocalRepository();
-
         ajcMojo.project = project;
         String temp = new File( "." ).getAbsolutePath();
         basedir = temp.substring( 0, temp.length() - 2 ) + "/src/test/projects/" + getProjectName() + "/";
@@ -90,24 +81,7 @@ public abstract class CompilerMojoTestBase
         Artifact artifact = new MockArtifact( "dill", "dall" );
         artifact.setArtifactHandler( artifactHandler );
         project.setArtifact( artifact );
-        Set artifacts = new HashSet();
-        Artifact junit = new DefaultArtifact( "junit", "junit", VersionRange.createFromVersion( "3.8.2" ), "test",
-                                              "jar", "", new DefaultArtifactHandler( "" ) );
-        Artifact aspectJTools = new DefaultArtifact( "org.aspectj", "aspectjtools", VersionRange
-            .createFromVersion( "1.6.10" ), "compile", "jar", "", new DefaultArtifactHandler( "" ) );
-        Artifact aspectJTRt = new DefaultArtifact( "org.aspectj", "aspectjrt", VersionRange.createFromVersion( "1.6.10" ),
-                                                   "compile", "jar", "", new DefaultArtifactHandler( "" ) );
-
-        junit.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( junit ) + ".jar" ) );
-        aspectJTools.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTools )
-            + ".jar" ) );
-        aspectJTRt.setFile( new File( localRepository.getBasedir() + "/" + localRepository.pathOf( aspectJTRt )
-            + ".jar" ) );
-
-        artifacts.add( aspectJTools );
-        artifacts.add( aspectJTRt );
-        artifacts.add( junit );
-        project.setDependencyArtifacts( artifacts );
+        project.setDependencyArtifacts( Collections.EMPTY_SET );
 
     }
 
