@@ -25,6 +25,7 @@ package org.codehaus.mojo.aspectj;
  */
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,7 +41,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.lang.SystemUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -222,12 +222,12 @@ public class AjcHelper
         File argFile = new File( outputDir, fileName );
         argFile.getParentFile().mkdirs();
         argFile.createNewFile();
-        FileWriter writer = new FileWriter( argFile );
+        BufferedWriter writer = new BufferedWriter( new FileWriter( argFile ) );
         Iterator iter = arguments.iterator();
         while ( iter.hasNext() )
         {
-            String argument = (String) iter.next();
-            writer.write( argument + SystemUtils.LINE_SEPARATOR );
+            writer.write( (String) iter.next() );
+            writer.newLine();
         }
         writer.flush();
         writer.close();

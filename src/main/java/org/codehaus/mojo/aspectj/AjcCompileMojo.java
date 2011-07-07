@@ -25,7 +25,7 @@ package org.codehaus.mojo.aspectj;
  */
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.codehaus.plexus.util.DirectoryScanner;
@@ -80,7 +80,7 @@ public class AjcCompileMojo
      */
     protected List getClasspathDirectories()
     {
-        return Arrays.asList(new String[]{project.getBuild().getOutputDirectory()});
+        return Collections.singletonList( project.getBuild().getOutputDirectory() );
     }
 
     /**
