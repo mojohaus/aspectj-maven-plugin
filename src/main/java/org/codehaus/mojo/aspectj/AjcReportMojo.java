@@ -33,12 +33,12 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.maven.artifact.handler.ArtifactHandler;
+import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.aspectj.tools.ajdoc.Main;
-import org.codehaus.doxia.site.renderer.SiteRenderer;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -56,14 +56,14 @@ public class AjcReportMojo
      * 
      * @parameter default-value="src/main/aspect"
      */
-    protected String aspectDirectory = "src/main/aspect";
+    private String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
      * 
      * @parameter default-value="src/test/aspect"
      */
-    protected String testAspectDirectory = "src/test/aspect";
+    private String testAspectDirectory = "src/test/aspect";
 
     /**
      * The maven project.
@@ -72,7 +72,7 @@ public class AjcReportMojo
      * @required
      * @readonly
      */
-    protected MavenProject project;
+    private MavenProject project;
 
     /**
      * The basedir of the project.
@@ -81,35 +81,43 @@ public class AjcReportMojo
      * @required
      * @readonly
      */
-    protected File basedir;
+    private File basedir;
 
+    /**
+     * The output directory for the report.
+     * 
+     * @parameter default-value="${project.reporting.outputDirectory}/aspectj-report"
+     * @required
+     */
+    private File outputDirectory;
+    
     /**
      * List of ant-style patterns used to specify the aspects that should be included when compiling. When none
      * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
      * property are included.
      */
-    protected String[] includes;
+    private String[] includes;
 
     /**
      * List of ant-style patterns used to specify the aspects that should be excluded when compiling. When none
      * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
      * property are included.
      */
-    protected String[] excludes;
+    private String[] excludes;
 
     /**
      * Where to find the ajdt build definition file. <i>If set this will override the use of project sourcedirs</i>.
      * 
      * @parameter
      */
-    protected String ajdtBuildDefFile;
+    private String ajdtBuildDefFile;
 
     /**
      * Doxia Site Renderer.
      * 
      * @component
      */
-    private SiteRenderer siteRenderer;
+    private Renderer siteRenderer;
 
     /**
      * Shows only package, protected, and public classes and members.
@@ -207,7 +215,7 @@ public class AjcReportMojo
         ArrayList arguments = new ArrayList();
         // Add classpath
         arguments.add( "-classpath" );
-        arguments.add( AjcHelper.createClassPath( project, pluginArtifacts, getOutputDirectories() ) );
+        arguments.add( AjcHelper.createClassPath( project, pluginArtifacts, getClasspathDirectories() ) );
 
         arguments.addAll( ajcOptions );
 
@@ -265,13 +273,13 @@ public class AjcReportMojo
      */
     protected String getOutputDirectory()
     {
-        return project.getBuild().getDirectory() + "/site/aspectj-report";
+        return outputDirectory.getAbsolutePath();
     }
 
     /**
      * get compileroutput directory.
      */
-    protected List getOutputDirectories()
+    protected List getClasspathDirectories()
     {
         return Arrays.asList( new String[] { project.getBuild().getOutputDirectory(),
             project.getBuild().getTestOutputDirectory() } );
@@ -282,7 +290,7 @@ public class AjcReportMojo
      */
     public String getOutputName()
     {
-        return "aspectj-report/index";
+        return "index";
     }
 
     /**
@@ -330,7 +338,7 @@ public class AjcReportMojo
     /**
      * Get the site renderer.
      */
-    protected SiteRenderer getSiteRenderer()
+    protected Renderer getSiteRenderer()
     {
         return siteRenderer;
     }
