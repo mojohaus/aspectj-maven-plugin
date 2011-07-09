@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.maven.artifact.handler.ArtifactHandler;
@@ -208,6 +209,7 @@ public class AjcReportMojo
         throws MavenReportException
     {
         getLog().info( "Starting generating ajdoc" );
+        
         project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
         project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
 
@@ -252,7 +254,17 @@ public class AjcReportMojo
             getLog().debug( command );
         }
 
-        Main.main( (String[]) arguments.toArray( new String[0] ) );
+        // There seems to be a difference in classloading when calling 'mvn site' or 'mvn aspectj:aspectj-report'.
+        // When calling mvn site, without the contextClassLoader set, you might see the next message:
+        // javadoc: error - Cannot find doclet class com.sun.tools.doclets.standard.Standard
+        ClassLoader oldContextClassLoader = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
+            Main.main( (String[]) arguments.toArray( new String[0] ) );
+        }
+        finally {
+            Thread.currentThread().setContextClassLoader( oldContextClassLoader );
+        }
 
     }
 
@@ -297,7 +309,7 @@ public class AjcReportMojo
      */
     public String getName( Locale locale )
     {
-        return "aspectJ";
+        return getBundle( locale ).getString( "report.aspectj.name" );
     }
 
     /**
@@ -305,15 +317,7 @@ public class AjcReportMojo
      */
     public String getDescription( Locale locale )
     {
-        return " Similar to javadoc, Maven AspectJ Report renders HTML" + " documentation for "
-            + "pointcuts, advice, and inter-type declarations, as well as the"
-            + " Java constructs that Javadoc renders. Maven AspectJ Report also" + " links advice"
-            + " from members affected by the advice and the inter-type "
-            + "declaration for members declared from aspects. The aspect will"
-            + " be fully documented, as will your target classes, including "
-            + "links to any advice or declarations that affect the class. "
-            + "That means, for example, that you can see everything affecting"
-            + " a method when reading the documentation for the method.";
+        return getBundle( locale ).getString( "report.aspectj.description" );
     }
 
     /**
@@ -420,5 +424,16 @@ public class AjcReportMojo
     {
         this.pluginArtifacts = pluginArtifacts;
 
+    }
+    
+    /**
+     * Gets the resource bundle for the report text.
+     * 
+     * @param locale The locale for the report, must not be <code>null</code>.
+     * @return The resource bundle for the requested locale.
+     */
+    private ResourceBundle getBundle( Locale locale )
+    {
+        return ResourceBundle.getBundle( "aspectj-report", locale );
     }
 }
