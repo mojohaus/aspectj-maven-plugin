@@ -64,11 +64,11 @@ public class AjcCompileMojo
      * Otherwise specify the source folder(s) to use.
      * </p>
      * 
-     * @see DirectoryScanner
-     * @parameter alias="sources"
+     * @parameter
      * @since 1.4
+     * @see DirectoryScanner
      */
-    private Scanner[] javaSources;
+    private Scanner[] sources;
     
     protected File getOutputDirectory()
     {
@@ -93,7 +93,7 @@ public class AjcCompileMojo
     
     protected Scanner[] getJavaSources()
     {
-        return javaSources;
+        return sources;
     }
 
     protected String getAdditionalAspectPaths()

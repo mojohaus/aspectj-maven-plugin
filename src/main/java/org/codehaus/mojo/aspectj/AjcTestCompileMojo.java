@@ -80,11 +80,11 @@ public class AjcTestCompileMojo
      * Otherwise specify the test source folder(s) to use.
      * <p>
      * 
-     * @see DirectoryScanner
-     * @parameter alias="testSources"
+     * @parameter
      * @since 1.4
+     * @see DirectoryScanner
      */
-    private Scanner[] javaTestSources;
+    private Scanner[] testSources;
 
     /**
      * 
@@ -118,7 +118,7 @@ public class AjcTestCompileMojo
 
     protected Scanner[] getJavaSources()
     {
-        return javaTestSources;
+        return testSources;
     }
 
     protected String getAdditionalAspectPaths()

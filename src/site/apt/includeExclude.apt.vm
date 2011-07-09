@@ -10,6 +10,8 @@ Using sources
   The plugin makes use of the Plexus Scanner
   (i.e. the {{{http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/DirectoryScanner.html}DirectoryScanner}} implementation), 
   an advanced implementation which covers all the needs.
+  If you don't want to use any sourceDirectory, Maven3 users can just add an empty sources tag(i.e. \<sources/\>). 
+  If you're a Maven2 users you have to specify an empty source (i.e. \<sources\>\<source/\>\</sources\>).
 
 +------------------------------------------+
 <project>

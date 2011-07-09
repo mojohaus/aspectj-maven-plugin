@@ -480,10 +480,6 @@ public abstract class AbstractAjcCompiler
         Set/* <String> */result = new HashSet/* <String> */();
         if ( getJavaSources() == null )
         {
-            List sd = getSourceDirectories();
-            for(int i=0;i<sd.size();i++) {
-                getLog().warn( "sd: " + sd.get(i) );
-            }
             result = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
         }
         else
@@ -491,10 +487,17 @@ public abstract class AbstractAjcCompiler
             for ( int scannerIndex = 0; scannerIndex < getJavaSources().length; scannerIndex++ )
             {
                 Scanner scanner = getJavaSources()[scannerIndex];
-                scanner.scan();
-                for ( int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++ )
+                if( scanner.getBasedir() == null )
                 {
-                    result.add( FileUtils.resolveFile( scanner.getBasedir(), scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
+                    getLog().info( "Source without basedir, skipping it." );
+                }
+                else
+                {
+                    scanner.scan();
+                    for ( int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++ )
+                    {
+                        result.add( FileUtils.resolveFile( scanner.getBasedir(), scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
+                    }
                 }
             }
         }
