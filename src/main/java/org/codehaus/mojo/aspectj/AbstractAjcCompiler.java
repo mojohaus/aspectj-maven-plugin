@@ -358,7 +358,6 @@ public abstract class AbstractAjcCompiler
             return;
         }
 
-        Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
         project.getCompileSourceRoots().add( FileUtils.resolveFile( basedir, aspectDirectory ).getAbsolutePath() );
         project.getTestCompileSourceRoots().add( FileUtils.resolveFile( basedir, testAspectDirectory).getAbsolutePath() );
         assembleArguments();

@@ -208,7 +208,6 @@ public class AjcReportMojo
         throws MavenReportException
     {
         getLog().info( "Starting generating ajdoc" );
-        Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
         project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
         project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
 
