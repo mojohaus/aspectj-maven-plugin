@@ -13,9 +13,7 @@
   <inceptionYear>2005</inceptionYear>
 
   <properties>
-    <!-- NOTE: If the AspectJ dependencies are updated, be sure to update 
-      the tests CompilerMojoTestBase and AjcReportMojoTest as well! -->
-    <aspectjVersion>1.6.10</aspectjVersion>
+    <aspectjVersion>1.6.11</aspectjVersion>
     <mavenVersion>2.0.6</mavenVersion> <!-- due to plex utils 1.5.6 -->
   </properties>
 
