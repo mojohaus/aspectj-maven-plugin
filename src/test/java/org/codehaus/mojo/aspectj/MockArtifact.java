@@ -176,6 +176,11 @@ public class MockArtifact
         throw new RuntimeException( "Not implemented" );
     }
 
+    public ArtifactMetadata getMetadata( Class aClass )
+    {
+        throw new RuntimeException( "Not implemented" );
+    }
+
     public Collection getMetadataList()
     {
         throw new RuntimeException( "Not implemented" );
@@ -327,11 +332,21 @@ public class MockArtifact
     public int compareTo( Object o )
     {
         Artifact a = (Artifact) o;
+        return compareTo( a );
+    }
+
+    /**
+     * Very simple compareTo implementation
+     *
+     * @param a
+     * @return compare value
+     */
+    public int compareTo( Artifact a )
+    {
         int val = getGroupId().compareTo( a.getGroupId() );
         if ( val != 0 )
             return val;
         val = getArtifactId().compareTo( a.getArtifactId() );
         return val;
     }
-
 }
