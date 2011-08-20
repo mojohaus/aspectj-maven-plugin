@@ -325,5 +325,26 @@ public class AbstractAjcCompilerTest
         assertTrue( weavePath.indexOf( mod1Artifact ) != -1 );
         assertTrue( weavePath.indexOf( mod2Artifact ) != -1 );
     }
+    
+    // MASPECTJ-103
+    public void testGetAJc_EmptyClassifier() throws Exception
+    {
+        String groupId = "groupId";
+        String artifactId = "artifactId";
+        String classifier = ""; //could be result of filtering properties
+
+        Module module = new Module();
+        module.setGroupId( groupId );
+        module.setArtifactId( artifactId );
+        module.setClassifier( classifier );
+        
+        ajcCompMojo.aspectLibraries = new Module[] { module };
+        
+        Set artifacts = new HashSet();
+        artifacts.add( new MockArtifact( groupId, artifactId ) );
+        ajcCompMojo.project.setArtifacts( artifacts );
+        ajcCompMojo.assembleArguments();
+        // should not fail
+    }
 
 }

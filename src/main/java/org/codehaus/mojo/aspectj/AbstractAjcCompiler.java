@@ -543,8 +543,8 @@ public abstract class AbstractAjcCompiler
                     Artifact art = (Artifact) iterator.next();
                     if ( art.getGroupId().equals( module.getGroupId() )
                         && art.getArtifactId().equals( module.getArtifactId() )
-                        && StringUtils.equals( module.getClassifier(), art.getClassifier() )
-                        && StringUtils.equals( module.getType(), module.getType() ) )
+                        && StringUtils.defaultString( module.getClassifier() ).equals( StringUtils.defaultString( art.getClassifier() ) )
+                        && StringUtils.defaultString( module.getType(), "jar" ).equals( StringUtils.defaultString( art.getType() ) ) )
                     {
                         artifact = art;
                         break;
