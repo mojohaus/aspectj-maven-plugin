@@ -25,12 +25,14 @@ package org.codehaus.mojo.aspectj;
  */
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.codehaus.plexus.util.FileUtils;
-
 import junit.framework.TestCase;
+
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AjcHelper}
@@ -96,5 +98,11 @@ public class AjcHelperTest
                 FileUtils.fileDelete(fileAbsolutePath);
             }
         }
+    }
+    
+    public void testEmptyDependencyArtifacts()
+    {
+        MavenProject project = new MavenProject();
+        AjcHelper.createClassPath( project, Collections.EMPTY_LIST, Collections.EMPTY_LIST );
     }
 }

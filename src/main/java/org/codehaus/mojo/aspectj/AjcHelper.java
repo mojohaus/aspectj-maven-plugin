@@ -70,7 +70,8 @@ public class AjcHelper
     {
         String cp = new String();
         Set classPathElements = Collections.synchronizedSet( new LinkedHashSet() );
-        classPathElements.addAll( project.getDependencyArtifacts() );
+        Set dependencyArtifacts = project.getDependencyArtifacts();
+        classPathElements.addAll( dependencyArtifacts == null ? Collections.EMPTY_SET : dependencyArtifacts );
         classPathElements.addAll( project.getArtifacts() );
         classPathElements.addAll( pluginArtifacts == null ? Collections.EMPTY_LIST : pluginArtifacts );
         Iterator iter = classPathElements.iterator();
