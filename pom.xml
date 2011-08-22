@@ -295,7 +295,7 @@
         <configuration>
           <locales>
             <locale>nl</locale>
-            <locale>se</locale>
+            <locale>sv</locale>
           </locales>
         </configuration>
       </plugin>
