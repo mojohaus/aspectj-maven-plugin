@@ -14,58 +14,58 @@ Weaving already compiled JAR artifacts
   
 +------------------------------------------+
 <project>
+  ...
+  <dependencies>
     ...
-    <dependencies>
-        ...
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectjVersion}</version>
-        </dependency>
-        
-         <dependency>
-            <groupId>org.agroup</groupId>
-            <artifactId>to-weave</artifactId>
-            <version>1.0</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.anothergroup</groupId>
-            <artifactId>gen</artifactId>
-            <version>1.0</version>
-        </dependency>
-        ...
-    </dependencies>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectjVersion}</version>
+    </dependency>
+
+     <dependency>
+      <groupId>org.agroup</groupId>
+      <artifactId>to-weave</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.anothergroup</groupId>
+      <artifactId>gen</artifactId>
+      <version>1.0</version>
+    </dependency>
     ...
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                    <weaveDependencies>
-                        <weaveDependency>
-                            <groupId>org.agroup</groupId>
-                            <artifactId>to-weave</artifactId>
-                        </weaveDependency>
-                        <weaveDependency>
-                            <groupId>org.anothergroup</groupId>
-                            <artifactId>gen</artifactId>
-                        </weaveDependency>
-                    </weaveDependencies>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            ...
-        </plugins>in
-    <build>
-    ...
+  </dependencies>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <configuration>
+          <weaveDependencies>
+            <weaveDependency>
+              <groupId>org.agroup</groupId>
+              <artifactId>to-weave</artifactId>
+            </weaveDependency>
+            <weaveDependency>
+              <groupId>org.anothergroup</groupId>
+              <artifactId>gen</artifactId>
+            </weaveDependency>
+          </weaveDependencies>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      ...
+    </plugins>
+  <build>
+  ...
 </project>
 +------------------------------------------+

@@ -9,62 +9,62 @@ Applying already compiled aspect JARs
   In order to apply already compiled aspects to your own sources you need do setup all the JAR
   files you would like to weave in the plugin configuration as shown below.
 
-  <<Note:>> The artifacts you reference must exist as dependencies in the project.
+  <<Note:>> The artifacts you reference must exist as dependencies in your project.
   
 +------------------------------------------+
 <project>
+  ...
+  <dependencies>
     ...
-    <dependencies>
-        ...
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectjVersion}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.agroup</groupId>
-            <artifactId>to-weave</artifactId>
-            <version>1.0</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.anothergroup</groupId>
-            <artifactId>gen</artifactId>
-            <version>1.0</version>
-        </dependency>
-        ...
-    </dependencies>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectjVersion}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.agroup</groupId>
+      <artifactId>to-weave</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.anothergroup</groupId>
+      <artifactId>gen</artifactId>
+      <version>1.0</version>
+    </dependency>
     ...
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                    <aspectLibraries>
-                        <aspectLibrary>
-                            <groupId>org.agroup</groupId>
-                            <artifactId>to-weave</artifactId>
-                        </aspectLibrary>
-                        <aspectLibrary>
-                            <groupId>org.anothergroup</groupId>
-                            <artifactId>gen</artifactId>
-                        </aspectLibrary>
-                    </aspectLibraries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            ...
-        </plugins>in
-    <build>
-    ...
+  </dependencies>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <configuration>
+          <aspectLibraries>
+            <aspectLibrary>
+              <groupId>org.agroup</groupId>
+              <artifactId>to-weave</artifactId>
+            </aspectLibrary>
+            <aspectLibrary>
+              <groupId>org.anothergroup</groupId>
+              <artifactId>gen</artifactId>
+            </aspectLibrary>
+          </aspectLibraries>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      ...
+    </plugins>
+  <build>
+  ...
 </project>
 +------------------------------------------+

@@ -7,41 +7,41 @@
 Usage
 
   This plugin weaves AspectJ aspects with your classes using the AspectJ ajc compiler.
-  Please do remember to add aspectjrt as a dependency to your project. AspectJ needs it to weave
-  and ultimately to run your code. To have it compile aspects found in your project source directories
+  Please do remember to add <<<aspectjrt>>> as a dependency to your project. AspectJ needs it to weave
+  and ultimately to run your code. To have the plugin compile aspects found in your project source directories
   simply use the configuration below.
 
 +------------------------------------------+
 <project>
+  ...
+  <dependencies>
     ...
-    <dependencies>
-        ...
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectjVersion}</version>
-        </dependency>
-        ...
-    </dependencies>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectjVersion}</version>
+    </dependency>
     ...
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>       <!-- use this goal to weave all your main classes -->
-                            <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            ...
-        </plugins>
-    <build>
-    ...
+  </dependencies>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>       <!-- use this goal to weave all your main classes -->
+              <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      ...
+    </plugins>
+  <build>
+  ...
 </project>
 +------------------------------------------+
