@@ -13,7 +13,7 @@
   <inceptionYear>2005</inceptionYear>
 
   <properties>
-    <aspectjVersion>1.6.11</aspectjVersion>
+    <aspectjVersion>1.7.2</aspectjVersion>
     <mavenVersion>2.2.1</mavenVersion>
   </properties>
 
