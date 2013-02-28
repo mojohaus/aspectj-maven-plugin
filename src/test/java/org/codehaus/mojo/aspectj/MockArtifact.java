@@ -325,18 +325,6 @@ public class MockArtifact
 
     /**
      * Very simple compareTo implementation
-     * 
-     * @param o
-     * @return compare value
-     */
-    public int compareTo( Object o )
-    {
-        Artifact a = (Artifact) o;
-        return compareTo( a );
-    }
-
-    /**
-     * Very simple compareTo implementation
      *
      * @param a
      * @return compare value
