@@ -11,7 +11,7 @@ Usage
   and ultimately to run your code. To have the plugin compile aspects found in your project source directories
   simply use the configuration below.
 
-+------------------------------------------+
++------------------------------------------
 <project>
   ...
   <dependencies>
@@ -44,4 +44,47 @@ Usage
   <build>
   ...
 </project>
-+------------------------------------------+
++------------------------------------------
+
+* Upgrading AspectJ
+
+  The frequency of releases of the aspectj-maven-plugin is lower than AspectJ. 
+  If you want to use a different version of AspectJ than ${aspectjVersion}, you also need to upgrade the aspectjtools within the plugin too.
+
++------------------------------------------
+<project>
+  ...
+  <properties>
+    <aspectj.version>1.7.n</aspectj.version> <!-- specify your version -->
+  </properties>
+  
+  <dependencies>
+    ...
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
+    ...
+  </dependencies>
+  ...
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>${aspectj.version}</version>
+          </dependency>
+        <dependencies>
+      </plugin>
+      ...
+    </plugins>
+  <build>
+  ...
+</project>
++------------------------------------------
