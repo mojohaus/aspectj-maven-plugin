@@ -132,24 +132,24 @@ public abstract class AbstractAjcCompiler
     protected boolean XhasMember;
 
     /**
-     * Specify classfile target setting (1.1 to 1.6) default is 1.2
+     * Specify classfile target setting (1.1 to 1.7) default is 1.2
      *
      * @parameter default-value="${project.build.java.target}"
      */
     protected String target;
 
     /**
-     * Toggle assertions (1.3, 1.4, or 1.6 - default is 1.4). When using -source 1.3, an assert() statement valid under
+     * Toggle assertions (1.3, 1.4, 1.5, 1.6 or 1.7 - default is 1.4). When using -source 1.3, an assert() statement valid under
      * Java 1.4 will result in a compiler error. When using -source 1.4, treat assert as a keyword and implement
      * assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java 5 language features are
-     * permitted.
+     * permitted. With --source 1.7 or higher Java 7 features are supported.
      *
      * @parameter default-value="${mojo.java.target}"
      */
     protected String source;
 
     /**
-     * Specify compiler compliance setting (1.3 to 1.6) default is 1.4
+     * Specify compiler compliance setting (1.3 to 1.7) default is 1.4
      *
      * @parameter
      */
@@ -657,7 +657,7 @@ public abstract class AbstractAjcCompiler
     public void setComplianceLevel( String complianceLevel )
     {
         if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" )
-            || complianceLevel.equals( "1.6" ) )
+            || complianceLevel.equals( "1.6" ) || complianceLevel.equals( "1.7" ))
         {
             ajcOptions.add( "-" + complianceLevel );
         }

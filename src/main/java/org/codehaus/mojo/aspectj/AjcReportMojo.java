@@ -91,7 +91,7 @@ public class AjcReportMojo
      * @required
      */
     private File outputDirectory;
-    
+
     /**
      * List of ant-style patterns used to specify the aspects that should be included when compiling. When none
      * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
@@ -184,7 +184,7 @@ public class AjcReportMojo
     protected boolean verbose;
 
     /**
-     * Specify compiler compliance setting (1.3 to 1.6, default is 1.4)
+     * Specify compiler compliance setting (1.3 to 1.7, default is 1.4)
      * 
      * @parameter default-value="${mojo.java.target}"
      */
@@ -209,7 +209,7 @@ public class AjcReportMojo
         throws MavenReportException
     {
         getLog().info( "Starting generating ajdoc" );
-        
+
         project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
         project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
 
@@ -258,11 +258,13 @@ public class AjcReportMojo
         // When calling mvn site, without the contextClassLoader set, you might see the next message:
         // javadoc: error - Cannot find doclet class com.sun.tools.doclets.standard.Standard
         ClassLoader oldContextClassLoader = Thread.currentThread().getContextClassLoader();
-        try {
+        try
+        {
             Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
             Main.main( (String[]) arguments.toArray( new String[0] ) );
         }
-        finally {
+        finally
+        {
             Thread.currentThread().setContextClassLoader( oldContextClassLoader );
         }
 
@@ -412,7 +414,7 @@ public class AjcReportMojo
     public void setComplianceLevel( String complianceLevel )
     {
         if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" )
-            || complianceLevel.equals( "1.6" ) )
+            || complianceLevel.equals( "1.6" ) || complianceLevel.equals( "1.7" ) )
         {
             ajcOptions.add( "-source" );
             ajcOptions.add( complianceLevel );
@@ -425,7 +427,7 @@ public class AjcReportMojo
         this.pluginArtifacts = pluginArtifacts;
 
     }
-    
+
     /**
      * Gets the resource bundle for the report text.
      * 
