@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>31</version>
+    <version>32</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>aspectj-maven-plugin</artifactId>
@@ -274,7 +274,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>2.6</version>
+        <version>2.9</version>
         <configuration>
           <columnNames>Type,Key,Summary,Assignee,Status,Resolution,Created</columnNames>
           <generateJiraAnnouncement>true</generateJiraAnnouncement>
