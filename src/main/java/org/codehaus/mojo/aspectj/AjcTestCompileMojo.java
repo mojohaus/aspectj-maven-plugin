@@ -86,28 +86,26 @@ public class AjcTestCompileMojo
      */
     private Scanner[] testSources;
 
-    /**
-     * 
-     */
-    protected List getClasspathDirectories()
+    @Override
+    protected List<String> getClasspathDirectories()
     {
-        List outputDirectories = new ArrayList();
+        List<String> outputDirectories = new ArrayList<String>();
         outputDirectories.add( project.getBuild().getTestOutputDirectory() );
         outputDirectories.add( project.getBuild().getOutputDirectory() );
         return outputDirectories;
     }
     
+    @Override
     protected File getOutputDirectory()
     {
         return outputDirectory;
     }
 
-    /**
-     * 
-     */
-    protected List getSourceDirectories()
+    @SuppressWarnings( "unchecked" )
+    @Override
+    protected List<String> getSourceDirectories()
     {
-        List sourceDirs = new ArrayList();
+        List<String> sourceDirs = new ArrayList<String>();
         sourceDirs.addAll( project.getTestCompileSourceRoots() );
         if ( weaveMainSourceFolder )
         {

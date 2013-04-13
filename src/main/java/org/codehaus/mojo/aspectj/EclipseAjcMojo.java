@@ -30,8 +30,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -126,18 +124,7 @@ public class EclipseAjcMojo
         }
     }
 
-    protected List getOutputDirectories()
-    {
-        return null;
-    }
-
-    protected List getSourceDirectories()
-    {
-        return null;
-    }
-
-    private final void writePaths( //
-    PrintWriter out, Module[] modules, String[] keys )
+    private final void writePaths( PrintWriter out, Module[] modules, String[] keys )
         throws MojoExecutionException
     {
         if ( modules == null || modules.length == 0 )
@@ -151,10 +138,10 @@ public class EclipseAjcMojo
             // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
             // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
             Artifact artifact = null;
-            Set allArtifacts = project.getArtifacts();
-            for ( Iterator iterator = allArtifacts.iterator(); iterator.hasNext(); )
+            @SuppressWarnings( "unchecked" )
+            Set<Artifact> allArtifacts = project.getArtifacts();
+            for ( Artifact art : allArtifacts )
             {
-                Artifact art = (Artifact) iterator.next();
                 if ( art.getGroupId().equals( module.getGroupId() )
                     && art.getArtifactId().equals( module.getArtifactId() )
                     && StringUtils.equals( module.getClassifier(), art.getClassifier() )

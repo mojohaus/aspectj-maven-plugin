@@ -27,12 +27,12 @@ package org.codehaus.mojo.aspectj;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -193,18 +193,19 @@ public class AjcReportMojo
     /**
      * Holder for all options passed
      */
-    private List ajcOptions = new ArrayList();
+    private List<String> ajcOptions = new ArrayList<String>();
 
     /**
      * @parameter default-value="${plugin.artifacts}"
      * @required
      * @readonly
      */
-    private List pluginArtifacts;
+    private List<Artifact> pluginArtifacts;
 
     /**
      * Executes this ajdoc-report generation.
      */
+    @SuppressWarnings( "unchecked" )
     protected void executeReport( Locale locale )
         throws MavenReportException
     {
@@ -213,14 +214,14 @@ public class AjcReportMojo
         project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
         project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
 
-        ArrayList arguments = new ArrayList();
+        List<String> arguments = new ArrayList<String>();
         // Add classpath
         arguments.add( "-classpath" );
         arguments.add( AjcHelper.createClassPath( project, pluginArtifacts, getClasspathDirectories() ) );
 
         arguments.addAll( ajcOptions );
 
-        Set includes;
+        Set<String> includes;
         try
         {
             if ( null != ajdtBuildDefFile )
@@ -245,11 +246,10 @@ public class AjcReportMojo
 
         if ( getLog().isDebugEnabled() )
         {
-            String command = "Running : ajdoc ";
-            Iterator iter = arguments.iterator();
-            while ( iter.hasNext() )
+            StringBuilder command = new StringBuilder( "Running : ajdoc " );
+            for ( String argument : arguments )
             {
-                command += ( iter.next() + " " );
+                command.append( ' ' ).append( argument );
             }
             getLog().debug( command );
         }
@@ -273,9 +273,10 @@ public class AjcReportMojo
     /**
      * Get the directories containg sources
      */
-    protected List getSourceDirectories()
+    @SuppressWarnings( "unchecked" )
+    protected List<String> getSourceDirectories()
     {
-        List sourceDirectories = new ArrayList();
+        List<String> sourceDirectories = new ArrayList<String>();
         sourceDirectories.addAll( project.getCompileSourceRoots() );
         sourceDirectories.addAll( project.getTestCompileSourceRoots() );
         return sourceDirectories;
@@ -292,10 +293,10 @@ public class AjcReportMojo
     /**
      * get compileroutput directory.
      */
-    protected List getClasspathDirectories()
+    protected List<String> getClasspathDirectories()
     {
-        return Arrays.asList( new String[] { project.getBuild().getOutputDirectory(),
-            project.getBuild().getTestOutputDirectory() } );
+        return Arrays.asList( project.getBuild().getOutputDirectory(),
+            project.getBuild().getTestOutputDirectory() );
     }
 
     /**
@@ -422,7 +423,7 @@ public class AjcReportMojo
 
     }
 
-    public void setPluginArtifacts( List pluginArtifacts )
+    public void setPluginArtifacts( List<Artifact> pluginArtifacts )
     {
         this.pluginArtifacts = pluginArtifacts;
 

@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -292,19 +291,19 @@ public abstract class AbstractAjcCompiler
     /**
      * Holder for ajc compiler options
      */
-    protected List ajcOptions = new ArrayList();
+    protected List<String> ajcOptions = new ArrayList<String>();
 
     /**
      * Holds all files found using the includes, excludes parameters.
      */
-    protected Set resolvedIncludes;
+    protected Set<String> resolvedIncludes;
 
     /**
      * Abstract method used by child classes to specify the correct output directory for compiled classes.
      *
      * @return the directories containing compiled classes.
      */
-    protected abstract List getClasspathDirectories();
+    protected abstract List<String> getClasspathDirectories();
     
     /**
      * The directory where compiled classes go.
@@ -318,7 +317,7 @@ public abstract class AbstractAjcCompiler
      *
      * @return where sources may be found.
      */
-    protected abstract List getSourceDirectories();
+    protected abstract List<String> getSourceDirectories();
     
     protected abstract Scanner[] getJavaSources();
     
@@ -339,6 +338,7 @@ public abstract class AbstractAjcCompiler
      *
      * @throws MojoExecutionException
      */
+    @SuppressWarnings( "unchecked" )
     public void execute()
         throws MojoExecutionException
     {
@@ -376,11 +376,11 @@ public abstract class AbstractAjcCompiler
 
         if ( getLog().isDebugEnabled() )
         {
-            String command = "Running : ajc";
-            Iterator iter = ajcOptions.iterator();
-            while ( iter.hasNext() )
+            StringBuilder command = new StringBuilder( "Running : ajc" );
+            
+            for ( String arg : ajcOptions )
             {
-                command += ( " " + iter.next() );
+                command.append( ' ' ).append( arg );
             }
             getLog().debug( command );
         }
@@ -473,10 +473,10 @@ public abstract class AbstractAjcCompiler
         ajcOptions.addAll( resolvedIncludes );
     }
 
-    protected Set/* <String> */getIncludedSources()
+    protected Set<String> getIncludedSources()
         throws MojoExecutionException
     {
-        Set/* <String> */result = new HashSet/* <String> */();
+        Set<String> result = new HashSet<String>();
         if ( getJavaSources() == null )
         {
             result = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
@@ -513,11 +513,11 @@ public abstract class AbstractAjcCompiler
      * @param role
      * @throws MojoExecutionException
      */
-    private void addModulesArgument( String argument, List arguments, Module[] modules, String aditionalpath,
+    private void addModulesArgument( String argument, List<String> arguments, Module[] modules, String aditionalpath,
                                      String role )
         throws MojoExecutionException
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
         if ( null != aditionalpath )
         {
@@ -537,10 +537,10 @@ public abstract class AbstractAjcCompiler
                 // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
                 // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
                 Artifact artifact = null;
-                Set allArtifacts = project.getArtifacts();
-                for ( Iterator iterator = allArtifacts.iterator(); iterator.hasNext(); )
+                @SuppressWarnings( "unchecked" )
+                Set<Artifact> allArtifacts = project.getArtifacts();
+                for ( Artifact art :  allArtifacts )
                 {
-                    Artifact art = (Artifact) iterator.next();
                     if ( art.getGroupId().equals( module.getGroupId() )
                         && art.getArtifactId().equals( module.getArtifactId() )
                         && StringUtils.defaultString( module.getClassifier() ).equals( StringUtils.defaultString( art.getClassifier() ) )
@@ -613,11 +613,10 @@ public abstract class AbstractAjcCompiler
 
     private boolean hasSourcesChanged( File outDir )
     {
-        Iterator sourceIter = resolvedIncludes.iterator();
         long lastBuild = new File( outDir, argumentFileName ).lastModified();
-        while ( sourceIter.hasNext() )
+        for ( String source : resolvedIncludes )
         {
-            File sourceFile = new File( (String) sourceIter.next() );
+            File sourceFile = new File( source );
             long sourceModified = sourceFile.lastModified();
             if ( sourceModified >= lastBuild )
             {
@@ -633,12 +632,11 @@ public abstract class AbstractAjcCompiler
     {
         if ( weaveDirectories != null && weaveDirectories.length > 0 )
         {
-            Set weaveSources = AjcHelper.getWeaveSourceFiles( weaveDirectories );
-            Iterator sourceIter = weaveSources.iterator();
+            Set<String> weaveSources = AjcHelper.getWeaveSourceFiles( weaveDirectories );
             long lastBuild = new File( outDir, argumentFileName ).lastModified();
-            while ( sourceIter.hasNext() )
+            for ( String source : weaveSources )
             {
-                File sourceFile = new File( (String) sourceIter.next() );
+                File sourceFile = new File( source );
                 long sourceModified = sourceFile.lastModified();
                 if ( sourceModified >= lastBuild )
                 {

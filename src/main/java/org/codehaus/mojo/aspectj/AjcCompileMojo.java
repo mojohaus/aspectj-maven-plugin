@@ -78,7 +78,7 @@ public class AjcCompileMojo
     /**
      * 
      */
-    protected List getClasspathDirectories()
+    protected List<String> getClasspathDirectories()
     {
         return Collections.singletonList( project.getBuild().getOutputDirectory() );
     }
@@ -86,7 +86,8 @@ public class AjcCompileMojo
     /**
      * 
      */
-    protected List getSourceDirectories()
+    @SuppressWarnings( "unchecked" )
+    protected List<String> getSourceDirectories()
     {
         return project.getCompileSourceRoots();
     }

@@ -66,18 +66,17 @@ public class AjcHelper
      * @param outDirs the outputDirectories
      * @return a os spesific classpath string
      */
-    public static String createClassPath( MavenProject project, List pluginArtifacts, List outDirs )
+    @SuppressWarnings( "unchecked" )
+    public static String createClassPath( MavenProject project, List<Artifact> pluginArtifacts, List<String> outDirs )
     {
         String cp = new String();
-        Set classPathElements = Collections.synchronizedSet( new LinkedHashSet() );
-        Set dependencyArtifacts = project.getDependencyArtifacts();
-        classPathElements.addAll( dependencyArtifacts == null ? Collections.EMPTY_SET : dependencyArtifacts );
+        Set<Artifact> classPathElements = Collections.synchronizedSet( new LinkedHashSet<Artifact>() );
+        Set<Artifact> dependencyArtifacts = project.getDependencyArtifacts();
+        classPathElements.addAll( dependencyArtifacts == null ? Collections.<Artifact>emptySet() : dependencyArtifacts );
         classPathElements.addAll( project.getArtifacts() );
-        classPathElements.addAll( pluginArtifacts == null ? Collections.EMPTY_LIST : pluginArtifacts );
-        Iterator iter = classPathElements.iterator();
-        while ( iter.hasNext() )
+        classPathElements.addAll( pluginArtifacts == null ? Collections.<Artifact>emptySet() : pluginArtifacts );
+        for ( Artifact classPathElement  : classPathElements )
         {
-            Artifact classPathElement = ( Artifact ) iter.next();
             File artifact = classPathElement.getFile();
             if ( null != artifact )
             {
@@ -85,7 +84,7 @@ public class AjcHelper
                 cp += File.pathSeparatorChar;
             }
         }
-        Iterator outIter = outDirs.iterator();
+        Iterator<String> outIter = outDirs.iterator();
         while ( outIter.hasNext() )
         {
             cp += outIter.next();
@@ -111,10 +110,10 @@ public class AjcHelper
      * @return
      * @throws MojoExecutionException
      */
-    public static Set getBuildFilesForAjdtFile( String ajdtBuildDefFile, File basedir )
+    public static Set<String> getBuildFilesForAjdtFile( String ajdtBuildDefFile, File basedir )
         throws MojoExecutionException
     {
-        Set result = new LinkedHashSet();
+        Set<String> result = new LinkedHashSet<String>();
 
         Properties ajdtBuildProperties = new Properties();
         try
@@ -129,8 +128,8 @@ public class AjcHelper
         {
             throw new MojoExecutionException( "IO Error reading build properties file specified", e );
         }
-        result.addAll( resolveIncludeExcludeString( ( String ) ajdtBuildProperties.get( "src.includes" ), basedir ) );
-        Set exludes = resolveIncludeExcludeString( ( String ) ajdtBuildProperties.get( "src.excludes" ), basedir );
+        result.addAll( resolveIncludeExcludeString( ajdtBuildProperties.getProperty( "src.includes" ), basedir ) );
+        Set<String> exludes = resolveIncludeExcludeString( ajdtBuildProperties.getProperty( "src.excludes" ), basedir );
         result.removeAll( exludes );
 
         return result;
@@ -146,17 +145,15 @@ public class AjcHelper
      * @return
      * @throws MojoExecutionException
      */
-    public static Set getBuildFilesForSourceDirs( List sourceDirs, String[] includes, String[] excludes )
+    public static Set<String> getBuildFilesForSourceDirs( List<String> sourceDirs, String[] includes, String[] excludes )
         throws MojoExecutionException
     {
-        Set result = new LinkedHashSet();
+        Set<String> result = new LinkedHashSet<String>();
 
-        Iterator it = sourceDirs.iterator();
-        while ( it.hasNext() )
+        for ( String sourceDir : sourceDirs )
         {
             try
             {
-                String sourceDir = (String) it.next();
                 if ( FileUtils.fileExists( sourceDir ) )
                 {
                     result.addAll( FileUtils
@@ -183,10 +180,10 @@ public class AjcHelper
      * @return
      * @throws MojoExecutionException
      */
-    public static Set getWeaveSourceFiles( String[] weaveDirs )
+    public static Set<String> getWeaveSourceFiles( String[] weaveDirs )
         throws MojoExecutionException
     {
-        Set result = new HashSet();
+        Set<String> result = new HashSet<String>();
 
         for ( int i = 0; i < weaveDirs.length; i++ )
         {
@@ -216,7 +213,7 @@ public class AjcHelper
      * @param outputDir the build output area.
      * @throws IOException 
      */
-    public static void writeBuildConfigToFile( List arguments, String fileName, File outputDir )
+    public static void writeBuildConfigToFile( List<String> arguments, String fileName, File outputDir )
         throws IOException
     {
         FileUtils.forceMkdir( outputDir );
@@ -224,10 +221,9 @@ public class AjcHelper
         argFile.getParentFile().mkdirs();
         argFile.createNewFile();
         BufferedWriter writer = new BufferedWriter( new FileWriter( argFile ) );
-        Iterator iter = arguments.iterator();
-        while ( iter.hasNext() )
+        for ( String argument : arguments )
         {
-            writer.write( (String) iter.next() );
+            writer.write( argument );
             writer.newLine();
         }
         writer.flush();
@@ -242,10 +238,10 @@ public class AjcHelper
      * @return
      * @throws IOException 
      */
-    public static List readBuildConfigFile( String fileName, File outputDir )
+    public static List<String> readBuildConfigFile( String fileName, File outputDir )
         throws IOException
     {
-        List arguments = new ArrayList();
+        List<String> arguments = new ArrayList<String>();
         File argFile = new File( outputDir, fileName );
         if ( FileUtils.fileExists( argFile.getAbsolutePath() ) )
         {
@@ -307,10 +303,10 @@ public class AjcHelper
      * @return a list over all files inn the include string
      * @throws IOException
      */
-    protected static Set resolveIncludeExcludeString( String input, File basedir )
+    protected static Set<String> resolveIncludeExcludeString( String input, File basedir )
         throws MojoExecutionException
     {
-        Set inclExlSet = new LinkedHashSet();
+        Set<String> inclExlSet = new LinkedHashSet<String>();
         try
         {
             if ( null == input || input.trim().equals( "" ) )
