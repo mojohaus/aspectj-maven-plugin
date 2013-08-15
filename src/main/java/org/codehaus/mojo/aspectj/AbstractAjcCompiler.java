@@ -24,14 +24,6 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -41,9 +33,17 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Scanner;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Base class for the two aspectJ compiletime weaving mojos.
- * 
+ * <p/>
  * For all available options see {@link http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html}
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
@@ -247,10 +247,10 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected boolean XaddSerialVersionUID;
-    
+
     /**
      * Causes compiler to terminate before weaving
-     * 
+     *
      * @parameter
      */
     protected boolean XterminateAfterCompilation;
@@ -304,10 +304,10 @@ public abstract class AbstractAjcCompiler
      * @return the directories containing compiled classes.
      */
     protected abstract List<String> getClasspathDirectories();
-    
+
     /**
      * The directory where compiled classes go.
-     * 
+     *
      * @return the outputDirectory
      */
     protected abstract File getOutputDirectory();
@@ -318,9 +318,9 @@ public abstract class AbstractAjcCompiler
      * @return where sources may be found.
      */
     protected abstract List<String> getSourceDirectories();
-    
+
     protected abstract Scanner[] getJavaSources();
-    
+
     /**
      * Abstract method used by child classes to specify additional aspect paths.
      *
@@ -338,13 +338,13 @@ public abstract class AbstractAjcCompiler
      *
      * @throws MojoExecutionException
      */
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public void execute()
         throws MojoExecutionException
     {
-        if ( isSkip() ) 
+        if ( isSkip() )
         {
-            if( getLog().isInfoEnabled() )
+            if ( getLog().isInfoEnabled() )
             {
                 getLog().info( "Skipping execution because of 'skip' option" );
             }
@@ -377,7 +377,7 @@ public abstract class AbstractAjcCompiler
         if ( getLog().isDebugEnabled() )
         {
             StringBuilder command = new StringBuilder( "Running : ajc" );
-            
+
             for ( String arg : ajcOptions )
             {
                 command.append( ' ' ).append( arg );
@@ -386,11 +386,11 @@ public abstract class AbstractAjcCompiler
         }
         try
         {
-            getLog().debug( "Compiling and weaving " + resolvedIncludes.size() + " sources to "
-                                + getOutputDirectory() );
+            getLog().debug(
+                "Compiling and weaving " + resolvedIncludes.size() + " sources to " + getOutputDirectory() );
             AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, getOutputDirectory() );
-            getLog().debug( "Argumentsfile written : "
-                                + new File( getOutputDirectory(), argumentFileName ).getAbsolutePath() );
+            getLog().debug(
+                "Argumentsfile written : " + new File( getOutputDirectory(), argumentFileName ).getAbsolutePath() );
         }
         catch ( IOException e )
         {
@@ -402,7 +402,7 @@ public abstract class AbstractAjcCompiler
 
         synchronized ( BIG_ASPECTJ_LOCK )
         {
-        	main.runMain( (String[]) ajcOptions.toArray( new String[ajcOptions.size()] ), false );
+            main.runMain( (String[]) ajcOptions.toArray( new String[ajcOptions.size()] ), false );
         }
 
         IMessage[] errors = mavenMessageHandler.getMessages( IMessage.ERROR, true );
@@ -448,13 +448,11 @@ public abstract class AbstractAjcCompiler
         {
             joinedWeaveDirectories = StringUtils.join( weaveDirectories, File.pathSeparator );
         }
-        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, joinedWeaveDirectories, "dependencies and/or directories to weave" );
+        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, joinedWeaveDirectories,
+                            "dependencies and/or directories to weave" );
 
         // Add library artifacts
-        addModulesArgument( "-aspectpath",
-                            ajcOptions,
-                            aspectLibraries,
-                            getAdditionalAspectPaths(),
+        addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(),
                             "an aspect library" );
 
         // add target dir argument
@@ -486,7 +484,7 @@ public abstract class AbstractAjcCompiler
             for ( int scannerIndex = 0; scannerIndex < getJavaSources().length; scannerIndex++ )
             {
                 Scanner scanner = getJavaSources()[scannerIndex];
-                if( scanner.getBasedir() == null )
+                if ( scanner.getBasedir() == null )
                 {
                     getLog().info( "Source without basedir, skipping it." );
                 }
@@ -495,7 +493,8 @@ public abstract class AbstractAjcCompiler
                     scanner.scan();
                     for ( int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++ )
                     {
-                        result.add( FileUtils.resolveFile( scanner.getBasedir(), scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
+                        result.add( FileUtils.resolveFile( scanner.getBasedir(),
+                                                           scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
                     }
                 }
             }
@@ -537,14 +536,13 @@ public abstract class AbstractAjcCompiler
                 // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
                 // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
                 Artifact artifact = null;
-                @SuppressWarnings( "unchecked" )
-                Set<Artifact> allArtifacts = project.getArtifacts();
-                for ( Artifact art :  allArtifacts )
+                @SuppressWarnings("unchecked") Set<Artifact> allArtifacts = project.getArtifacts();
+                for ( Artifact art : allArtifacts )
                 {
-                    if ( art.getGroupId().equals( module.getGroupId() )
-                        && art.getArtifactId().equals( module.getArtifactId() )
-                        && StringUtils.defaultString( module.getClassifier() ).equals( StringUtils.defaultString( art.getClassifier() ) )
-                        && StringUtils.defaultString( module.getType(), "jar" ).equals( StringUtils.defaultString( art.getType() ) ) )
+                    if ( art.getGroupId().equals( module.getGroupId() ) && art.getArtifactId().equals(
+                        module.getArtifactId() ) && StringUtils.defaultString( module.getClassifier() ).equals(
+                        StringUtils.defaultString( art.getClassifier() ) ) && StringUtils.defaultString(
+                        module.getType(), "jar" ).equals( StringUtils.defaultString( art.getType() ) ) )
                     {
                         artifact = art;
                         break;
@@ -552,8 +550,9 @@ public abstract class AbstractAjcCompiler
                 }
                 if ( artifact == null )
                 {
-                    throw new MojoExecutionException( "The artifact " + module.toString()
-                        + " referenced in aspectj plugin as " + role + ", is not found the project dependencies" );
+                    throw new MojoExecutionException(
+                        "The artifact " + module.toString() + " referenced in aspectj plugin as " + role
+                            + ", is not found the project dependencies" );
                 }
                 if ( buf.length() != 0 )
                 {
@@ -581,7 +580,7 @@ public abstract class AbstractAjcCompiler
     {
         File outDir = getOutputDirectory();
         return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) ||
-                hasSourcesChanged( outDir ) || hasNonWeavedClassesChanged( outDir );
+            hasSourcesChanged( outDir ) || hasNonWeavedClassesChanged( outDir );
 
     }
 
@@ -648,14 +647,15 @@ public abstract class AbstractAjcCompiler
         return false;
     }
 
-    /** 
+    /**
      * Setters which when called sets compiler arguments
+     *
      * @param complianceLevel the complianceLevel
      */
     public void setComplianceLevel( String complianceLevel )
     {
         if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" )
-            || complianceLevel.equals( "1.6" ) || complianceLevel.equals( "1.7" ))
+            || complianceLevel.equals( "1.6" ) || complianceLevel.equals( "1.7" ) )
         {
             ajcOptions.add( "-" + complianceLevel );
         }
@@ -814,10 +814,10 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-XaddSerialVersionUID" );
         }
     }
-    
+
     public void setXterminateAfterCompilation( boolean xterminateAfterCompilation )
     {
-        if( xterminateAfterCompilation )
+        if ( xterminateAfterCompilation )
         {
             ajcOptions.add( "-XterminateAfterCompilation" );
         }
