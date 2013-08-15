@@ -24,10 +24,10 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
-import java.io.File;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.project.MavenProject;
+
+import java.io.File;
 
 /**
  * The base class.
@@ -85,7 +85,7 @@ public abstract class AbstractAjcMojo extends AbstractMojo
     /**
      * Skip plugin execution.
      *
-     * @parameter default-value="false" expression="${aspectj.skip}"
+     * @parameter default-value="false" property="aspectj.skip"
      */
     private boolean skip;
     

@@ -192,7 +192,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Specify default source encoding format.
      *
-     * @parameter expression="${project.build.sourceEncoding}"
+     * @parameter property="project.build.sourceEncoding"
      */
     protected String encoding;
 
@@ -358,8 +358,46 @@ public abstract class AbstractAjcCompiler
             return;
         }
 
-        project.getCompileSourceRoots().add( FileUtils.resolveFile( basedir, aspectDirectory ).getAbsolutePath() );
-        project.getTestCompileSourceRoots().add( FileUtils.resolveFile( basedir, testAspectDirectory).getAbsolutePath() );
+        // MASPECT-110:
+        //
+        // Only add the aspectSourcePathDir and testAspectSourcePathDir to their respective
+        // compileSourceRoots if they actually exist and are directories... to avoid crashing
+        // downstream plugins requiring/assuming that all entries within the compileSourceRoots
+        // and testCompileSourceRoots are directories.
+        //
+        final File aspectSourcePathDir = FileUtils.resolveFile(basedir, aspectDirectory);
+        final File testAspectSourcePathDir = FileUtils.resolveFile(basedir, testAspectDirectory);
+
+        final String aspectSourcePath = aspectSourcePathDir.getAbsolutePath();
+        final String testAspectSourcePath = testAspectSourcePathDir.getAbsolutePath();
+
+        if(aspectSourcePathDir.exists()
+                && aspectSourcePathDir.isDirectory()
+                && !project.getCompileSourceRoots().contains(aspectSourcePath))
+        {
+            getLog().debug( "Adding existing aspectSourcePathDir [" + aspectSourcePath + "] to compileSourceRoots." );
+            project.getCompileSourceRoots().add( aspectSourcePath );
+        }
+        else
+        {
+            getLog().debug( "Not adding non-existent or already added aspectSourcePathDir [" + aspectSourcePath
+                    + "] to compileSourceRoots." );
+        }
+
+        if(testAspectSourcePathDir.exists()
+                && testAspectSourcePathDir.isDirectory()
+                && !project.getTestCompileSourceRoots().contains(testAspectSourcePath))
+        {
+            getLog().debug( "Adding existing testAspectSourcePathDir [" + testAspectSourcePath
+                    + "] to testCompileSourceRoots." );
+            project.getTestCompileSourceRoots().add( testAspectSourcePath );
+        }
+        else
+        {
+            getLog().debug( "Not adding non-existent or already added testAspectSourcePathDir ["
+                    + testAspectSourcePath + "] to testCompileSourceRoots." );
+        }
+
         assembleArguments();
 
         if ( !forceAjcCompile && !hasSourcesToCompile() )
@@ -838,5 +876,4 @@ public abstract class AbstractAjcCompiler
         this.argumentFileName = argumentFileName;
 
     }
-
 }

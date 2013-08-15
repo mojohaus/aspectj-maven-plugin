@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.mojo.aspectj.it</groupId>
+  <artifactId>MASPECTJ-110</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+    <description>Verifies that nonexistent directories are not added to compile or testCompile source
+        roots. Also verifies that directories are not added twice.</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+      <version>@aspectjVersion@</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>aspectj-maven-plugin</artifactId>
+        <version>@project.version@</version>
+          <executions>
+              <execution>
+                  <id>compile_with_nonexistent_aspect_directory</id>
+                  <goals>
+                      <goal>compile</goal>
+                  </goals>
+                  <configuration>
+                      <forceAjcCompile>true</forceAjcCompile>
+                      <aspectDirectory>src/main/nonexistentCompileDirectory</aspectDirectory>
+                      <complianceLevel>1.5</complianceLevel>
+                  </configuration>
+              </execution>
+              <execution>
+                  <id>compile_with_proper_aspect_directory</id>
+                  <goals>
+                      <goal>compile</goal>
+                  </goals>
+                  <configuration>
+                      <forceAjcCompile>true</forceAjcCompile>
+                      <aspectDirectory>src/main/trivialaspects</aspectDirectory>
+                      <complianceLevel>1.5</complianceLevel>
+                  </configuration>
+              </execution>
+              <execution>
+                  <id>testcompile_with_nonexistent_aspect_directory</id>
+                  <goals>
+                      <goal>test-compile</goal>
+                  </goals>
+                  <configuration>
+                      <forceAjcCompile>true</forceAjcCompile>
+                      <aspectDirectory>src/main/trivialaspects</aspectDirectory>
+                      <testAspectDirectory>src/test/nonexistentTestCompileDirectory</testAspectDirectory>
+                      <complianceLevel>1.5</complianceLevel>
+                  </configuration>
+              </execution>
+              <execution>
+                  <id>testcompile_with_proper_aspect_directory</id>
+                  <goals>
+                      <goal>test-compile</goal>
+                  </goals>
+                  <configuration>
+                      <forceAjcCompile>true</forceAjcCompile>
+                      <testAspectDirectory>src/test/trivialtestaspects</testAspectDirectory>
+                      <complianceLevel>1.5</complianceLevel>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+
+        <!--
+            Use the Antrun plugin to write some properties *after* the AspectJ plugin has run.
+        -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <tasks>
+                            <echo>[compileSourceRoots] ${project.compileSourceRoots}</echo>
+                            <echo>[testCompileSourceRoots] ${project.testCompileSourceRoots}</echo>
+                        </tasks>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+  </build>
+</project>
