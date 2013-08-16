@@ -93,6 +93,15 @@ public class AjcReportMojo
     private File outputDirectory;
 
     /**
+     * The build directory (normally "${basedir}/target").
+     *
+     * @parameter default-value="${project.build.directory}"
+     * @required
+     * @readonly
+     */
+    private File buildDirectory;
+
+    /**
      * List of ant-style patterns used to specify the aspects that should be included when compiling. When none
      * specified all .java and .aj files in the project source directories, or directories spesified by the ajdtDefFile
      * property are included.
@@ -261,6 +270,12 @@ public class AjcReportMojo
         try
         {
             Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
+
+            // MASPECTJ-11: Make the ajdoc use the ${project.build.directory} directory for its intermediate folder.
+            // The argument should be the absolute path to the parent directory of the "ajdocworkingdir" folder.
+            Main.setOutputWorkingDir( buildDirectory.getAbsolutePath() );
+
+            // Now produce the JavaDoc.
             Main.main( (String[]) arguments.toArray( new String[0] ) );
         }
         finally
