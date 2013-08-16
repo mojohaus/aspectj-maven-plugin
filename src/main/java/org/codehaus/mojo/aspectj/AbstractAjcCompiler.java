@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,9 @@ import java.util.Set;
 public abstract class AbstractAjcCompiler
     extends AbstractAjcMojo
 {
+
+    // Constants
+    private static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList("1.2", "1.5");
 
     /**
      * The source directory for the aspects.
@@ -270,6 +274,13 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected boolean XterminateAfterCompilation;
+
+    /**
+     * (Experimental) Allows code to be generated that targets a 1.2 or a 1.5 level AspectJ runtime (default 1.5)
+     *
+     * @parameter
+     */
+    protected String Xajruntimetarget;
 
     /**
      * Override location of VM's bootclasspath for purposes of evaluating types when compiling. Path is a single
@@ -902,6 +913,19 @@ public abstract class AbstractAjcCompiler
         if ( xterminateAfterCompilation )
         {
             ajcOptions.add( "-XterminateAfterCompilation" );
+        }
+    }
+
+    public void setXajruntimetarget( String xajruntimetarget )
+    {
+        if (XAJRUNTIMETARGET_SUPPORTED_VALUES.contains( xajruntimetarget ))
+        {
+            ajcOptions.add( "-Xajruntimetarget:" + xajruntimetarget );
+        }
+        else
+        {
+            getLog().warn( "Incorrect Xajruntimetarget value specified. Supported: "
+                               + XAJRUNTIMETARGET_SUPPORTED_VALUES );
         }
     }
 
