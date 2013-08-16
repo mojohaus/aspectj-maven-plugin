@@ -55,7 +55,7 @@ public abstract class AbstractAjcCompiler
 {
 
     // Constants
-    private static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList("1.2", "1.5");
+    private static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList( "1.2", "1.5" );
 
     /**
      * The source directory for the aspects.
@@ -127,6 +127,7 @@ public abstract class AbstractAjcCompiler
      *   &lt;/Xset&gt;
      * &lt;/configuration&gt;
      * </pre>
+     *
      * @parameter
      * @since 1.5
      */
@@ -139,6 +140,15 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected String Xlint;
+
+    /**
+     * Specify properties file to set levels for specific crosscutting messages.
+     * PropertyFile is a path to a Java .properties file that takes the same property names and values as
+     * org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar, which it also overrides.
+     *
+     * @parameter
+     */
+    protected File Xlintfile;
 
     /**
      * Enables the compiler to support hasmethod(method_pattern) and hasfield(field_pattern) type patterns, but only
@@ -398,9 +408,8 @@ public abstract class AbstractAjcCompiler
         final String aspectSourcePath = aspectSourcePathDir.getAbsolutePath();
         final String testAspectSourcePath = testAspectSourcePathDir.getAbsolutePath();
 
-        if(aspectSourcePathDir.exists()
-                && aspectSourcePathDir.isDirectory()
-                && !project.getCompileSourceRoots().contains(aspectSourcePath))
+        if ( aspectSourcePathDir.exists() && aspectSourcePathDir.isDirectory()
+            && !project.getCompileSourceRoots().contains( aspectSourcePath ) )
         {
             getLog().debug( "Adding existing aspectSourcePathDir [" + aspectSourcePath + "] to compileSourceRoots." );
             project.getCompileSourceRoots().add( aspectSourcePath );
@@ -507,17 +516,17 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-warn:" + warn );
         }
 
-        if (Xset != null && !Xset.isEmpty()) 
+        if ( Xset != null && !Xset.isEmpty() )
         {
-        	StringBuilder sb = new StringBuilder("-Xset:");
-            for (Map.Entry<String, String> param: Xset.entrySet()) 
+            StringBuilder sb = new StringBuilder( "-Xset:" );
+            for ( Map.Entry<String, String> param : Xset.entrySet() )
             {
-                sb.append(param.getKey());
-                sb.append("=");
-                sb.append(param.getValue());
-                sb.append(',');
+                sb.append( param.getKey() );
+                sb.append( "=" );
+                sb.append( param.getValue() );
+                sb.append( ',' );
             }
-            ajcOptions.add( sb.substring(0, sb.length() - 1) );
+            ajcOptions.add( sb.substring( 0, sb.length() - 1 ) );
         }
 
         // Add artifacts or directories to weave
@@ -871,7 +880,37 @@ public abstract class AbstractAjcCompiler
 
     public void setXset( Map<String, String> xset )
     {
-    	this.Xset = xset;
+        this.Xset = xset;
+    }
+
+    public void setXlintfile( File xlintfile )
+    {
+        try
+        {
+            final String prefix = "Xlintfile parameter invalid: ";
+            final String path = xlintfile.getCanonicalPath();
+            if ( !xlintfile.exists() )
+            {
+                getLog().warn( prefix + " file [" + path + "] does not exist" );
+            }
+            else if ( xlintfile.isDirectory() )
+            {
+                getLog().warn( prefix + " given path [" + path + "] is a directory." );
+            }
+            else if ( !path.trim().toLowerCase().endsWith( ".properties" ) )
+            {
+                getLog().warn( prefix + " must be a .properties file" );
+            }
+            else
+            {
+                ajcOptions.add( "-Xlintfile" );
+                ajcOptions.add( path );
+            }
+        }
+        catch ( IOException e )
+        {
+            getLog().error( "IOException while setting Xlintfile option", e );
+        }
     }
 
     public void setXnoInline( boolean xnoInline )
@@ -918,14 +957,14 @@ public abstract class AbstractAjcCompiler
 
     public void setXajruntimetarget( String xajruntimetarget )
     {
-        if (XAJRUNTIMETARGET_SUPPORTED_VALUES.contains( xajruntimetarget ))
+        if ( XAJRUNTIMETARGET_SUPPORTED_VALUES.contains( xajruntimetarget ) )
         {
             ajcOptions.add( "-Xajruntimetarget:" + xajruntimetarget );
         }
         else
         {
-            getLog().warn( "Incorrect Xajruntimetarget value specified. Supported: "
-                               + XAJRUNTIMETARGET_SUPPORTED_VALUES );
+            getLog().warn(
+                "Incorrect Xajruntimetarget value specified. Supported: " + XAJRUNTIMETARGET_SUPPORTED_VALUES );
         }
     }
 
