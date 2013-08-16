@@ -37,6 +37,7 @@ import java.io.File;
  */
 public abstract class AbstractAjcMojo extends AbstractMojo
 {
+
     /**
      * The maven project.
      *
@@ -62,11 +63,11 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * @parameter
      */
     protected Module[] weaveDependencies;
-    
+
     /**
      * List of of directories with .class files to weave (into target directory).
-     * Corresponds to <code>ajc -inpath</code> option .
-     * 
+     * Corresponds to <code>ajc -inpath</code> option.
+     *
      * @parameter
      * @since 1.4
      */
@@ -83,14 +84,22 @@ public abstract class AbstractAjcMojo extends AbstractMojo
     protected Module[] aspectLibraries;
 
     /**
+     * Parameter which indicates an XML file containing AspectJ weaving instructions.
+     * Assigning this plugin parameter adds the <code>-xmlConfigured</code> option to ajc.
+     *
+     * @parameter
+     * @see <a href="http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html">http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html</a>
+     */
+    protected File xmlConfigured;
+
+    /**
      * Skip plugin execution.
      *
      * @parameter default-value="false" property="aspectj.skip"
      */
     private boolean skip;
-    
+
     /**
-     * 
      * @return <code>true</code> if execution should be skipped, otherwise <code>false</code>
      */
     protected final boolean isSkip()
@@ -98,4 +107,33 @@ public abstract class AbstractAjcMojo extends AbstractMojo
         return skip;
     }
 
+    /**
+     * Parameter which indicates an XML file containing AspectJ weaving instructions.
+     * Assigning this plugin parameter adds the <code>-xmlConfigured</code> option to ajc.
+     *
+     * @param xmlConfigured an XML file containing AspectJ weaving instructions.
+     */
+    public void setXmlConfigured( final File xmlConfigured )
+    {
+        try
+        {
+            final String path = xmlConfigured.getCanonicalPath();
+            if ( !xmlConfigured.exists() )
+            {
+                getLog().warn( "xmlConfigured parameter invalid. [" + path + "] does not exist." );
+            }
+            else if ( !path.trim().toLowerCase().endsWith( ".xml" ) )
+            {
+                getLog().warn( "xmlConfigured parameter invalid. XML file name must end in .xml" );
+            }
+            else
+            {
+                this.xmlConfigured = xmlConfigured;
+            }
+        }
+        catch ( Exception e )
+        {
+            getLog().error( "Exception setting xmlConfigured option", e );
+        }
+    }
 }

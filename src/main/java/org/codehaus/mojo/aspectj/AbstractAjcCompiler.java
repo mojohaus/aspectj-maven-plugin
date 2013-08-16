@@ -338,7 +338,7 @@ public abstract class AbstractAjcCompiler
      *
      * @throws MojoExecutionException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void execute()
         throws MojoExecutionException
     {
@@ -365,8 +365,8 @@ public abstract class AbstractAjcCompiler
         // downstream plugins requiring/assuming that all entries within the compileSourceRoots
         // and testCompileSourceRoots are directories.
         //
-        final File aspectSourcePathDir = FileUtils.resolveFile(basedir, aspectDirectory);
-        final File testAspectSourcePathDir = FileUtils.resolveFile(basedir, testAspectDirectory);
+        final File aspectSourcePathDir = FileUtils.resolveFile( basedir, aspectDirectory );
+        final File testAspectSourcePathDir = FileUtils.resolveFile( basedir, testAspectDirectory );
 
         final String aspectSourcePath = aspectSourcePathDir.getAbsolutePath();
         final String testAspectSourcePath = testAspectSourcePathDir.getAbsolutePath();
@@ -381,7 +381,7 @@ public abstract class AbstractAjcCompiler
         else
         {
             getLog().debug( "Not adding non-existent or already added aspectSourcePathDir [" + aspectSourcePath
-                    + "] to compileSourceRoots." );
+                                + "] to compileSourceRoots." );
         }
 
         if(testAspectSourcePathDir.exists()
@@ -493,6 +493,13 @@ public abstract class AbstractAjcCompiler
         addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(),
                             "an aspect library" );
 
+        // Add xmlConfigured option and argument
+        if ( null != xmlConfigured )
+        {
+            ajcOptions.add( "-xmlConfigured" );
+            ajcOptions.add( xmlConfigured.getAbsolutePath() );
+        }
+
         // add target dir argument
         ajcOptions.add( "-d" );
         ajcOptions.add( getOutputDirectory().getAbsolutePath() );
@@ -550,8 +557,11 @@ public abstract class AbstractAjcCompiler
      * @param role
      * @throws MojoExecutionException
      */
-    private void addModulesArgument( String argument, List<String> arguments, Module[] modules, String aditionalpath,
-                                     String role )
+    private void addModulesArgument( final String argument,
+                                     final List<String> arguments,
+                                     final Module[] modules,
+                                     final String aditionalpath,
+                                     final String role )
         throws MojoExecutionException
     {
         StringBuilder buf = new StringBuilder();
@@ -574,7 +584,7 @@ public abstract class AbstractAjcCompiler
                 // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
                 // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
                 Artifact artifact = null;
-                @SuppressWarnings("unchecked") Set<Artifact> allArtifacts = project.getArtifacts();
+                @SuppressWarnings( "unchecked" ) Set<Artifact> allArtifacts = project.getArtifacts();
                 for ( Artifact art : allArtifacts )
                 {
                     if ( art.getGroupId().equals( module.getGroupId() ) && art.getArtifactId().equals(

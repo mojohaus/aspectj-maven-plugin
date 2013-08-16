@@ -24,13 +24,13 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Set;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.plexus.util.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,18 +41,17 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.codehaus.plexus.util.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * Create eclipse configuration of aspectJ
- * 
+ *
  * @author Juraj Burian
  * @version $Revision$ by $Author$ (at)goal eclipse
  * @requiresDependencyResolution compile
@@ -61,15 +60,16 @@ import org.xml.sax.SAXException;
 public class EclipseAjcMojo
     extends AbstractAjcMojo
 {
-    public static final String FILE_SEPARATOR = //
-        System.getProperty( "file.separator" );
+    public static final String FILE_SEPARATOR = System.getProperty( "file.separator" );
 
     private final String[] ASPECT_LIBRARIES_KEYS = //
-        new String[] { "org.eclipse.ajdt.ui.aspectPath.contentKind", "org.eclipse.ajdt.ui.aspectPath.entryKind",
+        new String[]{ "org.eclipse.ajdt.ui.aspectPath.contentKind",
+            "org.eclipse.ajdt.ui.aspectPath.entryKind",
             "org.eclipse.ajdt.ui.aspectPath" };
 
     private final String[] WEAVE_DEPENDENCIES_KEYS = //
-        new String[] { "org.eclipse.ajdt.ui.inPath.contentKind", "org.eclipse.ajdt.ui.inPath.entryKind",
+        new String[]{ "org.eclipse.ajdt.ui.inPath.contentKind",
+            "org.eclipse.ajdt.ui.inPath.entryKind",
             "org.eclipse.ajdt.ui.inPath" };
 
     private static final String AJ_BUILDER = "org.eclipse.ajdt.core.ajbuilder";
@@ -88,8 +88,7 @@ public class EclipseAjcMojo
         }
 
         // write file
-        File prefs = new File( //
-                               basedir, ".settings" + FILE_SEPARATOR + "org.eclipse.ajdt.ui.prefs" );
+        File prefs = new File( basedir, ".settings" + FILE_SEPARATOR + "org.eclipse.ajdt.ui.prefs" );
         try
         {
             prefs.getParentFile().mkdirs();
@@ -97,8 +96,7 @@ public class EclipseAjcMojo
         }
         catch ( IOException e )
         {
-            throw new MojoExecutionException( //
-                                              "Can't create file: " + prefs.getPath() );
+            throw new MojoExecutionException( "Can't create file: " + prefs.getPath() );
         }
 
         PrintWriter out = null;
@@ -114,6 +112,21 @@ public class EclipseAjcMojo
         out.println( "eclipse.preferences.version=1" );
         writePaths( out, aspectLibraries, ASPECT_LIBRARIES_KEYS );
         writePaths( out, weaveDependencies, WEAVE_DEPENDENCIES_KEYS );
+        if ( xmlConfigured != null )
+        {
+            String xmlPath;
+            if ( xmlConfigured.isAbsolute() )
+            {
+                xmlPath = xmlConfigured.getAbsolutePath();
+            }
+            else
+            {
+                // Note: Eclipse always use '/' here, not FILE_SEPARATOR
+                xmlPath = "/" + project.getName() + "/" + xmlConfigured;
+            }
+            out.println( "org.eclipse.ajdt.aopxml=" + xmlPath );
+        }
+        out.flush();
         out.close();
 
         // merge .project file if exists
@@ -138,8 +151,7 @@ public class EclipseAjcMojo
             // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
             // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
             Artifact artifact = null;
-            @SuppressWarnings( "unchecked" )
-            Set<Artifact> allArtifacts = project.getArtifacts();
+            @SuppressWarnings("unchecked") Set<Artifact> allArtifacts = project.getArtifacts();
             for ( Artifact art : allArtifacts )
             {
                 if ( art.getGroupId().equals( module.getGroupId() )
@@ -155,7 +167,7 @@ public class EclipseAjcMojo
             if ( artifact == null )
             {
                 throw new MojoExecutionException( "The artifact " + module.toString()
-                    + " referenced in aspectj plugin as an aspect library, is not found the project dependencies" );
+                                                      + " referenced in aspectj plugin as an aspect library, is not found the project dependencies" );
 
             }
             paths[i] = artifact.getFile().getPath();
@@ -296,7 +308,7 @@ public class EclipseAjcMojo
 
     /**
      * write document to the file
-     * 
+     *
      * @param document
      * @param file
      * @throws TransformerException

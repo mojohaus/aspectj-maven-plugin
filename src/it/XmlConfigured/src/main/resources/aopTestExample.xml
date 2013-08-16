@@ -1,0 +1,8 @@
+<aspectj>
+  <aspects>
+    <aspect name="Azpect" scope="IncludedClazz"/>
+  </aspects>
+  <weaver>
+    <include within="IncludedClazz"/>
+  </weaver>
+</aspectj>
