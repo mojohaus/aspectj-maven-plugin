@@ -39,6 +39,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -111,6 +112,21 @@ public abstract class AbstractAjcCompiler
      * @parameter
      */
     protected boolean emacssym;
+
+    /**
+     * Allows the caller to provide additional arguments in a Map format. For example:
+     * <pre>
+     * &lt;configuration&gt;
+     *   &lt;Xset&gt;
+     *     &lt;overWeaving&gt;true&lt;/overWeaving&gt;
+     *     &lt;avoidFinal&gt;false&lt;/avoidFinal&gt;
+     *   &lt;/Xset&gt;
+     * &lt;/configuration&gt;
+     * </pre>
+     * @parameter
+     * @since 1.5
+     */
+    protected Map<String, String> Xset;
 
     /**
      * Set default level for messages about potential programming mistakes in crosscutting code. {level} may be ignore,
@@ -480,6 +496,19 @@ public abstract class AbstractAjcCompiler
             ajcOptions.add( "-warn:" + warn );
         }
 
+        if (Xset != null && !Xset.isEmpty()) 
+        {
+        	StringBuilder sb = new StringBuilder("-Xset:");
+            for (Map.Entry<String, String> param: Xset.entrySet()) 
+            {
+                sb.append(param.getKey());
+                sb.append("=");
+                sb.append(param.getValue());
+                sb.append(',');
+            }
+            ajcOptions.add( sb.substring(0, sb.length() - 1) );
+        }
+
         // Add artifacts or directories to weave
         String joinedWeaveDirectories = null;
         if ( weaveDirectories != null )
@@ -827,6 +856,11 @@ public abstract class AbstractAjcCompiler
     public void setXlint( String xlint )
     {
         ajcOptions.add( "-Xlint:" + xlint );
+    }
+
+    public void setXset( Map<String, String> xset )
+    {
+    	this.Xset = xset;
     }
 
     public void setXnoInline( boolean xnoInline )
