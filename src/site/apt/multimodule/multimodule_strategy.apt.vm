@@ -1,0 +1,441 @@
+ ------
+ AspectJ in a multi-module reactor
+ ------
+ ------
+ ------
+
+Strategies for using AspectJ in a Maven multi-module reactor
+
+  In a multi-module reactor, a convenient pattern for using AspectJ is to create one project containing Aspect
+  definitions to be used by ("woven into") the code of other projects within the Maven reactor. Since
+  some dependencies (such as the AspectJ runtime) must be identical in all of the projects within
+  the Maven reactor, this walkthrough serves as a step-by-step guide to painless use of aspects in a
+  multi-module reactor.
+
+  To make this walkthrough less abstract, we will use Validation as an example throughout the step-by-step guide.
+  In this example, we will create a small API for validating the internal state of objects, and delegate its
+  correct use to AspectJ by means of the AspectJ Maven Plugin. There are many ways besides AspectJ to perform
+  this, but AspectJ is one of the few which does not depend on particular surroundings such as containers or
+  application servers. In fact, the small Validation solution may be run directly in a plain Java SE environment.
+  All steps will be detailed in the walkthrough below, but we will start by taking a look at the end result:
+
+[../images/plantuml/multimodule_ajc.png] Resulting reactor
+
+  The reactor contains the following parts:
+
+    * <<rootParentPOM>>: Contains version definitions for the aspectjrt and aspectjtools libraries, to be
+        used in all projects in the multi-module reactor.
+
+    * <<validation-api>>: Defines a small API for validating the internal state of objects.
+
+    * <<validation-aspect>>: Defines an Aspect using classes from the <<<validation-api>>> to validate the
+        internal state of objects.
+
+    * <<aspectParentPOM>>: Configures the AspectJ Maven Plugin (this plugin!) to use the Aspect defined within
+        the <<<validation-aspect>>> project and apply it on all maven projects having the aspectParentPOM for
+        parent.
+
+    * <<mavenProjectWithAspects>>: A project whose classes can use/implement types from the validation-api to
+        indicate that the aspect defined in <<<validation-aspect>>> project should be woven into its bytecode
+        representation.
+
+    After the introduction, let us proceed to the step-by-step guide.
+
+* 1. Define required runtime dependency versions
+
+    In the rootParentPom, define dependencies for the AspectJ runtime and your library holding aspects.
+    It is recommended to introduce a Maven property in order to reduce the number of locations where
+    the AspectJ version must be changed to upgrade the dependency.
+
++------------------------------------------
+      <!-- +========================================= -->
+      <!-- | Maven property definitions               -->
+      <!-- +========================================= -->
+      <properties>
+        <aspectj.runtime.version>1.7.3</aspectj.runtime.version>
+
+        ...
+      </properties>
+
+
+      <!-- +========================================= -->
+      <!-- | Dependency (management) settings         -->
+      <!-- +========================================= -->
+      <dependencyManagement>
+          <dependencies>
+
+            <!-- AOP dependencies. -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.runtime.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj.runtime.version}</version>
+            </dependency>
+
+            ...
+
+          </dependencies>
+      </dependencyManagement>
+
++------------------------------------------
+
+    The definitions in the rootParentPOM are now complete.
+
+* 2. Implement the Validation-API
+
+    For the purpose of this example, we would like AspectJ to enforce a common behaviour/lifecycle for
+    objects whose internal state can be validated. The Validation-API contains a defining interface,
+    <<<Validatable>>>, which should be implemented by any class whose objects should be validated after
+    being created. The Validatable interface is shown below:
+
++------------------------------------------
+/**
+ * Specification for providing an object with Validation mechanics.
+ * Each Validatable object can perform internal validation to assert
+ * its state before being serialized and after being deserialized.
+ *
+ * Making an object implement Validatable does not imply that all
+ * uses of the object is guaranteed. Validatable objects should
+ * primarily make use of their own data to ascertain its valid state.
+ *
+ * It is the responsibilities of services using the Validatable object
+ * (as opposed to the validation mechanics provided within this Validatable)
+ * to provide extra/semantic validation for object <strong>graphs</strong>
+ * in which this Validatable instance is part.
+ */
+public interface Validatable {
+
+    /**
+     * Performs validation of the internal state of this Validatable.
+     *
+     * @throws InternalStateValidationException
+     *          if the state of this Validatable was
+     *          in an incorrect state (i.e. invalid).
+     */
+    void validateInternalState() throws InternalStateValidationException;
+}
++------------------------------------------
+
+    Following the definition of a custom exception class called <<<InternalStateValidationException>>>
+    which should extends <<<IllegalStateException>>>, the small validation-api project is complete:
+
++------------------------------------------
+/**
+ * Exception indicating problems occurred when validating a Validatable instance.
+ */
+public class InternalStateValidationException extends IllegalStateException {
+
+    /**
+     * Constructs an InternalStateValidationException with the specified detail message.
+     * A detail message is a String that describes this particular exception.
+     *
+     * @param message the String that contains a detailed message
+     */
+    public InternalStateValidationException(final String message) {
+        super(message);
+    }
+}
++------------------------------------------
+
+    Assuming that the rootParentPOM contains common build definitions which should be applied to the
+    validation-api project, we should remember to assign the rootParentPOM as its parent.
+    In this brief example, we explore no reason to connect the validation-api to a parent - but in real life
+    configurations such as licensing, coverage, code style, etc. are frequently configured and maintained
+    only in one POM - the rootParentPOM.
+
+* 3. Implement the Aspect performing validation
+
+    Now that our tiny Validation API is complete, it is time to implement its corresponding Aspect.
+    This is done in the <<<validation-aspect>>> project, which must import the validation-api as a
+    dependency in its POM. It is also important that the validation-aspect project assigns its POM
+    parent to rootParentPOM, since we want to use the AspectJ definitions from the parent. The POM
+    bits of the validation-aspect project are shown below:
+
++------------------------------------------
+    <!-- +========================================= -->
+    <!-- | Define the Parent POM                    -->
+    <!-- +========================================= -->
+    <parent>
+        <groupId>some.group.id</groupId>
+        <artifactId>rootParentPOM</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <!-- +========================================= -->
+    <!-- | Dependency (management) settings         -->
+    <!-- +========================================= -->
+    <dependencies>
+        <dependency>
+            <groupId>some.group.id</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        ...
+    </dependencies>
+
+    <!-- +========================================= -->
+    <!-- | Build settings                           -->
+    <!-- +========================================= -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <complianceLevel>1.6</complianceLevel>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>**/*.aj</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>compile_with_aspectj</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile_with_aspectj</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjrt</artifactId>
+                        <version>${aspectj.runtime.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>${aspectj.runtime.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            ...
++------------------------------------------
+
+    Besides including the correct parent POM and the required dependencies from aspectjrt and
+    the validation-api project, the POM of the validation-aspect project must also define the
+    full aspectj-maven-plugin configuration to perform the aspectj compilation.
+
+    Note that aspectjrt and aspectjtools should be included as dependencies for the aspectj-maven-plugin
+    as illustrated here to ensure that the same versions of AspectJ used for the AspectJ compilation
+    are used throughout the reactor.
+
+    The implementation of the Aspect itself can appear somewhat complex, despite only being a single
+    active method. The main relevant method call is <<<validatable.validateInternalState();>>> which appears
+    towards the end of the <<<performValidationAfterCompoundConstructor>>> method. This is the place where
+    this Aspect invokes the method from the validation-api, and therefore lets the object validate its internal state.
+    The other two methods in the aspect are placeholders for two Pointcut expressions defining exactly when
+    the advice should be called. In this example case, we want to invoke validation after any constructor other
+    than a default constructor is called.
+
+------------------------------------------
+    Why would you not want to perform validation after a default constructor is called? Consider the
+    lifecycle for frameworks which create an object instance by calling the default constructor of a class, followed
+    by poulating its internal state (i.e. its private members) using reflection. Some such frameworks include JAXB
+    and JPA, implying that validation cannot be performed immediately after a default constructor has been run since
+    the state of the object is still empty.
+------------------------------------------
+
+    The aspect is implemented as a standard Java Class using AspectJ annotations, as shown below:
+
++------------------------------------------
+/**
+ * The aspect enforcing validity on a class implementing Validatable (i.e. Entities).
+ * This aspect should be fired immediately after a non-default constructor is invoked,
+ * and is intended to run as a singleton.
+ *
+ * Validation should be run only once, and only after the constructor of the ultimate
+ * created instance is run (default AspectJ behaviour is to run the Aspect after any
+ * constructor within the inheritance hierarchy is executed [i.e. after constructors
+ * in superclasses are run, within the constructor of subtypes]).
+ */
+@Aspect
+public class ValidationAspect {
+
+    // Our log
+    private static final Logger log = LoggerFactory.getLogger(ValidationAspect.class);
+
+    /**
+     * Pointcut defining a default constructor within any class.
+     */
+    @Pointcut("initialization(*.new())")
+    void anyDefaultConstructor() {
+    }
+
+    /**
+     * Defines a Pointcut for any constructor in a class implementing Validatable -
+     * except default constructors (i.e. those having no arguments).
+     *
+     * @param joinPoint    The currently executing joinPoint.
+     * @param aValidatable The Validatable instance just created.
+     */
+    @Pointcut(value = "initialization(se.jguru.nazgul.tools.validation.api.Validatable+.new(..)) "
+            + "&& this(aValidatable) "
+            + "&& !anyDefaultConstructor()", argNames = "joinPoint, aValidatable")
+    void anyNonDefaultConstructor(final JoinPoint joinPoint, final Validatable aValidatable) {
+    }
+
+    /**
+     * Validation aspect, performing its job after calling any constructor except
+     * non-private default ones (having no arguments).
+     *
+     * @param joinPoint   The currently executing joinPoint.
+     * @param validatable The validatable instance just created.
+     * @throws InternalStateValidationException
+     *          if the validation of the validatable failed.
+     */
+    @AfterReturning(value = "anyNonDefaultConstructor(joinPoint, validatable)", argNames = "joinPoint, validatable")
+    public void performValidationAfterCompoundConstructor(final JoinPoint joinPoint, final Validatable validatable)
+            throws InternalStateValidationException {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Validating instance of type [" + validatable.getClass().getName() + "]");
+        }
+
+        if (joinPoint.getStaticPart() == null) {
+            log.warn("Static part of join point was null for validatable of type: "
+                    + validatable.getClass().getName(), new IllegalStateException());
+            return;
+        }
+
+        // Ignore calling validateInternalState when we execute constructors in
+        // any class but the concrete Validatable class.
+        final ConstructorSignature sig = (ConstructorSignature) joinPoint.getSignature();
+        final Class<?> constructorDefinitionClass = sig.getConstructor().getDeclaringClass();
+        if (validatable.getClass() == constructorDefinitionClass) {
+
+            // Now fire the validateInternalState method.
+            validatable.validateInternalState();
+
+        } else {
+
+            log.debug("Ignored firing validatable for constructor defined in ["
+                    + constructorDefinitionClass.getName() + "] and Validatable of type ["
+                    + validatable.getClass().getName() + "]");
+        }
+    }
+}
++------------------------------------------
+
+* 4. Include Aspects into aspectParentPOM
+
+    The last piece of the AspectJ plugin puzzle is the inclusion of our validation-aspect into the
+    standard build cycle, which is performed within the aspectParentPOM project. The aspectParentPOM
+    must therefore include a dependency on the <<<validation-aspect>>> project, and use the rootParentPOM
+    for parent.
+
++------------------------------------------
+    <!-- +========================================= -->
+    <!-- | Define the Parent POM                    -->
+    <!-- +========================================= -->
+    <parent>
+        <groupId>some.group.id</groupId>
+        <artifactId>rootParentPOM</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <!-- +========================================= -->
+    <!-- | Dependency (management) settings         -->
+    <!-- +========================================= -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>some.group.id</groupId>
+                <artifactId>validation-aspect</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <!-- Include AOP dependencies -->
+        <dependency>
+            <groupId>some.group.id</groupId>
+            <artifactId>validation-aspect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+
+        ...
+    </dependencies>
+
+    <!-- +========================================= -->
+    <!-- | Build settings                           -->
+    <!-- +========================================= -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <complianceLevel>1.6</complianceLevel>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>**/*.aj</include>
+                    </includes>
+                    <aspectDirectory>src/main/aspect</aspectDirectory>
+                    <testAspectDirectory>src/test/aspect</testAspectDirectory>
+                    <XaddSerialVersionUID>true</XaddSerialVersionUID>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>some.group.id</groupId>
+                            <artifactId>validation-aspect</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>compile_with_aspectj</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>test-compile_with_aspectj</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>${aspectj.runtime.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>se.jguru.nazgul.tools.validation.aspect</groupId>
+                        <artifactId>nazgul-tools-validation-aspect</artifactId>
+                        <version>1.0.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
++------------------------------------------
+
+    For all project now using the <<<aspectParentPOM>>> as their parent, the validationAspect will
+    be woven into all classes implementing the Validatable interface. This means you can perform
+    automatic AspectJ-driven validation in objects inside or outside of any container.

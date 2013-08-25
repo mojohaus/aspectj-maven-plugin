@@ -1,0 +1,14 @@
+ ------
+ About "AspectJ Maven Plugin"
+ ------
+ ------
+ ------
+
+AspectJ Maven Plugin overview
+
+  The AspectJ-Maven-Plugin weaves AspectJ aspects into your classes using the AspectJ compiler ("ajc").
+  There are typically two ways to package and use aspects in your Maven reactors; either as a standalone
+  project where aspects and code are defined within the same Maven project - or as part of a multi-module
+  Maven reactor where one/some project(s) contains aspects and other projects within the Maven reactor
+  contain code using the aspects ("woven by the aspects").
+

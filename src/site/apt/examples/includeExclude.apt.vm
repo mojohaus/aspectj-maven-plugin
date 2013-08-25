@@ -9,7 +9,7 @@ Using sources
   Since version 1.4 this plugin has a much stronger way of defining the Java sources, their includes and excludes.
   The plugin makes use of the Plexus Scanner
   (i.e. the {{{http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/DirectoryScanner.html}DirectoryScanner}} implementation), 
-  an advanced implementation which covers all the needs.
+  an advanced implementation which covers most needs regarding source selection.
   If you don't want to use any sourceDirectory, Maven 3 users can just add an empty sources element (i.e. \<sources/\>).
   If you're a Maven 2 user you have to specify an empty source element (i.e. \<sources\>\<source/\>\</sources\>).
 

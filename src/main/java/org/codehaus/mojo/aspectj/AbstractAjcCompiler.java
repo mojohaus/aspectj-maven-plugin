@@ -195,7 +195,8 @@ public abstract class AbstractAjcCompiler
     protected String source;
 
     /**
-     * Specify compiler compliance setting (1.3 to 1.7) default is 1.4
+     * Specify compiler compliance setting.
+     * Defaults to 1.4, with permitted values ("1.3", "1.4", "1.5", "1.6" and "1.7").
      *
      * @parameter default-value="1.4"
      * @see #ACCEPTED_COMPLIANCE_LEVEL_VALUES

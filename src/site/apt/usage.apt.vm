@@ -6,10 +6,13 @@
 
 Usage
 
-  This plugin weaves AspectJ aspects with your classes using the AspectJ ajc compiler.
-  Please do remember to add <<<aspectjrt>>> as a dependency to your project. AspectJ needs it to weave
-  and ultimately to run your code. To have the plugin compile aspects found in your project source directories
-  simply use the configuration below.
+  The AspectJ-Maven-Plugin weaves AspectJ aspects into your classes using the AspectJ compiler ("ajc").
+  There are typically two ways to package and use aspects in your Maven reactors; either as a standalone
+  project where aspects and code are defined within the same Maven project - or as part of a multi-module
+  Maven reactor where one/some project(s) contains aspects and other projects within the Maven reactor
+  contain code using the aspects ("woven by the aspects").
+
+  Below follows a standard single-project usage example.
 
 +------------------------------------------
 <project>
@@ -49,7 +52,8 @@ Usage
 * Upgrading AspectJ
 
   The frequency of releases of the aspectj-maven-plugin is lower than AspectJ. 
-  If you want to use a different version of AspectJ than ${aspectjVersion}, you also need to upgrade the aspectjtools within the plugin too.
+  If you want to use a different version of AspectJ than ${aspectjVersion}, you also need to upgrade the
+  aspectjtools within the plugin too.
 
 +------------------------------------------
 <project>
