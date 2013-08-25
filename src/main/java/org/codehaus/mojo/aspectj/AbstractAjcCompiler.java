@@ -144,6 +144,13 @@ public abstract class AbstractAjcCompiler
     protected Map<String, String> Xset;
 
     /**
+     * generate .ajsym file into the output directory
+     *
+     * @parameter
+     */
+    protected boolean crossrefs;
+
+    /**
      * Set default level for messages about potential programming mistakes in crosscutting code. {level} may be ignore,
      * warning, or error. This overrides entries in org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar.
      *
@@ -268,6 +275,13 @@ public abstract class AbstractAjcCompiler
     protected boolean Xreweavable;
 
     /**
+     * (Experimental) Create class files that can't be subsequently rewoven by AspectJ.
+     *
+     * @parameter
+     */
+    protected boolean XnotReweavable;
+
+    /**
      * (Experimental) do not inline around advice
      *
      * @parameter
@@ -302,6 +316,15 @@ public abstract class AbstractAjcCompiler
      * @parameter default="1.5"
      */
     protected String Xajruntimetarget;
+
+    /**
+     * supply a comma separated list of new joinpoints
+     * that can be identified by pointcuts.  Values are:
+     * arrayconstruction, synchronization
+     * 
+     * @parameter
+     */
+    protected String Xjoinpoints;
 
     /**
      * Override location of VM's bootclasspath for purposes of evaluating types when compiling. Path is a single
@@ -554,6 +577,11 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-bootclasspath" );
             ajcOptions.add( bootclasspath );
+        }
+
+        if ( null != Xjoinpoints )
+        {
+            ajcOptions.add( "-Xjoinpoints:" + Xjoinpoints );
         }
 
         // Add warn option
@@ -817,6 +845,14 @@ public abstract class AbstractAjcCompiler
 
     }
 
+    public void setCrossrefs( boolean crossrefs )
+    {
+        if ( crossrefs )
+        {
+            ajcOptions.add( "-crossrefs" );
+        }
+    }
+
     public void setEncoding( String encoding )
     {
         ajcOptions.add( "-encoding" );
@@ -838,7 +874,6 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-outxml" );
         }
-
     }
 
     public void setOutxmlfile( String outxmlfile )
@@ -871,7 +906,6 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-referenceInfo" );
         }
-
     }
 
     public void setRepeat( int repeat )
@@ -886,7 +920,6 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-showWeaveInfo" );
         }
-
     }
 
     public void setTarget( String target )
@@ -960,7 +993,6 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-XnoInline" );
         }
-
     }
 
     public void setXreweavable( boolean xreweavable )
@@ -969,7 +1001,14 @@ public abstract class AbstractAjcCompiler
         {
             ajcOptions.add( "-Xreweavable" );
         }
+    }
 
+    public void setXnotReweavable( boolean xnotReweavable )
+    {
+        if ( xnotReweavable )
+        {
+            ajcOptions.add( "-XnotReweavable" );
+        }
     }
 
     public void setXserializableAspects( boolean xserializableAspects )
@@ -1014,6 +1053,11 @@ public abstract class AbstractAjcCompiler
         this.bootclasspath = bootclasspath;
     }
 
+    public void setXjoinpoints( String xjoinpoints )
+    {
+        this.Xjoinpoints = xjoinpoints;
+    }
+
     public void setWarn( String warn )
     {
         this.warn = warn;
@@ -1022,6 +1066,5 @@ public abstract class AbstractAjcCompiler
     public void setArgumentFileName( String argumentFileName )
     {
         this.argumentFileName = argumentFileName;
-
     }
 }
