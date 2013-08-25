@@ -55,7 +55,17 @@ public abstract class AbstractAjcCompiler
 {
 
     // Constants
-    private static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList( "1.2", "1.5" );
+
+    /**
+     * List holding all accepted values for the {@code complianceLevel} parameter.
+     */
+    public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES =
+        Arrays.asList( "1.3", "1.4", "1.5", "1.6", "1.7" );
+
+    /**
+     * List holding all accepted values for the {@code Xajruntimetarget} parameter.
+     */
+    public static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList( "1.2", "1.5" );
 
     /**
      * The source directory for the aspects.
@@ -168,10 +178,10 @@ public abstract class AbstractAjcCompiler
     protected String target;
 
     /**
-     * Toggle assertions (1.3, 1.4, 1.5, 1.6 or 1.7 - default is 1.4). When using -source 1.3, an assert() statement valid under
-     * Java 1.4 will result in a compiler error. When using -source 1.4, treat assert as a keyword and implement
-     * assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java 5 language features are
-     * permitted. With --source 1.7 or higher Java 7 features are supported.
+     * Toggle assertions (1.3, 1.4, 1.5, 1.6 or 1.7 - default is 1.4). When using -source 1.3, an assert()
+     * statement valid under Java 1.4 will result in a compiler error. When using -source 1.4, treat assert
+     * as a keyword and implement assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java
+     * 5 language features are permitted. With --source 1.7 or higher Java 7 features are supported.
      *
      * @parameter default-value="${mojo.java.target}"
      */
@@ -180,7 +190,8 @@ public abstract class AbstractAjcCompiler
     /**
      * Specify compiler compliance setting (1.3 to 1.7) default is 1.4
      *
-     * @parameter
+     * @parameter default-value="1.4"
+     * @see #ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
     protected String complianceLevel;
 
@@ -288,7 +299,7 @@ public abstract class AbstractAjcCompiler
     /**
      * (Experimental) Allows code to be generated that targets a 1.2 or a 1.5 level AspectJ runtime (default 1.5)
      *
-     * @parameter
+     * @parameter default="1.5"
      */
     protected String Xajruntimetarget;
 
@@ -302,17 +313,53 @@ public abstract class AbstractAjcCompiler
     protected String bootclasspath;
 
     /**
-     * Emit warnings for any instances of the comma-delimited list of questionable code (e.g. 'unusedLocals,deprecation'):
-     * see http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc for available settings
+     * Emit warnings for any instances of the comma-delimited list of questionable code.
+     * Supported values are shown in the list below, with their respective explanations - as copied
+     * directly from the AJC reference.
+     * <p/>
+     * <dl>
+     * <dt>constructorName</dt>
+     * <dd>method with constructor name</dd>
+     * <dt>packageDefaultMethod</dt>
+     * <dd>attempt to override package-default method</dd>
+     * <dt>deprecation</dt>
+     * <dd>usage of deprecated type or member</dd>
+     * <dt>maskedCatchBlocks</dt>
+     * <dd>hidden catch block</dd>
+     * <dt>unusedLocals</dt>
+     * <dd>local variable never read</dd>
+     * <dt>unusedArguments</dt>
+     * <dd>method argument never read</dd>
+     * <dt>unusedImports</dt>
+     * <dd>import statement not used by code in file</dd>
+     * <dt>none</dt>
+     * <dd>suppress all compiler warnings</dd>
+     * </dl>
      *
      * @parameter
+     * @see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc">Eclipse AJC reference</a>
      */
     protected String warn;
 
     /**
-     * The filename to store build configuration in. This file will be placed in the project build output directory, and
-     * will contain all the arguments passed to the compiler in the last run, and also all the filenames included in the
-     * build. Aspects as well as java files.
+     * The filename holding AJC build arguments.
+     * The file will be placed in the project build output directory, and will contain all the arguments passed to
+     * the AJC compiler in the last run, and also all the files included in the AJC build.
+     * <p/>
+     * Sample content shown below to illustrate typical content within the builddef.lst file:
+     * <p/>
+     * <pre>
+     *     <code>
+     * -1.6
+     * -encoding
+     * UTF-8
+     * -classpath
+     * /Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-api/target/nazgul-tools-validation-api-2.0.10-SNAPSHOT.jar:/Users/lj/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar:/Users/lj/.m2/repository/org/aspectj/aspectjrt/1.7.3/aspectjrt-1.7.3.jar:/Users/lj/.m2/repository/junit/junit/4.11/junit-4.11.jar:/Users/lj/.m2/repository/ch/qos/logback/logback-classic/1.0.13/logback-classic-1.0.13.jar:/Users/lj/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar:/Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-aspect/target/classes
+     * -d
+     * /Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-aspect/target/classes
+     * /Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-aspect/src/main/java/se/jguru/nazgul/tools/validation/aspect/ValidationAspect.java
+     *     </code>
+     * </pre>
      *
      * @parameter default-value="builddef.lst"
      */
@@ -321,7 +368,7 @@ public abstract class AbstractAjcCompiler
     /**
      * Forces re-compilation, regardless of whether the compiler arguments or the sources have changed.
      *
-     * @parameter
+     * @parameter default-value="false"
      */
     protected boolean forceAjcCompile;
 
@@ -420,18 +467,17 @@ public abstract class AbstractAjcCompiler
                                 + "] to compileSourceRoots." );
         }
 
-        if(testAspectSourcePathDir.exists()
-                && testAspectSourcePathDir.isDirectory()
-                && !project.getTestCompileSourceRoots().contains(testAspectSourcePath))
+        if ( testAspectSourcePathDir.exists() && testAspectSourcePathDir.isDirectory()
+            && !project.getTestCompileSourceRoots().contains( testAspectSourcePath ) )
         {
-            getLog().debug( "Adding existing testAspectSourcePathDir [" + testAspectSourcePath
-                    + "] to testCompileSourceRoots." );
+            getLog().debug(
+                "Adding existing testAspectSourcePathDir [" + testAspectSourcePath + "] to testCompileSourceRoots." );
             project.getTestCompileSourceRoots().add( testAspectSourcePath );
         }
         else
         {
-            getLog().debug( "Not adding non-existent or already added testAspectSourcePathDir ["
-                    + testAspectSourcePath + "] to testCompileSourceRoots." );
+            getLog().debug( "Not adding non-existent or already added testAspectSourcePathDir [" + testAspectSourcePath
+                                + "] to testCompileSourceRoots." );
         }
 
         assembleArguments();
@@ -606,11 +652,8 @@ public abstract class AbstractAjcCompiler
      * @param role
      * @throws MojoExecutionException
      */
-    private void addModulesArgument( final String argument,
-                                     final List<String> arguments,
-                                     final Module[] modules,
-                                     final String aditionalpath,
-                                     final String role )
+    private void addModulesArgument( final String argument, final List<String> arguments, final Module[] modules,
+                                     final String aditionalpath, final String role )
         throws MojoExecutionException
     {
         StringBuilder buf = new StringBuilder();
@@ -751,12 +794,10 @@ public abstract class AbstractAjcCompiler
      */
     public void setComplianceLevel( String complianceLevel )
     {
-        if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" )
-            || complianceLevel.equals( "1.6" ) || complianceLevel.equals( "1.7" ) )
+        if ( ACCEPTED_COMPLIANCE_LEVEL_VALUES.contains( complianceLevel ) )
         {
             ajcOptions.add( "-" + complianceLevel );
         }
-
     }
 
     public void setDeprecation( boolean deprecation )

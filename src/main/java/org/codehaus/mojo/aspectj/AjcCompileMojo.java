@@ -76,7 +76,7 @@ public class AjcCompileMojo
     }
     
     /**
-     * 
+     * @return All directories matching {@code project.getBuild().getOutputDirectory()}.
      */
     protected List<String> getClasspathDirectories()
     {
@@ -84,7 +84,7 @@ public class AjcCompileMojo
     }
 
     /**
-     * 
+     * @return All directories matching {@code project.getCompileSourceRoots()}.
      */
     @SuppressWarnings( "unchecked" )
     protected List<String> getSourceDirectories()
@@ -101,5 +101,4 @@ public class AjcCompileMojo
     {
         return null;
     }
-    
 }

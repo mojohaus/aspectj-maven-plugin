@@ -45,11 +45,10 @@ public class AjcTestCompileMojo
     extends AbstractAjcCompiler
 {
     /**
-     * Flag to indicate if the main source dirs
-     * should be a part of the compile process. Note 
-     * this will make all classes in main source dir
-     * appare in the test output dir also, 
-     * potentially overwriting test resources.
+     * Flag to indicate if the main source dirs should be a part of the compile process.
+     * <strong>Note!</strong> This will make all classes in main source dir appear in the
+     * test output dir also, potentially overwriting test resources.
+     *
      * @parameter default-value="false"
      */
     protected boolean weaveMainSourceFolder = false;
@@ -57,6 +56,7 @@ public class AjcTestCompileMojo
     /**
      * Flag to indicate if aspects in the the main source dirs
      * should be a part of the compile process
+     *
      * @parameter default-value="true"
      */
     protected boolean weaveWithAspectsInMainSourceFolder = true;
