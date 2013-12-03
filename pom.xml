@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
@@ -13,7 +14,7 @@
   <inceptionYear>2005</inceptionYear>
 
   <properties>
-    <aspectjVersion>1.7.3</aspectjVersion>
+    <aspectjVersion>1.7.4</aspectjVersion>
     <mavenVersion>2.2.1</mavenVersion>
     <changesPluginVersion>2.9</changesPluginVersion>
   </properties>
@@ -69,6 +70,10 @@
     <developer>
       <name>Lennart Jörelid</name>
       <email>lj@jguru.se</email>
+      <organization>jGuru Europe AB</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
       <timezone>+1</timezone>
     </developer>
   </developers>
@@ -186,6 +191,13 @@
             <phase>pre-site</phase>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>net.sourceforge.plantuml</groupId>
+            <artifactId>plantuml</artifactId>
+            <version>7985</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
