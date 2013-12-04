@@ -13,7 +13,7 @@
   <version>1.7-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>AspectJ compiler Maven Plugin</name>
+  <name>Mojo's AspectJ Maven Plugin</name>
   <description>
     Handles AspectJ usage within Maven.
     Functionality provided is: weaving of aspects (or existing aspects from libraries) with the
