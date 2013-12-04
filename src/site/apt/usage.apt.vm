@@ -6,7 +6,7 @@
 
 Usage
 
-  The AspectJ-Maven-Plugin weaves AspectJ aspects into your classes using the AspectJ compiler ("ajc").
+  This plugin weaves AspectJ aspects into your classes using the AspectJ compiler ("ajc").
   There are typically two ways to package and use aspects in your Maven reactors; either as a standalone
   project where aspects and code are defined within the same Maven project - or as part of a multi-module
   Maven reactor where one/some project(s) contains aspects and other projects within the Maven reactor
@@ -51,9 +51,9 @@ Usage
 
 * Upgrading AspectJ
 
-  The frequency of releases of the aspectj-maven-plugin is lower than AspectJ. 
+  The frequency of releases of this plugin is lower than of AspectJ. 
   If you want to use a different version of AspectJ than ${aspectjVersion}, you also need to upgrade the
-  aspectjtools within the plugin too.
+  aspectjtools within the plugin.
 
 +------------------------------------------
 <project>

@@ -7,7 +7,7 @@
 Weaving already compiled classes
 
   AspectJ gives a possibility to weave already compiled classes in a folder.
-  In order to do this with the AspectJ Plugin you need to specify the folder(s)
+  In order to do this with Mojo's AspectJ Maven Plugin you need to specify the folder(s)
   with the compiled classes via <<<weaveDirectories>>> and execute the plugin after
   maven-compiler-plugin has been run (life cycle phase "process-classes" or later).
 
