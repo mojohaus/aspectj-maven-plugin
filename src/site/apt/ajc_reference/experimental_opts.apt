@@ -9,7 +9,7 @@ AspectJ Compiler reference: non-standard options
   Mojo's AspectJ Maven Plugin delegates the majority of its arguments to the AspectJ Compiler ("ajc"), which is part
   of the AspectJ binary distribution. For convenience, the help text and option reference of the AJC's nonstandard
   options is reproduced below verbatim. Relevant options found in the listing below are mirrored in the
-  options of its goals, as defined in {{../plugin-info.html}}.
+  options of its goals, as defined in the {{{../plugin-info.html}Plugin Documentation}} page.
 
 +------------------------------------------
     AspectJ Compiler 1.7.3 non-standard options:
