@@ -60,7 +60,7 @@ public abstract class AbstractAjcCompiler
      * List holding all accepted values for the {@code complianceLevel} parameter.
      */
     public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES =
-        Arrays.asList( "1.3", "1.4", "1.5", "1.6", "1.7" );
+        Arrays.asList( "1.3", "1.4", "1.5", "1.6", "1.7", "1.8" );
 
     /**
      * List holding all accepted values for the {@code Xajruntimetarget} parameter.
@@ -178,14 +178,14 @@ public abstract class AbstractAjcCompiler
     protected boolean XhasMember;
 
     /**
-     * Specify classfile target setting (1.1 to 1.7) default is 1.2
+     * Specify classfile target setting (1.1 to 1.8) default is 1.2
      *
      * @parameter default-value="${project.build.java.target}"
      */
     protected String target;
 
     /**
-     * Toggle assertions (1.3, 1.4, 1.5, 1.6 or 1.7 - default is 1.4). When using -source 1.3, an assert()
+     * Toggle assertions (1.3, 1.4, 1.5, 1.6, 1.7 or 1.8 - default is 1.4). When using -source 1.3, an assert()
      * statement valid under Java 1.4 will result in a compiler error. When using -source 1.4, treat assert
      * as a keyword and implement assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java
      * 5 language features are permitted. With --source 1.7 or higher Java 7 features are supported.
@@ -196,7 +196,7 @@ public abstract class AbstractAjcCompiler
 
     /**
      * Specify compiler compliance setting.
-     * Defaults to 1.4, with permitted values ("1.3", "1.4", "1.5", "1.6" and "1.7").
+     * Defaults to 1.4, with permitted values ("1.3", "1.4", "1.5", "1.6" and "1.7", "1.8").
      *
      * @parameter default-value="1.4"
      * @see #ACCEPTED_COMPLIANCE_LEVEL_VALUES

@@ -193,7 +193,7 @@ public class AjcReportMojo
     protected boolean verbose;
 
     /**
-     * Specify compiler compliance setting (1.3 to 1.7, default is 1.4)
+     * Specify compiler compliance setting (1.3 to 1.8, default is 1.4)
      * 
      * @parameter default-value="${mojo.java.target}"
      */
@@ -430,7 +430,7 @@ public class AjcReportMojo
     public void setComplianceLevel( String complianceLevel )
     {
         if ( complianceLevel.equals( "1.3" ) || complianceLevel.equals( "1.4" ) || complianceLevel.equals( "1.5" )
-            || complianceLevel.equals( "1.6" ) || complianceLevel.equals( "1.7" ) )
+            || complianceLevel.equals( "1.6" ) || complianceLevel.equals( "1.7" ) || complianceLevel.equals( "1.8" ) )
         {
             ajcOptions.add( "-source" );
             ajcOptions.add( complianceLevel );
