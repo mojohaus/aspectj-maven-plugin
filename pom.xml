@@ -30,7 +30,7 @@
   </licenses>
 
   <properties>
-    <aspectjVersion>1.7.4</aspectjVersion>
+    <aspectjVersion>1.8.0</aspectjVersion>
     <mavenVersion>2.2.1</mavenVersion>
     <changesPluginVersion>2.9</changesPluginVersion>
   </properties>
