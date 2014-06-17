@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>32</version>
+    <version>33</version>
   </parent>
 
   <artifactId>aspectj-maven-plugin</artifactId>
@@ -32,7 +32,7 @@
   <properties>
     <aspectjVersion>1.8.0</aspectjVersion>
     <mavenVersion>2.2.1</mavenVersion>
-    <changesPluginVersion>2.9</changesPluginVersion>
+    <changesPluginVersion>2.10</changesPluginVersion>
   </properties>
 
   <prerequisites>
@@ -193,6 +193,19 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <version>3.3</version>
+          <executions>
+            <execution>
+              <id>help-mojo</id>
+              <goals>
+                <goal>helpmojo</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-changes-plugin</artifactId>
           <version>${changesPluginVersion}</version>
         </plugin>
@@ -216,6 +229,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.17</version>
         <configuration>
           <skip>false</skip>
           <excludes>
