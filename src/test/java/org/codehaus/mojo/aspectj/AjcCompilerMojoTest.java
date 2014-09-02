@@ -61,16 +61,22 @@ public class AjcCompilerMojoTest
             ajcMojo.includes= new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
             ajcMojo.assembleArguments();
             assertTrue("Build should be needed when no previous files are found",ajcMojo.isBuildNeeded());
-          
-            try {
+
+            try
+            {
                 ajcMojo.ajcOptions.clear();
-                ajcMojo.includes = includes; 
+                ajcMojo.includes = includes;
                 ajcMojo.execute();
             }
-            catch(CompilationFailedException cfe) {
-                //we're only testing modifications, don't care if it won't compile
+            catch ( CompilationFailedException cfe )
+            {
+                // we're only testing modifications, don't care if it won't compile
             }
-            
+            catch ( UnsupportedClassVersionError ucve )
+            {
+                // we're only testing modifications, don't care if it won't compile
+            }
+
             ajcMojo.ajcOptions.clear();
             ajcMojo.includes = includes;
             ajcMojo.assembleArguments();
