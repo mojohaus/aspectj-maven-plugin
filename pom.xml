@@ -33,6 +33,7 @@
         <aspectjVersion>1.8.0</aspectjVersion>
         <mavenVersion>2.2.1</mavenVersion>
         <changesPluginVersion>2.10</changesPluginVersion>
+        <mojo.java.target>1.6</mojo.java.target> <!-- to ensure correct JDK requirement om project summary page, otherwise 1.5 would be enough to compile -->
     </properties>
 
     <prerequisites>
@@ -238,6 +239,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.3.1</version>
                 <executions>
                     <execution>
                         <id>enforce-bytecode-version</id>
