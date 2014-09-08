@@ -33,6 +33,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,7 +50,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 /**
  * A helper class for creating classpaths for the compilers and report mojos
- * 
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 public class AjcHelper
@@ -59,8 +60,27 @@ public class AjcHelper
     public static final String DEFAULT_EXCLUDES = "";
 
     /**
+     * List holding all accepted values for the {@code complianceLevel} parameter.
+     */
+    public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES =
+            Arrays.asList("1.3", "1.4", "1.5", "1.6", "1.7", "1.8");
+
+    /**
+     * Checks if the given complianceLevel value is valid.
+     *
+     * @param complianceLevel A complianceLevel
+     * @return {@code true} if the supplied complianceLevel is valid, implying that it is defined within the
+     * {@code ACCEPTED_COMPLIANCE_LEVEL_VALUES} List.
+     * @see #ACCEPTED_COMPLIANCE_LEVEL_VALUES
+     */
+    public static boolean isValidComplianceLevel( String complianceLevel )
+    {
+        return ACCEPTED_COMPLIANCE_LEVEL_VALUES.contains(complianceLevel);
+    }
+
+    /**
      * Constructs AspectJ compiler classpath string
-     * 
+     *
      * @param project the Maven Project
      * @param pluginArtifacts the plugin Artifacts
      * @param outDirs the outputDirectories
@@ -95,7 +115,7 @@ public class AjcHelper
         {
             cp = cp.substring( 0, cp.length() - 1 );
         }
-        
+
         cp = StringUtils.replace( cp, "//", "/" );
         return cp;
     }
@@ -138,7 +158,7 @@ public class AjcHelper
     /**
      * Based on a set of sourcedirs, apply include and exclude statements and
      * returns a set of all the files to be compiled and weaved.
-     * 
+     *
      * @param sourceDirs
      * @param includes
      * @param excludes
@@ -170,13 +190,13 @@ public class AjcHelper
             }
         }
         // We might need to check if some of these files are already included through the weaveDirectories.
-        
+
         return result;
     }
 
     /**
      * Based on a set of weavedirs returns a set of all the files to be weaved.
-     * 
+     *
      * @return
      * @throws MojoExecutionException
      */
@@ -205,13 +225,13 @@ public class AjcHelper
 
     /**
      * Creates a file that can be used as input to the ajc compiler using the -argdfile flag.
-     * Each line in these files should contain one option or filename. 
+     * Each line in these files should contain one option or filename.
      * Comments, as in Java, start with // and extend to the end of the line.
-     * 
+     *
      * @param arguments All arguments passed to ajc in this run
      * @param fileName the filename of the argfile
      * @param outputDir the build output area.
-     * @throws IOException 
+     * @throws IOException
      */
     public static void writeBuildConfigToFile( List<String> arguments, String fileName, File outputDir )
         throws IOException
@@ -232,11 +252,11 @@ public class AjcHelper
 
     /**
      * Reads a build config file, and returns the List of all compiler arguments.
-     * 
+     *
      * @param fileName the filename of the argfile
      * @param outputDir the build output area
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public static List<String> readBuildConfigFile( String fileName, File outputDir )
         throws IOException
@@ -263,7 +283,7 @@ public class AjcHelper
 
     /**
      * Convert a string array to a comma separated list
-     * 
+     *
      * @param strings
      * @return
      */
@@ -289,7 +309,7 @@ public class AjcHelper
      * includeString. The includeString is a comma separated list over files, or
      * directories relative to the specified basedir. Examples of correct
      * listings
-     * 
+     *
      * <pre>
      *         src/main/java/
      *         src/main/java
@@ -297,7 +317,7 @@ public class AjcHelper
      *         src/main/java/com/project/AnAspect.aj
      *         src/main/java/com/project/AnAspect.java
      * </pre>
-     * 
+     *
      * @param input
      * @param basedir the baseDirectory
      * @return a list over all files inn the include string

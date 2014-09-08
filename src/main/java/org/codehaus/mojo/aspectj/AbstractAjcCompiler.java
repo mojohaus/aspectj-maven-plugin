@@ -57,12 +57,6 @@ public abstract class AbstractAjcCompiler
     // Constants
 
     /**
-     * List holding all accepted values for the {@code complianceLevel} parameter.
-     */
-    public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES =
-        Arrays.asList( "1.3", "1.4", "1.5", "1.6", "1.7", "1.8" );
-
-    /**
      * List holding all accepted values for the {@code Xajruntimetarget} parameter.
      */
     public static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList( "1.2", "1.5" );
@@ -199,12 +193,12 @@ public abstract class AbstractAjcCompiler
      * Defaults to 1.4, with permitted values ("1.3", "1.4", "1.5", "1.6" and "1.7", "1.8").
      *
      * @parameter default-value="1.4"
-     * @see #ACCEPTED_COMPLIANCE_LEVEL_VALUES
+     * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
     protected String complianceLevel;
 
     /**
-     * Toggle warningmessages on deprecations
+     * Toggle warning messages on deprecations
      *
      * @parameter
      */
@@ -823,7 +817,7 @@ public abstract class AbstractAjcCompiler
      */
     public void setComplianceLevel( String complianceLevel )
     {
-        if ( ACCEPTED_COMPLIANCE_LEVEL_VALUES.contains( complianceLevel ) )
+        if ( AjcHelper.isValidComplianceLevel( complianceLevel ) )
         {
             ajcOptions.add( "-" + complianceLevel );
         }

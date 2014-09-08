@@ -429,7 +429,7 @@ public class AjcReportMojo
      */
     public void setComplianceLevel( String complianceLevel )
     {
-        if ( AjcCompileMojo.ACCEPTED_COMPLIANCE_LEVEL_VALUES.contains(complianceLevel) )
+        if ( AjcHelper.isValidComplianceLevel( complianceLevel ) )
         {
             ajcOptions.add( "-source" );
             ajcOptions.add( complianceLevel );
