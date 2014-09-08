@@ -235,11 +235,7 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!--
-                We need to include the tools.jar on the classpath for the AspectJ site documentation
-                (i.e. the ajdoc tool). Does this imply problems enforcing a maximum Java bytecode level?
-            -->
-            <!--- plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <executions>
@@ -251,7 +247,10 @@
                         <configuration>
                             <rules>
                                 <enforceBytecodeVersion>
-                                    <maxJdkVersion>1.8</maxJdkVersion>
+                                    <maxJdkVersion>1.6</maxJdkVersion>
+                                    <excludes>
+                                        <exclude>com.sun:tools</exclude>
+                                    </excludes>
                                 </enforceBytecodeVersion>
                             </rules>
                         </configuration>
@@ -264,7 +263,7 @@
                         <version>1.0-beta-2</version>
                     </dependency>
                 </dependencies>
-            </plugin -->
+            </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.17</version>
