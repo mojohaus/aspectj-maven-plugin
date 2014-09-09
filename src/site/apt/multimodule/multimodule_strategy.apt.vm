@@ -248,11 +248,13 @@ public class InternalStateValidationException extends IllegalStateException {
     than a default constructor is called.
 
 ------------------------------------------
-    Why would you not want to perform validation after a default constructor is called? Consider the
-    lifecycle for frameworks which create an object instance by calling the default constructor of a class, followed
-    by poulating its internal state (i.e. its private members) using reflection. Some such frameworks include JAXB
-    and JPA, implying that validation cannot be performed immediately after a default constructor has been run since
-    the state of the object is still empty.
+    Why would you not want to perform validation after a default constructor is called?
+    Consider the lifecycle for frameworks which create an object instance by calling the
+    default constructor of a class, followed by poulating its internal state
+    (i.e. its private members) using reflection.
+    Some such frameworks include JAXB and JPA, implying that validation cannot be performed
+    immediately after a default constructor has been run since the state of
+    the object is still empty.
 ------------------------------------------
 
     The aspect is implemented as a standard Java Class using AspectJ annotations, as shown below:
