@@ -14,7 +14,7 @@ AspectJ Compiler reference: standard options
   For a reference of non-standard AJC options, please refer to {{{./experimental_opts.html}AJC Experimental Options}}.
 
 +------------------------------------------
-    AspectJ Compiler 1.8.0
+    AspectJ Compiler 1.8.2
 
 	    Usage: <options> <source file | @argfile>..
 
@@ -24,25 +24,25 @@ AspectJ Compiler reference: standard options
     	-injars <jarList>   use classes in <jarList> zip files as source
     	                    (<jarList> uses classpath delimiter)
     	                    deprecated - use inpath instead.
-    	-aspectpath <list>  weave aspects in .class files from <list> dirs and jars/zip into sources
-    	                    (<list> uses classpath delimiter)
-    	-outjar <file>      put output classes in zip file <file>
-    	-outxml             generate META-INF/aop.xml
-    	-outxmlfile <file>  specify alternate destination output of -outxml
-    	-argfile <file>     specify line-delimited list of source files
-    	-showWeaveInfo      display information about weaving
-    	-incremental        continuously-running compiler, needs -sourceroots
+        -aspectpath <list>  weave aspects in .class files from <list> dirs and jars/zip into sources
+                            (<list> uses classpath delimiter)
+        -outjar <file>      put output classes in zip file <file>
+	    -outxml             generate META-INF/aop.xml
+	    -outxmlfile <file>  specify alternate destination output of -outxml
+	    -argfile <file>     specify line-delimited list of source files
+	    -showWeaveInfo      display information about weaving
+	    -incremental        continuously-running compiler, needs -sourceroots
     	                    (reads stdin: enter to recompile and 'q' to quit)
     	-sourceroots <dirs> compile all .aj and .java files in <dirs>
     	                    (<dirs> uses classpath delimiter)
-    	-crossrefs          generate .ajsym file into the output directory
-    	-emacssym           generate .ajesym symbol files for emacs support
-    	-Xlint              same as '-Xlint:warning'
-    	-Xlint:<level>      set default level for crosscutting messages
-    	                    (<level> may be ignore, warning, or error)
-    	-Xlintfile <file>   specify properties file to set per-message levels
-    	                    (cf org/aspectj/weaver/XlintDefault.properties)
-    	-X                  print help on non-standard options
+        -crossrefs          generate .ajsym file into the output directory
+        -emacssym           generate .ajesym symbol files for emacs support
+        -Xlint              same as '-Xlint:warning'
+        -Xlint:<level>      set default level for crosscutting messages
+                            (<level> may be ignore, warning, or error)
+        -Xlintfile <file>   specify properties file to set per-message levels
+                            (cf org/aspectj/weaver/XlintDefault.properties)
+        -X                  print help on non-standard options
 
     Standard Eclipse compiler options:
     Options enabled by default are prefixed with '+'

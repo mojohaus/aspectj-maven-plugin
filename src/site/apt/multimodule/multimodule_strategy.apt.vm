@@ -52,7 +52,7 @@ Strategies for using AspectJ in a Maven multi-module reactor
       <!-- | Maven property definitions               -->
       <!-- +========================================= -->
       <properties>
-        <aspectj.runtime.version>1.7.3</aspectj.runtime.version>
+        <aspectj.runtime.version>1.8.2</aspectj.runtime.version>
 
         ...
       </properties>

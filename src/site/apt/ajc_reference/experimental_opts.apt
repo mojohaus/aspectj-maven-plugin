@@ -12,7 +12,7 @@ AspectJ Compiler reference: non-standard options
   options of its goals, as defined in the {{{../plugin-info.html}Plugin Documentation}} page.
 
 +------------------------------------------
-    AspectJ Compiler 1.8.0 non-standard options:
+AspectJ Compiler 1.8.2 non-standard options:
 
 	-XnoInline          dont inline advice
 	-XlazyTjp           create thisJoinPoint objects lazily
