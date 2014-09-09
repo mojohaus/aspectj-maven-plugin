@@ -29,7 +29,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Plugin testcases.
- * 
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  *
  */
@@ -38,7 +38,7 @@ public class AjcCompilerMojoTest
 {
 
     /**
-     * 
+     *
      */
     protected void setUp()
         throws Exception
@@ -57,7 +57,7 @@ public class AjcCompilerMojoTest
             final String[] includes = new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
             ajcMojo.setArgumentFileName("builddef.lst");
             FileUtils.fileDelete(project.getBuild().getDirectory() + ajcMojo.argumentFileName);
-            
+
             ajcMojo.includes= new String[]{"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
             ajcMojo.assembleArguments();
             assertTrue("Build should be needed when no previous files are found",ajcMojo.isBuildNeeded());
@@ -81,14 +81,14 @@ public class AjcCompilerMojoTest
             ajcMojo.includes = includes;
             ajcMojo.assembleArguments();
             assertFalse("A build has compleeted. No modifications done. no new build needed",ajcMojo.isBuildNeeded());
-            
+
             ajcMojo.ajcOptions.clear();
             ajcMojo.includes = includes;
             ajcMojo.setShowWeaveInfo(true);
             ajcMojo.assembleArguments();
             assertTrue("One of the arguments has changed, a new build is needed",ajcMojo.isBuildNeeded());
-                        
-            
+
+
             ajcMojo.ajcOptions.clear();
             ajcMojo.includes = includes;
             ajcMojo.assembleArguments();
@@ -104,8 +104,4 @@ public class AjcCompilerMojoTest
     {
         return "test-project";
     }
-    
-
-
-
 }

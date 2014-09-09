@@ -26,66 +26,164 @@ package org.codehaus.mojo.aspectj;
 
 import org.apache.maven.plugin.logging.Log;
 import org.aspectj.bridge.IMessage;
+import org.aspectj.bridge.ISourceLocation;
 import org.aspectj.bridge.MessageHandler;
 
-/**
- * A Ajc message handler. gets all compiler messages from the ajc compiler, and uses maven plugin logger to print them.
- * 
- * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
- */
-public class MavenMessageHandler
-    extends MessageHandler
-{
-    Log log;
+import java.util.ArrayList;
+import java.util.List;
 
-    /**
-     * Constructs a MessageHandler with a Maven plugin logger.
-     * 
-     * @param log
-     */
-    public MavenMessageHandler( Log log )
-    {
-        super();
-        this.log = log;
+/**
+ * MessageHandler implementation which uses the standard Maven Log to emit
+ * messages from the AJC process. For warnings and error messages from the AJC,
+ * the message detail (containing information about class and line number location)
+ * is emitted as well.
+ *
+ * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ * @author <a href="mailto:lj@jguru.se">Lennart J&ouml;relid</a>, jGuru Europe AB
+ */
+public class MavenMessageHandler extends MessageHandler {
+
+
+    // Internal state
+    private static final List<IMessage.Kind> DEFAULT_DETAIL_TYPES;
+    private Log log;
+    private List<IMessage.Kind> showDetailsForMessageKindList;
+
+    static {
+        DEFAULT_DETAIL_TYPES = new ArrayList<IMessage.Kind>();
+        DEFAULT_DETAIL_TYPES.add(IMessage.ERROR);
+        DEFAULT_DETAIL_TYPES.add(IMessage.WARNING);
+        DEFAULT_DETAIL_TYPES.add(IMessage.FAIL);
     }
 
     /**
-     * Hook into the maven logger.
+     * Constructs a MessageHandler with a Maven plugin logger.
+     *
+     * @param log                           The active Maven Log.
+     * @param showDetailsForMessageKindList A List holding all AJC message types for which this MavenMessageHandler
+     *                                      should emit details onto the Maven log (i.e. class name,
+     *                                      line/row number etc.)
      */
-    public boolean handleMessage( IMessage message )
-    {
-        if ( message.getKind().equals( IMessage.WARNING ) && !isIgnoring( IMessage.WARNING ) )
-        {
-            log.warn( (CharSequence) message.getMessage() );
+    public MavenMessageHandler(final Log log,
+                               final List<IMessage.Kind> showDetailsForMessageKindList) {
+
+        // Check sanity
+        // assert log != null : "Cannot handle null log argument.";
+        // assert showDetailsForMessageKindList != null : "Cannot handle null showDetailsForMessageKindList argument.";
+        if (log == null) {
+            throw new NullPointerException("Cannot handle null log argument.");
         }
-        else if ( message.getKind().equals( IMessage.DEBUG ) && !isIgnoring( IMessage.DEBUG ) )
-        {
-            log.debug( (CharSequence) message.getMessage() );
+        if (showDetailsForMessageKindList == null) {
+            throw new NullPointerException("Cannot handle null showDetailsForMessageKindList argument.");
         }
-        else if ( message.getKind().equals( IMessage.ERROR ) && !isIgnoring( IMessage.ERROR ) )
-        {
-            log.error( (CharSequence) message.getMessage() );
+
+        // Assign internal state
+        this.log = log;
+        this.showDetailsForMessageKindList = showDetailsForMessageKindList;
+
+        if (log.isInfoEnabled()) {
+            log.info("Showing AJC message detail for messages of types: " + showDetailsForMessageKindList);
         }
-        else if ( message.getKind().equals( IMessage.ABORT ) && !isIgnoring( IMessage.ABORT ) )
-        {
-            log.error( (CharSequence) message.getMessage() );
+    }
+
+    /**
+     * Constructs a MessageHandler with a Maven plugin logger, and emitting detailed information for all
+     * AJC message kinds the {@code DEFAULT_DETAIL_TYPES} List.
+     *
+     * @param log The active Maven Log.
+     */
+    public MavenMessageHandler(final Log log) {
+        this(log, DEFAULT_DETAIL_TYPES);
+    }
+
+    /**
+     * Copies output from the supplied message onto the active Maven Log.
+     * If the message type (i.e. {@code message.getKind()}) is listed in the showDetailsForMessageKindList List,
+     * the message is prefixed with location details (Class, row/line number etc.) as well.
+     * <p/>
+     * {@inheritDoc}
+     */
+    public boolean handleMessage(final IMessage message) {
+
+        // Compose the message text
+        final StringBuilder builder = new StringBuilder(message.getMessage());
+        if (isMessageDetailDesired(message)) {
+
+            //
+            // The AJC details are typically delivered on the format [fileName]:[lineNumber]
+            // (i.e. /src/main/java/Clazz.java:16).
+            //
+            // Mimic this, and include the context of the message as well,
+            // including guarding against NPEs.
+            //
+            final ISourceLocation sourceLocation = message.getSourceLocation();
+            final String sourceFile = sourceLocation == null || sourceLocation.getSourceFile() == null
+                    ? "<unknown source file>"
+                    : sourceLocation.getSourceFile().getAbsolutePath();
+            final String context = sourceLocation == null || sourceLocation.getContext() == null
+                    ? ""
+                    : sourceLocation.getContext() + "\n";
+            final String line = sourceLocation == null
+                    ? "<no line information>"
+                    : "" + sourceLocation.getLine();
+
+            builder.append("\n\t")
+                    .append(sourceFile)
+                    .append(":")
+                    .append(line)
+                    .append("\n")
+                    .append(context);
         }
-        else if ( message.getKind().equals( IMessage.FAIL ) && !isIgnoring( IMessage.FAIL ) )
-        {
-            log.error( (CharSequence) message.getMessage() );
+
+        final String messageText = builder.toString();
+
+        if (isNotIgnored(message, IMessage.DEBUG)
+                || isNotIgnored(message, IMessage.INFO)
+                || isNotIgnored(message, IMessage.TASKTAG)) {
+
+            // The DEBUG, INFO, and TASKTAG ajc message kinds are considered Maven Debug messages.
+            log.debug(messageText);
+
+        } else if (isNotIgnored(message, IMessage.WEAVEINFO)) {
+
+            // The WEAVEINFO ajc message kind is considered Maven Info messages.
+            log.info(messageText);
+
+        } else if (isNotIgnored(message, IMessage.WARNING)) {
+
+            // The WARNING ajc message kind is considered Maven Warn messages.
+            log.warn(messageText);
+
+        } else if(isNotIgnored(message, IMessage.ERROR)
+                || isNotIgnored(message, IMessage.ABORT)
+                || isNotIgnored(message, IMessage.FAIL)) {
+
+            // We map ERROR, ABORT, and FAIL ajc message kinds to Maven Error messages.
+            log.error(messageText);
         }
-        else if ( message.getKind().equals( IMessage.INFO ) && !isIgnoring( IMessage.INFO ) )
-        {
-            log.debug( (CharSequence) message.getMessage() );
+
+        // Delegate to normal handling.
+        return super.handleMessage(message);
+    }
+
+    //
+    // Private helpers
+    //
+
+    private boolean isMessageDetailDesired(final IMessage message) {
+
+        if (message != null) {
+            for (IMessage.Kind current : showDetailsForMessageKindList) {
+                if (message.getKind().equals(current)) {
+                    return true;
+                }
+            }
         }
-        else if ( message.getKind().equals( IMessage.WEAVEINFO ) && !isIgnoring( IMessage.WEAVEINFO ) )
-        {
-            log.info( (CharSequence) message.getMessage() );
-        }
-        else if ( message.getKind().equals( IMessage.TASKTAG ) && !isIgnoring( IMessage.TASKTAG ) )
-        {
-            log.debug( (CharSequence) message.getMessage() );
-        }
-        return super.handleMessage( message );
+
+        return false;
+    }
+
+    private boolean isNotIgnored(final IMessage message, final IMessage.Kind messageType) {
+        return message.getKind().equals(messageType) && !isIgnoring(messageType);
     }
 }

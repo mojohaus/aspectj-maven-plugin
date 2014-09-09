@@ -50,16 +50,14 @@ import java.util.Set;
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public abstract class AbstractAjcCompiler
-    extends AbstractAjcMojo
-{
+public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
 
     // Constants
 
     /**
      * List holding all accepted values for the {@code Xajruntimetarget} parameter.
      */
-    public static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList( "1.2", "1.5" );
+    public static final List<String> XAJRUNTIMETARGET_SUPPORTED_VALUES = Arrays.asList("1.2", "1.5");
 
     /**
      * The source directory for the aspects.
@@ -316,7 +314,7 @@ public abstract class AbstractAjcCompiler
      * supply a comma separated list of new joinpoints
      * that can be identified by pointcuts.  Values are:
      * arrayconstruction, synchronization
-     * 
+     *
      * @parameter
      */
     protected String Xjoinpoints;
@@ -440,23 +438,19 @@ public abstract class AbstractAjcCompiler
      *
      * @throws MojoExecutionException
      */
-    @SuppressWarnings( "unchecked" )
-    public void execute()
-        throws MojoExecutionException
-    {
-        if ( isSkip() )
-        {
-            if ( getLog().isInfoEnabled() )
-            {
-                getLog().info( "Skipping execution because of 'skip' option" );
+    @SuppressWarnings("unchecked")
+    public void execute() throws MojoExecutionException {
+
+        if (isSkip()) {
+            if (getLog().isInfoEnabled()) {
+                getLog().info("Skipping execution because of 'skip' option");
             }
             return;
         }
 
         ArtifactHandler artifactHandler = project.getArtifact().getArtifactHandler();
-        if ( !"java".equals( artifactHandler.getLanguage() ) )
-        {
-            getLog().warn( "Not executing aspectJ compiler as the project is not a Java classpath-capable package" );
+        if (!"java".equalsIgnoreCase(artifactHandler.getLanguage())) {
+            getLog().warn("Not executing aspectJ compiler as the project is not a Java classpath-capable package");
             return;
         }
 
@@ -467,86 +461,72 @@ public abstract class AbstractAjcCompiler
         // downstream plugins requiring/assuming that all entries within the compileSourceRoots
         // and testCompileSourceRoots are directories.
         //
-        final File aspectSourcePathDir = FileUtils.resolveFile( basedir, aspectDirectory );
-        final File testAspectSourcePathDir = FileUtils.resolveFile( basedir, testAspectDirectory );
+        final File aspectSourcePathDir = FileUtils.resolveFile(basedir, aspectDirectory);
+        final File testAspectSourcePathDir = FileUtils.resolveFile(basedir, testAspectDirectory);
 
         final String aspectSourcePath = aspectSourcePathDir.getAbsolutePath();
         final String testAspectSourcePath = testAspectSourcePathDir.getAbsolutePath();
 
-        if ( aspectSourcePathDir.exists() && aspectSourcePathDir.isDirectory()
-            && !project.getCompileSourceRoots().contains( aspectSourcePath ) )
-        {
-            getLog().debug( "Adding existing aspectSourcePathDir [" + aspectSourcePath + "] to compileSourceRoots." );
-            project.getCompileSourceRoots().add( aspectSourcePath );
-        }
-        else
-        {
-            getLog().debug( "Not adding non-existent or already added aspectSourcePathDir [" + aspectSourcePath
-                                + "] to compileSourceRoots." );
+        if (aspectSourcePathDir.exists() && aspectSourcePathDir.isDirectory()
+                && !project.getCompileSourceRoots().contains(aspectSourcePath)) {
+            getLog().debug("Adding existing aspectSourcePathDir [" + aspectSourcePath + "] to compileSourceRoots.");
+            project.getCompileSourceRoots().add(aspectSourcePath);
+        } else {
+            getLog().debug("Not adding non-existent or already added aspectSourcePathDir [" + aspectSourcePath
+                    + "] to compileSourceRoots.");
         }
 
-        if ( testAspectSourcePathDir.exists() && testAspectSourcePathDir.isDirectory()
-            && !project.getTestCompileSourceRoots().contains( testAspectSourcePath ) )
-        {
+        if (testAspectSourcePathDir.exists() && testAspectSourcePathDir.isDirectory()
+                && !project.getTestCompileSourceRoots().contains(testAspectSourcePath)) {
             getLog().debug(
-                "Adding existing testAspectSourcePathDir [" + testAspectSourcePath + "] to testCompileSourceRoots." );
-            project.getTestCompileSourceRoots().add( testAspectSourcePath );
-        }
-        else
-        {
-            getLog().debug( "Not adding non-existent or already added testAspectSourcePathDir [" + testAspectSourcePath
-                                + "] to testCompileSourceRoots." );
+                    "Adding existing testAspectSourcePathDir [" + testAspectSourcePath + "] to testCompileSourceRoots.");
+            project.getTestCompileSourceRoots().add(testAspectSourcePath);
+        } else {
+            getLog().debug("Not adding non-existent or already added testAspectSourcePathDir [" + testAspectSourcePath
+                    + "] to testCompileSourceRoots.");
         }
 
         assembleArguments();
 
-        if ( !forceAjcCompile && !hasSourcesToCompile() )
-        {
-            getLog().warn( "No sources found skipping aspectJ compile" );
+        if (!forceAjcCompile && !hasSourcesToCompile()) {
+            getLog().warn("No sources found skipping aspectJ compile");
             return;
         }
 
-        if ( !forceAjcCompile && !isBuildNeeded() )
-        {
-            getLog().info( "No modifications found skipping aspectJ compile" );
+        if (!forceAjcCompile && !isBuildNeeded()) {
+            getLog().info("No modifications found skipping aspectJ compile");
             return;
         }
 
-        if ( getLog().isDebugEnabled() )
-        {
-            StringBuilder command = new StringBuilder( "Running : ajc" );
+        if (getLog().isDebugEnabled()) {
+            StringBuilder command = new StringBuilder("Running : ajc");
 
-            for ( String arg : ajcOptions )
-            {
-                command.append( ' ' ).append( arg );
+            for (String arg : ajcOptions) {
+                command.append(' ').append(arg);
             }
-            getLog().debug( command );
+            getLog().debug(command);
         }
-        try
-        {
+        try {
             getLog().debug(
-                "Compiling and weaving " + resolvedIncludes.size() + " sources to " + getOutputDirectory() );
-            AjcHelper.writeBuildConfigToFile( ajcOptions, argumentFileName, getOutputDirectory() );
+                    "Compiling and weaving " + resolvedIncludes.size() + " sources to " + getOutputDirectory());
+            AjcHelper.writeBuildConfigToFile(ajcOptions, argumentFileName, getOutputDirectory());
             getLog().debug(
-                "Argumentsfile written : " + new File( getOutputDirectory(), argumentFileName ).getAbsolutePath() );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Could not write arguments file to the target area", e );
-        }
-        Main main = new Main();
-        MavenMessageHandler mavenMessageHandler = new MavenMessageHandler( getLog() );
-        main.setHolder( mavenMessageHandler );
-
-        synchronized ( BIG_ASPECTJ_LOCK )
-        {
-            main.runMain( (String[]) ajcOptions.toArray( new String[ajcOptions.size()] ), false );
+                    "Arguments file written : " + new File(getOutputDirectory(), argumentFileName).getAbsolutePath());
+        } catch (IOException e) {
+            throw new MojoExecutionException("Could not write arguments file to the target area", e);
         }
 
-        IMessage[] errors = mavenMessageHandler.getMessages( IMessage.ERROR, true );
-        if ( !proceedOnError && errors.length > 0 )
-        {
-            throw new CompilationFailedException( errors );
+        final Main ajcMain = new Main();
+        MavenMessageHandler mavenMessageHandler = new MavenMessageHandler(getLog());
+        ajcMain.setHolder(mavenMessageHandler);
+
+        synchronized (BIG_ASPECTJ_LOCK) {
+            ajcMain.runMain((String[]) ajcOptions.toArray(new String[ajcOptions.size()]), false);
+        }
+
+        IMessage[] errors = mavenMessageHandler.getMessages(IMessage.ERROR, true);
+        if (!proceedOnError && errors.length > 0) {
+            throw CompilationFailedException.create(errors);
         }
     }
 
@@ -556,108 +536,87 @@ public abstract class AbstractAjcCompiler
      * @throws MojoExecutionException error in configuration
      */
     protected void assembleArguments()
-        throws MojoExecutionException
-    {
-        if ( XhasMember )
-        {
-            ajcOptions.add( "-XhasMember" );
+            throws MojoExecutionException {
+        if (XhasMember) {
+            ajcOptions.add("-XhasMember");
         }
 
         // Add classpath
-        ajcOptions.add( "-classpath" );
-        ajcOptions.add( AjcHelper.createClassPath( project, null, getClasspathDirectories() ) );
+        ajcOptions.add("-classpath");
+        ajcOptions.add(AjcHelper.createClassPath(project, null, getClasspathDirectories()));
 
         // Add boot classpath
-        if ( null != bootclasspath )
-        {
-            ajcOptions.add( "-bootclasspath" );
-            ajcOptions.add( bootclasspath );
+        if (null != bootclasspath) {
+            ajcOptions.add("-bootclasspath");
+            ajcOptions.add(bootclasspath);
         }
 
-        if ( null != Xjoinpoints )
-        {
-            ajcOptions.add( "-Xjoinpoints:" + Xjoinpoints );
+        if (null != Xjoinpoints) {
+            ajcOptions.add("-Xjoinpoints:" + Xjoinpoints);
         }
 
         // Add warn option
-        if ( null != warn )
-        {
-            ajcOptions.add( "-warn:" + warn );
+        if (null != warn) {
+            ajcOptions.add("-warn:" + warn);
         }
 
-        if ( Xset != null && !Xset.isEmpty() )
-        {
-            StringBuilder sb = new StringBuilder( "-Xset:" );
-            for ( Map.Entry<String, String> param : Xset.entrySet() )
-            {
-                sb.append( param.getKey() );
-                sb.append( "=" );
-                sb.append( param.getValue() );
-                sb.append( ',' );
+        if (Xset != null && !Xset.isEmpty()) {
+            StringBuilder sb = new StringBuilder("-Xset:");
+            for (Map.Entry<String, String> param : Xset.entrySet()) {
+                sb.append(param.getKey());
+                sb.append("=");
+                sb.append(param.getValue());
+                sb.append(',');
             }
-            ajcOptions.add( sb.substring( 0, sb.length() - 1 ) );
+            ajcOptions.add(sb.substring(0, sb.length() - 1));
         }
 
         // Add artifacts or directories to weave
         String joinedWeaveDirectories = null;
-        if ( weaveDirectories != null )
-        {
-            joinedWeaveDirectories = StringUtils.join( weaveDirectories, File.pathSeparator );
+        if (weaveDirectories != null) {
+            joinedWeaveDirectories = StringUtils.join(weaveDirectories, File.pathSeparator);
         }
-        addModulesArgument( "-inpath", ajcOptions, weaveDependencies, joinedWeaveDirectories,
-                            "dependencies and/or directories to weave" );
+        addModulesArgument("-inpath", ajcOptions, weaveDependencies, joinedWeaveDirectories,
+                "dependencies and/or directories to weave");
 
         // Add library artifacts
-        addModulesArgument( "-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(),
-                            "an aspect library" );
+        addModulesArgument("-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(),
+                "an aspect library");
 
         // Add xmlConfigured option and argument
-        if ( null != xmlConfigured )
-        {
-            ajcOptions.add( "-xmlConfigured" );
-            ajcOptions.add( xmlConfigured.getAbsolutePath() );
+        if (null != xmlConfigured) {
+            ajcOptions.add("-xmlConfigured");
+            ajcOptions.add(xmlConfigured.getAbsolutePath());
         }
 
         // add target dir argument
-        ajcOptions.add( "-d" );
-        ajcOptions.add( getOutputDirectory().getAbsolutePath() );
+        ajcOptions.add("-d");
+        ajcOptions.add(getOutputDirectory().getAbsolutePath());
 
         // Add all the files to be included in the build,
-        if ( null != ajdtBuildDefFile )
-        {
-            resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile( ajdtBuildDefFile, basedir );
-        }
-        else
-        {
+        if (null != ajdtBuildDefFile) {
+            resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
+        } else {
             resolvedIncludes = getIncludedSources();
         }
-        ajcOptions.addAll( resolvedIncludes );
+        ajcOptions.addAll(resolvedIncludes);
     }
 
     protected Set<String> getIncludedSources()
-        throws MojoExecutionException
-    {
+            throws MojoExecutionException {
         Set<String> result = new HashSet<String>();
-        if ( getJavaSources() == null )
-        {
-            result = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
-        }
-        else
-        {
-            for ( int scannerIndex = 0; scannerIndex < getJavaSources().length; scannerIndex++ )
-            {
+        if (getJavaSources() == null) {
+            result = AjcHelper.getBuildFilesForSourceDirs(getSourceDirectories(), this.includes, this.excludes);
+        } else {
+            for (int scannerIndex = 0; scannerIndex < getJavaSources().length; scannerIndex++) {
                 Scanner scanner = getJavaSources()[scannerIndex];
-                if ( scanner.getBasedir() == null )
-                {
-                    getLog().info( "Source without basedir, skipping it." );
-                }
-                else
-                {
+                if (scanner.getBasedir() == null) {
+                    getLog().info("Source without basedir, skipping it.");
+                } else {
                     scanner.scan();
-                    for ( int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++ )
-                    {
-                        result.add( FileUtils.resolveFile( scanner.getBasedir(),
-                                                           scanner.getIncludedFiles()[fileIndex] ).getAbsolutePath() );
+                    for (int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++) {
+                        result.add(FileUtils.resolveFile(scanner.getBasedir(),
+                                scanner.getIncludedFiles()[fileIndex]).getAbsolutePath());
                     }
                 }
             }
@@ -675,60 +634,50 @@ public abstract class AbstractAjcCompiler
      * @param role
      * @throws MojoExecutionException
      */
-    private void addModulesArgument( final String argument, final List<String> arguments, final Module[] modules,
-                                     final String aditionalpath, final String role )
-        throws MojoExecutionException
-    {
+    private void addModulesArgument(final String argument, final List<String> arguments, final Module[] modules,
+                                    final String aditionalpath, final String role)
+            throws MojoExecutionException {
         StringBuilder buf = new StringBuilder();
 
-        if ( null != aditionalpath )
-        {
-            arguments.add( argument );
-            buf.append( aditionalpath );
+        if (null != aditionalpath) {
+            arguments.add(argument);
+            buf.append(aditionalpath);
         }
-        if ( modules != null && modules.length > 0 )
-        {
-            if ( !arguments.contains( argument ) )
-            {
-                arguments.add( argument );
+        if (modules != null && modules.length > 0) {
+            if (!arguments.contains(argument)) {
+                arguments.add(argument);
             }
 
-            for ( int i = 0; i < modules.length; ++i )
-            {
+            for (int i = 0; i < modules.length; ++i) {
                 Module module = modules[i];
                 // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
                 // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
                 Artifact artifact = null;
-                @SuppressWarnings( "unchecked" ) Set<Artifact> allArtifacts = project.getArtifacts();
-                for ( Artifact art : allArtifacts )
-                {
-                    if ( art.getGroupId().equals( module.getGroupId() ) && art.getArtifactId().equals(
-                        module.getArtifactId() ) && StringUtils.defaultString( module.getClassifier() ).equals(
-                        StringUtils.defaultString( art.getClassifier() ) ) && StringUtils.defaultString(
-                        module.getType(), "jar" ).equals( StringUtils.defaultString( art.getType() ) ) )
-                    {
+                @SuppressWarnings("unchecked") Set<Artifact> allArtifacts = project.getArtifacts();
+                for (Artifact art : allArtifacts) {
+                    if (art.getGroupId().equals(module.getGroupId()) && art.getArtifactId().equals(
+                            module.getArtifactId()) && StringUtils.defaultString(module.getClassifier()).equals(
+                            StringUtils.defaultString(art.getClassifier())) && StringUtils.defaultString(
+                            module.getType(), "jar").equals(StringUtils.defaultString(art.getType()))) {
                         artifact = art;
                         break;
                     }
                 }
-                if ( artifact == null )
-                {
+                if (artifact == null) {
                     throw new MojoExecutionException(
-                        "The artifact " + module.toString() + " referenced in aspectj plugin as " + role
-                            + ", is not found the project dependencies" );
+                            "The artifact " + module.toString() + " referenced in aspectj plugin as " + role
+                                    + ", is not found the project dependencies");
                 }
-                if ( buf.length() != 0 )
-                {
-                    buf.append( File.pathSeparatorChar );
+                if (buf.length() != 0) {
+                    buf.append(File.pathSeparatorChar);
                 }
-                buf.append( artifact.getFile().getPath() );
+                buf.append(artifact.getFile().getPath());
             }
         }
-        if ( buf.length() > 0 )
-        {
+        if (buf.length() > 0) {
             String pathString = buf.toString();
-            arguments.add( pathString );
-            getLog().debug( "Adding " + argument + ": " + pathString );
+            arguments.add(pathString);
+            getLog().debug("Adding " + argument + ": " + pathString);
         }
     }
 
@@ -739,49 +688,39 @@ public abstract class AbstractAjcCompiler
      * @throws MojoExecutionException
      */
     protected boolean isBuildNeeded()
-        throws MojoExecutionException
-    {
+            throws MojoExecutionException {
         File outDir = getOutputDirectory();
-        return hasNoPreviousBuild( outDir ) || hasArgumentsChanged( outDir ) ||
-            hasSourcesChanged( outDir ) || hasNonWeavedClassesChanged( outDir );
+        return hasNoPreviousBuild(outDir) || hasArgumentsChanged(outDir) ||
+                hasSourcesChanged(outDir) || hasNonWeavedClassesChanged(outDir);
 
     }
 
-    private boolean hasNoPreviousBuild( File outDir )
-    {
-        return !FileUtils.resolveFile( outDir, argumentFileName ).exists();
+    private boolean hasNoPreviousBuild(File outDir) {
+        return !FileUtils.resolveFile(outDir, argumentFileName).exists();
     }
 
-    private boolean hasArgumentsChanged( File outDir )
-        throws MojoExecutionException
-    {
-        try
-        {
-            return ( !ajcOptions.equals( AjcHelper.readBuildConfigFile( argumentFileName, outDir ) ) );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Error during reading of previous argumentsfile " );
+    private boolean hasArgumentsChanged(File outDir)
+            throws MojoExecutionException {
+        try {
+            return (!ajcOptions.equals(AjcHelper.readBuildConfigFile(argumentFileName, outDir)));
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error during reading of previous argumentsfile ");
         }
     }
 
     /**
      * Not entirely safe, assembleArguments() must be run
      */
-    private boolean hasSourcesToCompile()
-    {
+    private boolean hasSourcesToCompile() {
         return resolvedIncludes.size() > 0;
     }
 
-    private boolean hasSourcesChanged( File outDir )
-    {
-        long lastBuild = new File( outDir, argumentFileName ).lastModified();
-        for ( String source : resolvedIncludes )
-        {
-            File sourceFile = new File( source );
+    private boolean hasSourcesChanged(File outDir) {
+        long lastBuild = new File(outDir, argumentFileName).lastModified();
+        for (String source : resolvedIncludes) {
+            File sourceFile = new File(source);
             long sourceModified = sourceFile.lastModified();
-            if ( sourceModified >= lastBuild )
-            {
+            if (sourceModified >= lastBuild) {
                 return true;
             }
 
@@ -789,19 +728,15 @@ public abstract class AbstractAjcCompiler
         return false;
     }
 
-    private boolean hasNonWeavedClassesChanged( File outDir )
-        throws MojoExecutionException
-    {
-        if ( weaveDirectories != null && weaveDirectories.length > 0 )
-        {
-            Set<String> weaveSources = AjcHelper.getWeaveSourceFiles( weaveDirectories );
-            long lastBuild = new File( outDir, argumentFileName ).lastModified();
-            for ( String source : weaveSources )
-            {
-                File sourceFile = new File( source );
+    private boolean hasNonWeavedClassesChanged(File outDir)
+            throws MojoExecutionException {
+        if (weaveDirectories != null && weaveDirectories.length > 0) {
+            Set<String> weaveSources = AjcHelper.getWeaveSourceFiles(weaveDirectories);
+            long lastBuild = new File(outDir, argumentFileName).lastModified();
+            for (String source : weaveSources) {
+                File sourceFile = new File(source);
                 long sourceModified = sourceFile.lastModified();
-                if ( sourceModified >= lastBuild )
-                {
+                if (sourceModified >= lastBuild) {
                     return true;
                 }
 
@@ -815,251 +750,190 @@ public abstract class AbstractAjcCompiler
      *
      * @param complianceLevel the complianceLevel
      */
-    public void setComplianceLevel( String complianceLevel )
-    {
-        if ( AjcHelper.isValidComplianceLevel( complianceLevel ) )
-        {
-            ajcOptions.add( "-" + complianceLevel );
+    public void setComplianceLevel(String complianceLevel) {
+        if (AjcHelper.isValidComplianceLevel(complianceLevel)) {
+            ajcOptions.add("-" + complianceLevel);
         }
     }
 
-    public void setDeprecation( boolean deprecation )
-    {
-        if ( deprecation )
-        {
-            ajcOptions.add( "-deprecation" );
+    public void setDeprecation(boolean deprecation) {
+        if (deprecation) {
+            ajcOptions.add("-deprecation");
         }
     }
 
-    public void setEmacssym( boolean emacssym )
-    {
-        if ( emacssym )
-        {
-            ajcOptions.add( "-emacssym" );
+    public void setEmacssym(boolean emacssym) {
+        if (emacssym) {
+            ajcOptions.add("-emacssym");
         }
 
     }
 
-    public void setCrossrefs( boolean crossrefs )
-    {
-        if ( crossrefs )
-        {
-            ajcOptions.add( "-crossrefs" );
+    public void setCrossrefs(boolean crossrefs) {
+        if (crossrefs) {
+            ajcOptions.add("-crossrefs");
         }
     }
 
-    public void setEncoding( String encoding )
-    {
-        ajcOptions.add( "-encoding" );
-        ajcOptions.add( encoding );
+    public void setEncoding(String encoding) {
+        ajcOptions.add("-encoding");
+        ajcOptions.add(encoding);
     }
 
-    public void setNoImportError( boolean noImportError )
-    {
-        if ( noImportError )
-        {
-            ajcOptions.add( "-noImportError" );
+    public void setNoImportError(boolean noImportError) {
+        if (noImportError) {
+            ajcOptions.add("-noImportError");
         }
 
     }
 
-    public void setOutxml( boolean outxml )
-    {
-        if ( outxml )
-        {
-            ajcOptions.add( "-outxml" );
+    public void setOutxml(boolean outxml) {
+        if (outxml) {
+            ajcOptions.add("-outxml");
         }
     }
 
-    public void setOutxmlfile( String outxmlfile )
-    {
-        ajcOptions.add( "-outxmlfile" );
-        ajcOptions.add( outxmlfile );
+    public void setOutxmlfile(String outxmlfile) {
+        ajcOptions.add("-outxmlfile");
+        ajcOptions.add(outxmlfile);
     }
 
-    public void setPreserveAllLocals( boolean preserveAllLocals )
-    {
-        if ( preserveAllLocals )
-        {
-            ajcOptions.add( "-preserveAllLocals" );
+    public void setPreserveAllLocals(boolean preserveAllLocals) {
+        if (preserveAllLocals) {
+            ajcOptions.add("-preserveAllLocals");
         }
 
     }
 
-    public void setProceedOnError( boolean proceedOnError )
-    {
-        if ( proceedOnError )
-        {
-            ajcOptions.add( "-proceedOnError" );
+    public void setProceedOnError(boolean proceedOnError) {
+        if (proceedOnError) {
+            ajcOptions.add("-proceedOnError");
         }
         this.proceedOnError = proceedOnError;
     }
 
-    public void setReferenceInfo( boolean referenceInfo )
-    {
-        if ( referenceInfo )
-        {
-            ajcOptions.add( "-referenceInfo" );
+    public void setReferenceInfo(boolean referenceInfo) {
+        if (referenceInfo) {
+            ajcOptions.add("-referenceInfo");
         }
     }
 
-    public void setRepeat( int repeat )
-    {
-        ajcOptions.add( "-repeat" );
-        ajcOptions.add( "" + repeat );
+    public void setRepeat(int repeat) {
+        ajcOptions.add("-repeat");
+        ajcOptions.add("" + repeat);
     }
 
-    public void setShowWeaveInfo( boolean showWeaveInfo )
-    {
-        if ( showWeaveInfo )
-        {
-            ajcOptions.add( "-showWeaveInfo" );
+    public void setShowWeaveInfo(boolean showWeaveInfo) {
+        if (showWeaveInfo) {
+            ajcOptions.add("-showWeaveInfo");
         }
     }
 
-    public void setTarget( String target )
-    {
-        ajcOptions.add( "-target" );
-        ajcOptions.add( target );
+    public void setTarget(String target) {
+        ajcOptions.add("-target");
+        ajcOptions.add(target);
     }
 
-    public void setSource( String source )
-    {
-        ajcOptions.add( "-source" );
-        ajcOptions.add( source );
+    public void setSource(String source) {
+        ajcOptions.add("-source");
+        ajcOptions.add(source);
     }
 
-    public void setVerbose( boolean verbose )
-    {
-        if ( verbose )
-        {
-            ajcOptions.add( "-verbose" );
+    public void setVerbose(boolean verbose) {
+        if (verbose) {
+            ajcOptions.add("-verbose");
         }
     }
 
-    public void setXhasMember( boolean xhasMember )
-    {
+    public void setXhasMember(boolean xhasMember) {
         XhasMember = xhasMember;
     }
 
-    public void setXlint( String xlint )
-    {
-        ajcOptions.add( "-Xlint:" + xlint );
+    public void setXlint(String xlint) {
+        ajcOptions.add("-Xlint:" + xlint);
     }
 
-    public void setXset( Map<String, String> xset )
-    {
+    public void setXset(Map<String, String> xset) {
         this.Xset = xset;
     }
 
-    public void setXlintfile( File xlintfile )
-    {
-        try
-        {
+    public void setXlintfile(File xlintfile) {
+        try {
             final String prefix = "Xlintfile parameter invalid: ";
             final String path = xlintfile.getCanonicalPath();
-            if ( !xlintfile.exists() )
-            {
-                getLog().warn( prefix + " file [" + path + "] does not exist" );
+            if (!xlintfile.exists()) {
+                getLog().warn(prefix + " file [" + path + "] does not exist");
+            } else if (xlintfile.isDirectory()) {
+                getLog().warn(prefix + " given path [" + path + "] is a directory.");
+            } else if (!path.trim().toLowerCase().endsWith(".properties")) {
+                getLog().warn(prefix + " must be a .properties file");
+            } else {
+                ajcOptions.add("-Xlintfile");
+                ajcOptions.add(path);
             }
-            else if ( xlintfile.isDirectory() )
-            {
-                getLog().warn( prefix + " given path [" + path + "] is a directory." );
-            }
-            else if ( !path.trim().toLowerCase().endsWith( ".properties" ) )
-            {
-                getLog().warn( prefix + " must be a .properties file" );
-            }
-            else
-            {
-                ajcOptions.add( "-Xlintfile" );
-                ajcOptions.add( path );
-            }
-        }
-        catch ( IOException e )
-        {
-            getLog().error( "IOException while setting Xlintfile option", e );
+        } catch (IOException e) {
+            getLog().error("IOException while setting Xlintfile option", e);
         }
     }
 
-    public void setXnoInline( boolean xnoInline )
-    {
-        if ( xnoInline )
-        {
-            ajcOptions.add( "-XnoInline" );
+    public void setXnoInline(boolean xnoInline) {
+        if (xnoInline) {
+            ajcOptions.add("-XnoInline");
         }
     }
 
-    public void setXreweavable( boolean xreweavable )
-    {
-        if ( xreweavable )
-        {
-            ajcOptions.add( "-Xreweavable" );
+    public void setXreweavable(boolean xreweavable) {
+        if (xreweavable) {
+            ajcOptions.add("-Xreweavable");
         }
     }
 
-    public void setXnotReweavable( boolean xnotReweavable )
-    {
-        if ( xnotReweavable )
-        {
-            ajcOptions.add( "-XnotReweavable" );
+    public void setXnotReweavable(boolean xnotReweavable) {
+        if (xnotReweavable) {
+            ajcOptions.add("-XnotReweavable");
         }
     }
 
-    public void setXserializableAspects( boolean xserializableAspects )
-    {
-        if ( xserializableAspects )
-        {
-            ajcOptions.add( "-XserializableAspects" );
+    public void setXserializableAspects(boolean xserializableAspects) {
+        if (xserializableAspects) {
+            ajcOptions.add("-XserializableAspects");
         }
     }
 
-    public void setXaddSerialVersionUID( boolean xaddSerialVersionUID )
-    {
-        if ( xaddSerialVersionUID )
-        {
-            ajcOptions.add( "-XaddSerialVersionUID" );
+    public void setXaddSerialVersionUID(boolean xaddSerialVersionUID) {
+        if (xaddSerialVersionUID) {
+            ajcOptions.add("-XaddSerialVersionUID");
         }
     }
 
-    public void setXterminateAfterCompilation( boolean xterminateAfterCompilation )
-    {
-        if ( xterminateAfterCompilation )
-        {
-            ajcOptions.add( "-XterminateAfterCompilation" );
+    public void setXterminateAfterCompilation(boolean xterminateAfterCompilation) {
+        if (xterminateAfterCompilation) {
+            ajcOptions.add("-XterminateAfterCompilation");
         }
     }
 
-    public void setXajruntimetarget( String xajruntimetarget )
-    {
-        if ( XAJRUNTIMETARGET_SUPPORTED_VALUES.contains( xajruntimetarget ) )
-        {
-            ajcOptions.add( "-Xajruntimetarget:" + xajruntimetarget );
-        }
-        else
-        {
+    public void setXajruntimetarget(String xajruntimetarget) {
+        if (XAJRUNTIMETARGET_SUPPORTED_VALUES.contains(xajruntimetarget)) {
+            ajcOptions.add("-Xajruntimetarget:" + xajruntimetarget);
+        } else {
             getLog().warn(
-                "Incorrect Xajruntimetarget value specified. Supported: " + XAJRUNTIMETARGET_SUPPORTED_VALUES );
+                    "Incorrect Xajruntimetarget value specified. Supported: " + XAJRUNTIMETARGET_SUPPORTED_VALUES);
         }
     }
 
-    public void setBootClassPath( String bootclasspath )
-    {
+    public void setBootClassPath(String bootclasspath) {
         this.bootclasspath = bootclasspath;
     }
 
-    public void setXjoinpoints( String xjoinpoints )
-    {
+    public void setXjoinpoints(String xjoinpoints) {
         this.Xjoinpoints = xjoinpoints;
     }
 
-    public void setWarn( String warn )
-    {
+    public void setWarn(String warn) {
         this.warn = warn;
     }
 
-    public void setArgumentFileName( String argumentFileName )
-    {
+    public void setArgumentFileName(String argumentFileName) {
         this.argumentFileName = argumentFileName;
     }
 }
