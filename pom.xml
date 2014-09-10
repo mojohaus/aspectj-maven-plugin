@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -10,7 +9,7 @@
     </parent>
 
     <artifactId>aspectj-maven-plugin</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.7</version>
     <packaging>maven-plugin</packaging>
 
     <name>Mojo's AspectJ Maven Plugin</name>
@@ -41,10 +40,10 @@
     </prerequisites>
 
     <scm>
-        <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/
+        <connection>scm:svn:http://svn.codehaus.org/mojo/tags/aspectj-maven-plugin-1.7</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/aspectj-maven-plugin-1.7
         </developerConnection>
-        <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/aspectj-maven-plugin</url>
+        <url>http://fisheye.codehaus.org/browse/mojo/tags/aspectj-maven-plugin-1.7</url>
     </scm>
     <issueManagement>
         <system>jira</system>
