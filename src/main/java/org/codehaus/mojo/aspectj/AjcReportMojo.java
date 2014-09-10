@@ -24,14 +24,6 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Set;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.doxia.siterenderer.Renderer;
@@ -42,11 +34,20 @@ import org.apache.maven.reporting.MavenReportException;
 import org.aspectj.tools.ajdoc.Main;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
+
 /**
- * Creates a ajdoc report in html format. requiresDependencyResolution compile
- * 
- * @description A Maven 2.0 ajdoc report
+ * Creates an AspectJ HTML report using the {@code ajdoc} tool and format.
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
+ * @requiresDependencyResolution compile
+ * @description A Maven 2.0 ajdoc report
  * @goal aspectj-report
  */
 public class AjcReportMojo
@@ -54,21 +55,21 @@ public class AjcReportMojo
 {
     /**
      * The source directory for the aspects
-     * 
+     *
      * @parameter default-value="src/main/aspect"
      */
     private String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
-     * 
+     *
      * @parameter default-value="src/test/aspect"
      */
     private String testAspectDirectory = "src/test/aspect";
 
     /**
      * The maven project.
-     * 
+     *
      * @parameter default-value="${project}"
      * @required
      * @readonly
@@ -77,7 +78,7 @@ public class AjcReportMojo
 
     /**
      * The basedir of the project.
-     * 
+     *
      * @parameter default-value="${basedir}"
      * @required
      * @readonly
@@ -86,7 +87,7 @@ public class AjcReportMojo
 
     /**
      * The output directory for the report.
-     * 
+     *
      * @parameter default-value="${project.reporting.outputDirectory}/aspectj-report"
      * @required
      */
@@ -117,42 +118,42 @@ public class AjcReportMojo
 
     /**
      * Where to find the ajdt build definition file. <i>If set this will override the use of project sourcedirs</i>.
-     * 
+     *
      * @parameter
      */
     private String ajdtBuildDefFile;
 
     /**
      * Doxia Site Renderer.
-     * 
+     *
      * @component
      */
     private Renderer siteRenderer;
 
     /**
      * Shows only package, protected, and public classes and members.
-     * 
+     *
      * @parameter
      */
     protected boolean packageScope;
 
     /**
      * Shows only protected and public classes and members. This is the default.
-     * 
+     *
      * @parameter
      */
     protected boolean protectedScope;
 
     /**
      * Shows all classes and members.
-     * 
+     *
      * @parameter
      */
     protected boolean privateScope;
 
     /**
      * Shows only public classes and members.
-     * 
+     *
      * @parameter
      */
     protected boolean publicScope;
@@ -168,7 +169,7 @@ public class AjcReportMojo
      * about the file specified by path/filename, see overview comment file.Note that the overview page is created only
      * if you pass into javadoc two or more package names. For further explanation, see HTML Frames.) The title on the
      * overview page is set by -doctitle.
-     * 
+     *
      * @parameter
      */
     protected String overview;
@@ -178,7 +179,7 @@ public class AjcReportMojo
      * centered, level-one heading directly beneath the upper navigation bar. The title may contain html tags and white
      * space, though if it does, it must be enclosed in quotes. Any internal quotation marks within title may have to be
      * escaped.
-     * 
+     *
      * @parameter
      */
     protected String doctitle;
@@ -187,14 +188,14 @@ public class AjcReportMojo
      * Provides more detailed messages while javadoc is running. Without the verbose option, messages appear for loading
      * the source files, generating the documentation (one message per source file), and sorting. The verbose option
      * causes the printing of additional messages specifying the number of milliseconds to parse each java source file.
-     * 
+     *
      * @parameter
      */
     protected boolean verbose;
 
     /**
      * Specify compiler compliance setting (1.3 to 1.8, default is 1.5)
-     * 
+     *
      * @parameter default-value="${mojo.java.target}"
      */
     protected String complianceLevel;
@@ -315,7 +316,7 @@ public class AjcReportMojo
     }
 
     /**
-     * 
+     *
      */
     public String getOutputName()
     {
@@ -323,7 +324,7 @@ public class AjcReportMojo
     }
 
     /**
-     * 
+     *
      */
     public String getName( Locale locale )
     {
@@ -331,7 +332,7 @@ public class AjcReportMojo
     }
 
     /**
-     * 
+     *
      */
     public String getDescription( Locale locale )
     {
@@ -443,7 +444,7 @@ public class AjcReportMojo
 
     /**
      * Gets the resource bundle for the report text.
-     * 
+     *
      * @param locale The locale for the report, must not be <code>null</code>.
      * @return The resource bundle for the requested locale.
      */
