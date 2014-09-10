@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>aspectj-maven-plugin</artifactId>
-    <version>1.7</version>
+    <version>1.8-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Mojo's AspectJ Maven Plugin</name>
@@ -40,10 +40,10 @@
     </prerequisites>
 
     <scm>
-        <connection>scm:svn:http://svn.codehaus.org/mojo/tags/aspectj-maven-plugin-1.7</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/mojo/tags/aspectj-maven-plugin-1.7
+        <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/
         </developerConnection>
-        <url>http://fisheye.codehaus.org/browse/mojo/tags/aspectj-maven-plugin-1.7</url>
+        <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/aspectj-maven-plugin</url>
     </scm>
     <issueManagement>
         <system>jira</system>
