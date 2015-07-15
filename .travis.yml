@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - oraclejdk7
+  - oraclejdk8
+install: "mvn --show-version --errors --batch-mode validate dependency:go-offline"
+script: "mvn --show-version --errors --batch-mode clean package site"
+branches:
+    except:
+        - gh-pages
+notifications:
+    email:
+        - david@davidkarlsen.com
