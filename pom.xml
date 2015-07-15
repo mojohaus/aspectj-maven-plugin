@@ -40,10 +40,9 @@
     </prerequisites>
 
     <scm>
-        <connection>scm:svn:http://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/mojo/trunk/mojo/aspectj-maven-plugin/
-        </developerConnection>
-        <url>http://fisheye.codehaus.org/browse/mojo/trunk/mojo/aspectj-maven-plugin</url>
+        <connection>https://github.com/mojohaus/aspectj-maven-plugin</connection>
+        <developerConnection>scm:git:ssh://git@github.com/mojohaus/aspectj-maven-plugin.git</developerConnection>
+        <url>https://github.com/mojohaus/aspectj-maven-plugin</url>
     </scm>
     <issueManagement>
         <system>jira</system>
