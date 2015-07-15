@@ -29,7 +29,7 @@
     </licenses>
 
     <properties>
-        <aspectjVersion>1.8.2</aspectjVersion>
+        <aspectjVersion>1.8.6</aspectjVersion>
         <mavenVersion>2.2.1</mavenVersion>
         <changesPluginVersion>2.10</changesPluginVersion>
         <mojo.java.target>1.6</mojo.java.target> <!-- to ensure correct JDK requirement om project summary page, otherwise 1.5 would be enough to compile -->
