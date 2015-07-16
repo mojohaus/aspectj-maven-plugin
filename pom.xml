@@ -40,7 +40,7 @@
     </prerequisites>
 
     <scm>
-        <connection>https://github.com/mojohaus/aspectj-maven-plugin</connection>
+        <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin</connection>
         <developerConnection>scm:git:ssh://git@github.com/mojohaus/aspectj-maven-plugin.git</developerConnection>
         <url>https://github.com/mojohaus/aspectj-maven-plugin</url>
     </scm>
