@@ -27,6 +27,7 @@ package org.codehaus.mojo.aspectj;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.tools.ajc.Main;
 import org.codehaus.plexus.util.FileUtils;
@@ -62,15 +63,15 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     /**
      * The source directory for the aspects.
      *
-     * @parameter default-value="src/main/aspect"
      */
+    @Parameter( defaultValue = "src/main/aspect" )
     protected String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects.
      *
-     * @parameter default-value="src/test/aspect"
      */
+    @Parameter( defaultValue = "src/test/aspect" )
     protected String testAspectDirectory = "src/test/aspect";
 
     /**
@@ -78,8 +79,8 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * specified all .java and .aj files in the project source directories, or directories specified by the ajdtDefFile
      * property are included.
      *
-     * @parameter
      */
+    @Parameter
     protected String[] includes;
 
     /**
@@ -87,36 +88,36 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * specified all .java and .aj files in the project source directories, or directories specified by the ajdtDefFile
      * property are included.
      *
-     * @parameter
      */
+    @Parameter
     protected String[] excludes;
 
     /**
      * Where to find the ajdt build definition file. <i>If set this will override the use of project sourcedirs</i>.
      *
-     * @parameter
      */
+    @Parameter
     protected String ajdtBuildDefFile;
 
     /**
      * Generate aop.xml file for load-time weaving with default name (/META-INF/aop.xml).
      *
-     * @parameter
      */
+    @Parameter
     protected boolean outxml;
 
     /**
      * Generate aop.xml file for load-time weaving with custom name.
      *
-     * @parameter
      */
+    @Parameter
     protected String outxmlfile;
 
     /**
      * Generate .ajesym symbol files for emacs support.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean emacssym;
 
     /**
@@ -130,24 +131,24 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * &lt;/configuration&gt;
      * </pre>
      *
-     * @parameter
      * @since 1.5
      */
+    @Parameter
     protected Map<String, String> Xset;
 
     /**
      * generate .ajsym file into the output directory
      *
-     * @parameter
      */
+    @Parameter
     protected boolean crossrefs;
 
     /**
      * Set default level for messages about potential programming mistakes in crosscutting code. {level} may be ignore,
      * warning, or error. This overrides entries in org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar.
      *
-     * @parameter
      */
+    @Parameter
     protected String Xlint;
 
     /**
@@ -155,8 +156,8 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * PropertyFile is a path to a Java .properties file that takes the same property names and values as
      * org/aspectj/weaver/XlintDefault.properties from aspectjtools.jar, which it also overrides.
      *
-     * @parameter
      */
+    @Parameter
     protected File Xlintfile;
 
     /**
@@ -164,16 +165,16 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * within declare statements. It's experimental and undocumented because it may change, and because it doesn't yet
      * take into account ITDs.
      *
-     * @parameter
      * @since 1.3
      */
+    @Parameter
     protected boolean XhasMember;
 
     /**
      * Specify classfile target setting (1.1 to 1.8) default is 1.2
      *
-     * @parameter default-value="${project.build.java.target}"
      */
+    @Parameter( defaultValue = "${project.build.java.target}" )
     protected String target;
 
     /**
@@ -182,80 +183,80 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * as a keyword and implement assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java
      * 5 language features are permitted. With --source 1.7 or higher Java 7 features are supported.
      *
-     * @parameter default-value="${mojo.java.target}"
      */
+    @Parameter( defaultValue = "${mojo.java.target}" )
     protected String source;
 
     /**
      * Specify compiler compliance setting.
      * Defaults to 1.4, with permitted values ("1.3", "1.4", "1.5", "1.6" and "1.7", "1.8").
      *
-     * @parameter default-value="1.4"
      * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
+    @Parameter( defaultValue = "1.4" )
     protected String complianceLevel;
 
     /**
      * Toggle warning messages on deprecations
      *
-     * @parameter
      */
+    @Parameter
     protected boolean deprecation;
 
     /**
      * Emit no errors for unresolved imports;
      *
-     * @parameter
      */
+    @Parameter
     protected boolean noImportError;
 
     /**
      * Keep compiling after error, dumping class files with problem methods
      *
-     * @parameter
      */
+    @Parameter
     protected boolean proceedOnError;
 
     /**
      * Preserve all local variables during code generation (to facilitate debugging).
      *
-     * @parameter
      */
+    @Parameter
     protected boolean preserveAllLocals;
 
     /**
      * Compute reference information.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean referenceInfo;
 
     /**
      * Specify default source encoding format.
      *
-     * @parameter property="project.build.sourceEncoding"
      */
+    @Parameter( property = "project.build.sourceEncoding" )
     protected String encoding;
 
     /**
      * Emit messages about accessed/processed compilation units
      *
-     * @parameter
      */
+    @Parameter
     protected boolean verbose;
 
     /**
      * Emit messages about weaving
      *
-     * @parameter
      */
+    @Parameter
     protected boolean showWeaveInfo;
 
     /**
      * Repeat compilation process N times (typically to do performance analysis).
      *
-     * @parameter
      */
+    @Parameter
     protected int repeat;
 
     /**
@@ -263,51 +264,55 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * subject to the restriction that on attempting a reweave all the types that advised the woven type must be
      * accessible.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean Xreweavable;
 
     /**
      * (Experimental) Create class files that can't be subsequently rewoven by AspectJ.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean XnotReweavable;
 
     /**
      * (Experimental) do not inline around advice
      *
-     * @parameter
      */
+    @Parameter
     protected boolean XnoInline;
 
     /**
      * (Experimental) Normally it is an error to declare aspects {@link Serializable}. This option removes that restriction.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean XserializableAspects;
 
     /**
      * Causes the compiler to calculate and add the SerialVersionUID field to any type implementing {@link Serializable} that is
      * affected by an aspect. The field is calculated based on the class before weaving has taken place.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean XaddSerialVersionUID;
 
     /**
      * Causes compiler to terminate before weaving
      *
-     * @parameter
      */
+    @Parameter
     protected boolean XterminateAfterCompilation;
 
     /**
      * (Experimental) Allows code to be generated that targets a 1.2 or a 1.5 level AspectJ runtime (default 1.5)
      *
+<<<<<<< HEAD
      * @parameter default-value="1.5"
+=======
+>>>>>>> Switch from javadoc style to annotations for maven parameters etc
      */
+    @Parameter( defaultValue = "1.5" )
     protected String Xajruntimetarget;
 
     /**
@@ -317,6 +322,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      *
      * @parameter
      */
+    @Parameter
     protected String Xjoinpoints;
 
     /**
@@ -326,6 +332,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      *
      * @parameter
      */
+    @Parameter
     protected String bootclasspath;
 
     /**
@@ -352,9 +359,9 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * <dd>suppress all compiler warnings</dd>
      * </dl>
      *
-     * @parameter
      * @see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc">Eclipse AJC reference</a>
      */
+    @Parameter
     protected String warn;
 
     /**
@@ -377,15 +384,15 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      *     </code>
      * </pre>
      *
-     * @parameter default-value="builddef.lst"
      */
+    @Parameter( defaultValue = "builddef.lst" )
     protected String argumentFileName = "builddef.lst";
 
     /**
      * Forces re-compilation, regardless of whether the compiler arguments or the sources have changed.
      *
-     * @parameter default-value="false"
      */
+    @Parameter( defaultValue = "false" )
     protected boolean forceAjcCompile;
 
     /**

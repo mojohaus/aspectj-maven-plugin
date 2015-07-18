@@ -28,6 +28,10 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
@@ -46,60 +50,52 @@ import java.util.Set;
  * Creates an AspectJ HTML report using the {@code ajdoc} tool and format.
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
- * @requiresDependencyResolution compile
  * @description A Maven 2.0 ajdoc report
- * @goal aspectj-report
  */
+@Mojo( name="aspectj-report", requiresDependencyResolution = ResolutionScope.COMPILE )
 public class AjcReportMojo
     extends AbstractMavenReport
 {
     /**
      * The source directory for the aspects
      *
-     * @parameter default-value="src/main/aspect"
      */
+    @Parameter( defaultValue = "src/main/aspect" )
     private String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
      *
-     * @parameter default-value="src/test/aspect"
      */
+    @Parameter( defaultValue = "src/test/aspect" )
     private String testAspectDirectory = "src/test/aspect";
 
     /**
      * The maven project.
      *
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter( readonly = true, required = true, defaultValue = "${project}" )
     private MavenProject project;
 
     /**
      * The basedir of the project.
      *
-     * @parameter default-value="${basedir}"
-     * @required
-     * @readonly
      */
+    @Parameter( readonly = true, required = true, defaultValue = "${basedir}" )
     private File basedir;
 
     /**
      * The output directory for the report.
      *
-     * @parameter default-value="${project.reporting.outputDirectory}/aspectj-report"
-     * @required
      */
+    @Parameter( required = true, defaultValue = "${project.reporting.outputDirectory}/aspectj-report" )
     private File outputDirectory;
 
     /**
      * The build directory (normally "${basedir}/target").
      *
-     * @parameter default-value="${project.build.directory}"
-     * @required
-     * @readonly
      */
+    @Parameter( required = true, readonly = true, defaultValue = "${project.build.directory}" )
     private File buildDirectory;
 
     /**
@@ -119,43 +115,43 @@ public class AjcReportMojo
     /**
      * Where to find the ajdt build definition file. <i>If set this will override the use of project sourcedirs</i>.
      *
-     * @parameter
      */
+    @Parameter
     private String ajdtBuildDefFile;
 
     /**
      * Doxia Site Renderer.
      *
-     * @component
      */
+    @Component
     private Renderer siteRenderer;
 
     /**
      * Shows only package, protected, and public classes and members.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean packageScope;
 
     /**
      * Shows only protected and public classes and members. This is the default.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean protectedScope;
 
     /**
      * Shows all classes and members.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean privateScope;
 
     /**
      * Shows only public classes and members.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean publicScope;
 
     /**
@@ -170,8 +166,8 @@ public class AjcReportMojo
      * if you pass into javadoc two or more package names. For further explanation, see HTML Frames.) The title on the
      * overview page is set by -doctitle.
      *
-     * @parameter
      */
+    @Parameter
     protected String overview;
 
     /**
@@ -180,8 +176,8 @@ public class AjcReportMojo
      * space, though if it does, it must be enclosed in quotes. Any internal quotation marks within title may have to be
      * escaped.
      *
-     * @parameter
      */
+    @Parameter
     protected String doctitle;
 
     /**
@@ -189,15 +185,15 @@ public class AjcReportMojo
      * the source files, generating the documentation (one message per source file), and sorting. The verbose option
      * causes the printing of additional messages specifying the number of milliseconds to parse each java source file.
      *
-     * @parameter
      */
+    @Parameter
     protected boolean verbose;
 
     /**
      * Specify compiler compliance setting (1.3 to 1.8, default is 1.5)
      *
-     * @parameter default-value="${mojo.java.target}"
      */
+    @Parameter( defaultValue = "${mojo.java.target}" )
     protected String complianceLevel;
 
     /**
@@ -206,10 +202,8 @@ public class AjcReportMojo
     private List<String> ajcOptions = new ArrayList<String>();
 
     /**
-     * @parameter default-value="${plugin.artifacts}"
-     * @required
-     * @readonly
      */
+    @Parameter( readonly = true, required = true, defaultValue = "${plugin.artifacts}" )
     private List<Artifact> pluginArtifacts;
 
     /**

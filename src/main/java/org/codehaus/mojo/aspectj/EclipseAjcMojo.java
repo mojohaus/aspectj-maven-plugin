@@ -26,6 +26,8 @@ package org.codehaus.mojo.aspectj;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,9 +56,9 @@ import java.util.Set;
  *
  * @author Juraj Burian
  * @version $Revision$ by $Author$ (at)goal eclipse
- * @requiresDependencyResolution compile
  * @description create eclipse configuration of aspectJ
  */
+@Mojo( name="EclipseAjcMojo", requiresDependencyResolution = ResolutionScope.COMPILE )
 public class EclipseAjcMojo
     extends AbstractAjcMojo
 {

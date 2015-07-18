@@ -28,19 +28,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
 
 /**
  * Weaves all test classes.
  * 
- * @goal test-compile
- * @requiresDependencyResolution test
- * @phase test-compile
  * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
- * @threadSafe
  */
+@Mojo( name="test-compile", threadSafe = true, defaultPhase = LifecyclePhase.TEST_COMPILE, requiresDependencyResolution = ResolutionScope.TEST )
 public class AjcTestCompileMojo
     extends AbstractAjcCompiler
 {
@@ -49,25 +50,23 @@ public class AjcTestCompileMojo
      * <strong>Note!</strong> This will make all classes in main source dir appear in the
      * test output dir also, potentially overwriting test resources.
      *
-     * @parameter default-value="false"
      */
+    @Parameter( defaultValue = "false" )
     protected boolean weaveMainSourceFolder = false;
 
     /**
      * Flag to indicate if aspects in the the main source dirs
      * should be a part of the compile process
      *
-     * @parameter default-value="true"
      */
+    @Parameter( defaultValue = "true" )
     protected boolean weaveWithAspectsInMainSourceFolder = true;
     
     /**
      * The directory where compiled test classes go.
      *
-     * @parameter default-value="${project.build.testOutputDirectory}"
-     * @required
-     * @readonly
      */
+    @Parameter( readonly = true, required = true, defaultValue = "${project.build.testOutputDirectory}" )
     private File outputDirectory;
     
     /**
@@ -80,10 +79,10 @@ public class AjcTestCompileMojo
      * Otherwise specify the test source folder(s) to use.
      * <p>
      * 
-     * @parameter
      * @since 1.4
      * @see DirectoryScanner
      */
+    @Parameter
     private Scanner[] testSources;
 
     @Override

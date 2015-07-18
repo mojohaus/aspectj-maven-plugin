@@ -28,19 +28,20 @@ import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
 
 /**
  * Weaves all main classes.
  * 
- * @goal compile
- * @requiresDependencyResolution compile
- * @phase compile
  * @description AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
- * @threadSafe
  */
+@Mojo( name="compile", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true )
 public class AjcCompileMojo
     extends AbstractAjcCompiler
 {
@@ -48,10 +49,8 @@ public class AjcCompileMojo
     /**
      * The directory for compiled classes.
      *
-     * @parameter default-value="${project.build.outputDirectory}"
-     * @required
-     * @readonly
      */
+    @Parameter( readonly = true, required = true, defaultValue = "${project.build.outputDirectory}" )
     private File outputDirectory;
     
     /**
@@ -64,10 +63,10 @@ public class AjcCompileMojo
      * Otherwise specify the source folder(s) to use.
      * </p>
      * 
-     * @parameter
      * @since 1.4
      * @see DirectoryScanner
      */
+    @Parameter
     private Scanner[] sources;
     
     protected File getOutputDirectory()

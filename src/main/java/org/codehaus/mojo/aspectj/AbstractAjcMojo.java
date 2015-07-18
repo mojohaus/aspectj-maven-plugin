@@ -25,6 +25,7 @@ package org.codehaus.mojo.aspectj;
  */
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -41,19 +42,15 @@ public abstract class AbstractAjcMojo extends AbstractMojo
     /**
      * The maven project.
      *
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter( required = true, readonly = true, defaultValue = "${project}" )
     protected MavenProject project;
 
     /**
      * The basedir of the project.
      *
-     * @parameter default-value="${basedir}"
-     * @required
-     * @readonly
      */
+    @Parameter( required = true, readonly = true, defaultValue = "${basedir}" )
     protected File basedir;
 
     /**
@@ -62,6 +59,7 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      *
      * @parameter
      */
+    @Parameter
     protected Module[] weaveDependencies;
 
     /**
@@ -71,6 +69,7 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * @parameter
      * @since 1.4
      */
+    @Parameter
     protected String[] weaveDirectories;
 
     /**
@@ -81,6 +80,7 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      *
      * @parameter
      */
+    @Parameter
     protected Module[] aspectLibraries;
 
     /**
@@ -90,13 +90,14 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * @parameter
      * @see <a href="http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html">http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html</a>
      */
+    @Parameter
     protected File xmlConfigured;
 
     /**
      * Skip plugin execution.
      *
-     * @parameter default-value="false" property="aspectj.skip"
      */
+    @Parameter( defaultValue = "false", property = "aspectj.skip" )
     private boolean skip;
 
     /**
