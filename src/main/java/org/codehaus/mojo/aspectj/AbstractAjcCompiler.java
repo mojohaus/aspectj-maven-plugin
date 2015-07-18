@@ -316,7 +316,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * that can be identified by pointcuts.  Values are:
      * arrayconstruction, synchronization
      *
-     * @parameter
      */
     @Parameter
     protected String Xjoinpoints;
@@ -326,7 +325,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * argument containing a list of paths to zip files or directories, delimited by the platform-specific path
      * delimiter.
      *
-     * @parameter
      */
     @Parameter
     protected String bootclasspath;

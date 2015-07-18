@@ -57,7 +57,6 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * List of of modules to weave (into target directory). Corresponds to <code>ajc
      * -inpath</code> option (or <code>-injars</code> for pre-1.2 (which is not supported)).
      *
-     * @parameter
      */
     @Parameter
     protected Module[] weaveDependencies;
@@ -66,7 +65,6 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * List of of directories with .class files to weave (into target directory).
      * Corresponds to <code>ajc -inpath</code> option.
      *
-     * @parameter
      * @since 1.4
      */
     @Parameter
@@ -78,7 +76,6 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * The modules must also be dependencies of the project.
      * Corresponds to <code>ajc -aspectpath</code> option
      *
-     * @parameter
      */
     @Parameter
     protected Module[] aspectLibraries;
@@ -87,7 +84,6 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * Parameter which indicates an XML file containing AspectJ weaving instructions.
      * Assigning this plugin parameter adds the <code>-xmlConfigured</code> option to ajc.
      *
-     * @parameter
      * @see <a href="http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html">http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html</a>
      */
     @Parameter
