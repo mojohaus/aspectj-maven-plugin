@@ -2,11 +2,18 @@ language: java
 jdk:
   - oraclejdk7
   - oraclejdk8
+addons:
+  apt:
+    packages:
+      - graphviz
 install: "mvn --show-version --errors --batch-mode validate dependency:go-offline"
-script: "mvn --show-version --errors --batch-mode clean package site"
+script: "mvn --show-version --errors --batch-mode clean install site"
+cache:
+    directories:
+    - $HOME/.m2
 branches:
     except:
         - gh-pages
 notifications:
     email:
-        - david@davidkarlsen.com
+        - lennartj@gmail.com
