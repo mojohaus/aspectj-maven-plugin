@@ -307,10 +307,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     /**
      * (Experimental) Allows code to be generated that targets a 1.2 or a 1.5 level AspectJ runtime (default 1.5)
      *
-<<<<<<< HEAD
-     * @parameter default-value="1.5"
-=======
->>>>>>> Switch from javadoc style to annotations for maven parameters etc
      */
     @Parameter( defaultValue = "1.5" )
     protected String Xajruntimetarget;
