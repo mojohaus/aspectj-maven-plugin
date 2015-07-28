@@ -31,6 +31,7 @@
     <properties>
         <aspectjVersion>1.8.6</aspectjVersion>
         <mavenVersion>3.0.5</mavenVersion>
+        <doxiaVersion>1.6</doxiaVersion>
         <mojo.java.target>1.6</mojo.java.target> <!-- to ensure correct JDK requirement om project summary page, otherwise 1.5 would be enough to compile -->
     </properties>
 
@@ -140,15 +141,21 @@
             <scope>provided</scope><!-- annotations are needed only to build the plugin -->
         </dependency>
         <!-- Other -->
+        <!-- see: https://cwiki.apache.org/confluence/display/MAVEN/Plugin+migration+to+Maven3+dependencies -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-compat</artifactId>
             <version>${mavenVersion}</version>
         </dependency>
-∫       <dependency>
+        <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-sink-api</artifactId>
+            <version>${doxiaVersion}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven.doxia</groupId>
             <artifactId>doxia-site-renderer</artifactId>
-            <version>1.6</version>
+            <version>${doxiaVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.reporting</groupId>
