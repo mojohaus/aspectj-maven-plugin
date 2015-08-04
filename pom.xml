@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>mojo-parent</artifactId>
-        <version>37</version>
+        <version>36</version>
     </parent>
 
     <artifactId>aspectj-maven-plugin</artifactId>
@@ -39,7 +39,7 @@
     </prerequisites>
 
     <scm>
-        <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin.git</connection>
+        <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin</connection>
         <developerConnection>scm:git:ssh://git@github.com/mojohaus/aspectj-maven-plugin.git</developerConnection>
         <url>https://github.com/mojohaus/aspectj-maven-plugin</url>
     </scm>
