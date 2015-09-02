@@ -59,6 +59,7 @@ public class AbstractAjcCompilerTest
         MavenProject project = new MavenProject( new Model() );
         ajcCompMojo.project = project;
         setVariableValueToObject( ajcCompMojo, "outputDirectory", getTestFile( "/target/test-classes" ) );
+        setVariableValueToObject( ajcCompMojo, "generatedTestSourcesDirectory", getTestFile( "/target/generated-test-sources/test-annotations" ) );
         project.setDependencyArtifacts( new HashSet() );
     }
 
