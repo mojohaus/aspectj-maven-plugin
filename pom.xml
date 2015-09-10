@@ -30,9 +30,9 @@
 
     <properties>
         <additionalparam>-Xdoclint:none</additionalparam>
-        <aspectjVersion>1.8.6</aspectjVersion>
+        <aspectjVersion>1.8.7</aspectjVersion>
         <mavenVersion>2.2.1</mavenVersion>
-        <mojo.java.target>1.6</mojo.java.target> <!-- to ensure correct JDK requirement om project summary page, otherwise 1.5 would be enough to compile -->
+        <mojo.java.target>1.7</mojo.java.target> <!-- aspectJ 1.8.7 is JDK 1.7 minimum -->
     </properties>
 
     <prerequisites>
@@ -252,7 +252,7 @@
                         <configuration>
                             <rules>
                                 <enforceBytecodeVersion>
-                                    <maxJdkVersion>1.6</maxJdkVersion>
+                                    <maxJdkVersion>${mojo.java.target}</maxJdkVersion>
                                     <excludes>
                                         <exclude>com.sun:tools</exclude>
                                     </excludes>
