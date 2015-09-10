@@ -29,7 +29,6 @@
     </licenses>
 
     <properties>
-        <additionalparam>-Xdoclint:none</additionalparam>
         <aspectjVersion>1.8.7</aspectjVersion>
         <mavenVersion>2.2.1</mavenVersion>
         <mojo.java.target>1.7</mojo.java.target> <!-- aspectJ 1.8.7 is JDK 1.7 minimum -->
@@ -410,7 +409,15 @@
                 <toolsjarSystemPath>${java.home}/../Classes/classes.jar</toolsjarSystemPath>
             </properties>
         </profile>
-
+        <profile>
+            <id>java8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
+        </profile>
         <profile>
             <id>maven-repo-local</id>
             <activation>
