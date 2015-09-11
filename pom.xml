@@ -32,6 +32,8 @@
     <aspectjVersion>1.8.7</aspectjVersion>
     <mavenVersion>2.2.1</mavenVersion>
     <mojo.java.target>1.7</mojo.java.target> <!-- aspectJ 1.8.7 is JDK 1.7 minimum -->
+    <!-- work around until it is correctly fixed at top parent -->
+    <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
   </properties>
 
   <prerequisites>
