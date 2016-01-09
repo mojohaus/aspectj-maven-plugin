@@ -47,7 +47,7 @@ import java.util.Set;
 /**
  * Base class for the two aspectJ compiletime weaving mojos.
  * <p/>
- * For all available options see {@link http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html}
+ * For all available options see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html">ajc-ref</a>
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
