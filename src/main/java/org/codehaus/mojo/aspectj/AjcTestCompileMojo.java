@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -45,6 +46,8 @@ import org.codehaus.plexus.util.Scanner;
 public class AjcTestCompileMojo
     extends AbstractAjcCompiler
 {
+    protected static final String MAVEN_TEST_SKIP = "maven.test.skip";
+
     /**
      * Flag to indicate if the main source dirs should be a part of the compile process.
      * <strong>Note!</strong> This will make all classes in main source dir appear in the
@@ -84,6 +87,17 @@ public class AjcTestCompileMojo
      */
     @Parameter
     private Scanner[] testSources;
+
+    @Override
+    public void execute() throws MojoExecutionException
+    {
+        if (isSkipTestCompile())
+        {
+            getLog().info("Not compiling test sources");
+            return;
+        }
+        super.execute();
+    }
 
     @Override
     protected List<String> getClasspathDirectories()
@@ -126,5 +140,11 @@ public class AjcTestCompileMojo
             additionalPath = project.getBuild().getOutputDirectory();
         }
         return additionalPath;
+    }
+
+    private boolean isSkipTestCompile()
+    {
+        String skipTestCompile = System.getProperty(MAVEN_TEST_SKIP);
+        return Boolean.parseBoolean(skipTestCompile);
     }
 }
