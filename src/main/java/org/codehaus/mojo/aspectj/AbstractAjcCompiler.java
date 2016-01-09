@@ -534,7 +534,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         ajcMain.setHolder(mavenMessageHandler);
 
         synchronized (BIG_ASPECTJ_LOCK) {
-            ajcMain.runMain((String[]) ajcOptions.toArray(new String[ajcOptions.size()]), false);
+            ajcMain.runMain(ajcOptions.toArray(new String[ajcOptions.size()]), false);
         }
 
         IMessage[] errors = mavenMessageHandler.getMessages(IMessage.ERROR, true);
