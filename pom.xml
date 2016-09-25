@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>38</version>
+    <version>40</version>
   </parent>
 
   <artifactId>aspectj-maven-plugin</artifactId>
