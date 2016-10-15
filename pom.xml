@@ -256,8 +256,6 @@
           </execution>
         </executions>
         <configuration>
-          <skipInvocation>true</skipInvocation>
-          <skipInstallation>true</skipInstallation>
           <projectsDirectory>src/it</projectsDirectory>
           <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
           <postBuildHookScript>verify</postBuildHookScript>
