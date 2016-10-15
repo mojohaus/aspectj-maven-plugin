@@ -195,23 +195,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <!-- use parent's managed version, but override configuration because we need 'descriptor' goal -->
-        <executions>
-          <execution>
-            <id>default-descriptor</id>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-            <phase>process-classes</phase>
-          </execution>
-          <execution>
-            <id>help-descriptor</id>
-            <goals>
-              <goal>helpmojo</goal>
-            </goals>
-            <phase>process-classes</phase>
-          </execution>
-        </executions>
+        <!-- use parent's configuration -->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
