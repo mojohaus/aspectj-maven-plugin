@@ -101,6 +101,19 @@
     </contributor>
   </contributors>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.sun</groupId>
+        <artifactId>tools</artifactId>
+        <version>${java.version}</version>
+        <scope>system</scope>
+        <!-- Dummy path, override later (should point to tools.jar) -->
+        <systemPath>${java.home}/lib/rt.jar</systemPath>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
         <!-- Maven core -->
         <dependency>
@@ -169,13 +182,6 @@
             [DEBUG] Running : ajdoc  -classpath [... a long classpath follows ...]
             ajdoc requires a JDK 1.4 or later tools jar - exiting
         -->
-    <dependency>
-      <groupId>com.sun</groupId>
-      <artifactId>tools</artifactId>
-      <version>${java.version}</version>
-      <scope>system</scope>
-      <systemPath>${toolsjarSystemPath}</systemPath>
-    </dependency>
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
@@ -250,6 +256,8 @@
           </execution>
         </executions>
         <configuration>
+          <skipInvocation>true</skipInvocation>
+          <skipInstallation>true</skipInstallation>
           <projectsDirectory>src/it</projectsDirectory>
           <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
           <postBuildHookScript>verify</postBuildHookScript>
@@ -316,10 +324,16 @@
   </reporting>
 
   <profiles>
-        <!--
-          The AspectJ compilation requires that tools.jar (or its equivalent for some JDKs) is found on the classpath.
-          The profiles named [something]toolsJar-profile define the systemPath for the tools.jar dependency.
-        -->
+    <!--
+      AspectJ compilation requires that tools.jar (or its equivalent for some JDKs) is found on the classpath.
+      The profiles named [something]toolsJar-profile define the systemPath for the tools.jar dependency
+      by overriding the dummy systemPath from the dependencyManagement section.
+
+      CAVEAT: Setting the systemPath it via a profile-dependent property like in earlier plugin versions
+      does *not* work when the compiled plugin is used from Eclipse because properties are incorrectly merged
+      by Eclipse, leading to problems ever since the 'java8' profile was introduced here because it also
+      defines a property.
+    -->
     <profile>
       <id>standardToolsJar-profile</id>
       <activation>
@@ -328,9 +342,14 @@
           <exists>${java.home}/../lib/tools.jar</exists>
         </file>
       </activation>
-      <properties>
-        <toolsjarSystemPath>${java.home}/../lib/tools.jar</toolsjarSystemPath>
-      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
+          <scope>system</scope>
+          <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
+      </dependencies>
     </profile>
     <profile>
       <id>appleJdkToolsJar-profile</id>
@@ -340,9 +359,14 @@
           <exists>${java.home}/../Classes/classes.jar</exists>
         </file>
       </activation>
-      <properties>
-        <toolsjarSystemPath>${java.home}/../Classes/classes.jar</toolsjarSystemPath>
-      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
+          <scope>system</scope>
+          <systemPath>${java.home}/../Classes/classes.jar</systemPath>
+        </dependency>
+      </dependencies>
     </profile>
     <profile>
       <id>java8</id>
@@ -350,6 +374,10 @@
         <jdk>1.8</jdk>
       </activation>
       <properties>
+        <!--
+          Because of this properties section the old way of setting the tools.jar path via a property defined in
+          another profile does not work anymore when importing Maven projects into Eclipse. :-(
+        -->
         <additionalparam>-Xdoclint:none</additionalparam>
       </properties>
     </profile>
