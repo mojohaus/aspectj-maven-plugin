@@ -20,7 +20,7 @@
   </description>
   <inceptionYear>2005</inceptionYear>
   <properties>
-    <aspectjVersion>1.8.9</aspectjVersion>
+    <aspectjVersion>1.8.10</aspectjVersion>
     <mavenVersion>3.0.5</mavenVersion>
     <doxiaVersion>1.6</doxiaVersion>
     <mojo.java.target>1.7</mojo.java.target> <!-- aspectJ 1.8.7 is JDK 1.7 minimum -->
