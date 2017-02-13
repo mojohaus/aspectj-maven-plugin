@@ -36,6 +36,9 @@ AspectJ Compiler reference: standard options
     	-sourceroots <dirs> compile all .aj and .java files in <dirs>
     	                    (<dirs> uses classpath delimiter)
         -crossrefs          generate .ajsym file into the output directory
+        -parameters         stores formal parameter names of constructors and methods
+                            in the generated class file so that the method
+                            java.lang.reflect.Executable.getParameters from the Reflection API can retrieve them.
         -emacssym           generate .ajesym symbol files for emacs support
         -Xlint              same as '-Xlint:warning'
         -Xlint:<level>      set default level for crosscutting messages
