@@ -21,19 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 
 /**
- * Testing of @AspectJ code style.
+ * The Class to get weaved
  */
-@Aspect
-public class Azpect
+public class Clazz
 {
-    @Before ("execution (* Clazz.print(..))")
-    public void trace()
-    { 
-        System.out.println("Trace");
+    public void print()
+    {
+        System.out.println( "Weave me" );
     }
-    
 }

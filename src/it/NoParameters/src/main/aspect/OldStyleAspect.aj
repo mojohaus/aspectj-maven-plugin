@@ -21,19 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 
 /**
- * Testing of @AspectJ code style.
+ * Testing of pre @AspectJ code style.
  */
-@Aspect
-public class Azpect
+public aspect OldStyleAspect
 {
-    @Before ("execution (* Clazz.print(..))")
-    public void trace()
-    { 
-        System.out.println("Trace");
+
+    pointcut oldStylePointcut():execution(* Clazz.print(..));
+
+    before() : oldStylePointcut(){
+        System.out.println( "before print()" );
     }
-    
 }
