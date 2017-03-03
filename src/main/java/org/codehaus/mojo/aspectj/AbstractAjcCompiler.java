@@ -131,6 +131,13 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     @Parameter
     protected String proc;
 
+    /**
+    * Set the compiler "parameters" argument.
+    *
+    */
+    @Parameter
+    protected boolean parameters;
+
 
     /**
      * Allows the caller to provide additional arguments in a Map format. For example:
@@ -784,6 +791,12 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
             ajcOptions.add("-emacssym");
         }
 
+    }
+
+    public void setParameters(boolean parameters) {
+        if (parameters) {
+            ajcOptions.add("-parameters");
+        }
     }
 
     public void setCrossrefs(boolean crossrefs) {
