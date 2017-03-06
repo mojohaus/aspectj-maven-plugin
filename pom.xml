@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>aspectj-maven-plugin</artifactId>
-  <version>1.11-SNAPSHOT</version>
+  <version>1.10-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Mojo's AspectJ Maven Plugin</name>
