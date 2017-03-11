@@ -23,11 +23,11 @@ under the License.
     <link>http://www.mojohaus.org/aspectj-maven-plugin/aspectj-maven-plugin</link>
     <description>Mojo's AspectJ Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2005 - 2016 MojoHaus</copyright>
+    <copyright>&#169;2005 - 2017 MojoHaus</copyright>
     <item>
       <title>File: 15,
-             Errors: 784,
-             Warnings: 85,
+             Errors: 792,
+             Warnings: 86,
              Infos: 4
       </title>
             <link>http://www.mojohaus.org/aspectj-maven-plugin/aspectj-maven-plugin/checkstyle.html</link>
@@ -80,10 +80,10 @@ under the License.
                   0
                 </td>
                 <td>
-                  37
+                  38
                 </td>
                 <td>
-                  601
+                  609
                 </td>
               </tr>
                           <tr>
