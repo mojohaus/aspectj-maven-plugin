@@ -469,7 +469,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         }
 
         ArtifactHandler artifactHandler = project.getArtifact().getArtifactHandler();
-        if (!"java".equalsIgnoreCase(artifactHandler.getLanguage())) {
+        if (!forceAjcCompile && !"java".equalsIgnoreCase(artifactHandler.getLanguage())) {
             getLog().warn("Not executing aspectJ compiler as the project is not a Java classpath-capable package");
             return;
         }
