@@ -100,8 +100,11 @@ public class AjcHelper
             File artifact = classPathElement.getFile();
             if ( null != artifact )
             {
+              String type = classPathElement.getType();
+              if (!type.equals("pom")){
                 cp += classPathElement.getFile().getAbsolutePath();
-                cp += File.pathSeparatorChar;
+                cp += File.pathSeparatorChar;                
+              }
             }
         }
         Iterator<String> outIter = outDirs.iterator();
