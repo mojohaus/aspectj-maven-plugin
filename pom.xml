@@ -20,10 +20,10 @@
   </description>
   <inceptionYear>2005</inceptionYear>
   <properties>
-    <aspectjVersion>1.8.9</aspectjVersion>
+    <aspectjVersion>1.8.13</aspectjVersion>
     <mavenVersion>3.0.5</mavenVersion>
     <doxiaVersion>1.6</doxiaVersion>
-    <mojo.java.target>1.7</mojo.java.target> <!-- aspectJ 1.8.7 is JDK 1.7 minimum -->
+    <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ 1.8.13 is JDK 1.8 minimum -->
     <!-- work around until it is correctly fixed at top parent -->
     <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
   </properties>
@@ -201,7 +201,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <!-- use parent's configuration -->
+        <version>3.5</version>
+        <configuration>
+          <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -307,6 +310,14 @@
 
   <reporting>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-plugin</artifactId>
+        <version>3.5</version>
+        <configuration>
+          <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>l10n-maven-plugin</artifactId>
