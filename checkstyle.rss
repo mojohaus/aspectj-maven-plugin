@@ -23,10 +23,10 @@ under the License.
     <link>http://www.mojohaus.org/aspectj-maven-plugin/aspectj-maven-plugin</link>
     <description>Mojo's AspectJ Maven Plugin - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2005 - 2017 MojoHaus</copyright>
+    <copyright>&#169;2005 - 2018 MojoHaus</copyright>
     <item>
       <title>File: 15,
-             Errors: 792,
+             Errors: 798,
              Warnings: 86,
              Infos: 4
       </title>
@@ -158,20 +158,6 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.mojohaus.org/aspectj-maven-plugin/aspectj-maven-plugin/checkstyle.html#org.codehaus.mojo.aspectj.AbstractAjcMojo.java">org/codehaus/mojo/aspectj/AbstractAjcMojo.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://www.mojohaus.org/aspectj-maven-plugin/aspectj-maven-plugin/checkstyle.html#org.codehaus.mojo.aspectj.Module.java">org/codehaus/mojo/aspectj/Module.java</a>
                 </td>
                 <td>
@@ -179,6 +165,20 @@ under the License.
                 </td>
                 <td>
                   1
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.mojohaus.org/aspectj-maven-plugin/aspectj-maven-plugin/checkstyle.html#org.codehaus.mojo.aspectj.AbstractAjcMojo.java">org/codehaus/mojo/aspectj/AbstractAjcMojo.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
                 </td>
                 <td>
                   1
@@ -223,7 +223,7 @@ under the License.
                   17
                 </td>
                 <td>
-                  8
+                  14
                 </td>
               </tr>
                           <tr>
