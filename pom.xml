@@ -348,7 +348,6 @@
     <profile>
       <id>standardToolsJar-profile</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
         <file>
           <exists>${java.home}/../lib/tools.jar</exists>
         </file>
