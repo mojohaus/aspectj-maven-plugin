@@ -77,7 +77,7 @@ public abstract class CompilerMojoTestBase
         Artifact artifact = new MockArtifact( "dill", "dall" );
         artifact.setArtifactHandler( artifactHandler );
         project.setArtifact( artifact );
-        project.setDependencyArtifacts( Collections.EMPTY_SET );
+        project.setDependencyArtifacts( Collections.emptySet() );
 
     }
 
