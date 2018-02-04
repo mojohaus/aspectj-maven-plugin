@@ -71,7 +71,8 @@ public abstract class CompilerMojoTestBase
         ajcMojo.basedir = new File( basedir );
         
         setVariableValueToObject( ajcMojo, "outputDirectory", new File( project.getBuild().getOutputDirectory() ) );
-        
+        setVariableValueToObject( ajcMojo, "generatedSourcesDirectory", new File( project.getBuild().getDirectory() + "/generated-sources/annotations" ) );
+
         ArtifactHandler artifactHandler = new MockArtifactHandler();
         Artifact artifact = new MockArtifact( "dill", "dall" );
         artifact.setArtifactHandler( artifactHandler );
