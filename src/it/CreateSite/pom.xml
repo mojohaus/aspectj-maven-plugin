@@ -18,7 +18,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -38,7 +41,7 @@
         </executions>
         <configuration>
           <ajdtBuildDefFile>build-1-5.ajproperties</ajdtBuildDefFile>
-          <complianceLevel>1.5</complianceLevel>
+          <complianceLevel>1.8</complianceLevel>
           <privateScope>true</privateScope>
           <verbose>true</verbose>
         </configuration>
@@ -54,7 +57,7 @@
         <version>@project.version@</version>
         <configuration>
           <ajdtBuildDefFile>build-1-5.ajproperties</ajdtBuildDefFile>
-          <complianceLevel>1.5</complianceLevel>
+          <complianceLevel>1.8</complianceLevel>
           <privateScope>true</privateScope>
           <verbose>true</verbose>
         </configuration>
