@@ -31,7 +31,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <complianceLevel>1.5</complianceLevel>
+                            <complianceLevel>1.8</complianceLevel>
                         </configuration>
                         <goals>
                             <goal>compile</goal>

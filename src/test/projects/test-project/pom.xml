@@ -31,7 +31,7 @@
                    <source>1.5</source>
                    <target>1.5</target>
                    <verbose>true</verbose>
-                   <complianceLevel>1.5</complianceLevel>
+                   <complianceLevel>1.8</complianceLevel>
                    <showWeaveInfo>true</showWeaveInfo>
                    <aspectLibraries>
                        <aspectLibrary>
@@ -84,7 +84,7 @@
 				<configuration>
 					<verbose>true</verbose>
 					<privateScope>true</privateScope>
-					<complianceLevel>1.5</complianceLevel>
+					<complianceLevel>1.8</complianceLevel>
 					<ajdtBuildDefFile>
 						build-1-5.ajproperties
 					</ajdtBuildDefFile>
