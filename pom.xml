@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>40</version>
+    <version>50</version>
   </parent>
 
   <artifactId>aspectj-maven-plugin</artifactId>
-  <version>1.11.1-SNAPSHOT</version>
+  <version>1.12.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Mojo's AspectJ Maven Plugin</name>
@@ -20,9 +20,9 @@
   </description>
   <inceptionYear>2005</inceptionYear>
   <properties>
-    <aspectjVersion>1.9.1</aspectjVersion>
-    <mavenVersion>3.0.5</mavenVersion>
-    <doxiaVersion>1.6</doxiaVersion>
+    <aspectjVersion>1.9.2</aspectjVersion>
+    <mavenVersion>3.2.5</mavenVersion>
+    <doxiaVersion>1.8</doxiaVersion>
     <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ > 1.8.13 is JDK 1.8 minimum -->
     <!-- work around until it is correctly fixed at top parent -->
     <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
@@ -140,6 +140,7 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-compat</artifactId>
+            <scope>test</scope>
             <version>${mavenVersion}</version>
         </dependency>
         <dependency>
@@ -155,7 +156,7 @@
         <dependency>
             <groupId>org.apache.maven.reporting</groupId>
             <artifactId>maven-reporting-impl</artifactId>
-            <version>2.4</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -178,12 +179,56 @@
         <dependency>
             <groupId>org.apache.maven.plugin-testing</groupId>
             <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>2.1</version>
+            <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
   <build>
+      <pluginManagement>
+          <plugins>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-site-plugin</artifactId>
+                  <version>3.5.1</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-resources-plugin</artifactId>
+                  <version>3.0.1</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-compiler-plugin</artifactId>
+                  <version>3.8.0</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-jar-plugin</artifactId>
+                  <version>3.1.0</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-clean-plugin</artifactId>
+                  <version>3.0.0</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-checkstyle-plugin</artifactId>
+                  <version>3.0.0</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-install-plugin</artifactId>
+                  <version>3.0.0-M1</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-deploy-plugin</artifactId>
+                  <version>3.0.0-M1</version>
+              </plugin>
+          </plugins>
+      </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -197,7 +242,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M1</version>
+        <version>3.0.0-M2</version>
+          <configuration>
+              <failFast>true</failFast>
+          </configuration>
         <executions>
           <execution>
             <id>enforce-bytecode-version</id>
@@ -213,6 +261,7 @@
                   </excludes>
                 </enforceBytecodeVersion>
               </rules>
+              <failFast>true</failFast>
             </configuration>
           </execution>
         </executions>
@@ -220,13 +269,15 @@
           <dependency>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>extra-enforcer-rules</artifactId>
-            <version>1.0-beta-7</version>
+            <version>1.0-beta-9</version>
           </dependency>
         </dependencies>
       </plugin>
       <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M1</version>
+          <configuration>
           <skip>false</skip>
           <excludes>
             <exclude>**/test-project/**/*.java</exclude>
@@ -238,6 +289,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-invoker-plugin</artifactId>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>integration-test</id>
@@ -258,6 +310,9 @@
           </goals>
           <settingsFile>src/it/settings.xml</settingsFile>
           <debug>true</debug>
+            <pomExcludes>
+                <pomExclude>AnnotationProcessingOutput/pom.xml</pomExclude>
+            </pomExcludes>
         </configuration>
       </plugin>
 
@@ -372,6 +427,7 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <systemProperties>
