@@ -8,17 +8,18 @@
     <version>40</version>
   </parent>
 
+  <groupId>com.nickwongdev</groupId>
   <artifactId>aspectj-maven-plugin</artifactId>
-  <version>1.11.1-SNAPSHOT</version>
+  <version>1.12.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>Mojo's AspectJ Maven Plugin</name>
+  <name>Mojo's AspectJ Maven Plugin - NickWongDev Fork</name>
   <description>
         Handles AspectJ usage within Maven.
         Functionality provided is: weaving of aspects (or existing aspects from libraries) with the
         test and/or main classes, weaving of pre-existing jars and ajdoc reporting.
   </description>
-  <inceptionYear>2005</inceptionYear>
+  <inceptionYear>2018</inceptionYear>
   <properties>
     <aspectjVersion>1.9.2</aspectjVersion>
     <mavenVersion>3.0.5</mavenVersion>
@@ -34,17 +35,13 @@
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/mojohaus/aspectj-maven-plugin/issues/</url>
+    <url>https://github.com/nickwongdev/aspectj-maven-plugin/issues/</url>
   </issueManagement>
-  <ciManagement>
-    <system>Travis-CI</system>
-    <url>https://travis-ci.org/mojohaus/aspectj-maven-plugin</url>
-  </ciManagement>
 
   <scm>
-    <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/mojohaus/aspectj-maven-plugin.git</developerConnection>
-    <url>https://github.com/mojohaus/aspectj-maven-plugin</url>
+    <connection>scm:git:https://github.com/nickwongdev/aspectj-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/nickwongdev/aspectj-maven-plugin.git</developerConnection>
+    <url>https://github.com/nickwongdev/aspectj-maven-plugin</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -98,6 +95,11 @@
       <name>Krzysztof Debski</name>
       <email>kdebski85@gmail.com</email>
       <timezone>+1</timezone>
+    </contributor>
+    <contributor>
+      <name>Nicholas Wong</name>
+      <email>nickwongdev@gmail.com</email>
+      <timezone>America/LosAngeles</timezone>
     </contributor>
   </contributors>
 
