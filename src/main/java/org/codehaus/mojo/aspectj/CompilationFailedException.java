@@ -6,7 +6,7 @@ import org.aspectj.bridge.IMessage;
 /**
  * Exception thrown when Ajc finds errors during compilation.
  *
- * @author Carlos Sanchez <carlos@apache.org>
+ * @author Carlos Sanchez carlos@apache.org
  */
 public final class CompilationFailedException extends MojoExecutionException {
 
