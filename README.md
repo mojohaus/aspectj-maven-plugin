@@ -1,3 +1,5 @@
+This is a fork of the aspectj-maven-plugin that has Java 11 support.
+
 # Mojohaus AspectJ-Maven-Plugin
 
 This plugin  weaves AspectJ aspects into your classes using the AspectJ compiler ("ajc").
