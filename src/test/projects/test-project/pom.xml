@@ -25,7 +25,7 @@
 	<build>
 		<plugins>
 			<plugin>
-               <groupId>org.codehaus.mojo</groupId>
+               <groupId>com.nickwongdev</groupId>
                <artifactId>aspectj-maven-plugin</artifactId>
                <configuration>
                    <source>1.5</source>
@@ -79,7 +79,7 @@
 				</reportSets>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>com.nickwongdev</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
 				<configuration>
 					<verbose>true</verbose>
