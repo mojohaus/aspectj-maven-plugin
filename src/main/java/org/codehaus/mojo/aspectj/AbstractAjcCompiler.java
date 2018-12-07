@@ -124,7 +124,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     * Set the compiler "proc" argument.
     * Aspectj supports Annotation processing since 1.8.2, it can been disabled by <code>proc:none</code>.
     *
-    * @parameter
     * @see <a href="https://www.eclipse.org/aspectj/doc/released/README-182.html">AspectJ 1.8.2 Release notes</a>
     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#processing">Annotation Processing</a>
     */

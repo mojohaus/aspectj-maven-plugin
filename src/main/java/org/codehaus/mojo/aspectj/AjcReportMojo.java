@@ -49,8 +49,9 @@ import java.util.Set;
 /**
  * Creates an AspectJ HTML report using the {@code ajdoc} tool and format.
  *
+ * A Maven 2.0 ajdoc report
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
- * @description A Maven 2.0 ajdoc report
  */
 @Mojo( name="aspectj-report", requiresDependencyResolution = ResolutionScope.COMPILE )
 public class AjcReportMojo
