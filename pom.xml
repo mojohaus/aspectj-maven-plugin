@@ -44,7 +44,16 @@
     <url>https://github.com/nickwongdev/aspectj-maven-plugin</url>
     <tag>HEAD</tag>
   </scm>
-
+  <distributionManagement>
+      <snapshotRepository>
+          <id>sonatype-snapshot</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      </snapshotRepository>
+      <repository>
+          <id>sonatype-release</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+      </repository>
+  </distributionManagement>
   <developers>
     <developer>
       <id>kaare</id>
