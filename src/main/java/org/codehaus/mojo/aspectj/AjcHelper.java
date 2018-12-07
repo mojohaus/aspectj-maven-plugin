@@ -130,7 +130,7 @@ public class AjcHelper
      *
      * @param ajdtBuildDefFile the ajdtBuildDefFile
      * @param basedir the baseDirectory
-     * @return
+     * @return Set of Build Files
      * @throws MojoExecutionException
      */
     public static Set<String> getBuildFilesForAjdtFile( String ajdtBuildDefFile, File basedir )
@@ -165,7 +165,7 @@ public class AjcHelper
      * @param sourceDirs
      * @param includes
      * @param excludes
-     * @return
+     * @return Set of Build Files for Source Dirs
      * @throws MojoExecutionException
      */
     public static Set<String> getBuildFilesForSourceDirs( List<String> sourceDirs, String[] includes, String[] excludes )
@@ -200,7 +200,7 @@ public class AjcHelper
     /**
      * Based on a set of weavedirs returns a set of all the files to be weaved.
      *
-     * @return
+     * @return a set of all the files to be weaved
      * @throws MojoExecutionException
      */
     public static Set<String> getWeaveSourceFiles( String[] weaveDirs )
@@ -258,7 +258,7 @@ public class AjcHelper
      *
      * @param fileName the filename of the argfile
      * @param outputDir the build output area
-     * @return
+     * @return the List of all compiler arguments.
      * @throws IOException
      */
     public static List<String> readBuildConfigFile( String fileName, File outputDir )
@@ -288,7 +288,7 @@ public class AjcHelper
      * Convert a string array to a comma separated list
      *
      * @param strings
-     * @return
+     * @return A comma separated list of Strings
      */
     protected static String getAsCsv( String[] strings )
     {
