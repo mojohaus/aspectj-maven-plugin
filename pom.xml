@@ -193,7 +193,7 @@
         <version>3.5</version>
         <configuration>
           <!-- see: https://github.com/apache/maven-plugin-tools/pull/11 -->
-          <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
+          <mojoDependencies>com.nickwongdev:aspectj-maven-plugin</mojoDependencies>
         </configuration>
       </plugin>
       <plugin>
@@ -235,31 +235,6 @@
             <exclude>**/parent-child-test-project/**/*.java</exclude>
             <exclude>**/AbstractAjcMojoTest.java</exclude>
           </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-invoker-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <goals>
-              <goal>install</goal>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <projectsDirectory>src/it</projectsDirectory>
-          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-          <postBuildHookScript>verify</postBuildHookScript>
-          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-          <goals>
-            <goal>clean</goal>
-            <goal>test</goal>
-          </goals>
-          <settingsFile>src/it/settings.xml</settingsFile>
-          <debug>true</debug>
         </configuration>
       </plugin>
 
@@ -307,7 +282,7 @@
         <version>3.5</version>
         <configuration>
           <!-- see: https://github.com/apache/maven-plugin-tools/pull/11 -->
-          <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
+          <mojoDependencies>com.nickwongdev:aspectj-maven-plugin</mojoDependencies>
         </configuration>
       </plugin>
       <plugin>
@@ -386,6 +361,43 @@
                   <value>${maven.repo.local}</value>
                 </property>
               </systemProperties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>integration-test</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>verify</goal>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <projectsDirectory>src/it</projectsDirectory>
+              <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+              <postBuildHookScript>verify</postBuildHookScript>
+              <localRepositoryPath>${project.build.directory}/local-repo
+              </localRepositoryPath>
+              <goals>
+                <goal>clean</goal>
+                <goal>test</goal>
+              </goals>
+              <settingsFile>src/it/settings.xml</settingsFile>
+              <debug>true</debug>
             </configuration>
           </plugin>
         </plugins>
