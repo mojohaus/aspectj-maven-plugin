@@ -21,7 +21,7 @@
   <inceptionYear>2005</inceptionYear>
   <properties>
     <aspectjVersion>1.9.7.M3</aspectjVersion>
-    <mavenVersion>3.0.5</mavenVersion>
+    <mavenVersion>3.3.9</mavenVersion>
     <doxiaVersion>1.6</doxiaVersion>
     <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
     <!-- work around until it is correctly fixed at top parent -->
@@ -174,7 +174,7 @@
     <dependency>
         <groupId>org.apache.maven.plugin-testing</groupId>
         <artifactId>maven-plugin-testing-harness</artifactId>
-        <version>2.1</version>
+        <version>3.3.0</version>
         <scope>test</scope>
     </dependency>
   </dependencies>
