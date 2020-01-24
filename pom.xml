@@ -10,7 +10,7 @@
 
   <groupId>com.nickwongdev</groupId>
   <artifactId>aspectj-maven-plugin</artifactId>
-  <version>1.12.5</version>
+  <version>1.12.6-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Mojo's AspectJ Maven Plugin - NickWongDev Fork</name>
@@ -42,7 +42,7 @@
     <connection>scm:git:https://github.com/nickwongdev/aspectj-maven-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/nickwongdev/aspectj-maven-plugin.git</developerConnection>
     <url>https://github.com/nickwongdev/aspectj-maven-plugin</url>
-    <tag>aspectj-maven-plugin-1.12.5</tag>
+    <tag>aspectj-maven-plugin-1.12.1</tag>
   </scm>
   <distributionManagement>
       <snapshotRepository>
