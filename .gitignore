@@ -2,6 +2,9 @@
 # Standard gitignore file for Java and Maven development.
 #
 
+## IntelliJ attach_pid file
+.attach_pid*
+
 ### TortoiseGit ###
 # Project-level settings
 /.tgitconfig

@@ -10,7 +10,7 @@
 
   <groupId>com.nickwongdev</groupId>
   <artifactId>aspectj-maven-plugin</artifactId>
-  <version>1.12.1</version>
+  <version>1.12.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Mojo's AspectJ Maven Plugin - NickWongDev Fork</name>
@@ -21,7 +21,7 @@
   </description>
   <inceptionYear>2018</inceptionYear>
   <properties>
-    <aspectjVersion>1.9.2</aspectjVersion>
+    <aspectjVersion>1.9.5</aspectjVersion>
     <mavenVersion>3.0.5</mavenVersion>
     <doxiaVersion>1.8</doxiaVersion>
     <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ > 1.8.13 is JDK 1.8 minimum -->
