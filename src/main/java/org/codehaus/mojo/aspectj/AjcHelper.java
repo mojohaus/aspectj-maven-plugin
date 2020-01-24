@@ -63,7 +63,7 @@ public class AjcHelper
      * List holding all accepted values for the {@code complianceLevel} parameter.
      */
     public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES =
-            Arrays.asList("1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "9", "10", "11");
+            Arrays.asList("1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "9", "10", "11", "12", "13");
 
     /**
      * Checks if the given complianceLevel value is valid.
