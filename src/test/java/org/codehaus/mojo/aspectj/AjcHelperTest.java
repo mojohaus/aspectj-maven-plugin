@@ -31,6 +31,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -93,5 +94,29 @@ public class AjcHelperTest
     {
         MavenProject project = new MavenProject();
         AjcHelper.createClassPath( project, Collections.EMPTY_LIST, Collections.EMPTY_LIST );
+    }
+
+    public void testProjectDependenciesBeforeOthers()
+    {
+        DefaultArtifact projectArtifact = createFixedArtifact();
+        projectArtifact.setFile(new File("../sibling-project/target/some.jar"));
+
+        DefaultArtifact dependencyArtifact = createFixedArtifact();
+        dependencyArtifact.setFile(new File("~/.m2/repository/coords/some.jar"));
+
+        DefaultArtifact pluginArtifact = createFixedArtifact();
+        dependencyArtifact.setFile(new File("~/.m2/repository/coords/plugin.jar"));
+
+        MavenProject project = new MavenProject();
+        project.setArtifacts(Collections.singleton(projectArtifact));
+        project.setDependencyArtifacts(Collections.singleton(dependencyArtifact));
+
+        String classPath = AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.EMPTY_LIST);
+        assertTrue("wrong dependency order in " + classPath, classPath.contains("sibling-project"));
+        assertFalse("wrong dependency order in " + classPath, classPath.contains("repository"));
+    }
+
+    private static DefaultArtifact createFixedArtifact() {
+        return new DefaultArtifact("group", "artifact", "1.0-SNAPSHOT", "compile", "type", "classifier", null);
     }
 }

@@ -92,9 +92,11 @@ public class AjcHelper
         String cp = "";
         Set<Artifact> classPathElements = Collections.synchronizedSet( new LinkedHashSet<>() );
         Set<Artifact> dependencyArtifacts = project.getDependencyArtifacts();
-        classPathElements.addAll( dependencyArtifacts == null ? Collections.emptySet() : dependencyArtifacts );
+        // Set.addAll only adds if absent, so we want to add the project artifacts first.
         classPathElements.addAll( project.getArtifacts() );
+        classPathElements.addAll( dependencyArtifacts == null ? Collections.emptySet() : dependencyArtifacts );
         classPathElements.addAll( pluginArtifacts == null ? Collections.emptySet() : pluginArtifacts );
+
         for ( Artifact classPathElement  : classPathElements )
         {
             File artifact = classPathElement.getFile();
@@ -103,7 +105,7 @@ public class AjcHelper
               String type = classPathElement.getType();
               if (!type.equals("pom")){
                 cp += classPathElement.getFile().getAbsolutePath();
-                cp += File.pathSeparatorChar;                
+                cp += File.pathSeparatorChar;
               }
             }
         }
