@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>40</version>
+    <version>61</version>
   </parent>
 
   <artifactId>aspectj-maven-plugin</artifactId>
@@ -102,102 +102,104 @@
   </contributors>
 
   <dependencies>
-        <!-- Maven core -->
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>${mavenVersion}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-model</artifactId>
-            <version>${mavenVersion}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.reporting</groupId>
-            <artifactId>maven-reporting-api</artifactId>
-            <version>3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>${mavenVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <scope>provided</scope><!-- annotations are needed only to build the plugin -->
-        </dependency>
-        <!-- Other -->
-        <!-- see: https://cwiki.apache.org/confluence/display/MAVEN/Plugin+migration+to+Maven3+dependencies -->
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-compat</artifactId>
-            <version>${mavenVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.doxia</groupId>
-            <artifactId>doxia-sink-api</artifactId>
-            <version>${doxiaVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.doxia</groupId>
-            <artifactId>doxia-site-renderer</artifactId>
-            <version>${doxiaVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.reporting</groupId>
-            <artifactId>maven-reporting-impl</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjtools</artifactId>
-            <version>${aspectjVersion}</version>
-        </dependency>
-        <!--
-            This is required to make the ajdoc tool work properly.
-            When generating the AspectJ site documentation, the following debug statement is emitted onto the log:
+    <!-- Maven core -->
+    <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-utils</artifactId>
+        <version>3.1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-core</artifactId>
+        <version>${mavenVersion}</version>
+        <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-model</artifactId>
+        <version>${mavenVersion}</version>
+        <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven.reporting</groupId>
+        <artifactId>maven-reporting-api</artifactId>
+        <version>3.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-plugin-api</artifactId>
+        <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven.plugin-tools</groupId>
+        <artifactId>maven-plugin-annotations</artifactId>
+        <scope>provided</scope><!-- annotations are needed only to build the plugin -->
+    </dependency>
+    <!-- Other -->
+    <!-- see: https://cwiki.apache.org/confluence/display/MAVEN/Plugin+migration+to+Maven3+dependencies -->
+    <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-compat</artifactId>
+        <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven.doxia</groupId>
+        <artifactId>doxia-sink-api</artifactId>
+        <version>${doxiaVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven.doxia</groupId>
+        <artifactId>doxia-site-renderer</artifactId>
+        <version>${doxiaVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven.reporting</groupId>
+        <artifactId>maven-reporting-impl</artifactId>
+        <version>2.4</version>
+    </dependency>
+    <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjtools</artifactId>
+        <version>${aspectjVersion}</version>
+    </dependency>
+    <!--
+        This is required to make the ajdoc tool work properly.
+        When generating the AspectJ site documentation, the following debug statement is emitted onto the log:
 
-            [DEBUG] Running : ajdoc  -classpath [... a long classpath follows ...]
-            ajdoc requires a JDK 1.4 or later tools jar - exiting
-        -->
-        <!-- Test -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugin-testing</groupId>
-            <artifactId>maven-plugin-testing-harness</artifactId>
-            <version>2.1</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+        [DEBUG] Running : ajdoc  -classpath [... a long classpath follows ...]
+        ajdoc requires a JDK 1.4 or later tools jar - exiting
+    -->
+    <!-- Test -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.maven.plugin-testing</groupId>
+        <artifactId>maven-plugin-testing-harness</artifactId>
+        <version>2.1</version>
+        <scope>test</scope>
+    </dependency>
+  </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <configuration>
+            <!-- see: https://github.com/apache/maven-plugin-tools/pull/11 -->
+            <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.5</version>
-        <configuration>
-          <!-- see: https://github.com/apache/maven-plugin-tools/pull/11 -->
-          <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0-M1</version>
         <executions>
           <execution>
             <id>enforce-bytecode-version</id>
@@ -225,6 +227,7 @@
         </dependencies>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <skip>false</skip>
