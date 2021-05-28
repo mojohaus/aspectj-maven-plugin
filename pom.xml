@@ -194,6 +194,16 @@
             <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <detectLinks>false</detectLinks>
+            <detectJavaApiLink>false</detectJavaApiLink>
+            <detectOfflineLinks>false</detectOfflineLinks>
+            <failOnWarnings>false</failOnWarnings>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>

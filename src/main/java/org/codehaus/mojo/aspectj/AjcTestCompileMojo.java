@@ -37,9 +37,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
 
 /**
- * Weaves all test classes.
- * 
- * @description AspectJ Compiler Plugin.
+ * Weaves all test classes. AspectJ Compiler Plugin.
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 @Mojo( name="test-compile", threadSafe = true, defaultPhase = LifecyclePhase.TEST_COMPILE, requiresDependencyResolution = ResolutionScope.TEST )
@@ -129,8 +127,7 @@ public class AjcTestCompileMojo
     @Override
     protected List<String> getSourceDirectories()
     {
-        List<String> sourceDirs = new ArrayList<String>();
-        sourceDirs.addAll( project.getTestCompileSourceRoots() );
+        List<String> sourceDirs = new ArrayList<>( project.getTestCompileSourceRoots() );
         if ( weaveMainSourceFolder )
         {
             sourceDirs.addAll( project.getCompileSourceRoots() );

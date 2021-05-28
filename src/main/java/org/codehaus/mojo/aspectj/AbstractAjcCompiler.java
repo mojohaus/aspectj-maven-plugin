@@ -45,9 +45,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Base class for the two aspectJ compiletime weaving mojos.
- * <p/>
- * For all available options see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html">ajc-ref</a>
+ * <div>Base class for the two aspectJ compiletime weaving mojos.</div>
+ * <div>For all available options see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html">ajc-ref</a></div>
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
@@ -124,7 +123,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     * Set the compiler "proc" argument.
     * Aspectj supports Annotation processing since 1.8.2, it can been disabled by <code>proc:none</code>.
     *
-    * @parameter
     * @see <a href="https://www.eclipse.org/aspectj/doc/released/README-182.html">AspectJ 1.8.2 Release notes</a>
     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#processing">Annotation Processing</a>
     */
@@ -352,7 +350,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * Emit warnings for any instances of the comma-delimited list of questionable code.
      * Supported values are shown in the list below, with their respective explanations - as copied
      * directly from the AJC reference.
-     * <p/>
      * <dl>
      * <dt>constructorName</dt>
      * <dd>method with constructor name</dd>
@@ -378,12 +375,13 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected String warn;
 
     /**
+     * <div>
      * The filename holding AJC build arguments.
      * The file will be placed in the project build output directory, and will contain all the arguments passed to
      * the AJC compiler in the last run, and also all the files included in the AJC build.
-     * <p/>
+     * </div>
+     * <div>
      * Sample content shown below to illustrate typical content within the builddef.lst file:
-     * <p/>
      * <pre>
      *     <code>
      * -1.6
@@ -396,7 +394,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * /Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-aspect/src/main/java/se/jguru/nazgul/tools/validation/aspect/ValidationAspect.java
      *     </code>
      * </pre>
-     *
+     * </div>
      */
     @Parameter( defaultValue = "builddef.lst" )
     protected String argumentFileName = "builddef.lst";
@@ -411,7 +409,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     /**
      * Holder for ajc compiler options
      */
-    protected List<String> ajcOptions = new ArrayList<String>();
+    protected List<String> ajcOptions = new ArrayList<>();
 
     /**
      * Holds all files found using the includes, excludes parameters.
@@ -548,7 +546,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         ajcMain.setHolder(mavenMessageHandler);
 
         synchronized (BIG_ASPECTJ_LOCK) {
-            ajcMain.runMain(ajcOptions.toArray(new String[ajcOptions.size()]), false);
+            ajcMain.runMain(ajcOptions.toArray(new String[0]), false);
         }
 
         IMessage[] errors = mavenMessageHandler.getMessages(IMessage.ERROR, true);
@@ -638,7 +636,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
 
     protected Set<String> getIncludedSources()
             throws MojoExecutionException {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
         if (getJavaSources() == null) {
             result = AjcHelper.getBuildFilesForSourceDirs(getSourceDirectories(), this.includes, this.excludes);
         } else {
@@ -682,8 +680,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
                 arguments.add(argument);
             }
 
-            for (int i = 0; i < modules.length; ++i) {
-                Module module = modules[i];
+            for (Module module : modules) {
                 // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
                 // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
                 Artifact artifact = null;

@@ -34,7 +34,6 @@ import java.io.File;
  * The base class.
  *
  * @author Juraj Burian
- * @version $Revision$ by $Author$
  */
 public abstract class AbstractAjcMojo extends AbstractMojo
 {
