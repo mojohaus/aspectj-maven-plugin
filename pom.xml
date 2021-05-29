@@ -303,7 +303,7 @@
           <dependency>
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml</artifactId>
-            <version>7985</version>
+            <version>8059</version>
           </dependency>
         </dependencies>
       </plugin>
