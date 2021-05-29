@@ -48,9 +48,6 @@ public class AbstractAjcCompilerTest
     /** Compiler mojo instance */
     private AjcTestCompileMojo ajcCompMojo;
 
-    /**
-     * @inheritDoc
-     */
     protected void setUp()
         throws Exception
     {
@@ -264,7 +261,6 @@ public class AbstractAjcCompilerTest
      * Tests that the compiler fails as it should if told to weave an library artifact not listed in the project
      * dependencies.
      * 
-     * @throws Exception
      */
     public void testGetAjcArguments_libraryArtifactsNotProjectDependecy()
     {

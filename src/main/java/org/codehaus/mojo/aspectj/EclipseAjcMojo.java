@@ -55,8 +55,6 @@ import java.util.Set;
  * Create eclipse configuration of aspectJ
  *
  * @author Juraj Burian
- * @version $Revision$ by $Author$ (at)goal eclipse
- * @description create eclipse configuration of aspectJ
  */
 @Mojo( name="EclipseAjcMojo", requiresDependencyResolution = ResolutionScope.COMPILE )
 public class EclipseAjcMojo

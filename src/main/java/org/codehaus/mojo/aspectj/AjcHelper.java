@@ -89,12 +89,12 @@ public class AjcHelper
     @SuppressWarnings( "unchecked" )
     public static String createClassPath( MavenProject project, List<Artifact> pluginArtifacts, List<String> outDirs )
     {
-        String cp = new String();
-        Set<Artifact> classPathElements = Collections.synchronizedSet( new LinkedHashSet<Artifact>() );
+        String cp = "";
+        Set<Artifact> classPathElements = Collections.synchronizedSet( new LinkedHashSet<>() );
         Set<Artifact> dependencyArtifacts = project.getDependencyArtifacts();
-        classPathElements.addAll( dependencyArtifacts == null ? Collections.<Artifact>emptySet() : dependencyArtifacts );
+        classPathElements.addAll( dependencyArtifacts == null ? Collections.emptySet() : dependencyArtifacts );
         classPathElements.addAll( project.getArtifacts() );
-        classPathElements.addAll( pluginArtifacts == null ? Collections.<Artifact>emptySet() : pluginArtifacts );
+        classPathElements.addAll( pluginArtifacts == null ? Collections.emptySet() : pluginArtifacts );
         for ( Artifact classPathElement  : classPathElements )
         {
             File artifact = classPathElement.getFile();
@@ -206,7 +206,7 @@ public class AjcHelper
     public static Set<String> getWeaveSourceFiles( String[] weaveDirs )
         throws MojoExecutionException
     {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
 
         for ( int i = 0; i < weaveDirs.length; i++ )
         {
@@ -324,12 +324,12 @@ public class AjcHelper
      * @param input
      * @param basedir the baseDirectory
      * @return a list over all files inn the include string
-     * @throws IOException
+     * @throws MojoExecutionException
      */
     protected static Set<String> resolveIncludeExcludeString( String input, File basedir )
         throws MojoExecutionException
     {
-        Set<String> inclExlSet = new LinkedHashSet<String>();
+        Set<String> inclExlSet = new LinkedHashSet<>();
         try
         {
             if ( null == input || input.trim().equals( "" ) )

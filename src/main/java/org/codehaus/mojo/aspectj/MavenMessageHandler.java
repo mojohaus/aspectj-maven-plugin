@@ -100,7 +100,6 @@ public class MavenMessageHandler extends MessageHandler {
      * Copies output from the supplied message onto the active Maven Log.
      * If the message type (i.e. {@code message.getKind()}) is listed in the showDetailsForMessageKindList List,
      * the message is prefixed with location details (Class, row/line number etc.) as well.
-     * <p/>
      * {@inheritDoc}
      */
     public boolean handleMessage(final IMessage message) {

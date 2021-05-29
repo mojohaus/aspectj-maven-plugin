@@ -48,9 +48,8 @@ import java.util.Set;
 
 /**
  * Creates an AspectJ HTML report using the {@code ajdoc} tool and format.
- *
+ * A Maven 2.0 ajdoc report
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
- * @description A Maven 2.0 ajdoc report
  */
 @Mojo( name="aspectj-report", requiresDependencyResolution = ResolutionScope.COMPILE )
 public class AjcReportMojo
@@ -199,7 +198,7 @@ public class AjcReportMojo
     /**
      * Holder for all options passed
      */
-    private List<String> ajcOptions = new ArrayList<String>();
+    private List<String> ajcOptions = new ArrayList<>();
 
     /**
      */
@@ -218,7 +217,7 @@ public class AjcReportMojo
         project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
         project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
 
-        List<String> arguments = new ArrayList<String>();
+        List<String> arguments = new ArrayList<>();
         // Add classpath
         arguments.add( "-classpath" );
         arguments.add( AjcHelper.createClassPath( project, pluginArtifacts, getClasspathDirectories() ) );
@@ -271,7 +270,7 @@ public class AjcReportMojo
             Main.setOutputWorkingDir( buildDirectory.getAbsolutePath() );
 
             // Now produce the JavaDoc.
-            Main.main( (String[]) arguments.toArray( new String[0] ) );
+            Main.main( arguments.toArray( new String[0] ) );
         }
         finally
         {
@@ -286,7 +285,7 @@ public class AjcReportMojo
     @SuppressWarnings( "unchecked" )
     protected List<String> getSourceDirectories()
     {
-        List<String> sourceDirectories = new ArrayList<String>();
+        List<String> sourceDirectories = new ArrayList<>();
         sourceDirectories.addAll( project.getCompileSourceRoots() );
         sourceDirectories.addAll( project.getTestCompileSourceRoots() );
         return sourceDirectories;
