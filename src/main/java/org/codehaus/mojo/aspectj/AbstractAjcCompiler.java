@@ -1,5 +1,8 @@
 package org.codehaus.mojo.aspectj;
 
+
+import org.apache.commons.collections.CollectionUtils;
+
 /**
  * The MIT License
  *
@@ -407,6 +410,14 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected boolean forceAjcCompile;
 
     /**
+     * Sets the arguments to be passed to the compiler if {@link #fork} is set to true.<br />
+     * Example: &lt;compilerArgs&gt; &lt;arg&gt;-Xmaxerrs=1000&lt;/arg&gt; &lt;arg&gt;-Xlint&lt;/arg&gt; &lt;arg&gt;-J-Duser.language=en_us&lt;/arg&gt;
+     * &lt;/compilerArgs&gt;
+     */
+    @Parameter
+    protected List<String> compilerArgs = new ArrayList<>();
+
+    /**
      * Holder for ajc compiler options
      */
     protected List<String> ajcOptions = new ArrayList<>();
@@ -632,6 +643,10 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
             resolvedIncludes = getIncludedSources();
         }
         ajcOptions.addAll(resolvedIncludes);
+
+        if (CollectionUtils.isNotEmpty(compilerArgs)) {
+            ajcOptions.addAll(compilerArgs);
+        }
     }
 
     protected Set<String> getIncludedSources()
