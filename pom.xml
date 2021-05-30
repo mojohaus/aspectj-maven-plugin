@@ -244,31 +244,6 @@
           </excludes>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-invoker-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <goals>
-              <goal>install</goal>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <projectsDirectory>src/it</projectsDirectory>
-          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-          <postBuildHookScript>verify</postBuildHookScript>
-          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-          <goals>
-            <goal>clean</goal>
-            <goal>test</goal>
-          </goals>
-          <settingsFile>src/it/settings.xml</settingsFile>
-          <debug>true</debug>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
@@ -309,56 +284,83 @@
       defines a property.
     -->
 
-      <profile>
-          <id>tools-jar</id>
-          <activation>
-              <jdk>1.8</jdk> <!-- activate only on JDK8, as 8 is minimum version to run aspectj on-->
-          </activation>
-          <dependencies>
-              <dependency>
-                  <groupId>com.sun</groupId>
-                  <artifactId>tools</artifactId>
-                  <version>1.8</version>
-                  <scope>system</scope>
-                  <systemPath>${java.home}/../lib/tools.jar</systemPath>
-              </dependency>
-          </dependencies>
-      </profile>
-      <profile>
-          <id>java8</id>
-          <activation>
-              <jdk>[1.8,)</jdk>
-          </activation>
-          <properties>
-              <!--
-                Because of this properties section the old way of setting the tools.jar path via a property defined in
-                another profile does not work anymore when importing Maven projects into Eclipse. :-(
-              -->
-              <additionalparam>-Xdoclint:none</additionalparam>
-          </properties>
-      </profile>
     <profile>
-      <id>maven-repo-local</id>
+      <id>tools-jar</id>
       <activation>
-        <property>
-          <name>maven.repo.local</name>
-        </property>
+        <jdk>1.8</jdk> <!-- activate only on JDK8, as 8 is minimum version to run aspectj on-->
       </activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun</groupId>
+          <artifactId>tools</artifactId>
+          <version>1.8</version>
+          <scope>system</scope>
+          <systemPath>${java.home}/../lib/tools.jar</systemPath>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>docs</id>
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-jar-no-fork</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
-              <systemProperties>
-                <property>
-                 <!--
-                    Pass this through to the tests (if set!) to
-                    have them pick the right repository
-                  -->
-                  <name>maven.repo.local</name>
-                  <value>${maven.repo.local}</value>
-                </property>
-              </systemProperties>
+              <failOnError>true</failOnError>
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>run-its</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <goals>
+                  <goal>install</goal>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <projectsDirectory>src/it</projectsDirectory>
+              <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+              <postBuildHookScript>verify</postBuildHookScript>
+              <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+              <goals>
+                <goal>clean</goal>
+                <goal>test</goal>
+              </goals>
+              <settingsFile>src/it/settings.xml</settingsFile>
+              <debug>true</debug>
             </configuration>
           </plugin>
         </plugins>
