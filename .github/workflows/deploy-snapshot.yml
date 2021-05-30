@@ -1,0 +1,40 @@
+name: Deploy Snapshot
+
+# Only trigger, when the build workflow succeeded
+on:
+  push:
+    branches:
+      - 'master'
+  workflow_run:
+    workflows: ["GitHub CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up cache for ~./m2/repository
+        uses: actions/cache@v2.1.3
+        with:
+          path: |
+            ~/.m2/repository
+            !~/.m2/repository/org/codehaus/mojo/aspectj-maven-plugin
+          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ matrix.os }}-java${{ matrix.java }}-
+            maven-${{ matrix.os }}-
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2.1.0
+        with:
+          java-version: 8
+          distribution: adopt-openj9
+
+      - name: Build with Maven
+        shell: bash
+        run: mvn --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its,docs" clean deploy
