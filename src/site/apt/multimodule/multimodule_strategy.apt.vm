@@ -19,8 +19,6 @@ Strategies for using AspectJ in a Maven multi-module reactor
   application servers. In fact, the small Validation solution may be run directly in a plain Java SE environment.
   All steps will be detailed in the walkthrough below, but we will start by taking a look at the end result:
 
-[../images/plantuml/multimodule_ajc.png] Resulting reactor
-
   The reactor contains the following parts:
 
     * <<rootParentPOM>>: Contains version definitions for the aspectjrt and aspectjtools libraries, to be

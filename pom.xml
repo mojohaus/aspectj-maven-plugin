@@ -20,7 +20,7 @@
   </description>
   <inceptionYear>2005</inceptionYear>
   <properties>
-    <aspectjVersion>1.9.6</aspectjVersion>
+    <aspectjVersion>1.9.7.M3</aspectjVersion>
     <mavenVersion>3.0.5</mavenVersion>
     <doxiaVersion>1.6</doxiaVersion>
     <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
@@ -272,40 +272,6 @@
           <settingsFile>src/it/settings.xml</settingsFile>
           <debug>true</debug>
         </configuration>
-      </plugin>
-
-      <!--
-         Provides PlantUML integration into site deployments.
-      -->
-      <plugin>
-        <groupId>com.github.jeluard</groupId>
-        <artifactId>plantuml-maven-plugin</artifactId>
-        <version>7954</version>
-        <configuration>
-          <sourceFiles>
-            <directory>${basedir}</directory>
-            <includes>
-              <include>src/site/**/*.puml</include>
-            </includes>
-          </sourceFiles>
-          <outputDirectory>${project.build.directory}/site/images/plantuml</outputDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>generate-plantuml-diagrams</id>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <phase>pre-site</phase>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>net.sourceforge.plantuml</groupId>
-            <artifactId>plantuml</artifactId>
-            <version>7985</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>
