@@ -1,7 +1,12 @@
+# Mojohaus AspectJ-Maven-Plugin
+
+This is the [aspectj-maven-plugin](https://www.mojohaus.org/aspectj-maven-plugin/).
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.mojo/aspectj-maven-plugin.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.codehaus.mojo%22%20AND%20a%3A%22aspectj-maven-plugin%22)
 [![GitHub CI](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml)
 
-# Mojohaus AspectJ-Maven-Plugin
+## Overview
 
 This plugin  weaves AspectJ aspects into your classes using the AspectJ compiler ("ajc").
 Typically, aspects are used in one of two ways within your Maven reactors:
@@ -15,5 +20,29 @@ Typically, aspects are used in one of two ways within your Maven reactors:
     This is a more complex and powerful approach, best suited when several Maven projects should be woven
     by a common set of aspects. The "Examples: Multi-module AspectJ use" contains a basic walkthrough
     of this approach.
-    
-[Plugin documentation - available shortly](http://www.mojohaus.org/aspectj-maven-plugin/)
+
+## Contributing
+
+The first step is to create [an appropriate issue](https://github.com/mojohaus/aspectj-maven-plugin/issues). Describe the problem/idea you have and create an appropriate pull request.
+
+Test you changes locally using 
+
+```shell
+mvn clean verify -Pdocs,run-its
+```
+
+If you need to contact a committer, please consider getting active [on the mailing lists](https://groups.google.com/forum/#!forum/mojohaus-dev).
+
+
+## Releasing
+
+* Make sure `gpg-agent` is running.
+* Make sure all tests pass `mvn clean verify -Prun-its`
+* Execute `mvn -B release:prepare release:perform`
+
+For publishing the site do the following:
+
+```
+cd target/checkout
+mvn verify site site:stage scm-publish:publish-scm
+```
