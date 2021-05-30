@@ -36,10 +36,6 @@
     <system>GitHub</system>
     <url>https://github.com/mojohaus/aspectj-maven-plugin/issues/</url>
   </issueManagement>
-  <ciManagement>
-    <system>Travis-CI</system>
-    <url>https://travis-ci.org/mojohaus/aspectj-maven-plugin</url>
-  </ciManagement>
 
   <scm>
     <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin.git</connection>
