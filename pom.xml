@@ -273,40 +273,6 @@
           <debug>true</debug>
         </configuration>
       </plugin>
-
-      <!--
-         Provides PlantUML integration into site deployments.
-      -->
-      <plugin>
-        <groupId>com.github.jeluard</groupId>
-        <artifactId>plantuml-maven-plugin</artifactId>
-        <version>7954</version>
-        <configuration>
-          <sourceFiles>
-            <directory>${basedir}</directory>
-            <includes>
-              <include>src/site/**/*.puml</include>
-            </includes>
-          </sourceFiles>
-          <outputDirectory>${project.build.directory}/site/images/plantuml</outputDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>generate-plantuml-diagrams</id>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <phase>pre-site</phase>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>net.sourceforge.plantuml</groupId>
-            <artifactId>plantuml</artifactId>
-            <version>7985</version>
-          </dependency>
-        </dependencies>
-      </plugin>
     </plugins>
   </build>
 
