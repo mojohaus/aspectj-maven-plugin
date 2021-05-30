@@ -58,33 +58,7 @@ jobs:
 
       - name: Build with Maven
         shell: bash
-        run: mvn --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its" clean verify
-
-  javadoc:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v2.1.3
-        with:
-          path: |
-            ~/.m2/repository
-            !~/.m2/repository/org/codehaus/mojo/aspectj-maven-plugin
-          key: maven-${{ matrix.os }}-java${{ matrix.java }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-${{ matrix.os }}-java${{ matrix.java }}-
-            maven-${{ matrix.os }}-
-      - name: Set up JDK
-        uses: actions/setup-java@v2.1.0
-        with:
-          java-version: 8
-          distribution: adopt-openj9
-      - name: Build with Maven
-        shell: bash
-        run: mvn --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its" clean compile javadoc:javadoc
+        run: mvn --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its,docs" clean verify
 
   site:
     needs: build
@@ -110,7 +84,7 @@ jobs:
           distribution: adopt-openj9
       - name: Build with Maven
         shell: bash
-        run: mvn --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its" clean javadoc:javadoc site site:stage
+        run: mvn --show-version --errors --batch-mode clean site site:stage
 
   build-all:
 
@@ -155,6 +129,13 @@ jobs:
           # exclude old maven versions on MacOS.
           - os: macOS-latest
             maven: '3.3.9'
+          # exclude old maven version with various JDKs, one will do.
+          - maven: '3.3.9'
+            java:
+              dist: adopt-hotspot
+          - maven: '3.3.9'
+            java:
+              dist: zulu
 
       fail-fast: false
 
@@ -192,5 +173,5 @@ jobs:
 
       - name: Build with Maven
         shell: bash
-        run: ./mvnw --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its" clean verify
+        run: ./mvnw --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its,docs" clean verify
 
