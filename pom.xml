@@ -22,7 +22,7 @@
   <properties>
     <aspectjVersion>1.9.7.M3</aspectjVersion>
     <mavenVersion>3.3.9</mavenVersion>
-    <doxiaVersion>1.6</doxiaVersion>
+    <doxiaVersion>1.9.1</doxiaVersion>
     <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
     <!-- work around until it is correctly fixed at top parent -->
     <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
