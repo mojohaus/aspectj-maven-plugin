@@ -48,8 +48,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <div>Base class for the two aspectJ compiletime weaving mojos.</div>
- * <div>For all available options see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html">ajc-ref</a></div>
+ * Base class for the two aspectJ compile-time weaving mojos.
+ * <p>
+ * For all available options see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html">ajc-ref</a>
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
@@ -191,25 +192,25 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected boolean XhasMember;
 
     /**
-     * Specify classfile target setting (1.1 to 1.8) default is 1.2
+     * Specify bytecode target setting (1.3 to 1.9, 10 to 16). See 'complianceLevel' for details. 
      *
+     * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
     @Parameter( defaultValue = "${project.build.java.target}" )
     protected String target;
 
     /**
-     * Toggle assertions (1.3, 1.4, 1.5, 1.6, 1.7 or 1.8 - default is 1.4). When using -source 1.3, an assert()
-     * statement valid under Java 1.4 will result in a compiler error. When using -source 1.4, treat assert
-     * as a keyword and implement assertions according to the 1.4 language spec. When using -source 1.5 or higher, Java
-     * 5 language features are permitted. With --source 1.7 or higher Java 7 features are supported.
+     * Specify source code language level (1.3 to 1.9, 10 to 16). See 'complianceLevel' for details. 
      *
+     * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
     @Parameter( defaultValue = "${mojo.java.target}" )
     protected String source;
 
     /**
-     * Specify compiler compliance setting.
-     * Defaults to 1.4, with permitted values ("1.3", "1.4", "1.5", "1.6" and "1.7", "1.8").
+     * Specify compiler compliance setting (same as setting 'source' and 'target' to the same level).
+     * Permitted values: 1.3, 1.4, 1.5, 5, 5.0, 1.6, 6, 6.0, 1.7, 7, 7.0, 1.8, 8, 8.0,
+     * 1.9, 9, 9.0, 10, 10.0, 11, 11.0, 12, 12.0, 13, 13.0, 14, 14.0, 15, 15.0, 16, 16.0.
      *
      * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
@@ -354,22 +355,22 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * Supported values are shown in the list below, with their respective explanations - as copied
      * directly from the AJC reference.
      * <dl>
-     * <dt>constructorName</dt>
-     * <dd>method with constructor name</dd>
-     * <dt>packageDefaultMethod</dt>
-     * <dd>attempt to override package-default method</dd>
-     * <dt>deprecation</dt>
-     * <dd>usage of deprecated type or member</dd>
-     * <dt>maskedCatchBlocks</dt>
-     * <dd>hidden catch block</dd>
-     * <dt>unusedLocals</dt>
-     * <dd>local variable never read</dd>
-     * <dt>unusedArguments</dt>
-     * <dd>method argument never read</dd>
-     * <dt>unusedImports</dt>
-     * <dd>import statement not used by code in file</dd>
-     * <dt>none</dt>
-     * <dd>suppress all compiler warnings</dd>
+     *   <dt>constructorName</dt>
+     *   <dd>method with constructor name</dd>
+     *   <dt>packageDefaultMethod</dt>
+     *   <dd>attempt to override package-default method</dd>
+     *   <dt>deprecation</dt>
+     *   <dd>usage of deprecated type or member</dd>
+     *   <dt>maskedCatchBlocks</dt>
+     *   <dd>hidden catch block</dd>
+     *   <dt>unusedLocals</dt>
+     *   <dd>local variable never read</dd>
+     *   <dt>unusedArguments</dt>
+     *   <dd>method argument never read</dd>
+     *   <dt>unusedImports</dt>
+     *   <dd>import statement not used by code in file</dd>
+     *   <dt>none</dt>
+     *   <dd>suppress all compiler warnings</dd>
      * </dl>
      *
      * @see <a href="http://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html#ajc">Eclipse AJC reference</a>
@@ -378,26 +379,21 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected String warn;
 
     /**
-     * <div>
      * The filename holding AJC build arguments.
      * The file will be placed in the project build output directory, and will contain all the arguments passed to
      * the AJC compiler in the last run, and also all the files included in the AJC build.
-     * </div>
-     * <div>
+     * <p>
      * Sample content shown below to illustrate typical content within the builddef.lst file:
-     * <pre>
-     *     <code>
+     * <pre><code>
      * -1.6
      * -encoding
      * UTF-8
      * -classpath
-     * /Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-api/target/nazgul-tools-validation-api-2.0.10-SNAPSHOT.jar:/Users/lj/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar:/Users/lj/.m2/repository/org/aspectj/aspectjrt/1.7.3/aspectjrt-1.7.3.jar:/Users/lj/.m2/repository/junit/junit/4.11/junit-4.11.jar:/Users/lj/.m2/repository/ch/qos/logback/logback-classic/1.0.13/logback-classic-1.0.13.jar:/Users/lj/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar:/Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-aspect/target/classes
+     * /my/library/lib.jar:/somewhere/aspectjrt.jar:/my/project/target/classes
      * -d
-     * /Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-aspect/target/classes
-     * /Users/lj/Development/Projects/Nazgul/nazgul_tools/validation/validation-aspect/src/main/java/se/jguru/nazgul/tools/validation/aspect/ValidationAspect.java
-     *     </code>
-     * </pre>
-     * </div>
+     * /my/project/target/classes
+     * /my/project/src/main/java/org/acme/ValidationAspect.java
+     * </code></pre>
      */
     @Parameter( defaultValue = "builddef.lst" )
     protected String argumentFileName = "builddef.lst";
@@ -472,7 +468,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     /**
      * Do the AspectJ compiling.
      *
-     * @throws MojoExecutionException
+     * @throws MojoExecutionException if arguments file cannot be written
      */
     @SuppressWarnings("unchecked")
     public void execute() throws MojoExecutionException {
@@ -731,7 +727,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * Checks modifications that would make us need a build
      *
      * @return <code>true</code> if build is needed, otherwise <code>false</code>
-     * @throws MojoExecutionException
+     * @throws MojoExecutionException if an unexpected error occurs, e.g. weave directories cannot be resolved 
      */
     protected boolean isBuildNeeded()
             throws MojoExecutionException {

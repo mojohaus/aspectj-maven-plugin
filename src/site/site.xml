@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
     <links>
-      <item name="AspectJ" href="http://aspectj.org"/>
-      <item name="AJC Documentation" href="http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html"/>
+      <item name="AspectJ" href="https://www.eclipse.org/aspectj/"/>
+      <item name="AJC Documentation" href="https://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html"/>
     </links>
     <menu name="Overview">
       <item name="Introduction" href="./index.html"/>

@@ -12,24 +12,23 @@ AspectJ Compiler reference: non-standard options
   options of its goals, as defined in the {{{../plugin-info.html}Plugin Documentation}} page.
 
 +------------------------------------------
-AspectJ Compiler 1.8.2 non-standard options:
 
-	-XnoInline          dont inline advice
-	-XlazyTjp           create thisJoinPoint objects lazily
-	-Xreweavable        create class files that can be subsequently rewoven
-	                    by AspectJ. Deprecated, this is now on by default.
-	-Xreweavable:compress deprecated, reweavable is now default.
-	-XnotReweavable     create class files that cant be subsequently rewoven
-	                    by AspectJ.
-	-XserializableAspects allows aspects to implement serializable
-	-XterminateAfterCompilation compile classes then terminate before weaving
-	-XaddSerialVersionUID calculates and adds the serialVersionUID to any
-	                    serializable type woven by an aspect
-	-Xajruntimetarget:<level> allows code to be generated that targets
-	                    a 1.2 or a 1.5 level AspectJ runtime (default 1.5)
-	-XhasMember         allow hasmethod() and hasfield type patterns in
-	                    declare parents and declare @type
-	-Xjoinpoints:       supply a comma separated list of new joinpoints
-	                    that can be identified by pointcuts.  Values are:
-	                    arrayconstruction, synchronization
+AspectJ Compiler - Eclipse Compiler a00b62fa3572b0 (17Mar2021) - Java16
+
+ AspectJ-specific non-standard options:
+    -XnoInline            dont inline advice
+    -XnotReweavable       create class files that cant be subsequently rewoven
+                          by AspectJ.
+    -XserializableAspects allows aspects to implement serializable
+    -XterminateAfterCompilation compile classes then terminate before weaving
+    -XaddSerialVersionUID calculates and adds the serialVersionUID to any
+                          serializable type woven by an aspect
+    -Xajruntimetarget:<level> allows code to be generated that targets
+                          a 1.2, 1.5, 1.9 level AspectJ runtime (default 1.5)
+    -XhasMember           allow hasmethod() and hasfield type patterns in
+                          declare parents and declare @type
+    -Xjoinpoints:         supply a comma separated list of new joinpoints
+                          that can be identified by pointcuts. Values are:
+                          arrayconstruction, synchronization
+
 +------------------------------------------

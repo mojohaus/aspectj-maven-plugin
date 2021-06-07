@@ -128,12 +128,12 @@ public class AjcHelper
     /**
      * Based on a AJDT build properties file resolves the combination of all
      * include and exclude statements and returns a set of all the files to be
-     * compiled and weaved.
+     * compiled and woven.
      *
      * @param ajdtBuildDefFile the ajdtBuildDefFile
      * @param basedir the baseDirectory
-     * @return
-     * @throws MojoExecutionException
+     * @return Set of Build Files
+     * @throws MojoExecutionException if build properties are not found or cannot be read
      */
     public static Set<String> getBuildFilesForAjdtFile( String ajdtBuildDefFile, File basedir )
         throws MojoExecutionException
@@ -162,13 +162,13 @@ public class AjcHelper
 
     /**
      * Based on a set of sourcedirs, apply include and exclude statements and
-     * returns a set of all the files to be compiled and weaved.
+     * returns a set of all the files to be compiled and woven.
      *
-     * @param sourceDirs
-     * @param includes
-     * @param excludes
-     * @return
-     * @throws MojoExecutionException
+     * @param sourceDirs source directories
+     * @param includes file include patterns
+     * @param excludes file exclude patterns
+     * @return Set of Build Files for Source Dirs
+     * @throws MojoExecutionException if sourceDirs cannot be resolved
      */
     public static Set<String> getBuildFilesForSourceDirs( List<String> sourceDirs, String[] includes, String[] excludes )
         throws MojoExecutionException
@@ -200,10 +200,11 @@ public class AjcHelper
     }
 
     /**
-     * Based on a set of weavedirs returns a set of all the files to be weaved.
+     * Based on a set of weave directories returns a set of all the files to be woven.
      *
-     * @return
-     * @throws MojoExecutionException
+     * @param weaveDirs weave directories
+     * @return a set of all the files to be woven
+     * @throws MojoExecutionException if weave directories cannot be resolved
      */
     public static Set<String> getWeaveSourceFiles( String[] weaveDirs )
         throws MojoExecutionException
@@ -236,7 +237,7 @@ public class AjcHelper
      * @param arguments All arguments passed to ajc in this run
      * @param fileName the filename of the argfile
      * @param outputDir the build output area.
-     * @throws IOException
+     * @throws IOException if argfile cannot be created or written
      */
     public static void writeBuildConfigToFile( List<String> arguments, String fileName, File outputDir )
         throws IOException
@@ -260,8 +261,8 @@ public class AjcHelper
      *
      * @param fileName the filename of the argfile
      * @param outputDir the build output area
-     * @return
-     * @throws IOException
+     * @return the List of all compiler arguments.
+     * @throws IOException if any file operation fails
      */
     public static List<String> readBuildConfigFile( String fileName, File outputDir )
         throws IOException
@@ -289,8 +290,8 @@ public class AjcHelper
     /**
      * Convert a string array to a comma separated list
      *
-     * @param strings
-     * @return
+     * @param strings string array to be converted
+     * @return A comma separated list of Strings
      */
     protected static String getAsCsv( String[] strings )
     {
@@ -311,7 +312,7 @@ public class AjcHelper
 
     /**
      * Helper method to find all .java or .aj files specified by the
-     * includeString. The includeString is a comma separated list over files, or
+     * inExcludeString. The includeString is a comma separated list over files, or
      * directories relative to the specified basedir. Examples of correct
      * listings
      *
@@ -323,22 +324,22 @@ public class AjcHelper
      *         src/main/java/com/project/AnAspect.java
      * </pre>
      *
-     * @param input
+     * @param inExcludeString in-/exclude string
      * @param basedir the baseDirectory
-     * @return a list over all files inn the include string
-     * @throws MojoExecutionException
+     * @return a list over all files in the include string
+     * @throws MojoExecutionException if Java or AspectJ source files cannot be resolved
      */
-    protected static Set<String> resolveIncludeExcludeString( String input, File basedir )
+    protected static Set<String> resolveIncludeExcludeString( String inExcludeString, File basedir )
         throws MojoExecutionException
     {
         Set<String> inclExlSet = new LinkedHashSet<>();
         try
         {
-            if ( null == input || input.trim().equals( "" ) )
+            if ( null == inExcludeString || inExcludeString.trim().equals( "" ) )
             {
                 return inclExlSet;
             }
-            String[] elements = input.split( "," );
+            String[] elements = inExcludeString.split( "," );
             if ( null != elements )
             {
 

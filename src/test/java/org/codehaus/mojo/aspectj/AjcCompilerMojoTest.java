@@ -48,7 +48,7 @@ public class AjcCompilerMojoTest
     }
 
     /**
-     * @throws Exception
+     * @throws Exception on test error
      */
     public void testModificationSet()
         throws Exception
@@ -80,7 +80,7 @@ public class AjcCompilerMojoTest
             ajcMojo.ajcOptions.clear();
             ajcMojo.includes = includes;
             ajcMojo.assembleArguments();
-            assertFalse("A build has compleeted. No modifications done. no new build needed",ajcMojo.isBuildNeeded());
+            assertFalse("A build has completed. No modifications done. no new build needed",ajcMojo.isBuildNeeded());
 
             ajcMojo.ajcOptions.clear();
             ajcMojo.includes = includes;
@@ -92,7 +92,7 @@ public class AjcCompilerMojoTest
             ajcMojo.ajcOptions.clear();
             ajcMojo.includes = includes;
             ajcMojo.assembleArguments();
-            assertFalse("A build has compleeted. No modifications done. no new build needed",ajcMojo.isBuildNeeded());
+            assertFalse("A build has completed. No modifications done. no new build needed",ajcMojo.isBuildNeeded());
             String currentDir = new File(".").getAbsolutePath();
             File aspect = new File(currentDir.substring(0,currentDir.length()-1)+"src/test/projects/test-project/src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj");
             long timeStamp = System.currentTimeMillis();
