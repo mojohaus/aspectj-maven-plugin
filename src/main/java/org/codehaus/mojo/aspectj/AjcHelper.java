@@ -62,8 +62,23 @@ public class AjcHelper
     /**
      * List holding all accepted values for the {@code complianceLevel} parameter.
      */
-    public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES =
-            Arrays.asList("1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "9", "10", "11", "12", "13", "14", "15", "16");
+    public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES = Arrays.asList(
+      // TODO: update from AJC (AspectJ Compiler) regularly, which in turn extends ECJ (Eclipse Java Compiler)
+      "1.3",
+      "1.4",
+      "1.5", "5", "5.0",
+      "1.6", "6", "6.0",
+      "1.7", "7", "7.0",
+      "1.8", "8", "8.0",
+      "1.9", "9", "9.0",
+      "10", "10.0",
+      "11", "11.0",
+      "12", "12.0",
+      "13", "13.0",
+      "14", "14.0",
+      "15", "15.0",
+      "16", "16.0"
+    );
 
     /**
      * Checks if the given complianceLevel value is valid.
