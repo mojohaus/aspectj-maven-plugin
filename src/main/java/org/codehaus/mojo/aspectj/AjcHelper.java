@@ -92,7 +92,7 @@ public class AjcHelper
         String cp = "";
         Set<Artifact> classPathElements = Collections.synchronizedSet(
             // LinkedHashSet preserves order by insertion for iteration
-            new LinkedHashSet<>()
+          new LinkedHashSet<>()
         );
         Set<Artifact> dependencyArtifacts = project.getDependencyArtifacts();
         // Set.addAll only adds if absent, so we want to add the project artifacts first
@@ -141,7 +141,7 @@ public class AjcHelper
     public static Set<String> getBuildFilesForAjdtFile( String ajdtBuildDefFile, File basedir )
         throws MojoExecutionException
     {
-        Set<String> result = new LinkedHashSet<String>();
+        Set<String> result = new LinkedHashSet<>();
 
         Properties ajdtBuildProperties = new Properties();
         try
@@ -176,7 +176,7 @@ public class AjcHelper
     public static Set<String> getBuildFilesForSourceDirs( List<String> sourceDirs, String[] includes, String[] excludes )
         throws MojoExecutionException
     {
-        Set<String> result = new LinkedHashSet<String>();
+        Set<String> result = new LinkedHashSet<>();
 
         for ( String sourceDir : sourceDirs )
         {
@@ -225,7 +225,7 @@ public class AjcHelper
                 }
                 catch ( IOException e )
                 {
-                    throw new MojoExecutionException( "IO Error resolving weavedirs", e );
+                    throw new MojoExecutionException( "IO Error resolving weave directories", e );
                 }
             }
         }
@@ -270,7 +270,7 @@ public class AjcHelper
     public static List<String> readBuildConfigFile( String fileName, File outputDir )
         throws IOException
     {
-        List<String> arguments = new ArrayList<String>();
+        List<String> arguments = new ArrayList<>();
         File argFile = new File( outputDir, fileName );
         if ( FileUtils.fileExists( argFile.getAbsolutePath() ) )
         {

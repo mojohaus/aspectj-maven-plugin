@@ -425,6 +425,18 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
   @Parameter
   protected List<String> additionalCompilerArgs = new ArrayList<>();
 
+  /**
+     * Activates compiler preview features (e.g. sealed classes in Java 16) when used with a suitable JDK version
+     *
+     * @since 1.13
+     */
+    // TODO:
+    //   Create tickets for at least Eclipse IDE and IntelliJ IDEA to recognise this switch and import it as a compiler
+    //   and possibly runtime setting. As for AJDT, maybe we have to implement it ourselves, but actually I found no
+    //   references to the Maven module there, so I guess the import is implemented somewhere else.
+    @Parameter( defaultValue = "false" )
+    protected boolean enablePreview;
+
     /**
      * Holder for ajc compiler options
      */
@@ -630,6 +642,10 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         // Add library artifacts
         addModulesArgument("-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(),
                 "an aspect library");
+
+        // Add Java 9+ modules needed for compilation
+        addModulesArgument("--module-path", ajcOptions, javaModules, null,
+                "Java module");
 
         // Add xmlConfigured option and argument
         if (null != xmlConfigured) {
@@ -890,13 +906,23 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     }
 
     public void setTarget(String target) {
-        ajcOptions.add("-target");
-        ajcOptions.add(target);
+        if (AjcHelper.isValidComplianceLevel(target)) {
+            ajcOptions.add("-target");
+            ajcOptions.add(target);
+        }
     }
 
     public void setSource(String source) {
-        ajcOptions.add("-source");
-        ajcOptions.add(source);
+        if (AjcHelper.isValidComplianceLevel(source)) {
+            ajcOptions.add("-source");
+            ajcOptions.add(source);
+        }
+    }
+
+    public void setEnablePreview(boolean enablePreview) {
+        if (enablePreview) {
+            ajcOptions.add("--enable-preview");
+        }
     }
 
     public void setVerbose(boolean verbose) {

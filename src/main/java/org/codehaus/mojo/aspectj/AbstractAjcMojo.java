@@ -70,6 +70,15 @@ public abstract class AbstractAjcMojo extends AbstractMojo
     protected String[] weaveDirectories;
 
     /**
+     * Java 9+ modules to build the module path from.
+     * Corresponds to <code>ajc --module-path</code> option.
+     *
+     * @since 1.13
+     */
+    @Parameter
+    protected Module[] javaModules;
+
+    /**
      * Weave binary aspects from the jars.
      * The aspects should have been output by the same version of the compiler.
      * The modules must also be dependencies of the project.

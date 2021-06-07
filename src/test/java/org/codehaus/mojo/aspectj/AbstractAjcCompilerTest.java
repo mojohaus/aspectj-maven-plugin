@@ -315,7 +315,86 @@ public class AbstractAjcCompilerTest
         assertTrue( weavePath.indexOf( mod1Artifact ) != -1 );
         assertTrue( weavePath.indexOf( mod2Artifact ) != -1 );
     }
-    
+
+    /**
+     * Verifies that if not stated no --module-path or -p argument should
+     * be found in the ajc arguments
+     * {@link AbstractAjcCompiler#execute()}
+     *
+     * @throws Exception on test error
+     */
+    public void testGetAjcArguments_noModulePath()
+        throws Exception
+    {
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+        assertFalse( args.contains( "--module-path" ) );
+        assertFalse( args.contains( "-p" ) );
+    }
+
+    /**
+     * Tests that the compiler fails as it should if told to weave a module artifact not listed in the project
+     * dependencies.
+     */
+    public void testGetAjcArguments_moduleArtifactsNotProjectDependency()
+    {
+        Module module1 = new Module();
+        String mod1Group = "dill.group";
+        module1.setGroupId( mod1Group );
+        String mod1Artifact = "dall.artifact";
+        module1.setArtifactId( mod1Artifact );
+        try
+        {
+            ajcCompMojo.javaModules = new Module[1];
+            ajcCompMojo.javaModules[0] = module1;
+            ajcCompMojo.assembleArguments();
+            fail( "Should fail quite miserably" );
+        }
+        catch ( MojoExecutionException e )
+        {
+            // good thing
+        }
+    }
+
+    /**
+     * Tests that Java 9+ module path works as expected if listed modules also exist as dependencies
+     *
+     * @throws MojoExecutionException if the mojo fails to execute
+     */
+    public void testGetAjc_moduleArtifacts() throws MojoExecutionException
+    {
+        ajcCompMojo.javaModules = new Module[2];
+        Module module1 = new Module();
+        String mod1Group = "dill.group";
+        module1.setGroupId( mod1Group );
+        String mod1Artifact = "dall.artifact";
+        module1.setArtifactId( mod1Artifact );
+        ajcCompMojo.javaModules[0] = module1;
+        Module module2 = new Module();
+        String mod2Group = "foooup";
+        module2.setGroupId( mod2Group );
+        String mod2Artifact = "bartifact";
+        module2.setArtifactId( mod2Artifact );
+        ajcCompMojo.javaModules[1] = module2;
+        // Modify project to include depencies
+        Set artifacts = new HashSet();
+        artifacts.add( new MockArtifact( mod1Group, mod1Artifact ) );
+        artifacts.add( new MockArtifact( mod2Group, mod2Artifact ) );
+        ajcCompMojo.project.setArtifacts( artifacts );
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+        assertTrue( args.contains( "--module-path" ) );
+        Iterator it = args.iterator();
+        while ( !it.next().equals( "--module-path" ) )
+        {
+            // don't do nothing
+        }
+        String modulePath = (String) it.next();
+        assertTrue( modulePath.indexOf( File.pathSeparator ) != -1 );
+        assertTrue( modulePath.indexOf( mod1Artifact ) != -1 );
+        assertTrue( modulePath.indexOf( mod2Artifact ) != -1 );
+    }
+
     // MASPECTJ-103
     public void testGetAJc_EmptyClassifier() throws Exception
     {
