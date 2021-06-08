@@ -425,8 +425,13 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
   @Parameter
   protected List<String> additionalCompilerArgs = new ArrayList<>();
 
-  /**
-     * Activates compiler preview features (e.g. sealed classes in Java 16) when used with a suitable JDK version
+    /**
+     * Activates compiler preview features (e.g. sealed classes in Java 16) when used with a suitable JDK version.
+     * <p>
+     * <b>Please note:</b> You cannot run code compiled with preview features on any other JDK than the one used for
+     * compilation. For example, records compiled with preview on JDK 15 cannot be used on JDK 16 without recompilation.
+     * This is a JVM limitation unrelated to AspectJ. Also, e.g. sealed classes are preview-1 on JDK 15 and preview-2 on
+     * JDK 16. You still need to recompile, no matter what. 
      *
      * @since 1.13
      */
