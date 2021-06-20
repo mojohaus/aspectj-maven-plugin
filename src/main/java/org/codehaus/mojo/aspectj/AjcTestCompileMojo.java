@@ -37,7 +37,10 @@ import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.Scanner;
 
 /**
- * Weaves all test classes. AspectJ Compiler Plugin.
+ * Weaves all test classes.
+ * 
+ * AspectJ Compiler Plugin.
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 @Mojo( name="test-compile", threadSafe = true, defaultPhase = LifecyclePhase.TEST_COMPILE, requiresDependencyResolution = ResolutionScope.TEST )

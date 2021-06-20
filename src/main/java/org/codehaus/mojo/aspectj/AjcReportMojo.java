@@ -48,7 +48,9 @@ import java.util.Set;
 
 /**
  * Creates an AspectJ HTML report using the {@code ajdoc} tool and format.
+ *
  * A Maven 2.0 ajdoc report
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 @Mojo( name="aspectj-report", requiresDependencyResolution = ResolutionScope.COMPILE )
@@ -280,7 +282,7 @@ public class AjcReportMojo
     }
 
     /**
-     * Get the directories containg sources
+     * @return list of source directories
      */
     @SuppressWarnings( "unchecked" )
     protected List<String> getSourceDirectories()
@@ -300,7 +302,7 @@ public class AjcReportMojo
     }
 
     /**
-     * get compileroutput directory.
+     * @return list of classpath directories
      */
     protected List<String> getClasspathDirectories()
     {
@@ -419,7 +421,9 @@ public class AjcReportMojo
     }
 
     /**
-     * Setters which when called sets compiler arguments
+     * Set source compliance level
+     * 
+     * @param complianceLevel compliance level
      */
     public void setComplianceLevel( String complianceLevel )
     {

@@ -59,8 +59,8 @@ public class MockArtifact
     /**
      * Constructor
      * 
-     * @param groupId
-     * @param artifactId
+     * @param groupId group ID
+     * @param artifactId artifact ID
      */
     public MockArtifact( String groupId, String artifactId )
     {
@@ -69,12 +69,12 @@ public class MockArtifact
     }
 
     /**
-     * Construstor with type and classifier
-     * 
-     * @param groupId
-     * @param artifactId
-     * @param classifier
-     * @param type
+     * Constructor with type and classifier
+     *
+     * @param groupId group ID
+     * @param artifactId artifact ID
+     * @param classifier artifact classifier
+     * @param type artifact type
      */
     public MockArtifact( String groupId, String artifactId, String classifier, String type )
     {
@@ -326,7 +326,7 @@ public class MockArtifact
     /**
      * Very simple compareTo implementation
      *
-     * @param a
+     * @param a other artifact to compare to
      * @return compare value
      */
     public int compareTo( Artifact a )
