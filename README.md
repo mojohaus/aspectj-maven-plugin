@@ -3,7 +3,7 @@
 This is the [aspectj-maven-plugin](https://www.mojohaus.org/aspectj-maven-plugin/).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.mojo/aspectj-maven-plugin.svg?label=Maven%20Central)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.codehaus.mojo%22%20AND%20a%3A%22aspectj-maven-plugin%22)
+[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.mojo/aspectj-maven-plugin.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.codehaus.mojo/aspectj-maven-plugin)
 [![GitHub CI](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml)
 
 ## Overview
