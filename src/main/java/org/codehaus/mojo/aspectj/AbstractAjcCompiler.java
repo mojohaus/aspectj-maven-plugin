@@ -1,8 +1,5 @@
 package org.codehaus.mojo.aspectj;
 
-
-import org.apache.commons.collections.CollectionUtils;
-
 /**
  * The MIT License
  *
@@ -27,6 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
  * SOFTWARE.
  */
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -405,13 +403,27 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     @Parameter( defaultValue = "false" )
     protected boolean forceAjcCompile;
 
-    /**
-     * Sets the arguments to be passed to the compiler.<br>
-     * Example: &lt;compilerArgs&gt; &lt;arg&gt;-Xmaxerrs=1000&lt;/arg&gt; &lt;arg&gt;-Xlint&lt;/arg&gt; &lt;arg&gt;-J-Duser.language=en_us&lt;/arg&gt;
-     * &lt;/compilerArgs&gt;
-     */
-    @Parameter
-    protected List<String> compilerArgs = new ArrayList<>();
+  /**
+   * Sets additional compiler arguments, e.g.
+   * <pre>{@code
+   * <compilerArgs>
+   *   <arg>-Xmaxerrs=1000</arg>
+   *   <arg>-Xlint</arg>
+   *   <arg>-J-Duser.language=en_us</arg> 
+   * </compilerArgs>
+   * }</pre>
+   * This option can be used in case you want to use AJC options not (yet) supported by this plugin.
+   * <p>
+   * <b>Caveat:</b> Be careful when using this option and select the additional compiler arguments wisely, because
+   * behaviour is undefined if you add arguments which have already been added by the plugin using regular parameters
+   * or their default values. The resulting compiler command line will in that case contain duplicate arguments, which
+   * might be illegal depending on the specific argument. Do not expect to be able to manually override existing
+   * arguments using this option or to replace whole argument lists.
+   *
+   * @since 1.13
+   */
+  @Parameter
+  protected List<String> additionalCompilerArgs = new ArrayList<>();
 
     /**
      * Holder for ajc compiler options
@@ -640,8 +652,8 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         }
         ajcOptions.addAll(resolvedIncludes);
 
-        if (CollectionUtils.isNotEmpty(compilerArgs)) {
-            ajcOptions.addAll(compilerArgs);
+        if (CollectionUtils.isNotEmpty(additionalCompilerArgs)) {
+            ajcOptions.addAll(additionalCompilerArgs);
         }
     }
 
