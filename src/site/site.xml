@@ -5,6 +5,11 @@
       <item name="AspectJ" href="https://www.eclipse.org/aspectj/"/>
       <item name="AJC Documentation" href="https://www.eclipse.org/aspectj/doc/released/devguide/ajc-ref.html"/>
     </links>
+    <breadcrumbs>
+      <item name="MojoHaus" href="https://www.mojohaus.org/"/>
+      <item name="${this.name}" href="${this.url}" />
+    </breadcrumbs>
+
     <menu name="Overview">
       <item name="Introduction" href="./index.html"/>
       <item name="Usage" href="./usage.html"/>

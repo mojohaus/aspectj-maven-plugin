@@ -24,7 +24,7 @@
     <mavenVersion>3.3.9</mavenVersion>
     <doxiaVersion>1.6</doxiaVersion>
     <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
-    <project.build.outputTimestamp>1</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2021-06-20T15:01:12Z</project.build.outputTimestamp>
     <!-- work around until it is correctly fixed at top parent -->
     <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
   </properties>
@@ -253,11 +253,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.5</version>
-        <configuration>
-          <!-- see: https://github.com/apache/maven-plugin-tools/pull/11 -->
-          <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
