@@ -22,7 +22,8 @@
   <properties>
     <aspectjVersion>1.9.7.M3</aspectjVersion>
     <mavenVersion>3.3.9</mavenVersion>
-    <doxiaVersion>1.6</doxiaVersion>
+    <doxiaVersion>1.10</doxiaVersion>
+    <doxiaSitetoolsVersion>1.10</doxiaSitetoolsVersion>
     <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
     <project.build.outputTimestamp>2021-06-20T15:01:12Z</project.build.outputTimestamp>
     <!-- work around until it is correctly fixed at top parent -->
@@ -101,11 +102,6 @@
   <dependencies>
     <!-- Maven core -->
     <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-utils</artifactId>
-        <version>3.3.0</version>
-    </dependency>
-    <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
         <version>${mavenVersion}</version>
@@ -116,11 +112,6 @@
         <artifactId>maven-model</artifactId>
         <version>${mavenVersion}</version>
         <scope>provided</scope>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.maven.reporting</groupId>
-        <artifactId>maven-reporting-api</artifactId>
-        <version>3.0</version>
     </dependency>
     <dependency>
         <groupId>org.apache.maven</groupId>
@@ -138,6 +129,14 @@
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-compat</artifactId>
         <version>${mavenVersion}</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- Reporting -->
+    <dependency>
+        <groupId>org.apache.maven.reporting</groupId>
+        <artifactId>maven-reporting-api</artifactId>
+        <version>3.0</version>
     </dependency>
     <dependency>
         <groupId>org.apache.maven.doxia</groupId>
@@ -147,13 +146,14 @@
     <dependency>
         <groupId>org.apache.maven.doxia</groupId>
         <artifactId>doxia-site-renderer</artifactId>
-        <version>${doxiaVersion}</version>
+        <version>${doxiaSitetoolsVersion}</version>
     </dependency>
     <dependency>
         <groupId>org.apache.maven.reporting</groupId>
         <artifactId>maven-reporting-impl</artifactId>
-        <version>2.4</version>
+        <version>3.0.0</version>
     </dependency>
+
     <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjtools</artifactId>
@@ -166,6 +166,13 @@
         [DEBUG] Running : ajdoc  -classpath [... a long classpath follows ...]
         ajdoc requires a JDK 1.4 or later tools jar - exiting
     -->
+
+    <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-utils</artifactId>
+        <version>3.3.0</version>
+    </dependency>
+
     <!-- Test -->
     <dependency>
         <groupId>junit</groupId>
