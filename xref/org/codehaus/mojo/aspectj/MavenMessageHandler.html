@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:kaare.nilsen@gmail.com" target="alexandria_uri">mailto:kaare.nilsen@gmail.com</a>"&gt;Kaare Nilsen&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * @author &lt;a href="<a href="mailto:lj@jguru.se" target="alexandria_uri">mailto:lj@jguru.se</a>"&gt;Lennart J&amp;ouml;relid&lt;/a&gt;, jGuru Europe AB</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/codehaus/mojo/aspectj/MavenMessageHandler.html">MavenMessageHandler</a> <strong class="jxr_keyword">extends</strong> MessageHandler {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="MavenMessageHandler" href="../../../../org/codehaus/mojo/aspectj/MavenMessageHandler.html#MavenMessageHandler">MavenMessageHandler</a> <strong class="jxr_keyword">extends</strong> MessageHandler {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_comment">// Internal state</em>
@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     *                                      should emit details onto the Maven log (i.e. class name,</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     *                                      line/row number etc.)</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/codehaus/mojo/aspectj/MavenMessageHandler.html">MavenMessageHandler</a>(<strong class="jxr_keyword">final</strong> Log log,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <a name="MavenMessageHandler" href="../../../../org/codehaus/mojo/aspectj/MavenMessageHandler.html#MavenMessageHandler">MavenMessageHandler</a>(<strong class="jxr_keyword">final</strong> Log log,
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>                                 <strong class="jxr_keyword">final</strong> List&lt;IMessage.Kind&gt; showDetailsForMessageKindList) {
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          <em class="jxr_comment">// Check sanity</em>
@@ -100,7 +100,7 @@
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">     * @param log The active Maven Log.</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">     */</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../org/codehaus/mojo/aspectj/MavenMessageHandler.html">MavenMessageHandler</a>(<strong class="jxr_keyword">final</strong> Log log) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>      <strong class="jxr_keyword">public</strong> <a name="MavenMessageHandler" href="../../../../org/codehaus/mojo/aspectj/MavenMessageHandler.html#MavenMessageHandler">MavenMessageHandler</a>(<strong class="jxr_keyword">final</strong> Log log) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>          <strong class="jxr_keyword">this</strong>(log, DEFAULT_DETAIL_TYPES);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>      }
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  
@@ -108,7 +108,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">     * Copies output from the supplied message onto the active Maven Log.</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">     * If the message type (i.e. {@code message.getKind()}) is listed in the showDetailsForMessageKindList List,</em>
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">     * the message is prefixed with location details (Class, row/line number etc.) as well.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">     * &lt;p/&gt;</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">     * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">     * {@inheritDoc}</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> handleMessage(<strong class="jxr_keyword">final</strong> IMessage message) {
@@ -197,6 +197,6 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2005&#x2013;2018 <a href="http://www.mojohaus.org">MojoHaus</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2005&#x2013;2021 <a href="https://www.mojohaus.org">MojoHaus</a>. All rights reserved.</div>
 </body>
 </html>
