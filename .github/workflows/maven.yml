@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v2
         with:
           path: |
             ~/.m2/repository
@@ -50,7 +50,7 @@ jobs:
             maven-${{ matrix.os }}-java${{ matrix.java }}-
             maven-${{ matrix.os }}-
       - name: Set up JDK
-        uses: actions/setup-java@v2.5.0
+        uses: actions/setup-java@v2
         with:
           java-version: 8
           distribution: adopt-openj9
@@ -73,7 +73,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v2
         with:
           path: |
             ~/.m2/repository
@@ -83,7 +83,7 @@ jobs:
             maven-${{ matrix.os }}-java${{ matrix.java }}-
             maven-${{ matrix.os }}-
       - name: Set up JDK
-        uses: actions/setup-java@v2.5.0
+        uses: actions/setup-java@v2
         with:
           java-version: 8
           distribution: adopt-openj9
@@ -97,7 +97,7 @@ jobs:
 
     strategy:
       matrix:
-        maven: [ '3.3.9', '3.8.1' ]
+        maven: [ '3.8.4' ]
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
         java:
           # Hotspot VM, the "default" VM
@@ -105,28 +105,28 @@ jobs:
             dist: adopt-hotspot
           - version: 11
             dist: adopt-hotspot
-          - version: 16
+          - version: 17
             dist: adopt-hotspot
           # Zulu VM, based on Hotspot
           - version: 8
             dist: zulu
           - version: 11
             dist: zulu
-          - version: 16
+          - version: 17
             dist: zulu
           # OpenJ9, an alternate JVM implementation.
           - version: 8
             dist: adopt-openj9
           - version: 11
             dist: adopt-openj9
-          - version: 16
+          - version: 17
             dist: adopt-openj9
         exclude:
           # exclude some builds, because MacOs builds have fewer resources available.
-          # excludes java 16 on macOS.
+          # excludes java 17 on macOS.
           - os: macOS-latest
             java:
-              version: 16
+              version: 17
           # exclude adopt-hotspot on MacOS. zulu (also hotspot) and OpenJ9 are sufficient.
           - os: macOS-latest
             java:
@@ -151,7 +151,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up cache for ~./m2/repository
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v2
         with:
           path: |
             ~/.m2/repository
@@ -162,7 +162,7 @@ jobs:
             maven-${{ matrix.os }}-
 
       - name: Set up JDK
-        uses: actions/setup-java@v2.5.0
+        uses: actions/setup-java@v2
         with:
           java-version: ${{ matrix.java.version }}
           distribution: ${{ matrix.java.dist }}
