@@ -20,7 +20,7 @@
   </description>
   <inceptionYear>2005</inceptionYear>
   <properties>
-    <aspectjVersion>1.9.7</aspectjVersion>
+    <aspectjVersion>1.9.8</aspectjVersion>
     <mavenVersion>3.3.9</mavenVersion>
     <doxiaVersion>1.11.1</doxiaVersion>
     <doxiaSitetoolsVersion>1.11.1</doxiaSitetoolsVersion>
