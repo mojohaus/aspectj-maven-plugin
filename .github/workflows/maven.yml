@@ -53,7 +53,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 8
-          distribution: adopt-openj9
+          distribution: temurin
 
       - name: Prepare maven build
         shell: bash
@@ -86,7 +86,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 8
-          distribution: adopt-openj9
+          distribution: temurin
       - name: Build with Maven
         shell: bash
         run: mvn --show-version --errors --batch-mode clean site site:stage
@@ -97,16 +97,16 @@ jobs:
 
     strategy:
       matrix:
-        maven: [ '3.8.4' ]
+        maven: [ '3.8.6' ]
         os: [ ubuntu-latest, windows-latest, macOS-latest ]
         java:
           # Hotspot VM, the "default" VM
           - version: 8
-            dist: adopt-hotspot
+            dist: temurin
           - version: 11
-            dist: adopt-hotspot
+            dist: temurin
           - version: 17
-            dist: adopt-hotspot
+            dist: temurin
           # Zulu VM, based on Hotspot
           - version: 8
             dist: zulu
@@ -130,14 +130,14 @@ jobs:
           # exclude adopt-hotspot on MacOS. zulu (also hotspot) and OpenJ9 are sufficient.
           - os: macOS-latest
             java:
-              dist: adopt-hotspot
+              dist: temurin
           # exclude old maven versions on MacOS.
           - os: macOS-latest
             maven: '3.3.9'
           # exclude old maven version with various JDKs, one will do.
           - maven: '3.3.9'
             java:
-              dist: adopt-hotspot
+              dist: temurin
           - maven: '3.3.9'
             java:
               dist: zulu
