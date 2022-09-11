@@ -13,7 +13,7 @@ AspectJ Compiler reference: non-standard options
 
 +------------------------------------------
 
-AspectJ Compiler - Eclipse Compiler a00b62fa3572b0 (17Mar2021) - Java16
+AspectJ Compiler - Eclipse Compiler a00b62fa3572b0 (7Sept2022) - Java17
 
  AspectJ-specific non-standard options:
     -XnoInline            dont inline advice

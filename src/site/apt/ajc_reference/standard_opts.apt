@@ -15,7 +15,7 @@ AspectJ Compiler reference: standard options
 
 +------------------------------------------
 
-AspectJ Compiler Eclipse Compiler a00b62fa3572b0 (17Mar2021) - Java16
+AspectJ Compiler Eclipse Compiler a00b62fa3572b0 (7Sept2022) - Java17
 
  Usage: <options> <source files | directories>
  If directories are specified, then their source contents are compiled.
@@ -123,9 +123,10 @@ AspectJ-specific options:
     -14 -14.0          use 14  compliance (-source 14  -target 14)
     -15 -15.0          use 15  compliance (-source 15  -target 15)
     -16 -16.0          use 16  compliance (-source 16  -target 16)
-    -source <version>  set source level: 1.3 to 1.9, 10 to 16
+    -17 -17.0          use 16  compliance (-source 17  -target 17)
+    -source <version>  set source level: 1.3 to 1.9, 10 to 17
                        (or 6, 6.0, etc)
-    -target <version>  set classfile target: 1.3 to 1.9, 10 to 16
+    -target <version>  set classfile target: 1.3 to 1.9, 10 to 17
                        (or 6, 6.0, etc)
                        cldc1.1 can also be used to generate the StackMap
                        attribute
