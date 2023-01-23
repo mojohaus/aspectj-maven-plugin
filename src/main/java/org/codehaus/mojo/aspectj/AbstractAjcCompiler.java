@@ -645,15 +645,19 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         ajcOptions.add(getGeneratedSourcesDirectory().getAbsolutePath());
 
         // Add all the files to be included in the build,
-        if (null != ajdtBuildDefFile) {
-            resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
-        } else {
-            resolvedIncludes = getIncludedSources();
-        }
+        resolvedIncludes = getResolvedIncludes();
         ajcOptions.addAll(resolvedIncludes);
 
         if (CollectionUtils.isNotEmpty(additionalCompilerArgs)) {
             ajcOptions.addAll(additionalCompilerArgs);
+        }
+    }
+
+    private Set<String> getResolvedIncludes() throws MojoExecutionException {
+        if (null != ajdtBuildDefFile) {
+            return AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
+        } else {
+            return getIncludedSources();
         }
     }
 
