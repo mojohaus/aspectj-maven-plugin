@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.codehaus.mojo</groupId>
     <artifactId>mojo-parent</artifactId>
-    <version>67</version>
+    <version>74</version>
   </parent>
 
   <artifactId>aspectj-maven-plugin</artifactId>
@@ -24,7 +24,7 @@
     <mavenVersion>3.3.9</mavenVersion>
     <doxiaVersion>1.12.0</doxiaVersion>
     <doxiaSitetoolsVersion>1.11.1</doxiaSitetoolsVersion>
-    <mojo.java.target>1.8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
+    <mojo.java.target>8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
     <project.build.outputTimestamp>2021-07-29T20:50:38Z</project.build.outputTimestamp>
     <!-- work around until it is correctly fixed at top parent -->
     <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
