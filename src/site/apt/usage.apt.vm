@@ -51,7 +51,7 @@ Usage
 
 * Upgrading AspectJ
 
-  The frequency of releases of this plugin is lower than of AspectJ. 
+  The frequency of releases of this plugin is lower than of AspectJ.
   If you want to use a different version of AspectJ than ${aspectjVersion}, you also need to upgrade the
   aspectjtools within the plugin.
 
@@ -61,7 +61,7 @@ Usage
   <properties>
     <aspectj.version>1.7.n</aspectj.version> <!-- specify your version -->
   </properties>
-  
+
   <dependencies>
     ...
     <dependency>
@@ -84,7 +84,7 @@ Usage
             <artifactId>aspectjtools</artifactId>
             <version>${aspectj.version}</version>
           </dependency>
-        <dependencies>
+        </dependencies>
       </plugin>
       ...
     </plugins>
