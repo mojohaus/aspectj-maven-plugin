@@ -182,7 +182,7 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-xml</artifactId>
       <!-- To keep compatibility with Maven 3.x use 3.x -->
-      <version>3.0.0</version>
+      <version>4.0.2</version>
     </dependency>
 
     <!-- Test -->
