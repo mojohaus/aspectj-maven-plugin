@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>aspectj-maven-plugin</artifactId>
-  <version>1.15.0</version>
+  <version>1.15.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Mojo's AspectJ Maven Plugin</name>
@@ -24,7 +24,7 @@
     <doxiaVersion>1.12.0</doxiaVersion>
     <doxiaSitetoolsVersion>1.11.1</doxiaSitetoolsVersion>
     <mojo.java.target>8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
-    <project.build.outputTimestamp>2023-12-12T02:46:31Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2023-12-12T02:46:45Z</project.build.outputTimestamp>
     <!-- work around until it is correctly fixed at top parent -->
     <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
   </properties>
@@ -42,7 +42,7 @@
     <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mojohaus/aspectj-maven-plugin.git</developerConnection>
     <url>https://github.com/mojohaus/aspectj-maven-plugin</url>
-    <tag>aspectj-maven-plugin-1.15.0</tag>
+    <tag>1.14.1</tag>
   </scm>
 
   <developers>
