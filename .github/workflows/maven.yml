@@ -115,8 +115,6 @@ jobs:
           - version: 17
             dist: zulu
           # OpenJ9, an alternate JVM implementation.
-          - version: 8
-            dist: adopt-openj9
           - version: 11
             dist: adopt-openj9
           - version: 17
@@ -131,16 +129,6 @@ jobs:
           - os: macOS-latest
             java:
               dist: temurin
-          # exclude old maven versions on MacOS.
-          - os: macOS-latest
-            maven: '3.3.9'
-          # exclude old maven version with various JDKs, one will do.
-          - maven: '3.3.9'
-            java:
-              dist: temurin
-          - maven: '3.3.9'
-            java:
-              dist: zulu
 
       fail-fast: false
 
