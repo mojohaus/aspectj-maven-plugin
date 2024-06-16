@@ -26,11 +26,10 @@ import org.apache.maven.artifact.handler.ArtifactHandler;
 
 /**
  * Used in unittests.
- * 
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class MockArtifactHandler implements ArtifactHandler
-{
+public class MockArtifactHandler implements ArtifactHandler {
     private String extension;
 
     private String type;
@@ -45,55 +44,44 @@ public class MockArtifactHandler implements ArtifactHandler
 
     private boolean addedToClasspath;
 
-    public String getExtension()
-    {
-        if ( extension == null )
-        {
+    public String getExtension() {
+        if (extension == null) {
             extension = type;
         }
         return extension;
     }
 
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
-    public String getClassifier()
-    {
+    public String getClassifier() {
         return classifier;
     }
 
-    public String getDirectory()
-    {
-        if ( directory == null )
-        {
+    public String getDirectory() {
+        if (directory == null) {
             directory = getPackaging() + "s";
         }
         return directory;
     }
 
-    public String getPackaging()
-    {
-        if ( packaging == null )
-        {
+    public String getPackaging() {
+        if (packaging == null) {
             packaging = type;
         }
         return packaging;
     }
 
-    public boolean isIncludesDependencies()
-    {
+    public boolean isIncludesDependencies() {
         return includesDependencies;
     }
 
-    public String getLanguage()
-    {
+    public String getLanguage() {
         return "java";
     }
 
-    public boolean isAddedToClasspath()
-    {
+    public boolean isAddedToClasspath() {
         return addedToClasspath;
     }
 }

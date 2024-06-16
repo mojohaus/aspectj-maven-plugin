@@ -23,7 +23,6 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -53,8 +52,7 @@ import org.codehaus.plexus.util.StringUtils;
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcHelper
-{
+public class AjcHelper {
     public static final String DEFAULT_INCLUDES = "**/*.java, **/*.aj";
 
     public static final String DEFAULT_EXCLUDES = "";
@@ -62,8 +60,8 @@ public class AjcHelper
     /**
      * List holding all accepted values for the {@code complianceLevel} parameter.
      */
-    public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES =
-            Arrays.asList("1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "9", "10", "11", "12", "13", "14", "15", "16", "17", "21");
+    public static final List<String> ACCEPTED_COMPLIANCE_LEVEL_VALUES = Arrays.asList(
+            "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "9", "10", "11", "12", "13", "14", "15", "16", "17", "21");
 
     /**
      * Checks if the given complianceLevel value is valid.
@@ -73,8 +71,7 @@ public class AjcHelper
      * {@code ACCEPTED_COMPLIANCE_LEVEL_VALUES} List.
      * @see #ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
-    public static boolean isValidComplianceLevel( String complianceLevel )
-    {
+    public static boolean isValidComplianceLevel(String complianceLevel) {
         return ACCEPTED_COMPLIANCE_LEVEL_VALUES.contains(complianceLevel);
     }
 
@@ -86,45 +83,39 @@ public class AjcHelper
      * @param outDirs the outputDirectories
      * @return a os spesific classpath string
      */
-    @SuppressWarnings( "unchecked" )
-    public static String createClassPath( MavenProject project, List<Artifact> pluginArtifacts, List<String> outDirs )
-    {
+    @SuppressWarnings("unchecked")
+    public static String createClassPath(MavenProject project, List<Artifact> pluginArtifacts, List<String> outDirs) {
         String cp = "";
         Set<Artifact> classPathElements = Collections.synchronizedSet(
-            // LinkedHashSet preserves order by insertion for iteration
-            new LinkedHashSet<>()
-        );
+                // LinkedHashSet preserves order by insertion for iteration
+                new LinkedHashSet<>());
         Set<Artifact> dependencyArtifacts = project.getDependencyArtifacts();
         // Set.addAll only adds if absent, so we want to add the project artifacts first
-        classPathElements.addAll( project.getArtifacts() );
-        classPathElements.addAll( dependencyArtifacts == null ? Collections.emptySet() : dependencyArtifacts );
-        classPathElements.addAll( pluginArtifacts == null ? Collections.emptySet() : pluginArtifacts );
+        classPathElements.addAll(project.getArtifacts());
+        classPathElements.addAll(dependencyArtifacts == null ? Collections.emptySet() : dependencyArtifacts);
+        classPathElements.addAll(pluginArtifacts == null ? Collections.emptySet() : pluginArtifacts);
 
-        for ( Artifact classPathElement  : classPathElements )
-        {
+        for (Artifact classPathElement : classPathElements) {
             File artifact = classPathElement.getFile();
-            if ( null != artifact )
-            {
-              String type = classPathElement.getType();
-              if (!type.equals("pom")){
-                cp += classPathElement.getFile().getAbsolutePath();
-                cp += File.pathSeparatorChar;
-              }
+            if (null != artifact) {
+                String type = classPathElement.getType();
+                if (!type.equals("pom")) {
+                    cp += classPathElement.getFile().getAbsolutePath();
+                    cp += File.pathSeparatorChar;
+                }
             }
         }
         Iterator<String> outIter = outDirs.iterator();
-        while ( outIter.hasNext() )
-        {
+        while (outIter.hasNext()) {
             cp += outIter.next();
             cp += File.pathSeparatorChar;
         }
 
-        if ( cp.endsWith( "" + File.pathSeparatorChar ) )
-        {
-            cp = cp.substring( 0, cp.length() - 1 );
+        if (cp.endsWith("" + File.pathSeparatorChar)) {
+            cp = cp.substring(0, cp.length() - 1);
         }
 
-        cp = StringUtils.replace( cp, "//", "/" );
+        cp = StringUtils.replace(cp, "//", "/");
         return cp;
     }
 
@@ -138,27 +129,21 @@ public class AjcHelper
      * @return Set of Build Files
      * @throws MojoExecutionException if build properties are not found or cannot be read
      */
-    public static Set<String> getBuildFilesForAjdtFile( String ajdtBuildDefFile, File basedir )
-        throws MojoExecutionException
-    {
+    public static Set<String> getBuildFilesForAjdtFile(String ajdtBuildDefFile, File basedir)
+            throws MojoExecutionException {
         Set<String> result = new LinkedHashSet<String>();
 
         Properties ajdtBuildProperties = new Properties();
-        try
-        {
-            ajdtBuildProperties.load( new FileInputStream( new File( basedir, ajdtBuildDefFile ) ) );
+        try {
+            ajdtBuildProperties.load(new FileInputStream(new File(basedir, ajdtBuildDefFile)));
+        } catch (FileNotFoundException e) {
+            throw new MojoExecutionException("Build properties file specified not found", e);
+        } catch (IOException e) {
+            throw new MojoExecutionException("IO Error reading build properties file specified", e);
         }
-        catch ( FileNotFoundException e )
-        {
-            throw new MojoExecutionException( "Build properties file specified not found", e );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "IO Error reading build properties file specified", e );
-        }
-        result.addAll( resolveIncludeExcludeString( ajdtBuildProperties.getProperty( "src.includes" ), basedir ) );
-        Set<String> exludes = resolveIncludeExcludeString( ajdtBuildProperties.getProperty( "src.excludes" ), basedir );
-        result.removeAll( exludes );
+        result.addAll(resolveIncludeExcludeString(ajdtBuildProperties.getProperty("src.includes"), basedir));
+        Set<String> exludes = resolveIncludeExcludeString(ajdtBuildProperties.getProperty("src.excludes"), basedir);
+        result.removeAll(exludes);
 
         return result;
     }
@@ -173,28 +158,21 @@ public class AjcHelper
      * @return Set of Build Files for Source Dirs
      * @throws MojoExecutionException if sourceDirs cannot be resolved
      */
-    public static Set<String> getBuildFilesForSourceDirs( List<String> sourceDirs, String[] includes, String[] excludes )
-        throws MojoExecutionException
-    {
+    public static Set<String> getBuildFilesForSourceDirs(List<String> sourceDirs, String[] includes, String[] excludes)
+            throws MojoExecutionException {
         Set<String> result = new LinkedHashSet<String>();
 
-        for ( String sourceDir : sourceDirs )
-        {
-            try
-            {
-                if ( FileUtils.fileExists( sourceDir ) )
-                {
-                    result.addAll( FileUtils
-                        .getFileNames( new File( sourceDir ),
-                                       ( null == includes || 0 == includes.length ) ? DEFAULT_INCLUDES
-                                                                                   : getAsCsv( includes ),
-                                       ( null == excludes || 0 == excludes.length ) ? DEFAULT_EXCLUDES
-                                                                                   : getAsCsv( excludes ), true ) );
+        for (String sourceDir : sourceDirs) {
+            try {
+                if (FileUtils.fileExists(sourceDir)) {
+                    result.addAll(FileUtils.getFileNames(
+                            new File(sourceDir),
+                            (null == includes || 0 == includes.length) ? DEFAULT_INCLUDES : getAsCsv(includes),
+                            (null == excludes || 0 == excludes.length) ? DEFAULT_EXCLUDES : getAsCsv(excludes),
+                            true));
                 }
-            }
-            catch ( IOException e )
-            {
-                throw new MojoExecutionException( "IO Error resolving sourcedirs", e );
+            } catch (IOException e) {
+                throw new MojoExecutionException("IO Error resolving sourcedirs", e);
             }
         }
         // We might need to check if some of these files are already included through the weaveDirectories.
@@ -209,23 +187,16 @@ public class AjcHelper
      * @return a set of all the files to be woven
      * @throws MojoExecutionException if weave directories cannot be resolved
      */
-    public static Set<String> getWeaveSourceFiles( String[] weaveDirs )
-        throws MojoExecutionException
-    {
+    public static Set<String> getWeaveSourceFiles(String[] weaveDirs) throws MojoExecutionException {
         Set<String> result = new HashSet<>();
 
-        for ( int i = 0; i < weaveDirs.length; i++ )
-        {
+        for (int i = 0; i < weaveDirs.length; i++) {
             String weaveDir = weaveDirs[i];
-            if ( FileUtils.fileExists( weaveDir ) )
-            {
-                try
-                {
-                    result.addAll( FileUtils.getFileNames( new File( weaveDir ), "**/*.class", DEFAULT_EXCLUDES, true ) );
-                }
-                catch ( IOException e )
-                {
-                    throw new MojoExecutionException( "IO Error resolving weavedirs", e );
+            if (FileUtils.fileExists(weaveDir)) {
+                try {
+                    result.addAll(FileUtils.getFileNames(new File(weaveDir), "**/*.class", DEFAULT_EXCLUDES, true));
+                } catch (IOException e) {
+                    throw new MojoExecutionException("IO Error resolving weavedirs", e);
                 }
             }
         }
@@ -242,17 +213,15 @@ public class AjcHelper
      * @param outputDir the build output area.
      * @throws IOException if argfile cannot be created or written
      */
-    public static void writeBuildConfigToFile( List<String> arguments, String fileName, File outputDir )
-        throws IOException
-    {
-        FileUtils.forceMkdir( outputDir );
-        File argFile = new File( outputDir, fileName );
+    public static void writeBuildConfigToFile(List<String> arguments, String fileName, File outputDir)
+            throws IOException {
+        FileUtils.forceMkdir(outputDir);
+        File argFile = new File(outputDir, fileName);
         argFile.getParentFile().mkdirs();
         argFile.createNewFile();
-        BufferedWriter writer = new BufferedWriter( new FileWriter( argFile ) );
-        for ( String argument : arguments )
-        {
-            writer.write( argument );
+        BufferedWriter writer = new BufferedWriter(new FileWriter(argFile));
+        for (String argument : arguments) {
+            writer.write(argument);
             writer.newLine();
         }
         writer.flush();
@@ -267,25 +236,19 @@ public class AjcHelper
      * @return the List of all compiler arguments.
      * @throws IOException if any file operation fails
      */
-    public static List<String> readBuildConfigFile( String fileName, File outputDir )
-        throws IOException
-    {
+    public static List<String> readBuildConfigFile(String fileName, File outputDir) throws IOException {
         List<String> arguments = new ArrayList<String>();
-        File argFile = new File( outputDir, fileName );
-        if ( FileUtils.fileExists( argFile.getAbsolutePath() ) )
-        {
-            FileReader reader = new FileReader( argFile );
-            BufferedReader bufRead = new BufferedReader( reader );
+        File argFile = new File(outputDir, fileName);
+        if (FileUtils.fileExists(argFile.getAbsolutePath())) {
+            FileReader reader = new FileReader(argFile);
+            BufferedReader bufRead = new BufferedReader(reader);
             String line = null;
-            do
-            {
+            do {
                 line = bufRead.readLine();
-                if ( null != line )
-                {
-                    arguments.add( line );
+                if (null != line) {
+                    arguments.add(line);
                 }
-            }
-            while ( null != line );
+            } while (null != line);
         }
         return arguments;
     }
@@ -296,16 +259,12 @@ public class AjcHelper
      * @param strings string array to be converted
      * @return A comma separated list of Strings
      */
-    protected static String getAsCsv( String[] strings )
-    {
+    protected static String getAsCsv(String[] strings) {
         String csv = "";
-        if ( null != strings )
-        {
-            for ( int i = 0; i < strings.length; i++ )
-            {
+        if (null != strings) {
+            for (int i = 0; i < strings.length; i++) {
                 csv += strings[i];
-                if ( i < ( strings.length - 1 ) )
-                {
+                if (i < (strings.length - 1)) {
                     csv += ",";
                 }
             }
@@ -332,44 +291,31 @@ public class AjcHelper
      * @return a list over all files in the include string
      * @throws MojoExecutionException if Java or AspectJ source files cannot be resolved
      */
-    protected static Set<String> resolveIncludeExcludeString( String inExcludeString, File basedir )
-        throws MojoExecutionException
-    {
+    protected static Set<String> resolveIncludeExcludeString(String inExcludeString, File basedir)
+            throws MojoExecutionException {
         Set<String> inclExlSet = new LinkedHashSet<>();
-        try
-        {
-            if ( null == inExcludeString || inExcludeString.trim().equals( "" ) )
-            {
+        try {
+            if (null == inExcludeString || inExcludeString.trim().equals("")) {
                 return inclExlSet;
             }
-            String[] elements = inExcludeString.split( "," );
-            if ( null != elements )
-            {
+            String[] elements = inExcludeString.split(",");
+            if (null != elements) {
 
-                for ( int i = 0; i < elements.length; i++ )
-                {
+                for (int i = 0; i < elements.length; i++) {
                     String element = elements[i];
-                    if ( element.endsWith( ".java" ) || element.endsWith( ".aj" ) )
-                    {
-                        inclExlSet.addAll( FileUtils.getFileNames( basedir, element, "", true ) );
-                    }
-                    else
-                    {
-                        File lookupBaseDir = new File( basedir, element );
-                        if ( FileUtils.fileExists( lookupBaseDir.getAbsolutePath() ) )
-                        {
-                            inclExlSet.addAll( FileUtils.getFileNames( lookupBaseDir, DEFAULT_INCLUDES, "",
-                                                                   true ) );
+                    if (element.endsWith(".java") || element.endsWith(".aj")) {
+                        inclExlSet.addAll(FileUtils.getFileNames(basedir, element, "", true));
+                    } else {
+                        File lookupBaseDir = new File(basedir, element);
+                        if (FileUtils.fileExists(lookupBaseDir.getAbsolutePath())) {
+                            inclExlSet.addAll(FileUtils.getFileNames(lookupBaseDir, DEFAULT_INCLUDES, "", true));
                         }
                     }
                 }
             }
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Could not resolve java or aspect sources to compile", e );
+        } catch (IOException e) {
+            throw new MojoExecutionException("Could not resolve java or aspect sources to compile", e);
         }
         return inclExlSet;
     }
-
 }
