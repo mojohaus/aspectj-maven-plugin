@@ -23,14 +23,13 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.maven.plugin.logging.Log;
 import org.aspectj.bridge.IMessage;
 import org.aspectj.bridge.ISourceLocation;
 import org.aspectj.bridge.MessageHandler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * MessageHandler implementation which uses the standard Maven Log to emit
@@ -42,7 +41,6 @@ import java.util.List;
  * @author <a href="mailto:lj@jguru.se">Lennart J&ouml;relid</a>, jGuru Europe AB
  */
 public class MavenMessageHandler extends MessageHandler {
-
 
     // Internal state
     private static final List<IMessage.Kind> DEFAULT_DETAIL_TYPES;
@@ -64,8 +62,7 @@ public class MavenMessageHandler extends MessageHandler {
      *                                      should emit details onto the Maven log (i.e. class name,
      *                                      line/row number etc.)
      */
-    public MavenMessageHandler(final Log log,
-                               final List<IMessage.Kind> showDetailsForMessageKindList) {
+    public MavenMessageHandler(final Log log, final List<IMessage.Kind> showDetailsForMessageKindList) {
 
         // Check sanity
         // assert log != null : "Cannot handle null log argument.";
@@ -123,9 +120,7 @@ public class MavenMessageHandler extends MessageHandler {
             final String context = sourceLocation == null || sourceLocation.getContext() == null
                     ? ""
                     : sourceLocation.getContext() + "\n";
-            final String line = sourceLocation == null
-                    ? "<no line information>"
-                    : "" + sourceLocation.getLine();
+            final String line = sourceLocation == null ? "<no line information>" : "" + sourceLocation.getLine();
 
             builder.append("\n\t")
                     .append(sourceFile)
@@ -154,7 +149,7 @@ public class MavenMessageHandler extends MessageHandler {
             // The WARNING ajc message kind is considered Maven Warn messages.
             log.warn(messageText);
 
-        } else if(isNotIgnored(message, IMessage.ERROR)
+        } else if (isNotIgnored(message, IMessage.ERROR)
                 || isNotIgnored(message, IMessage.ABORT)
                 || isNotIgnored(message, IMessage.FAIL)) {
 

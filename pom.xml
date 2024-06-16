@@ -13,37 +13,10 @@
   <packaging>maven-plugin</packaging>
 
   <name>Mojo's AspectJ Maven Plugin</name>
-  <description>
-        Handles AspectJ usage within Maven.
+  <description>Handles AspectJ usage within Maven.
         Functionality provided is: weaving of aspects (or existing aspects from libraries) with the
-        test and/or main classes, weaving of pre-existing jars and ajdoc reporting.
-  </description>
+        test and/or main classes, weaving of pre-existing jars and ajdoc reporting.</description>
   <inceptionYear>2005</inceptionYear>
-  <properties>
-    <aspectjVersion>1.9.7</aspectjVersion>
-    <doxiaVersion>1.12.0</doxiaVersion>
-    <doxiaSitetoolsVersion>1.11.1</doxiaSitetoolsVersion>
-    <mojo.java.target>8</mojo.java.target> <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
-    <project.build.outputTimestamp>2023-12-12T02:46:45Z</project.build.outputTimestamp>
-    <!-- work around until it is correctly fixed at top parent -->
-    <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
-  </properties>
-
-  <prerequisites>
-    <maven>${mavenVersion}</maven>
-  </prerequisites>
-
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/mojohaus/aspectj-maven-plugin/issues/</url>
-  </issueManagement>
-
-  <scm>
-    <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/mojohaus/aspectj-maven-plugin.git</developerConnection>
-    <url>https://github.com/mojohaus/aspectj-maven-plugin</url>
-    <tag>1.14.1</tag>
-  </scm>
 
   <developers>
     <developer>
@@ -98,6 +71,32 @@
     </contributor>
   </contributors>
 
+  <prerequisites>
+    <maven>${mavenVersion}</maven>
+  </prerequisites>
+
+  <scm>
+    <connection>scm:git:https://github.com/mojohaus/aspectj-maven-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/mojohaus/aspectj-maven-plugin.git</developerConnection>
+    <tag>1.14.1</tag>
+    <url>https://github.com/mojohaus/aspectj-maven-plugin</url>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/mojohaus/aspectj-maven-plugin/issues/</url>
+  </issueManagement>
+  <properties>
+    <aspectjVersion>1.9.7</aspectjVersion>
+    <doxiaVersion>1.12.0</doxiaVersion>
+    <doxiaSitetoolsVersion>1.11.1</doxiaSitetoolsVersion>
+    <mojo.java.target>8</mojo.java.target>
+    <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
+    <project.build.outputTimestamp>2023-12-12T02:46:45Z</project.build.outputTimestamp>
+    <!-- work around until it is correctly fixed at top parent -->
+    <scmpublish.content>${project.build.directory}/staging/aspectj-maven-plugin</scmpublish.content>
+  </properties>
+
   <dependencies>
     <!-- Maven core -->
     <dependency>
@@ -127,7 +126,8 @@
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
-      <scope>provided</scope><!-- annotations are needed only to build the plugin -->
+      <scope>provided</scope>
+      <!-- annotations are needed only to build the plugin -->
     </dependency>
     <!-- Other -->
     <!-- see: https://cwiki.apache.org/confluence/display/MAVEN/Plugin+migration+to+Maven3+dependencies -->
@@ -227,6 +227,13 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <version>3.5.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>extra-enforcer-rules</artifactId>
+            <version>1.8.0</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
             <id>enforce-bytecode-version</id>
@@ -245,13 +252,6 @@
             </configuration>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>extra-enforcer-rules</artifactId>
-            <version>1.8.0</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -303,7 +303,8 @@
     <profile>
       <id>tools-jar</id>
       <activation>
-        <jdk>1.8</jdk> <!-- activate only on JDK8, as 8 is minimum version to run aspectj on-->
+        <jdk>1.8</jdk>
+        <!-- activate only on JDK8, as 8 is minimum version to run aspectj on-->
       </activation>
       <dependencies>
         <dependency>
@@ -356,16 +357,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>integration-test</id>
-                <goals>
-                  <goal>install</goal>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-              </execution>
-            </executions>
             <configuration>
               <projectsDirectory>src/it</projectsDirectory>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -378,6 +369,16 @@
               <settingsFile>src/it/settings.xml</settingsFile>
               <debug>true</debug>
             </configuration>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <goals>
+                  <goal>install</goal>
+                  <goal>integration-test</goal>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>

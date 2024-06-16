@@ -23,6 +23,15 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.artifact.Artifact;
@@ -34,16 +43,6 @@ import org.aspectj.tools.ajc.Main;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.Scanner;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Base class for the two aspectJ compile-time weaving mojos.
@@ -65,14 +64,14 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * The source directory for the aspects.
      *
      */
-    @Parameter( defaultValue = "src/main/aspect" )
+    @Parameter(defaultValue = "src/main/aspect")
     protected String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects.
      *
      */
-    @Parameter( defaultValue = "src/test/aspect" )
+    @Parameter(defaultValue = "src/test/aspect")
     protected String testAspectDirectory = "src/test/aspect";
 
     /**
@@ -122,22 +121,21 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected boolean emacssym;
 
     /**
-    * Set the compiler "proc" argument.
-    * Aspectj supports Annotation processing since 1.8.2, it can been disabled by <code>proc:none</code>.
-    *
-    * @see <a href="https://www.eclipse.org/aspectj/doc/released/README-182.html">AspectJ 1.8.2 Release notes</a>
-    * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#processing">Annotation Processing</a>
-    */
+     * Set the compiler "proc" argument.
+     * Aspectj supports Annotation processing since 1.8.2, it can been disabled by <code>proc:none</code>.
+     *
+     * @see <a href="https://www.eclipse.org/aspectj/doc/released/README-182.html">AspectJ 1.8.2 Release notes</a>
+     * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#processing">Annotation Processing</a>
+     */
     @Parameter
     protected String proc;
 
     /**
-    * Set the compiler "parameters" argument.
-    *
-    */
+     * Set the compiler "parameters" argument.
+     *
+     */
     @Parameter
     protected boolean parameters;
-
 
     /**
      * Allows the caller to provide additional arguments in a Map format. For example:
@@ -190,19 +188,19 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected boolean XhasMember;
 
     /**
-     * Specify bytecode target setting (1.3 to 1.9, 10 to 17). See 'complianceLevel' for details. 
+     * Specify bytecode target setting (1.3 to 1.9, 10 to 17). See 'complianceLevel' for details.
      *
      * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
-    @Parameter( defaultValue = "${project.build.java.target}" )
+    @Parameter(defaultValue = "${project.build.java.target}")
     protected String target;
 
     /**
-     * Specify source code language level (1.3 to 1.9, 10 to 17). See 'complianceLevel' for details. 
+     * Specify source code language level (1.3 to 1.9, 10 to 17). See 'complianceLevel' for details.
      *
      * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
-    @Parameter( defaultValue = "${mojo.java.target}" )
+    @Parameter(defaultValue = "${mojo.java.target}")
     protected String source;
 
     /**
@@ -212,7 +210,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      *
      * @see org.codehaus.mojo.aspectj.AjcHelper#ACCEPTED_COMPLIANCE_LEVEL_VALUES
      */
-    @Parameter( defaultValue = "1.4" )
+    @Parameter(defaultValue = "1.4")
     protected String complianceLevel;
 
     /**
@@ -254,7 +252,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * Specify default source encoding format.
      *
      */
-    @Parameter( property = "project.build.sourceEncoding" )
+    @Parameter(property = "project.build.sourceEncoding")
     protected String encoding;
 
     /**
@@ -327,7 +325,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * (Experimental) Allows code to be generated that targets a 1.2 or a 1.5 level AspectJ runtime (default 1.5)
      *
      */
-    @Parameter( defaultValue = "1.5" )
+    @Parameter(defaultValue = "1.5")
     protected String Xajruntimetarget;
 
     /**
@@ -393,37 +391,37 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * /my/project/src/main/java/org/acme/ValidationAspect.java
      * </code></pre>
      */
-    @Parameter( defaultValue = "builddef.lst" )
+    @Parameter(defaultValue = "builddef.lst")
     protected String argumentFileName = "builddef.lst";
 
     /**
      * Forces re-compilation, regardless of whether the compiler arguments or the sources have changed.
      *
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     protected boolean forceAjcCompile;
 
-  /**
-   * Sets additional compiler arguments, e.g.
-   * <pre>{@code
-   * <compilerArgs>
-   *   <arg>-Xmaxerrs=1000</arg>
-   *   <arg>-Xlint</arg>
-   *   <arg>-J-Duser.language=en_us</arg> 
-   * </compilerArgs>
-   * }</pre>
-   * This option can be used in case you want to use AJC options not (yet) supported by this plugin.
-   * <p>
-   * <b>Caveat:</b> Be careful when using this option and select the additional compiler arguments wisely, because
-   * behaviour is undefined if you add arguments which have already been added by the plugin using regular parameters
-   * or their default values. The resulting compiler command line will in that case contain duplicate arguments, which
-   * might be illegal depending on the specific argument. Do not expect to be able to manually override existing
-   * arguments using this option or to replace whole argument lists.
-   *
-   * @since 1.13
-   */
-  @Parameter
-  protected List<String> additionalCompilerArgs = new ArrayList<>();
+    /**
+     * Sets additional compiler arguments, e.g.
+     * <pre>{@code
+     * <compilerArgs>
+     *   <arg>-Xmaxerrs=1000</arg>
+     *   <arg>-Xlint</arg>
+     *   <arg>-J-Duser.language=en_us</arg>
+     * </compilerArgs>
+     * }</pre>
+     * This option can be used in case you want to use AJC options not (yet) supported by this plugin.
+     * <p>
+     * <b>Caveat:</b> Be careful when using this option and select the additional compiler arguments wisely, because
+     * behaviour is undefined if you add arguments which have already been added by the plugin using regular parameters
+     * or their default values. The resulting compiler command line will in that case contain duplicate arguments, which
+     * might be illegal depending on the specific argument. Do not expect to be able to manually override existing
+     * arguments using this option or to replace whole argument lists.
+     *
+     * @since 1.13
+     */
+    @Parameter
+    protected List<String> additionalCompilerArgs = new ArrayList<>();
 
     /**
      * Holder for ajc compiler options
@@ -511,7 +509,8 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         final String aspectSourcePath = aspectSourcePathDir.getAbsolutePath();
         final String testAspectSourcePath = testAspectSourcePathDir.getAbsolutePath();
 
-        if (aspectSourcePathDir.exists() && aspectSourcePathDir.isDirectory()
+        if (aspectSourcePathDir.exists()
+                && aspectSourcePathDir.isDirectory()
                 && !project.getCompileSourceRoots().contains(aspectSourcePath)) {
             getLog().debug("Adding existing aspectSourcePathDir [" + aspectSourcePath + "] to compileSourceRoots.");
             project.getCompileSourceRoots().add(aspectSourcePath);
@@ -520,10 +519,11 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
                     + "] to compileSourceRoots.");
         }
 
-        if (testAspectSourcePathDir.exists() && testAspectSourcePathDir.isDirectory()
+        if (testAspectSourcePathDir.exists()
+                && testAspectSourcePathDir.isDirectory()
                 && !project.getTestCompileSourceRoots().contains(testAspectSourcePath)) {
-            getLog().debug(
-                    "Adding existing testAspectSourcePathDir [" + testAspectSourcePath + "] to testCompileSourceRoots.");
+            getLog().debug("Adding existing testAspectSourcePathDir [" + testAspectSourcePath
+                    + "] to testCompileSourceRoots.");
             project.getTestCompileSourceRoots().add(testAspectSourcePath);
         } else {
             getLog().debug("Not adding non-existent or already added testAspectSourcePathDir [" + testAspectSourcePath
@@ -551,11 +551,10 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
             getLog().debug(command);
         }
         try {
-            getLog().debug(
-                    "Compiling and weaving " + resolvedIncludes.size() + " sources to " + getOutputDirectory());
+            getLog().debug("Compiling and weaving " + resolvedIncludes.size() + " sources to " + getOutputDirectory());
             AjcHelper.writeBuildConfigToFile(ajcOptions, argumentFileName, getOutputDirectory());
-            getLog().debug(
-                    "Arguments file written : " + new File(getOutputDirectory(), argumentFileName).getAbsolutePath());
+            getLog().debug("Arguments file written : "
+                    + new File(getOutputDirectory(), argumentFileName).getAbsolutePath());
         } catch (IOException e) {
             throw new MojoExecutionException("Could not write arguments file to the target area", e);
         }
@@ -579,8 +578,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      *
      * @throws MojoExecutionException error in configuration
      */
-    protected void assembleArguments()
-            throws MojoExecutionException {
+    protected void assembleArguments() throws MojoExecutionException {
         if (XhasMember) {
             ajcOptions.add("-XhasMember");
         }
@@ -624,12 +622,15 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         if (weaveDirectories != null) {
             joinedWeaveDirectories = StringUtils.join(weaveDirectories, File.pathSeparator);
         }
-        addModulesArgument("-inpath", ajcOptions, weaveDependencies, joinedWeaveDirectories,
+        addModulesArgument(
+                "-inpath",
+                ajcOptions,
+                weaveDependencies,
+                joinedWeaveDirectories,
                 "dependencies and/or directories to weave");
 
         // Add library artifacts
-        addModulesArgument("-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(),
-                "an aspect library");
+        addModulesArgument("-aspectpath", ajcOptions, aspectLibraries, getAdditionalAspectPaths(), "an aspect library");
 
         // Add xmlConfigured option and argument
         if (null != xmlConfigured) {
@@ -657,8 +658,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         }
     }
 
-    protected Set<String> getIncludedSources()
-            throws MojoExecutionException {
+    protected Set<String> getIncludedSources() throws MojoExecutionException {
         Set<String> result = new HashSet<>();
         if (getJavaSources() == null) {
             result = AjcHelper.getBuildFilesForSourceDirs(getSourceDirectories(), this.includes, this.excludes);
@@ -670,8 +670,8 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
                 } else {
                     scanner.scan();
                     for (int fileIndex = 0; fileIndex < scanner.getIncludedFiles().length; fileIndex++) {
-                        result.add(FileUtils.resolveFile(scanner.getBasedir(),
-                                scanner.getIncludedFiles()[fileIndex]).getAbsolutePath());
+                        result.add(FileUtils.resolveFile(scanner.getBasedir(), scanner.getIncludedFiles()[fileIndex])
+                                .getAbsolutePath());
                     }
                 }
             }
@@ -689,8 +689,12 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * @param role
      * @throws MojoExecutionException
      */
-    private void addModulesArgument(final String argument, final List<String> arguments, final Module[] modules,
-                                    final String aditionalpath, final String role)
+    private void addModulesArgument(
+            final String argument,
+            final List<String> arguments,
+            final Module[] modules,
+            final String aditionalpath,
+            final String role)
             throws MojoExecutionException {
         StringBuilder buf = new StringBuilder();
 
@@ -707,20 +711,22 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
                 // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
                 // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
                 Artifact artifact = null;
-                @SuppressWarnings("unchecked") Set<Artifact> allArtifacts = project.getArtifacts();
+                @SuppressWarnings("unchecked")
+                Set<Artifact> allArtifacts = project.getArtifacts();
                 for (Artifact art : allArtifacts) {
-                    if (art.getGroupId().equals(module.getGroupId()) && art.getArtifactId().equals(
-                            module.getArtifactId()) && StringUtils.defaultString(module.getClassifier()).equals(
-                            StringUtils.defaultString(art.getClassifier())) && StringUtils.defaultString(
-                            module.getType(), "jar").equals(StringUtils.defaultString(art.getType()))) {
+                    if (art.getGroupId().equals(module.getGroupId())
+                            && art.getArtifactId().equals(module.getArtifactId())
+                            && StringUtils.defaultString(module.getClassifier())
+                                    .equals(StringUtils.defaultString(art.getClassifier()))
+                            && StringUtils.defaultString(module.getType(), "jar")
+                                    .equals(StringUtils.defaultString(art.getType()))) {
                         artifact = art;
                         break;
                     }
                 }
                 if (artifact == null) {
-                    throw new MojoExecutionException(
-                            "The artifact " + module.toString() + " referenced in aspectj plugin as " + role
-                                    + ", is not found the project dependencies");
+                    throw new MojoExecutionException("The artifact " + module.toString()
+                            + " referenced in aspectj plugin as " + role + ", is not found the project dependencies");
                 }
                 if (buf.length() != 0) {
                     buf.append(File.pathSeparatorChar);
@@ -739,22 +745,21 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * Checks modifications that would make us need a build
      *
      * @return <code>true</code> if build is needed, otherwise <code>false</code>
-     * @throws MojoExecutionException if an unexpected error occurs, e.g. weave directories cannot be resolved 
+     * @throws MojoExecutionException if an unexpected error occurs, e.g. weave directories cannot be resolved
      */
-    protected boolean isBuildNeeded()
-            throws MojoExecutionException {
+    protected boolean isBuildNeeded() throws MojoExecutionException {
         File outDir = getOutputDirectory();
-        return hasNoPreviousBuild(outDir) || hasArgumentsChanged(outDir) ||
-                hasSourcesChanged(outDir) || hasNonWeavedClassesChanged(outDir);
-
+        return hasNoPreviousBuild(outDir)
+                || hasArgumentsChanged(outDir)
+                || hasSourcesChanged(outDir)
+                || hasNonWeavedClassesChanged(outDir);
     }
 
     private boolean hasNoPreviousBuild(File outDir) {
         return !FileUtils.resolveFile(outDir, argumentFileName).exists();
     }
 
-    private boolean hasArgumentsChanged(File outDir)
-            throws MojoExecutionException {
+    private boolean hasArgumentsChanged(File outDir) throws MojoExecutionException {
         try {
             return (!ajcOptions.equals(AjcHelper.readBuildConfigFile(argumentFileName, outDir)));
         } catch (IOException e) {
@@ -777,13 +782,11 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
             if (sourceModified >= lastBuild) {
                 return true;
             }
-
         }
         return false;
     }
 
-    private boolean hasNonWeavedClassesChanged(File outDir)
-            throws MojoExecutionException {
+    private boolean hasNonWeavedClassesChanged(File outDir) throws MojoExecutionException {
         if (weaveDirectories != null && weaveDirectories.length > 0) {
             Set<String> weaveSources = AjcHelper.getWeaveSourceFiles(weaveDirectories);
             long lastBuild = new File(outDir, argumentFileName).lastModified();
@@ -793,7 +796,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
                 if (sourceModified >= lastBuild) {
                     return true;
                 }
-
             }
         }
         return false;
@@ -820,7 +822,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         if (emacssym) {
             ajcOptions.add("-emacssym");
         }
-
     }
 
     public void setParameters(boolean parameters) {
@@ -844,7 +845,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         if (noImportError) {
             ajcOptions.add("-noImportError");
         }
-
     }
 
     public void setOutxml(boolean outxml) {
@@ -862,7 +862,6 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         if (preserveAllLocals) {
             ajcOptions.add("-preserveAllLocals");
         }
-
     }
 
     public void setProceedOnError(boolean proceedOnError) {
@@ -976,8 +975,8 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         if (XAJRUNTIMETARGET_SUPPORTED_VALUES.contains(xajruntimetarget)) {
             ajcOptions.add("-Xajruntimetarget:" + xajruntimetarget);
         } else {
-            getLog().warn(
-                    "Incorrect Xajruntimetarget value specified. Supported: " + XAJRUNTIMETARGET_SUPPORTED_VALUES);
+            getLog().warn("Incorrect Xajruntimetarget value specified. Supported: "
+                    + XAJRUNTIMETARGET_SUPPORTED_VALUES);
         }
     }
 

@@ -23,33 +23,31 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import java.io.File;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-
-import java.io.File;
 
 /**
  * The base class.
  *
  * @author Juraj Burian
  */
-public abstract class AbstractAjcMojo extends AbstractMojo
-{
+public abstract class AbstractAjcMojo extends AbstractMojo {
 
     /**
      * The maven project.
      *
      */
-    @Parameter( required = true, readonly = true, defaultValue = "${project}" )
+    @Parameter(required = true, readonly = true, defaultValue = "${project}")
     protected MavenProject project;
 
     /**
      * The basedir of the project.
      *
      */
-    @Parameter( required = true, readonly = true, defaultValue = "${basedir}" )
+    @Parameter(required = true, readonly = true, defaultValue = "${basedir}")
     protected File basedir;
 
     /**
@@ -92,14 +90,13 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      * Skip plugin execution.
      *
      */
-    @Parameter( defaultValue = "false", property = "aspectj.skip" )
+    @Parameter(defaultValue = "false", property = "aspectj.skip")
     private boolean skip;
 
     /**
      * @return <code>true</code> if execution should be skipped, otherwise <code>false</code>
      */
-    protected final boolean isSkip()
-    {
+    protected final boolean isSkip() {
         return skip;
     }
 
@@ -109,27 +106,18 @@ public abstract class AbstractAjcMojo extends AbstractMojo
      *
      * @param xmlConfigured an XML file containing AspectJ weaving instructions.
      */
-    public void setXmlConfigured( final File xmlConfigured )
-    {
-        try
-        {
+    public void setXmlConfigured(final File xmlConfigured) {
+        try {
             final String path = xmlConfigured.getCanonicalPath();
-            if ( !xmlConfigured.exists() )
-            {
-                getLog().warn( "xmlConfigured parameter invalid. [" + path + "] does not exist." );
-            }
-            else if ( !path.trim().toLowerCase().endsWith( ".xml" ) )
-            {
-                getLog().warn( "xmlConfigured parameter invalid. XML file name must end in .xml" );
-            }
-            else
-            {
+            if (!xmlConfigured.exists()) {
+                getLog().warn("xmlConfigured parameter invalid. [" + path + "] does not exist.");
+            } else if (!path.trim().toLowerCase().endsWith(".xml")) {
+                getLog().warn("xmlConfigured parameter invalid. XML file name must end in .xml");
+            } else {
                 this.xmlConfigured = xmlConfigured;
             }
-        }
-        catch ( Exception e )
-        {
-            getLog().error( "Exception setting xmlConfigured option", e );
+        } catch (Exception e) {
+            getLog().error("Exception setting xmlConfigured option", e);
         }
     }
 }

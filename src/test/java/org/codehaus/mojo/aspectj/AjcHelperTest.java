@@ -30,75 +30,62 @@ import java.util.HashSet;
 import java.util.List;
 
 import junit.framework.TestCase;
-
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AjcHelper}
- * 
+ *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcHelperTest
-    extends TestCase
-{
-    public void testGetAsCsv()
-    {
-        String[] tests = new String[] { "kaare", "java", "aspectJ" };
-        assertEquals( "kaare,java,aspectJ", AjcHelper.getAsCsv( tests ) );
+public class AjcHelperTest extends TestCase {
+    public void testGetAsCsv() {
+        String[] tests = new String[] {"kaare", "java", "aspectJ"};
+        assertEquals("kaare,java,aspectJ", AjcHelper.getAsCsv(tests));
     }
 
     /**
      * @throws Exception on test error
      */
-    public void testGetSourcesEmptyBaseDir()
-        throws Exception
-    {
+    public void testGetSourcesEmptyBaseDir() throws Exception {
         List baseDirs = new ArrayList();
-        baseDirs.add( "src/shouldNotExist" );
-        HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs( baseDirs,
-            new String[] { AjcHelper.DEFAULT_INCLUDES },
-            new String[] { AjcHelper.DEFAULT_EXCLUDES } );
-        assertTrue( sources.isEmpty() );
+        baseDirs.add("src/shouldNotExist");
+        HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs(
+                baseDirs, new String[] {AjcHelper.DEFAULT_INCLUDES}, new String[] {AjcHelper.DEFAULT_EXCLUDES});
+        assertTrue(sources.isEmpty());
     }
 
-    public void testBuildConfigFile()
-    {
+    public void testBuildConfigFile() {
         final File baseDir = new File(".");
         final String fileName = "test.lst";
         final String fileAbsolutePath = baseDir.getAbsolutePath() + File.separator + fileName;
-        
+
         List args = new ArrayList();
         args.add("-classpath");
         args.add("a:b:c");
         args.add("-showWeaveInfo");
         args.add("/home/aspectj/AFile");
         args.add("/home/aspectj/AnotherFile");
-        try
-        {
-            AjcHelper.writeBuildConfigToFile(args,fileName,baseDir);
-            assertTrue("Config file not written to disk",FileUtils.fileExists(fileAbsolutePath));
-            List readArgs = AjcHelper.readBuildConfigFile(fileName,baseDir);
-            assertEquals(args,readArgs);
-        } catch (Exception e)
-        {
+        try {
+            AjcHelper.writeBuildConfigToFile(args, fileName, baseDir);
+            assertTrue("Config file not written to disk", FileUtils.fileExists(fileAbsolutePath));
+            List readArgs = AjcHelper.readBuildConfigFile(fileName, baseDir);
+            assertEquals(args, readArgs);
+        } catch (Exception e) {
             fail("Unexpected exception: " + e.toString());
-            if (FileUtils.fileExists(fileAbsolutePath))
-            {
+            if (FileUtils.fileExists(fileAbsolutePath)) {
                 FileUtils.fileDelete(fileAbsolutePath);
             }
         }
     }
-    
-    public void testEmptyDependencyArtifacts()
-    {
+
+    public void testEmptyDependencyArtifacts() {
         MavenProject project = new MavenProject();
-        AjcHelper.createClassPath( project, Collections.EMPTY_LIST, Collections.EMPTY_LIST );
+        AjcHelper.createClassPath(project, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
     }
 
-    public void testProjectDependenciesBeforeOthers()
-    {
+    public void testProjectDependenciesBeforeOthers() {
         DefaultArtifact projectArtifact = createFixedArtifact();
         projectArtifact.setFile(new File("../sibling-project/target/some.jar"));
 
@@ -112,7 +99,8 @@ public class AjcHelperTest
         project.setArtifacts(Collections.singleton(projectArtifact));
         project.setDependencyArtifacts(Collections.singleton(dependencyArtifact));
 
-        String classPath = AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.EMPTY_LIST);
+        String classPath =
+                AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.EMPTY_LIST);
         assertTrue("wrong dependency order in " + classPath, classPath.contains("sibling-project"));
         assertFalse("wrong dependency order in " + classPath, classPath.contains("repository"));
     }

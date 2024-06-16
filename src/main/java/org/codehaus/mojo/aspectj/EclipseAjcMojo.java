@@ -23,6 +23,23 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -34,43 +51,28 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Set;
-
 /**
  * Create eclipse configuration of aspectJ
  *
  * @author Juraj Burian
  */
-@Mojo( name="EclipseAjcMojo", requiresDependencyResolution = ResolutionScope.COMPILE )
-public class EclipseAjcMojo
-    extends AbstractAjcMojo
-{
-    public static final String FILE_SEPARATOR = System.getProperty( "file.separator" );
+@Mojo(name = "EclipseAjcMojo", requiresDependencyResolution = ResolutionScope.COMPILE)
+public class EclipseAjcMojo extends AbstractAjcMojo {
+    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
 
     private final String[] ASPECT_LIBRARIES_KEYS = //
-        new String[]{ "org.eclipse.ajdt.ui.aspectPath.contentKind",
-            "org.eclipse.ajdt.ui.aspectPath.entryKind",
-            "org.eclipse.ajdt.ui.aspectPath" };
+            new String[] {
+                "org.eclipse.ajdt.ui.aspectPath.contentKind",
+                "org.eclipse.ajdt.ui.aspectPath.entryKind",
+                "org.eclipse.ajdt.ui.aspectPath"
+            };
 
     private final String[] WEAVE_DEPENDENCIES_KEYS = //
-        new String[]{ "org.eclipse.ajdt.ui.inPath.contentKind",
-            "org.eclipse.ajdt.ui.inPath.entryKind",
-            "org.eclipse.ajdt.ui.inPath" };
+            new String[] {
+                "org.eclipse.ajdt.ui.inPath.contentKind",
+                "org.eclipse.ajdt.ui.inPath.entryKind",
+                "org.eclipse.ajdt.ui.inPath"
+            };
 
     private static final String AJ_BUILDER = "org.eclipse.ajdt.core.ajbuilder";
 
@@ -78,150 +80,115 @@ public class EclipseAjcMojo
 
     private static final String AJ_NATURE = "org.eclipse.ajdt.ui.ajnature";
 
-    public void execute()
-        throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         // exclude this :
-        if ( "pom".endsWith( project.getPackaging() ) || "ear".endsWith( project.getPackaging() ) )
-        {
+        if ("pom".endsWith(project.getPackaging()) || "ear".endsWith(project.getPackaging())) {
             return;
         }
 
         // write file
-        File prefs = new File( basedir, ".settings" + FILE_SEPARATOR + "org.eclipse.ajdt.ui.prefs" );
-        try
-        {
+        File prefs = new File(basedir, ".settings" + FILE_SEPARATOR + "org.eclipse.ajdt.ui.prefs");
+        try {
             prefs.getParentFile().mkdirs();
             prefs.createNewFile();
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Can't create file: " + prefs.getPath() );
+        } catch (IOException e) {
+            throw new MojoExecutionException("Can't create file: " + prefs.getPath());
         }
 
         PrintWriter out = null;
-        try
-        {
-            out = new PrintWriter( new FileOutputStream( prefs ) );
-        }
-        catch ( FileNotFoundException e )
-        {
+        try {
+            out = new PrintWriter(new FileOutputStream(prefs));
+        } catch (FileNotFoundException e) {
             // can't happen
         }
-        out.println( "#" + new Date() );
-        out.println( "eclipse.preferences.version=1" );
-        writePaths( out, aspectLibraries, ASPECT_LIBRARIES_KEYS );
-        writePaths( out, weaveDependencies, WEAVE_DEPENDENCIES_KEYS );
-        if ( xmlConfigured != null )
-        {
+        out.println("#" + new Date());
+        out.println("eclipse.preferences.version=1");
+        writePaths(out, aspectLibraries, ASPECT_LIBRARIES_KEYS);
+        writePaths(out, weaveDependencies, WEAVE_DEPENDENCIES_KEYS);
+        if (xmlConfigured != null) {
             String xmlPath;
-            if ( xmlConfigured.isAbsolute() )
-            {
+            if (xmlConfigured.isAbsolute()) {
                 xmlPath = xmlConfigured.getAbsolutePath();
-            }
-            else
-            {
+            } else {
                 // Note: Eclipse always use '/' here, not FILE_SEPARATOR
                 xmlPath = "/" + project.getName() + "/" + xmlConfigured;
             }
-            out.println( "org.eclipse.ajdt.aopxml=" + xmlPath );
+            out.println("org.eclipse.ajdt.aopxml=" + xmlPath);
         }
         out.flush();
         out.close();
 
         // merge .project file if exists
-        File dotProject = new File( basedir, ".project" );
-        if ( dotProject.exists() )
-        {
-            mergeProject( dotProject );
+        File dotProject = new File(basedir, ".project");
+        if (dotProject.exists()) {
+            mergeProject(dotProject);
         }
     }
 
-    private final void writePaths( PrintWriter out, Module[] modules, String[] keys )
-        throws MojoExecutionException
-    {
-        if ( modules == null || modules.length == 0 )
-        {
+    private final void writePaths(PrintWriter out, Module[] modules, String[] keys) throws MojoExecutionException {
+        if (modules == null || modules.length == 0) {
             return;
         }
         String[] paths = new String[modules.length];
-        for ( int i = 0; i < modules.length; i++ )
-        {
+        for (int i = 0; i < modules.length; i++) {
             Module module = modules[i];
             // String key = ArtifactUtils.versionlessKey( module.getGroupId(), module.getArtifactId() );
             // Artifact artifact = (Artifact) project.getArtifactMap().get( key );
             Artifact artifact = null;
-            @SuppressWarnings("unchecked") Set<Artifact> allArtifacts = project.getArtifacts();
-            for ( Artifact art : allArtifacts )
-            {
-                if ( art.getGroupId().equals( module.getGroupId() )
-                    && art.getArtifactId().equals( module.getArtifactId() )
-                    && StringUtils.equals( module.getClassifier(), art.getClassifier() )
-                    && StringUtils.equals( module.getType(), module.getType() ) )
-                {
+            @SuppressWarnings("unchecked")
+            Set<Artifact> allArtifacts = project.getArtifacts();
+            for (Artifact art : allArtifacts) {
+                if (art.getGroupId().equals(module.getGroupId())
+                        && art.getArtifactId().equals(module.getArtifactId())
+                        && StringUtils.equals(module.getClassifier(), art.getClassifier())
+                        && StringUtils.equals(module.getType(), module.getType())) {
                     artifact = art;
                     break;
                 }
-
             }
-            if ( artifact == null )
-            {
-                throw new MojoExecutionException( "The artifact " + module.toString()
-                                                      + " referenced in aspectj plugin as an aspect library, is not found the project dependencies" );
-
+            if (artifact == null) {
+                throw new MojoExecutionException("The artifact " + module.toString()
+                        + " referenced in aspectj plugin as an aspect library, is not found the project dependencies");
             }
             paths[i] = artifact.getFile().getPath();
         }
-        for ( int i = 1; i <= paths.length; i++ )
-        {
-            out.println( "org.eclipse.ajdt.ui.aspectPath.contentKind" + i + "=BINARY" );
+        for (int i = 1; i <= paths.length; i++) {
+            out.println("org.eclipse.ajdt.ui.aspectPath.contentKind" + i + "=BINARY");
         }
-        for ( int i = 1; i <= paths.length; i++ )
-        {
-            out.println( "org.eclipse.ajdt.ui.aspectPath.entryKind" + i + "=LIBRARY" );
+        for (int i = 1; i <= paths.length; i++) {
+            out.println("org.eclipse.ajdt.ui.aspectPath.entryKind" + i + "=LIBRARY");
         }
-        for ( int i = 0; i < paths.length; i++ )
-        {
-            out.print( "org.eclipse.ajdt.ui.aspectPath" + i + "=" );
+        for (int i = 0; i < paths.length; i++) {
+            out.print("org.eclipse.ajdt.ui.aspectPath" + i + "=");
             String path = paths[i];
-            path = StringUtils.replace( path, "\\", "/" );
-            path = StringUtils.replace( path, ":", "\\:" );
-            out.println( path );
+            path = StringUtils.replace(path, "\\", "/");
+            path = StringUtils.replace(path, ":", "\\:");
+            out.println(path);
         }
     }
 
     /**
      * @throws
      */
-    private void mergeProject( File file )
-        throws MojoExecutionException
-    {
-        try
-        {
+    private void mergeProject(File file) throws MojoExecutionException {
+        try {
             DocumentBuilder builder = //
-                DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = builder.parse( file );
-            boolean builderMerged = mergeBuilders( document );
-            boolean natureMerged = mergeNatures( document );
-            if ( builderMerged || natureMerged )
-            {
-                writeDocument( document, file );
+                    DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = builder.parse(file);
+            boolean builderMerged = mergeBuilders(document);
+            boolean natureMerged = mergeNatures(document);
+            if (builderMerged || natureMerged) {
+                writeDocument(document, file);
             }
 
-        }
-        catch ( ParserConfigurationException ex )
-        {
-            throw new MojoExecutionException( "Can't create doom parser configuration", ex );
+        } catch (ParserConfigurationException ex) {
+            throw new MojoExecutionException("Can't create doom parser configuration", ex);
 
-        }
-        catch ( SAXException ex )
-        {
-            throw new MojoExecutionException( "Can't parse .project file", ex );
+        } catch (SAXException ex) {
+            throw new MojoExecutionException("Can't parse .project file", ex);
 
-        }
-        catch ( Exception ex )
-        {
-            throw new MojoExecutionException( "Can't merge .project file", ex );
+        } catch (Exception ex) {
+            throw new MojoExecutionException("Can't merge .project file", ex);
         }
     }
 
@@ -230,79 +197,66 @@ public class EclipseAjcMojo
      * @return true if document need be saved
      */
     // TODO remove javac builder if aspectJ builder is used
-    private boolean mergeBuilders( Document document )
-        throws MojoExecutionException
-    {
-        NodeList buildCommandList = document.getElementsByTagName( "buildCommand" );
-        for ( int i = 0; i < buildCommandList.getLength(); i++ )
-        {
-            Element buildCommand = (Element) buildCommandList.item( i );
-            NodeList nameList = buildCommand.getElementsByTagName( "name" );
-            for ( int j = 0; j < nameList.getLength(); j++ )
-            {
-                Element name = (Element) nameList.item( j );
-                if ( name.getNodeValue().equals( AJ_BUILDER ) )
-                {
+    private boolean mergeBuilders(Document document) throws MojoExecutionException {
+        NodeList buildCommandList = document.getElementsByTagName("buildCommand");
+        for (int i = 0; i < buildCommandList.getLength(); i++) {
+            Element buildCommand = (Element) buildCommandList.item(i);
+            NodeList nameList = buildCommand.getElementsByTagName("name");
+            for (int j = 0; j < nameList.getLength(); j++) {
+                Element name = (Element) nameList.item(j);
+                if (name.getNodeValue().equals(AJ_BUILDER)) {
                     return false;
                 }
                 // if maven2 builder is used we don't need
                 // use aspectJ builder
-                if ( name.getNodeValue().equals( M2_BUILDER ) )
-                {
+                if (name.getNodeValue().equals(M2_BUILDER)) {
                     return false;
                 }
             }
         }
         // we need add aspectJ builder node
-        NodeList buildSpecList = document.getElementsByTagName( "buildSpec" );
-        if ( 0 == buildSpecList.getLength() )
-        {
-            NodeList nodes = document.getElementsByTagName( "natures" );
-            if ( 0 == nodes.getLength() )
-            {
-                throw new MojoExecutionException( "At least one nature must be specified in .project file!" );
+        NodeList buildSpecList = document.getElementsByTagName("buildSpec");
+        if (0 == buildSpecList.getLength()) {
+            NodeList nodes = document.getElementsByTagName("natures");
+            if (0 == nodes.getLength()) {
+                throw new MojoExecutionException("At least one nature must be specified in .project file!");
             }
-            Element buildSpec = document.createElement( "buildSpec" );
-            document.insertBefore( buildSpec, nodes.item( 0 ) );
-            buildSpecList = document.getElementsByTagName( "buildSpec" );
+            Element buildSpec = document.createElement("buildSpec");
+            document.insertBefore(buildSpec, nodes.item(0));
+            buildSpecList = document.getElementsByTagName("buildSpec");
         }
-        Element buildSpec = (Element) buildSpecList.item( 0 );
-        Element buildCommand = document.createElement( "buildCommand" );
+        Element buildSpec = (Element) buildSpecList.item(0);
+        Element buildCommand = document.createElement("buildCommand");
 
         // create & append <name/>
-        Element name = document.createElement( "name" );
-        name.setNodeValue( AJ_BUILDER );
-        buildCommand.appendChild( name );
+        Element name = document.createElement("name");
+        name.setNodeValue(AJ_BUILDER);
+        buildCommand.appendChild(name);
 
         // create & append <arguments/>
-        buildCommand.appendChild( document.createElement( "arguments" ) );
+        buildCommand.appendChild(document.createElement("arguments"));
 
-        buildSpec.insertBefore( buildCommand, buildSpec.getFirstChild() );
+        buildSpec.insertBefore(buildCommand, buildSpec.getFirstChild());
 
         return true;
     }
 
-    private boolean mergeNatures( Document document )
-        throws MojoExecutionException
-    {
-        NodeList naturesList = document.getElementsByTagName( "natures" );
-        for ( int i = 0; i < naturesList.getLength(); i++ )
-        {
-            Element natures = (Element) naturesList.item( i );
-            NodeList natureList = natures.getElementsByTagName( "nature" );
-            for ( int j = 0; j < natureList.getLength(); j++ )
-            {
-                Element nature = (Element) natureList.item( j );
-                if ( nature.getNodeValue().equals( AJ_NATURE ) )
-                {
+    private boolean mergeNatures(Document document) throws MojoExecutionException {
+        NodeList naturesList = document.getElementsByTagName("natures");
+        for (int i = 0; i < naturesList.getLength(); i++) {
+            Element natures = (Element) naturesList.item(i);
+            NodeList natureList = natures.getElementsByTagName("nature");
+            for (int j = 0; j < natureList.getLength(); j++) {
+                Element nature = (Element) natureList.item(j);
+                if (nature.getNodeValue().equals(AJ_NATURE)) {
                     return false;
                 }
             }
         }
-        Element natures = (Element) naturesList.item( 0 );
-        Element nature = document.createElement( "nature" );
-        nature.setNodeValue( AJ_NATURE );
-        natures.appendChild( nature );
+        Element natures = (Element) naturesList.item(0);
+        Element nature = document.createElement("nature");
+        nature.setNodeValue(AJ_NATURE);
+        natures.appendChild(nature);
         return true;
     }
 
@@ -314,14 +268,12 @@ public class EclipseAjcMojo
      * @throws TransformerException
      * @throws FileNotFoundException
      */
-    private void writeDocument( Document document, File file )
-        throws TransformerException, FileNotFoundException
-    {
+    private void writeDocument(Document document, File file) throws TransformerException, FileNotFoundException {
         document.normalize();
-        DOMSource source = new DOMSource( document );
-        StreamResult result = new StreamResult( new FileOutputStream( file ) );
+        DOMSource source = new DOMSource(document);
+        StreamResult result = new StreamResult(new FileOutputStream(file));
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
-        transformer.transform( source, result );
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.transform(source, result);
     }
 }

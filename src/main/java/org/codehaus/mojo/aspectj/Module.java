@@ -26,11 +26,10 @@ package org.codehaus.mojo.aspectj;
 
 /**
  * Module to be referenced through AJC-mojo
- * 
+ *
  * @author <a href="mailto:tel@objectnet.no">Thor Age Eldby</a>
  */
-public class Module
-{
+public class Module {
 
     /** Artifact's group id */
     private String groupId;
@@ -47,40 +46,34 @@ public class Module
     /**
      * @return id of artifact
      */
-    public String getArtifactId()
-    {
+    public String getArtifactId() {
         return artifactId;
     }
 
     /**
      * @param artifactId id of artifact
      */
-    public void setArtifactId( String artifactId )
-    {
+    public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
     }
 
     /**
      * @return id of artifact's group
      */
-    public String getGroupId()
-    {
+    public String getGroupId() {
         return groupId;
     }
 
     /**
      * @param groupId id of artifact's group
      */
-    public void setGroupId( String groupId )
-    {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
-    public String toString()
-    {
+    public String toString() {
         String ts = getGroupId() + ":" + getArtifactId();
-        if ( getType() != null )
-        {
+        if (getType() != null) {
             ts += ":" + getType();
         }
         // TODO where to place the classifier?
@@ -90,33 +83,28 @@ public class Module
     /**
      * @return classifier of artifact
      */
-    public String getClassifier()
-    {
+    public String getClassifier() {
         return classifier;
     }
 
     /**
      * @param classifier classifier of artifact
      */
-    public void setClassifier( String classifier )
-    {
+    public void setClassifier(String classifier) {
         this.classifier = classifier;
     }
 
     /**
      * @return type of artifact
      */
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
     /**
      * @param type type fo artifact
      */
-    public void setType( String type )
-    {
+    public void setType(String type) {
         this.type = type;
     }
-
 }

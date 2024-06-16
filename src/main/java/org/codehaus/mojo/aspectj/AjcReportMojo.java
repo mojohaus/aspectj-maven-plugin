@@ -23,6 +23,13 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
@@ -38,14 +45,6 @@ import org.apache.maven.reporting.MavenReportException;
 import org.aspectj.tools.ajdoc.Main;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Set;
-
 /**
  * Creates an AspectJ HTML report using the {@code ajdoc} tool and format.
  *
@@ -53,50 +52,48 @@ import java.util.Set;
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-@Mojo( name="aspectj-report", requiresDependencyResolution = ResolutionScope.COMPILE )
-public class AjcReportMojo
-    extends AbstractMavenReport
-{
+@Mojo(name = "aspectj-report", requiresDependencyResolution = ResolutionScope.COMPILE)
+public class AjcReportMojo extends AbstractMavenReport {
     /**
      * The source directory for the aspects
      *
      */
-    @Parameter( defaultValue = "src/main/aspect" )
+    @Parameter(defaultValue = "src/main/aspect")
     private String aspectDirectory = "src/main/aspect";
 
     /**
      * The source directory for the test aspects
      *
      */
-    @Parameter( defaultValue = "src/test/aspect" )
+    @Parameter(defaultValue = "src/test/aspect")
     private String testAspectDirectory = "src/test/aspect";
 
     /**
      * The maven project.
      *
      */
-    @Parameter( readonly = true, required = true, defaultValue = "${project}" )
+    @Parameter(readonly = true, required = true, defaultValue = "${project}")
     private MavenProject project;
 
     /**
      * The basedir of the project.
      *
      */
-    @Parameter( readonly = true, required = true, defaultValue = "${basedir}" )
+    @Parameter(readonly = true, required = true, defaultValue = "${basedir}")
     private File basedir;
 
     /**
      * The output directory for the report.
      *
      */
-    @Parameter( required = true, defaultValue = "${project.reporting.outputDirectory}/aspectj-report" )
+    @Parameter(required = true, defaultValue = "${project.reporting.outputDirectory}/aspectj-report")
     private File outputDirectory;
 
     /**
      * The build directory (normally "${basedir}/target").
      *
      */
-    @Parameter( required = true, readonly = true, defaultValue = "${project.build.directory}" )
+    @Parameter(required = true, readonly = true, defaultValue = "${project.build.directory}")
     private File buildDirectory;
 
     /**
@@ -194,7 +191,7 @@ public class AjcReportMojo
      * Specify compiler compliance setting (1.3 to 1.8, default is 1.5)
      *
      */
-    @Parameter( defaultValue = "${mojo.java.target}" )
+    @Parameter(defaultValue = "${mojo.java.target}")
     protected String complianceLevel;
 
     /**
@@ -204,238 +201,199 @@ public class AjcReportMojo
 
     /**
      */
-    @Parameter( readonly = true, required = true, defaultValue = "${plugin.artifacts}" )
+    @Parameter(readonly = true, required = true, defaultValue = "${plugin.artifacts}")
     private List<Artifact> pluginArtifacts;
 
     /**
      * Executes this ajdoc-report generation.
      */
-    @SuppressWarnings( "unchecked" )
-    protected void executeReport( Locale locale )
-        throws MavenReportException
-    {
-        getLog().info( "Starting generating ajdoc" );
+    @SuppressWarnings("unchecked")
+    protected void executeReport(Locale locale) throws MavenReportException {
+        getLog().info("Starting generating ajdoc");
 
-        project.getCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + aspectDirectory );
-        project.getTestCompileSourceRoots().add( basedir.getAbsolutePath() + "/" + testAspectDirectory );
+        project.getCompileSourceRoots().add(basedir.getAbsolutePath() + "/" + aspectDirectory);
+        project.getTestCompileSourceRoots().add(basedir.getAbsolutePath() + "/" + testAspectDirectory);
 
         List<String> arguments = new ArrayList<>();
         // Add classpath
-        arguments.add( "-classpath" );
-        arguments.add( AjcHelper.createClassPath( project, pluginArtifacts, getClasspathDirectories() ) );
+        arguments.add("-classpath");
+        arguments.add(AjcHelper.createClassPath(project, pluginArtifacts, getClasspathDirectories()));
 
-        arguments.addAll( ajcOptions );
+        arguments.addAll(ajcOptions);
 
         Set<String> includes;
-        try
-        {
-            if ( null != ajdtBuildDefFile )
-            {
-                includes = AjcHelper.getBuildFilesForAjdtFile( ajdtBuildDefFile, basedir );
+        try {
+            if (null != ajdtBuildDefFile) {
+                includes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
+            } else {
+                includes = AjcHelper.getBuildFilesForSourceDirs(getSourceDirectories(), this.includes, this.excludes);
             }
-            else
-            {
-                includes = AjcHelper.getBuildFilesForSourceDirs( getSourceDirectories(), this.includes, this.excludes );
-            }
-        }
-        catch ( MojoExecutionException e )
-        {
-            throw new MavenReportException( "AspectJ Report failed", e );
+        } catch (MojoExecutionException e) {
+            throw new MavenReportException("AspectJ Report failed", e);
         }
 
         // add target dir argument
-        arguments.add( "-d" );
-        arguments.add( StringUtils.replace( getOutputDirectory(), "//", "/" ) );
+        arguments.add("-d");
+        arguments.add(StringUtils.replace(getOutputDirectory(), "//", "/"));
 
-        arguments.addAll( includes );
+        arguments.addAll(includes);
 
-        if ( getLog().isDebugEnabled() )
-        {
-            StringBuilder command = new StringBuilder( "Running : ajdoc " );
-            for ( String argument : arguments )
-            {
-                command.append( ' ' ).append( argument );
+        if (getLog().isDebugEnabled()) {
+            StringBuilder command = new StringBuilder("Running : ajdoc ");
+            for (String argument : arguments) {
+                command.append(' ').append(argument);
             }
-            getLog().debug( command );
+            getLog().debug(command);
         }
 
         // There seems to be a difference in classloading when calling 'mvn site' or 'mvn aspectj:aspectj-report'.
         // When calling mvn site, without the contextClassLoader set, you might see the next message:
         // javadoc: error - Cannot find doclet class com.sun.tools.doclets.standard.Standard
         ClassLoader oldContextClassLoader = Thread.currentThread().getContextClassLoader();
-        try
-        {
-            Thread.currentThread().setContextClassLoader( this.getClass().getClassLoader() );
+        try {
+            Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
             // MASPECTJ-11: Make the ajdoc use the ${project.build.directory} directory for its intermediate folder.
             // The argument should be the absolute path to the parent directory of the "ajdocworkingdir" folder.
-            Main.setOutputWorkingDir( buildDirectory.getAbsolutePath() );
+            Main.setOutputWorkingDir(buildDirectory.getAbsolutePath());
 
             // Now produce the JavaDoc.
-            Main.main( arguments.toArray( new String[0] ) );
+            Main.main(arguments.toArray(new String[0]));
+        } finally {
+            Thread.currentThread().setContextClassLoader(oldContextClassLoader);
         }
-        finally
-        {
-            Thread.currentThread().setContextClassLoader( oldContextClassLoader );
-        }
-
     }
 
     /**
      * @return list of source directories
      */
-    @SuppressWarnings( "unchecked" )
-    protected List<String> getSourceDirectories()
-    {
+    @SuppressWarnings("unchecked")
+    protected List<String> getSourceDirectories() {
         List<String> sourceDirectories = new ArrayList<>();
-        sourceDirectories.addAll( project.getCompileSourceRoots() );
-        sourceDirectories.addAll( project.getTestCompileSourceRoots() );
+        sourceDirectories.addAll(project.getCompileSourceRoots());
+        sourceDirectories.addAll(project.getTestCompileSourceRoots());
         return sourceDirectories;
     }
 
     /**
      * get report output directory.
      */
-    protected String getOutputDirectory()
-    {
+    protected String getOutputDirectory() {
         return outputDirectory.getAbsolutePath();
     }
 
     /**
      * @return list of classpath directories
      */
-    protected List<String> getClasspathDirectories()
-    {
-        return Arrays.asList( project.getBuild().getOutputDirectory(),
-            project.getBuild().getTestOutputDirectory() );
+    protected List<String> getClasspathDirectories() {
+        return Arrays.asList(
+                project.getBuild().getOutputDirectory(), project.getBuild().getTestOutputDirectory());
     }
 
     /**
      *
      */
-    public String getOutputName()
-    {
+    public String getOutputName() {
         return "index";
     }
 
     /**
      *
      */
-    public String getName( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.aspectj.name" );
+    public String getName(Locale locale) {
+        return getBundle(locale).getString("report.aspectj.name");
     }
 
     /**
      *
      */
-    public String getDescription( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.aspectj.description" );
+    public String getDescription(Locale locale) {
+        return getBundle(locale).getString("report.aspectj.description");
     }
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#isExternalReport()
      */
-    public boolean isExternalReport()
-    {
+    public boolean isExternalReport() {
         return true;
     }
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
-    public boolean canGenerateReport()
-    {
+    public boolean canGenerateReport() {
         // Only execute reports for java projects
         ArtifactHandler artifactHandler = this.project.getArtifact().getArtifactHandler();
-        return "java".equals( artifactHandler.getLanguage() );
+        return "java".equals(artifactHandler.getLanguage());
     }
 
     /**
      * Get the site renderer.
      */
-    protected Renderer getSiteRenderer()
-    {
+    protected Renderer getSiteRenderer() {
         return siteRenderer;
     }
 
     /**
      * Get the maven project.
      */
-    protected MavenProject getProject()
-    {
+    protected MavenProject getProject() {
         return project;
     }
 
-    public void setOverview( String overview )
-    {
-        ajcOptions.add( "-overview" );
-        ajcOptions.add( overview );
+    public void setOverview(String overview) {
+        ajcOptions.add("-overview");
+        ajcOptions.add(overview);
     }
 
-    public void setDoctitle( String doctitle )
-    {
-        ajcOptions.add( "-doctitle" );
-        ajcOptions.add( doctitle );
+    public void setDoctitle(String doctitle) {
+        ajcOptions.add("-doctitle");
+        ajcOptions.add(doctitle);
     }
 
-    public void setPackageScope( boolean packageScope )
-    {
-        if ( packageScope )
-        {
-            ajcOptions.add( "-package" );
+    public void setPackageScope(boolean packageScope) {
+        if (packageScope) {
+            ajcOptions.add("-package");
         }
     }
 
-    public void setPrivateScope( boolean privateScope )
-    {
-        if ( privateScope )
-        {
-            ajcOptions.add( "-private" );
+    public void setPrivateScope(boolean privateScope) {
+        if (privateScope) {
+            ajcOptions.add("-private");
         }
     }
 
-    public void setProtectedScope( boolean protectedScope )
-    {
-        if ( protectedScope )
-        {
-            ajcOptions.add( "-protected" );
+    public void setProtectedScope(boolean protectedScope) {
+        if (protectedScope) {
+            ajcOptions.add("-protected");
         }
     }
 
-    public void setPublicScope( boolean publicScope )
-    {
-        if ( publicScope )
-        {
-            ajcOptions.add( "-public" );
+    public void setPublicScope(boolean publicScope) {
+        if (publicScope) {
+            ajcOptions.add("-public");
         }
     }
 
-    public void setVerbose( boolean verbose )
-    {
-        if ( verbose )
-        {
-            ajcOptions.add( "-verbose" );
+    public void setVerbose(boolean verbose) {
+        if (verbose) {
+            ajcOptions.add("-verbose");
         }
     }
 
     /**
      * Set source compliance level
-     * 
+     *
      * @param complianceLevel compliance level
      */
-    public void setComplianceLevel( String complianceLevel )
-    {
-        if ( AjcHelper.isValidComplianceLevel( complianceLevel ) )
-        {
-            ajcOptions.add( "-source" );
-            ajcOptions.add( complianceLevel );
+    public void setComplianceLevel(String complianceLevel) {
+        if (AjcHelper.isValidComplianceLevel(complianceLevel)) {
+            ajcOptions.add("-source");
+            ajcOptions.add(complianceLevel);
         }
     }
 
-    public void setPluginArtifacts( List<Artifact> pluginArtifacts )
-    {
+    public void setPluginArtifacts(List<Artifact> pluginArtifacts) {
         this.pluginArtifacts = pluginArtifacts;
     }
 
@@ -445,8 +403,7 @@ public class AjcReportMojo
      * @param locale The locale for the report, must not be <code>null</code>.
      * @return The resource bundle for the requested locale.
      */
-    private ResourceBundle getBundle( Locale locale )
-    {
-        return ResourceBundle.getBundle( "aspectj-report", locale );
+    private ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("aspectj-report", locale);
     }
 }

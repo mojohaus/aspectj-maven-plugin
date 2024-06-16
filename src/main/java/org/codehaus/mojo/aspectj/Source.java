@@ -23,17 +23,12 @@ package org.codehaus.mojo.aspectj;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
  * Default implementation when a source is configured
- * 
+ *
  * @author Robert Scholte
  * @since 1.4
  */
-public class Source
-    extends DirectoryScanner
-{
-
-}
+public class Source extends DirectoryScanner {}
