@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<site xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
   <body>
     <links>
       <item name="AspectJ" href="https://www.eclipse.org/aspectj/"/>
@@ -32,4 +33,4 @@
       <item name="AJC experimental options" href="./ajc_reference/experimental_opts.html"/>
     </menu>
   </body>
-</project>
+</site>
