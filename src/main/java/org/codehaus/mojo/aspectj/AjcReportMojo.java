@@ -211,8 +211,8 @@ public class AjcReportMojo extends AbstractMavenReport {
     protected void executeReport(Locale locale) throws MavenReportException {
         getLog().info("Starting generating ajdoc");
 
-        project.getCompileSourceRoots().add(basedir.getAbsolutePath() + "/" + aspectDirectory);
-        project.getTestCompileSourceRoots().add(basedir.getAbsolutePath() + "/" + testAspectDirectory);
+        project.addCompileSourceRoot(basedir.getAbsolutePath() + "/" + aspectDirectory);
+        project.addTestCompileSourceRoot(basedir.getAbsolutePath() + "/" + testAspectDirectory);
 
         List<String> arguments = new ArrayList<>();
         // Add classpath
