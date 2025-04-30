@@ -33,13 +33,10 @@ import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
-import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.aspectj.tools.ajdoc.Main;
@@ -67,13 +64,6 @@ public class AjcReportMojo extends AbstractMavenReport {
      */
     @Parameter(defaultValue = "src/test/aspect")
     private String testAspectDirectory = "src/test/aspect";
-
-    /**
-     * The maven project.
-     *
-     */
-    @Parameter(readonly = true, required = true, defaultValue = "${project}")
-    private MavenProject project;
 
     /**
      * The basedir of the project.
@@ -116,13 +106,6 @@ public class AjcReportMojo extends AbstractMavenReport {
      */
     @Parameter
     private String ajdtBuildDefFile;
-
-    /**
-     * Doxia Site Renderer.
-     *
-     */
-    @Component
-    private Renderer siteRenderer;
 
     /**
      * Shows only package, protected, and public classes and members.
@@ -207,7 +190,6 @@ public class AjcReportMojo extends AbstractMavenReport {
     /**
      * Executes this ajdoc-report generation.
      */
-    @SuppressWarnings("unchecked")
     protected void executeReport(Locale locale) throws MavenReportException {
         getLog().info("Starting generating ajdoc");
 
@@ -325,20 +307,6 @@ public class AjcReportMojo extends AbstractMavenReport {
         // Only execute reports for java projects
         ArtifactHandler artifactHandler = this.project.getArtifact().getArtifactHandler();
         return "java".equals(artifactHandler.getLanguage());
-    }
-
-    /**
-     * Get the site renderer.
-     */
-    protected Renderer getSiteRenderer() {
-        return siteRenderer;
-    }
-
-    /**
-     * Get the maven project.
-     */
-    protected MavenProject getProject() {
-        return project;
     }
 
     public void setOverview(String overview) {

@@ -88,8 +88,8 @@
   </issueManagement>
   <properties>
     <aspectjVersion>1.9.7</aspectjVersion>
-    <doxiaVersion>1.12.0</doxiaVersion>
-    <doxiaSitetoolsVersion>1.11.1</doxiaSitetoolsVersion>
+    <doxiaVersion>2.0.0</doxiaVersion>
+    <doxiaSitetoolsVersion>2.0.0</doxiaSitetoolsVersion>
     <mojo.java.target>8</mojo.java.target>
     <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
     <project.build.outputTimestamp>2023-12-12T02:46:45Z</project.build.outputTimestamp>
@@ -157,7 +157,7 @@
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
-      <version>3.0.0</version>
+      <version>4.0.0</version>
     </dependency>
 
     <dependency>
@@ -204,14 +204,6 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-plugin-plugin</artifactId>
-          <configuration>
-            <!-- see: https://github.com/apache/maven-plugin-tools/pull/11 -->
-            <mojoDependencies>org.codehaus.mojo:aspectj-maven-plugin</mojoDependencies>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
             <detectLinks>false</detectLinks>
@@ -226,7 +218,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.5.0</version>
         <dependencies>
           <dependency>
             <groupId>org.codehaus.mojo</groupId>
