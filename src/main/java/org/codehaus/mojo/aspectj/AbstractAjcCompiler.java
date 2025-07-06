@@ -424,6 +424,14 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected List<String> additionalCompilerArgs = new ArrayList<>();
 
     /**
+     * It is used to control whether to add the {@link #resolvedIncludes} option parameter.
+     * <p>
+     * To maintain compatibility, the default value is "true", but it is recommended to set it to "false".
+     */
+    @Parameter(defaultValue = "true")
+    protected boolean containsResolvedIncludes = true;
+
+    /**
      * Holder for ajc compiler options
      */
     protected List<String> ajcOptions = new ArrayList<>();
@@ -431,7 +439,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     /**
      * Holds all files found using the includes, excludes parameters.
      */
-    protected Set<String> resolvedIncludes;
+    protected Set<String> resolvedIncludes = new HashSet<>();
 
     /**
      * Abstract method used by child classes to specify the correct output directory for compiled classes.
@@ -645,13 +653,15 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         ajcOptions.add("-s");
         ajcOptions.add(getGeneratedSourcesDirectory().getAbsolutePath());
 
-        // Add all the files to be included in the build,
-        if (null != ajdtBuildDefFile) {
-            resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
-        } else {
-            resolvedIncludes = getIncludedSources();
+        if (containsResolvedIncludes) {
+            // Add all the files to be included in the build,
+            if (null != ajdtBuildDefFile) {
+                resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
+            } else {
+                resolvedIncludes = getIncludedSources();
+            }
+            ajcOptions.addAll(resolvedIncludes);
         }
-        ajcOptions.addAll(resolvedIncludes);
 
         if (CollectionUtils.isNotEmpty(additionalCompilerArgs)) {
             ajcOptions.addAll(additionalCompilerArgs);
