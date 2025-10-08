@@ -429,7 +429,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * To maintain compatibility, the default value is "true", but it is recommended to set it to "false".
      */
     @Parameter(defaultValue = "true")
-    protected boolean containsResolvedIncludes = true;
+    protected boolean containsResolvedIncludes;
 
     /**
      * Holder for ajc compiler options
