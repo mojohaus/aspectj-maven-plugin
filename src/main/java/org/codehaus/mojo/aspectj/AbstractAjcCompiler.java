@@ -424,9 +424,19 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected List<String> additionalCompilerArgs = new ArrayList<>();
 
     /**
-     * It is used to control whether to add the {@link #resolvedIncludes} option parameter.
+     * Controls whether the list of resolved source files ({@link #resolvedIncludes}) is explicitly added to the
+     * compiler arguments passed to the AspectJ compiler (AJC).
      * <p>
-     * To maintain compatibility, the default value is "true", but it is recommended to set it to "false".
+     * <b>Functional impact:</b> When set to {@code true}, all resolved source files are listed as arguments to AJC.
+     * This can significantly increase the length of the command line, which may cause issues on some operating systems
+     * (e.g., command line length limits), and can slow down the build process due to the overhead of processing large
+     * argument lists. Additionally, including resolved files can reduce reproducibility if the set of files changes
+     * between builds, and may make builds less portable.
+     * <p>
+     * <b>Recommendation:</b> It is generally recommended to set this option to {@code false}, unless you have a
+     * specific need to pass all resolved source files explicitly. The default is {@code true} for backward
+     * compatibility, but setting it to {@code false} will typically result in shorter, more robust, and more
+     * reproducible builds.
      */
     @Parameter(defaultValue = "true")
     protected boolean containsResolvedIncludes;
