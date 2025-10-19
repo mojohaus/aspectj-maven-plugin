@@ -310,4 +310,27 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
         ajcCompMojo.assembleArguments();
         // should not fail
     }
+
+    /**
+     * Tests that -s option is included by default when proc is not set
+     *
+     * @throws Exception on test error
+     */
+    public void testGetAjcArguments_generatedSourcesDirIncludedByDefault() throws Exception {
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+        assertTrue("-s option should be included by default", args.contains("-s"));
+    }
+
+    /**
+     * Tests that -s option is NOT included when proc is set to "none"
+     *
+     * @throws Exception on test error
+     */
+    public void testGetAjcArguments_generatedSourcesDirNotIncludedWhenProcNone() throws Exception {
+        setVariableValueToObject(ajcCompMojo, "proc", "none");
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+        assertFalse("-s option should not be included when proc is 'none'", args.contains("-s"));
+    }
 }

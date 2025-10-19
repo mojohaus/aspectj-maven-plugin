@@ -642,8 +642,12 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         ajcOptions.add("-d");
         ajcOptions.add(getOutputDirectory().getAbsolutePath());
 
-        ajcOptions.add("-s");
-        ajcOptions.add(getGeneratedSourcesDirectory().getAbsolutePath());
+        // Only add -s option when annotation processing is not explicitly disabled
+        // This prevents AspectJ from trying to process already-generated sources (e.g., from Lombok)
+        if (!"none".equals(proc)) {
+            ajcOptions.add("-s");
+            ajcOptions.add(getGeneratedSourcesDirectory().getAbsolutePath());
+        }
 
         // Add all the files to be included in the build,
         if (null != ajdtBuildDefFile) {
