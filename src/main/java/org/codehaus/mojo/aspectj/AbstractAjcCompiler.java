@@ -771,7 +771,17 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * Not entirely safe, assembleArguments() must be run
      */
     private boolean hasSourcesToCompile() {
-        return resolvedIncludes.size() > 0;
+        return resolvedIncludes.size() > 0 || hasWeavableContent();
+    }
+
+    /**
+     * Checks if there are weave directories or dependencies configured for weaving.
+     *
+     * @return true if there are weave directories or dependencies configured, false otherwise
+     */
+    private boolean hasWeavableContent() {
+        return (weaveDirectories != null && weaveDirectories.length > 0)
+                || (weaveDependencies != null && weaveDependencies.length > 0);
     }
 
     private boolean hasSourcesChanged(File outDir) {
