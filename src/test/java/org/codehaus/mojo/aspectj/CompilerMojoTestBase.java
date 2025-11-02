@@ -32,6 +32,8 @@ import org.apache.maven.model.Model;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Baseclass for AjcMojo testcases. Sets up the testproject, and cleans
@@ -50,7 +52,8 @@ public abstract class CompilerMojoTestBase extends AbstractMojoTestCase {
     /**
      *
      */
-    protected void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() throws Exception {
         // prepare plexus environment
         super.setUp();
 
@@ -84,7 +87,8 @@ public abstract class CompilerMojoTestBase extends AbstractMojoTestCase {
      * Clean up targetarea after a testcase is run.
      * So we make shure, we don't get sideeffects between testruns.
      */
-    protected void tearDown() throws Exception {
+    @AfterEach
+    public void tearDown() throws Exception {
         super.tearDown();
         try {
             FileUtils.deleteDirectory(project.getBuild().getDirectory());

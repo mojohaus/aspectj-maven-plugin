@@ -34,19 +34,27 @@ import org.apache.maven.model.Model;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AbstractAjcCompiler}
  *
  * @author <a href="mailto:tel@objectnet.no">Thor Age Eldby</a>
  */
-public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
+class AbstractAjcCompilerTest extends AbstractMojoTestCase {
 
     /** Compiler mojo instance */
     private AjcTestCompileMojo ajcCompMojo;
 
-    @Override
-    protected void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         super.setUp();
         ajcCompMojo = new AjcTestCompileMojo();
         MavenProject project = new MavenProject(new Model());
@@ -65,7 +73,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_noWeaveArtifacts() throws MojoExecutionException {
+    @Test
+    void getAjcArgumentsNoWeaveArtifacts() throws Exception {
         ajcCompMojo.assembleArguments();
         List args = ajcCompMojo.ajcOptions;
         assertFalse(args.contains("-inpath"));
@@ -74,7 +83,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
     /**
      * Tests that the compiler fails as it should if told to weave an artifact not listed in the project dependencies.
      */
-    public void testGetAjcArguments_weaveArtifactsNotProjectDependecy() {
+    @Test
+    void getAjcArgumentsWeaveArtifactsNotProjectDependecy() {
         Module module1 = new Module();
         String mod1Group = "dill.group";
         module1.setGroupId(mod1Group);
@@ -96,7 +106,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_weaveArtifacts() throws MojoExecutionException {
+    @Test
+    void getAjcArgumentsWeaveArtifacts() throws Exception {
         ajcCompMojo.weaveDependencies = new Module[2];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -123,9 +134,9 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
             // don't do nothing
         }
         String weavePath = (String) it.next();
-        assertTrue(weavePath.indexOf(File.pathSeparator) != -1);
-        assertTrue(weavePath.indexOf(mod1Artifact) != -1);
-        assertTrue(weavePath.indexOf(mod2Artifact) != -1);
+        assertNotSame(weavePath.indexOf(File.pathSeparator), -1);
+        assertNotSame(weavePath.indexOf(mod1Artifact), -1);
+        assertNotSame(weavePath.indexOf(mod2Artifact), -1);
     }
 
     /**
@@ -134,7 +145,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_weaveArtifactsWithClassifier() throws MojoExecutionException {
+    @Test
+    void getAjcArgumentsWeaveArtifactsWithClassifier() throws Exception {
         ajcCompMojo.weaveDependencies = new Module[1];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -158,9 +170,9 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
             // don't do nothing
         }
         String weavePath = (String) it.next();
-        assertTrue(weavePath.indexOf(mod1Artifact) != -1);
-        assertTrue(weavePath.indexOf(mod1classifier) != -1);
-        assertFalse(weavePath.indexOf(mod2classifier) != -1);
+        assertNotSame(weavePath.indexOf(mod1Artifact), -1);
+        assertNotSame(weavePath.indexOf(mod1classifier), -1);
+        assertSame(weavePath.indexOf(mod2classifier), -1);
     }
 
     /**
@@ -169,7 +181,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_weaveArtifactsWithType() throws MojoExecutionException {
+    @Test
+    void getAjcArgumentsWeaveArtifactsWithType() throws Exception {
         ajcCompMojo.weaveDependencies = new Module[1];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -193,9 +206,9 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
             // don't do nothing
         }
         String weavePath = (String) it.next();
-        assertTrue(weavePath.indexOf(mod1Artifact) != -1);
-        assertTrue(weavePath.indexOf("." + mod1type) != -1);
-        assertFalse(weavePath.indexOf(mod2type) != -1);
+        assertNotSame(weavePath.indexOf(mod1Artifact), -1);
+        assertNotSame(weavePath.indexOf("." + mod1type), -1);
+        assertSame(weavePath.indexOf(mod2type), -1);
     }
 
     /**
@@ -203,7 +216,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws Exception on test error
      */
-    public void testGetAjcArguments_weaveDirectories() throws Exception {
+    @Test
+    void getAjcArgumentsWeaveDirectories() throws Exception {
         String dir1 = "target/classes1";
         String dir2 = "target/classes2";
         ajcCompMojo.weaveDirectories = new String[] {dir1, dir2};
@@ -215,9 +229,9 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
             // don't do nothing
         }
         String weavePath = (String) it.next();
-        assertTrue(weavePath.indexOf(File.pathSeparator) != -1);
-        assertTrue(weavePath.indexOf(dir1) != -1);
-        assertTrue(weavePath.indexOf(dir2) != -1);
+        assertNotSame(weavePath.indexOf(File.pathSeparator), -1);
+        assertNotSame(weavePath.indexOf(dir1), -1);
+        assertNotSame(weavePath.indexOf(dir2), -1);
     }
 
     /**
@@ -227,7 +241,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws Exception on test error
      */
-    public void testGetAjcArguments_noLibraryArtifacts() throws Exception {
+    @Test
+    void getAjcArgumentsNoLibraryArtifacts() throws Exception {
         ajcCompMojo.assembleArguments();
         List args = ajcCompMojo.ajcOptions;
         assertFalse(args.contains("-aspectpath"));
@@ -237,7 +252,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      * Tests that the compiler fails as it should if told to weave an library artifact not listed in the project
      * dependencies.
      */
-    public void testGetAjcArguments_libraryArtifactsNotProjectDependency() {
+    @Test
+    void getAjcArgumentsLibraryArtifactsNotProjectDependency() {
         Module module1 = new Module();
         String mod1Group = "dill.group";
         module1.setGroupId(mod1Group);
@@ -259,7 +275,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws Exception on test error
      */
-    public void testGetAjc_libraryArtifacts() throws Exception {
+    @Test
+    void getAjcLibraryArtifacts() throws Exception {
         ajcCompMojo.aspectLibraries = new Module[2];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -286,13 +303,14 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
             // don't do nothing
         }
         String weavePath = (String) it.next();
-        assertTrue(weavePath.indexOf(File.pathSeparator) != -1);
-        assertTrue(weavePath.indexOf(mod1Artifact) != -1);
-        assertTrue(weavePath.indexOf(mod2Artifact) != -1);
+        assertNotSame(weavePath.indexOf(File.pathSeparator), -1);
+        assertNotSame(weavePath.indexOf(mod1Artifact), -1);
+        assertNotSame(weavePath.indexOf(mod2Artifact), -1);
     }
 
     // MASPECTJ-103
-    public void testGetAJc_EmptyClassifier() throws Exception {
+    @Test
+    void getAJcEmptyClassifier() throws Exception {
         String groupId = "groupId";
         String artifactId = "artifactId";
         String classifier = ""; // could be result of filtering properties

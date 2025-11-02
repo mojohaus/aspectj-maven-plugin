@@ -29,18 +29,24 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AjcHelper}
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public class AjcHelperTest extends TestCase {
-    public void testGetAsCsv() {
+class AjcHelperTest {
+    @Test
+    void getAsCsv() {
         String[] tests = new String[] {"kaare", "java", "aspectJ"};
         assertEquals("kaare,java,aspectJ", AjcHelper.getAsCsv(tests));
     }
@@ -48,7 +54,8 @@ public class AjcHelperTest extends TestCase {
     /**
      * @throws Exception on test error
      */
-    public void testGetSourcesEmptyBaseDir() throws Exception {
+    @Test
+    void getSourcesEmptyBaseDir() throws Exception {
         List baseDirs = new ArrayList();
         baseDirs.add("src/shouldNotExist");
         HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs(
@@ -56,7 +63,8 @@ public class AjcHelperTest extends TestCase {
         assertTrue(sources.isEmpty());
     }
 
-    public void testBuildConfigFile() {
+    @Test
+    void buildConfigFile() {
         final File baseDir = new File(".");
         final String fileName = "test.lst";
         final String fileAbsolutePath = baseDir.getAbsolutePath() + File.separator + fileName;
@@ -69,7 +77,7 @@ public class AjcHelperTest extends TestCase {
         args.add("/home/aspectj/AnotherFile");
         try {
             AjcHelper.writeBuildConfigToFile(args, fileName, baseDir);
-            assertTrue("Config file not written to disk", FileUtils.fileExists(fileAbsolutePath));
+            assertTrue(FileUtils.fileExists(fileAbsolutePath), "Config file not written to disk");
             List readArgs = AjcHelper.readBuildConfigFile(fileName, baseDir);
             assertEquals(args, readArgs);
         } catch (Exception e) {
@@ -80,12 +88,14 @@ public class AjcHelperTest extends TestCase {
         }
     }
 
-    public void testEmptyDependencyArtifacts() {
+    @Test
+    void emptyDependencyArtifacts() {
         MavenProject project = new MavenProject();
         AjcHelper.createClassPath(project, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
     }
 
-    public void testProjectDependenciesBeforeOthers() {
+    @Test
+    void projectDependenciesBeforeOthers() {
         DefaultArtifact projectArtifact = createFixedArtifact();
         projectArtifact.setFile(new File("../sibling-project/target/some.jar"));
 
@@ -101,8 +111,8 @@ public class AjcHelperTest extends TestCase {
 
         String classPath =
                 AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.EMPTY_LIST);
-        assertTrue("wrong dependency order in " + classPath, classPath.contains("sibling-project"));
-        assertFalse("wrong dependency order in " + classPath, classPath.contains("repository"));
+        assertTrue(classPath.contains("sibling-project"), "wrong dependency order in " + classPath);
+        assertFalse(classPath.contains("repository"), "wrong dependency order in " + classPath);
     }
 
     private static DefaultArtifact createFixedArtifact() {

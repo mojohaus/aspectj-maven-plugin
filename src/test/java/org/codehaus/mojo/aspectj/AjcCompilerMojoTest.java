@@ -26,6 +26,11 @@ package org.codehaus.mojo.aspectj;
 import java.io.File;
 
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Plugin testcases.
@@ -33,12 +38,13 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  *
  */
-public class AjcCompilerMojoTest extends CompilerMojoTestBase {
+class AjcCompilerMojoTest extends CompilerMojoTestBase {
 
     /**
      *
      */
-    protected void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() throws Exception {
         ajcMojo = new AjcCompileMojo();
         super.setUp();
     }
@@ -46,7 +52,8 @@ public class AjcCompilerMojoTest extends CompilerMojoTestBase {
     /**
      * @throws Exception on test error
      */
-    public void testModificationSet() throws Exception {
+    @Test
+    void modificationSet() throws Exception {
         ajcMojo.aspectDirectory = "src/main/aspect";
         final String[] includes = new String[] {"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
         ajcMojo.setArgumentFileName("builddef.lst");
@@ -54,7 +61,7 @@ public class AjcCompilerMojoTest extends CompilerMojoTestBase {
 
         ajcMojo.includes = new String[] {"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
         ajcMojo.assembleArguments();
-        assertTrue("Build should be needed when no previous files are found", ajcMojo.isBuildNeeded());
+        assertTrue(ajcMojo.isBuildNeeded(), "Build should be needed when no previous files are found");
 
         try {
             ajcMojo.ajcOptions.clear();
@@ -69,24 +76,24 @@ public class AjcCompilerMojoTest extends CompilerMojoTestBase {
         ajcMojo.ajcOptions.clear();
         ajcMojo.includes = includes;
         ajcMojo.assembleArguments();
-        assertFalse("A build has completed. No modifications done. no new build needed", ajcMojo.isBuildNeeded());
+        assertFalse(ajcMojo.isBuildNeeded(), "A build has completed. No modifications done. no new build needed");
 
         ajcMojo.ajcOptions.clear();
         ajcMojo.includes = includes;
         ajcMojo.setShowWeaveInfo(true);
         ajcMojo.assembleArguments();
-        assertTrue("One of the arguments has changed, a new build is needed", ajcMojo.isBuildNeeded());
+        assertTrue(ajcMojo.isBuildNeeded(), "One of the arguments has changed, a new build is needed");
 
         ajcMojo.ajcOptions.clear();
         ajcMojo.includes = includes;
         ajcMojo.assembleArguments();
-        assertFalse("A build has completed. No modifications done. no new build needed", ajcMojo.isBuildNeeded());
+        assertFalse(ajcMojo.isBuildNeeded(), "A build has completed. No modifications done. no new build needed");
         String currentDir = new File(".").getAbsolutePath();
         File aspect = new File(currentDir.substring(0, currentDir.length() - 1)
                 + "src/test/projects/test-project/src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj");
         long timeStamp = System.currentTimeMillis();
-        assertTrue("Could not touch file: " + aspect.getAbsolutePath(), aspect.setLastModified(timeStamp));
-        assertTrue("One of the included files has changed. a new build is needed", ajcMojo.isBuildNeeded());
+        assertTrue(aspect.setLastModified(timeStamp), "Could not touch file: " + aspect.getAbsolutePath());
+        assertTrue(ajcMojo.isBuildNeeded(), "One of the included files has changed. a new build is needed");
     }
 
     String getProjectName() {

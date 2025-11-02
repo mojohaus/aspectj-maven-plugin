@@ -1,16 +1,19 @@
 package org.codehaus.mojo.aspectj;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.junit.jupiter.api.Test;
 
-public class AjcTestCompileMojoTest extends AbstractMojoTestCase {
+class AjcTestCompileMojoTest extends AbstractMojoTestCase {
 
-    public void testExecuteWithSkip() throws Exception {
+    @Test
+    void executeWithSkip() throws Exception {
         final AjcTestCompileMojo testSubject = new AjcTestCompileMojo();
         System.setProperty(AjcTestCompileMojo.MAVEN_TEST_SKIP, "true");
         testSubject.execute();
     }
 
-    public void testExecuteWithoutSkip() throws Exception {
+    @Test
+    void executeWithoutSkip() throws Exception {
         final AjcTestCompileMojo testSubject = new AjcTestCompileMojo();
 
         try {
