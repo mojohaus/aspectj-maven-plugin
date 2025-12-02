@@ -663,13 +663,14 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         ajcOptions.add("-s");
         ajcOptions.add(getGeneratedSourcesDirectory().getAbsolutePath());
 
+        // Add all the files to be included in the build,
+        if (null != ajdtBuildDefFile) {
+            resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
+        } else {
+            resolvedIncludes = getIncludedSources();
+        }
+
         if (containsResolvedIncludes) {
-            // Add all the files to be included in the build,
-            if (null != ajdtBuildDefFile) {
-                resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
-            } else {
-                resolvedIncludes = getIncludedSources();
-            }
             ajcOptions.addAll(resolvedIncludes);
         }
 
