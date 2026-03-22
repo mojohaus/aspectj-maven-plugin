@@ -1,2 +1,0 @@
-_extends: .github
-tag-template: aspectj-maven-plugin-$NEXT_MINOR_VERSION
