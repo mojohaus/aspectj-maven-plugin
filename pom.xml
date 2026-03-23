@@ -88,7 +88,7 @@
   </issueManagement>
   <properties>
     <aspectjVersion>1.9.7</aspectjVersion>
-    <doxiaVersion>2.0.0</doxiaVersion>
+    <doxiaVersion>2.1.0</doxiaVersion>
     <doxiaSitetoolsVersion>2.0.0</doxiaSitetoolsVersion>
     <mojo.java.target>8</mojo.java.target>
     <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
