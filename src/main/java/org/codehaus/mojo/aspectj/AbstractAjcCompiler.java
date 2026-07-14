@@ -402,6 +402,17 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected boolean forceAjcCompile;
 
     /**
+     * When set to true, only weaving will be performed on class files (specified via weaveDirectories or inpath).
+     * Source files will not be compiled. This is useful when another compiler plugin (e.g., maven-compiler-plugin)
+     * has already compiled the sources, and you only want AspectJ to weave the compiled classes.
+     * This is particularly important when using annotation processors like Lombok, which need to run before AspectJ.
+     *
+     * @since 2.15.1
+     */
+    @Parameter(defaultValue = "false", property = "aspectj.weaveOnly")
+    protected boolean weaveOnly;
+
+    /**
      * Sets additional compiler arguments, e.g.
      * <pre>{@code
      * <compilerArgs>
@@ -532,7 +543,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
 
         assembleArguments();
 
-        if (!forceAjcCompile && !hasSourcesToCompile()) {
+        if (!forceAjcCompile && !weaveOnly && !hasSourcesToCompile()) {
             getLog().warn("No sources found skipping aspectJ compile");
             return;
         }
@@ -646,12 +657,20 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
         ajcOptions.add(getGeneratedSourcesDirectory().getAbsolutePath());
 
         // Add all the files to be included in the build,
-        if (null != ajdtBuildDefFile) {
-            resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
+        // When weaveOnly is true, skip adding source files - only weave class files specified via
+        // weaveDirectories/inpath
+        if (!weaveOnly) {
+            if (null != ajdtBuildDefFile) {
+                resolvedIncludes = AjcHelper.getBuildFilesForAjdtFile(ajdtBuildDefFile, basedir);
+            } else {
+                resolvedIncludes = getIncludedSources();
+            }
+            ajcOptions.addAll(resolvedIncludes);
         } else {
-            resolvedIncludes = getIncludedSources();
+            // In weave-only mode, initialize resolvedIncludes as empty to avoid "No sources found" warnings
+            resolvedIncludes = new HashSet<>();
+            getLog().info("weaveOnly mode: skipping source file compilation, only weaving class files");
         }
-        ajcOptions.addAll(resolvedIncludes);
 
         if (CollectionUtils.isNotEmpty(additionalCompilerArgs)) {
             ajcOptions.addAll(additionalCompilerArgs);
