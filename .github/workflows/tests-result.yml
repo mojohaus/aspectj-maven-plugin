@@ -1,0 +1,17 @@
+name: Reports
+
+on:
+  workflow_run:
+    workflows: ["GitHub CI"]
+    types:
+      - completed
+
+permissions: {}
+
+jobs:
+  test-results:
+    permissions:
+      checks: write
+      pull-requests: write
+      actions: read
+    uses: mojohaus/.github/.github/workflows/test-results.yml@master
