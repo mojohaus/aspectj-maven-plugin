@@ -66,7 +66,7 @@ jobs:
         run: mvn --show-version --errors --batch-mode "-Dinvoker.streamLogsOnFailures=true" "-Prun-its,docs" clean verify
 
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: Test Results
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Upload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: Event File
           path: ${{ github.event_path }}
