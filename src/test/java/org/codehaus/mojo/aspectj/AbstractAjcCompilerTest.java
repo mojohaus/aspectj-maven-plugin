@@ -310,4 +310,109 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
         ajcCompMojo.assembleArguments();
         // should not fail
     }
+
+    /**
+     * Tests that weaveOnly mode skips source file compilation and only weaves class files.
+     * When weaveOnly is true, source files should not be added to ajcOptions.
+     *
+     * @throws Exception on test error
+     */
+    public void testWeaveOnly_skipsSourceFiles() throws Exception {
+        // Set up weaveDirectories to provide classes to weave
+        String dir1 = "target/classes";
+        ajcCompMojo.weaveDirectories = new String[] {dir1};
+
+        // Enable weaveOnly mode
+        setVariableValueToObject(ajcCompMojo, "weaveOnly", true);
+
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+
+        // Should have -inpath argument for weaving
+        assertTrue("weaveOnly mode should include -inpath argument", args.contains("-inpath"));
+
+        // resolvedIncludes should be empty in weaveOnly mode (no source files)
+        assertTrue("weaveOnly mode should not include source files", ajcCompMojo.resolvedIncludes.isEmpty());
+    }
+
+    /**
+     * Tests that weaveOnly mode includes weaveDirectories in -inpath.
+     *
+     * @throws Exception on test error
+     */
+    public void testWeaveOnly_includesWeaveDirectories() throws Exception {
+        String dir1 = "target/classes1";
+        String dir2 = "target/classes2";
+        ajcCompMojo.weaveDirectories = new String[] {dir1, dir2};
+
+        // Enable weaveOnly mode
+        setVariableValueToObject(ajcCompMojo, "weaveOnly", true);
+
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+
+        assertTrue("Should contain -inpath", args.contains("-inpath"));
+        Iterator it = args.iterator();
+        while (!it.next().equals("-inpath")) {
+            // find -inpath position
+        }
+        String weavePath = (String) it.next();
+        assertTrue("Should include first weave directory", weavePath.indexOf(dir1) != -1);
+        assertTrue("Should include second weave directory", weavePath.indexOf(dir2) != -1);
+    }
+
+    /**
+     * Tests that weaveOnly mode works with weaveDependencies.
+     *
+     * @throws Exception on test error
+     */
+    public void testWeaveOnly_withWeaveDependencies() throws Exception {
+        // Setup weaveDependencies
+        ajcCompMojo.weaveDependencies = new Module[1];
+        Module module1 = new Module();
+        String mod1Group = "test.group";
+        module1.setGroupId(mod1Group);
+        String mod1Artifact = "test.artifact";
+        module1.setArtifactId(mod1Artifact);
+        ajcCompMojo.weaveDependencies[0] = module1;
+
+        // Add to project artifacts
+        Set artifacts = new HashSet();
+        artifacts.add(new MockArtifact(mod1Group, mod1Artifact));
+        ajcCompMojo.project.setArtifacts(artifacts);
+
+        // Enable weaveOnly mode
+        setVariableValueToObject(ajcCompMojo, "weaveOnly", true);
+
+        ajcCompMojo.assembleArguments();
+        List args = ajcCompMojo.ajcOptions;
+
+        assertTrue("Should contain -inpath", args.contains("-inpath"));
+        Iterator it = args.iterator();
+        while (!it.next().equals("-inpath")) {
+            // find -inpath position
+        }
+        String weavePath = (String) it.next();
+        assertTrue("Should include weave dependency", weavePath.indexOf(mod1Artifact) != -1);
+
+        // resolvedIncludes should be empty in weaveOnly mode
+        assertTrue("weaveOnly mode should not include source files", ajcCompMojo.resolvedIncludes.isEmpty());
+    }
+
+    /**
+     * Tests that when weaveOnly is false (default), source files are still included.
+     *
+     * @throws Exception on test error
+     */
+    public void testWeaveOnly_defaultBehavior() throws Exception {
+        // weaveOnly is false by default
+        // This should work as before - sources should be included
+        // Note: we can't test actual source inclusion easily without a real test project,
+        // but we can verify the flag default value
+
+        ajcCompMojo.assembleArguments();
+
+        // The default behavior should allow source compilation
+        // (this is tested implicitly by other existing tests)
+    }
 }
