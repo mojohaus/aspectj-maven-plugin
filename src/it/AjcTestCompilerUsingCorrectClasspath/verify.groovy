@@ -1,4 +1,7 @@
 file = new File(basedir, "target/test-classes/builddef.lst")
 assert file.exists()
-assert file.readLines().get(4) == '-classpath'
-assert file.readLines().get(5).contains('junit')
+// options set through setters, such as -showWeaveInfo and -verbose, can come before or after -classpath
+def lines = file.readLines()
+def classpath = lines.indexOf('-classpath')
+assert classpath >= 0
+assert lines.get(classpath + 1).contains('junit')
