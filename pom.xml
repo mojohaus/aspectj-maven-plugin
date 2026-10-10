@@ -87,6 +87,8 @@
     <url>https://github.com/mojohaus/aspectj-maven-plugin/issues/</url>
   </issueManagement>
   <properties>
+    <!-- run the ITs in parallel -->
+    <invoker.parallelThreads>0.75C</invoker.parallelThreads>
     <aspectjVersion>1.9.7</aspectjVersion>
     <doxiaVersion>2.1.0</doxiaVersion>
     <doxiaSitetoolsVersion>2.1.0</doxiaSitetoolsVersion>
@@ -357,6 +359,10 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
             <configuration>
+              <environmentVariables>
+                <!-- each IT is a short-lived JVM: C2 compilation and parallel GC only add startup time -->
+                <JAVA_TOOL_OPTIONS>-XX:TieredStopAtLevel=1 -XX:+UseSerialGC</JAVA_TOOL_OPTIONS>
+              </environmentVariables>
               <projectsDirectory>src/it</projectsDirectory>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
               <postBuildHookScript>verify</postBuildHookScript>
