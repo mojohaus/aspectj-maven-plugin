@@ -3,7 +3,10 @@ updates:
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
+    groups:
+      maven:
+        update-types: ["minor", "patch"]
     ignore:
       # plexus-xml 4.x depends on the Maven 4 XML API
       - dependency-name: "org.codehaus.plexus:plexus-xml"
@@ -11,4 +14,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
+    groups:
+      github-actions:
+        patterns: ["*"]
