@@ -266,6 +266,14 @@
         <artifactId>maven-plugin-plugin</artifactId>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-plugin-report-plugin</artifactId>
+        <configuration>
+          <!-- the POMs before 1.9 have a tools.jar systemPath that no longer builds -->
+          <requirementsHistoryDetectionRange>[1.9,)</requirementsHistoryDetectionRange>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>l10n-maven-plugin</artifactId>
         <version>1.2.1</version>
