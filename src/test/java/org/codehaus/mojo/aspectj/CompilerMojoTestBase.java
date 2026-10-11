@@ -29,9 +29,11 @@ import java.util.Collections;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.model.Model;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.ReflectionUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Baseclass for AjcMojo testcases. Sets up the testproject, and cleans
@@ -39,7 +41,7 @@ import org.codehaus.plexus.util.FileUtils;
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
-public abstract class CompilerMojoTestBase extends AbstractMojoTestCase {
+abstract class CompilerMojoTestBase {
 
     MavenProject project = new MavenProject(new Model());
 
@@ -50,10 +52,9 @@ public abstract class CompilerMojoTestBase extends AbstractMojoTestCase {
     /**
      *
      */
-    protected void setUp() throws Exception {
-        // prepare plexus environment
-        super.setUp();
-
+    @BeforeEach
+    void setUp() throws Exception {
+        ajcMojo = createMojo();
         ajcMojo.project = project;
         String temp = new File(".").getAbsolutePath();
         basedir = temp.substring(0, temp.length() - 2) + "/src/test/projects/" + getProjectName() + "/";
@@ -66,9 +67,9 @@ public abstract class CompilerMojoTestBase extends AbstractMojoTestCase {
         project.addTestCompileSourceRoot(project.getBuild().getTestSourceDirectory());
         ajcMojo.basedir = new File(basedir);
 
-        setVariableValueToObject(
+        ReflectionUtils.setVariableValueInObject(
                 ajcMojo, "outputDirectory", new File(project.getBuild().getOutputDirectory()));
-        setVariableValueToObject(
+        ReflectionUtils.setVariableValueInObject(
                 ajcMojo,
                 "generatedSourcesDirectory",
                 new File(project.getBuild().getDirectory() + "/generated-sources/annotations"));
@@ -84,8 +85,8 @@ public abstract class CompilerMojoTestBase extends AbstractMojoTestCase {
      * Clean up targetarea after a testcase is run.
      * So we make shure, we don't get sideeffects between testruns.
      */
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @AfterEach
+    void tearDown() {
         try {
             FileUtils.deleteDirectory(project.getBuild().getDirectory());
         } catch (Exception ex) {
@@ -93,6 +94,8 @@ public abstract class CompilerMojoTestBase extends AbstractMojoTestCase {
             // It is probably not there
         }
     }
+
+    abstract AbstractAjcCompiler createMojo();
 
     abstract String getProjectName();
 }

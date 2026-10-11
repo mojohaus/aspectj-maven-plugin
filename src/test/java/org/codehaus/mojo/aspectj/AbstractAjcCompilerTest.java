@@ -32,30 +32,35 @@ import java.util.Set;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.ReflectionUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AbstractAjcCompiler}
  *
  * @author <a href="mailto:tel@objectnet.no">Thor Age Eldby</a>
  */
-public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
+class AbstractAjcCompilerTest {
 
     /** Compiler mojo instance */
     private AjcTestCompileMojo ajcCompMojo;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
         ajcCompMojo = new AjcTestCompileMojo();
         MavenProject project = new MavenProject(new Model());
         ajcCompMojo.project = project;
-        setVariableValueToObject(ajcCompMojo, "outputDirectory", getTestFile("/target/test-classes"));
-        setVariableValueToObject(
+        ReflectionUtils.setVariableValueInObject(ajcCompMojo, "outputDirectory", getTestFile("target/test-classes"));
+        ReflectionUtils.setVariableValueInObject(
                 ajcCompMojo,
                 "generatedTestSourcesDirectory",
-                getTestFile("/target/generated-test-sources/test-annotations"));
+                getTestFile("target/generated-test-sources/test-annotations"));
         project.setDependencyArtifacts(new HashSet());
     }
 
@@ -65,7 +70,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_noWeaveArtifacts() throws MojoExecutionException {
+    @Test
+    void testGetAjcArguments_noWeaveArtifacts() throws MojoExecutionException {
         ajcCompMojo.assembleArguments();
         List args = ajcCompMojo.ajcOptions;
         assertFalse(args.contains("-inpath"));
@@ -74,20 +80,17 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
     /**
      * Tests that the compiler fails as it should if told to weave an artifact not listed in the project dependencies.
      */
-    public void testGetAjcArguments_weaveArtifactsNotProjectDependecy() {
+    @Test
+    void testGetAjcArguments_weaveArtifactsNotProjectDependecy() {
         Module module1 = new Module();
         String mod1Group = "dill.group";
         module1.setGroupId(mod1Group);
         String mod1Artifact = "dall.artifact";
         module1.setArtifactId(mod1Artifact);
-        try {
-            ajcCompMojo.weaveDependencies = new Module[1];
-            ajcCompMojo.weaveDependencies[0] = module1;
-            ajcCompMojo.assembleArguments();
-            fail("Should fail quite miserably");
-        } catch (MojoExecutionException e) {
-            // good thing
-        }
+        ajcCompMojo.weaveDependencies = new Module[1];
+        ajcCompMojo.weaveDependencies[0] = module1;
+        assertThrows(
+                MojoExecutionException.class, () -> ajcCompMojo.assembleArguments(), "Should fail quite miserably");
     }
 
     /**
@@ -96,7 +99,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_weaveArtifacts() throws MojoExecutionException {
+    @Test
+    void testGetAjcArguments_weaveArtifacts() throws MojoExecutionException {
         ajcCompMojo.weaveDependencies = new Module[2];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -134,7 +138,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_weaveArtifactsWithClassifier() throws MojoExecutionException {
+    @Test
+    void testGetAjcArguments_weaveArtifactsWithClassifier() throws MojoExecutionException {
         ajcCompMojo.weaveDependencies = new Module[1];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -169,7 +174,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws MojoExecutionException if the mojo fails to execute
      */
-    public void testGetAjcArguments_weaveArtifactsWithType() throws MojoExecutionException {
+    @Test
+    void testGetAjcArguments_weaveArtifactsWithType() throws MojoExecutionException {
         ajcCompMojo.weaveDependencies = new Module[1];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -203,7 +209,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws Exception on test error
      */
-    public void testGetAjcArguments_weaveDirectories() throws Exception {
+    @Test
+    void testGetAjcArguments_weaveDirectories() throws Exception {
         String dir1 = "target/classes1";
         String dir2 = "target/classes2";
         ajcCompMojo.weaveDirectories = new String[] {dir1, dir2};
@@ -227,7 +234,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws Exception on test error
      */
-    public void testGetAjcArguments_noLibraryArtifacts() throws Exception {
+    @Test
+    void testGetAjcArguments_noLibraryArtifacts() throws Exception {
         ajcCompMojo.assembleArguments();
         List args = ajcCompMojo.ajcOptions;
         assertFalse(args.contains("-aspectpath"));
@@ -237,20 +245,17 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      * Tests that the compiler fails as it should if told to weave an library artifact not listed in the project
      * dependencies.
      */
-    public void testGetAjcArguments_libraryArtifactsNotProjectDependency() {
+    @Test
+    void testGetAjcArguments_libraryArtifactsNotProjectDependency() {
         Module module1 = new Module();
         String mod1Group = "dill.group";
         module1.setGroupId(mod1Group);
         String mod1Artifact = "dall.artifact";
         module1.setArtifactId(mod1Artifact);
-        try {
-            ajcCompMojo.aspectLibraries = new Module[1];
-            ajcCompMojo.aspectLibraries[0] = module1;
-            ajcCompMojo.assembleArguments();
-            fail("Should fail quite miserably");
-        } catch (MojoExecutionException e) {
-            // good thing
-        }
+        ajcCompMojo.aspectLibraries = new Module[1];
+        ajcCompMojo.aspectLibraries[0] = module1;
+        assertThrows(
+                MojoExecutionException.class, () -> ajcCompMojo.assembleArguments(), "Should fail quite miserably");
     }
 
     /**
@@ -259,7 +264,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
      *
      * @throws Exception on test error
      */
-    public void testGetAjc_libraryArtifacts() throws Exception {
+    @Test
+    void testGetAjc_libraryArtifacts() throws Exception {
         ajcCompMojo.aspectLibraries = new Module[2];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -292,7 +298,8 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
     }
 
     // MASPECTJ-103
-    public void testGetAJc_EmptyClassifier() throws Exception {
+    @Test
+    void testGetAJc_EmptyClassifier() throws Exception {
         String groupId = "groupId";
         String artifactId = "artifactId";
         String classifier = ""; // could be result of filtering properties
@@ -309,5 +316,9 @@ public class AbstractAjcCompilerTest extends AbstractMojoTestCase {
         ajcCompMojo.project.setArtifacts(artifacts);
         ajcCompMojo.assembleArguments();
         // should not fail
+    }
+
+    private static File getTestFile(String path) {
+        return new File(System.getProperty("basedir", System.getProperty("user.dir")), path);
     }
 }
