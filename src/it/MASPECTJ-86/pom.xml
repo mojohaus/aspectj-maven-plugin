@@ -12,9 +12,9 @@
       <version>@aspectjVersion@</version>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.5</version>
+      <groupId>localhost</groupId>
+      <artifactId>maspectj-86-dependency</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 
@@ -44,8 +44,8 @@
           <forceAjcCompile>true</forceAjcCompile>
           <weaveDependencies>
             <weaveDependency>
-              <groupId>commons-lang</groupId>
-              <artifactId>commons-lang</artifactId>
+              <groupId>localhost</groupId>
+              <artifactId>maspectj-86-dependency</artifactId>
             </weaveDependency>
           </weaveDependencies>
         </configuration>

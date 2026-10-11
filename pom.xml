@@ -365,6 +365,9 @@
               </environmentVariables>
               <projectsDirectory>src/it</projectsDirectory>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+              <setupIncludes>
+                <setupInclude>setup-*/pom.xml</setupInclude>
+              </setupIncludes>
               <postBuildHookScript>verify</postBuildHookScript>
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
               <goals>
