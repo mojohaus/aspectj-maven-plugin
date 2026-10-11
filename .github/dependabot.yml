@@ -4,6 +4,11 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    # IT and unit-test fixture POMs pin old versions on purpose
+    exclude-paths:
+      - "src/it/**"
+      - "src/test/resources/**"
+      - "src/test/projects/**"
     groups:
       maven:
         patterns: ["*"]
