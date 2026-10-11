@@ -25,6 +25,8 @@ Typically, aspects are used in one of two ways within your Maven reactors:
 
 The first step is to create [an appropriate issue](https://github.com/mojohaus/aspectj-maven-plugin/issues). Describe the problem/idea you have and create an appropriate pull request.
 
+Conventions for the build, the tests and the fixtures are in [AGENTS.md](AGENTS.md).
+
 Test you changes locally using
 
 ```shell
