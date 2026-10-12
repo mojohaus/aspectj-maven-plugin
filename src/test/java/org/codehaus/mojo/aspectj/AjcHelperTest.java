@@ -46,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class AjcHelperTest {
     @Test
-    void testGetAsCsv() {
+    void getAsCsv() {
         String[] tests = new String[] {"kaare", "java", "aspectJ"};
         assertEquals("kaare,java,aspectJ", AjcHelper.getAsCsv(tests));
     }
@@ -55,7 +55,7 @@ class AjcHelperTest {
      * @throws Exception on test error
      */
     @Test
-    void testGetSourcesEmptyBaseDir() throws Exception {
+    void getSourcesEmptyBaseDir() throws Exception {
         List baseDirs = new ArrayList();
         baseDirs.add("src/shouldNotExist");
         HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs(
@@ -64,7 +64,7 @@ class AjcHelperTest {
     }
 
     @Test
-    void testBuildConfigFile() {
+    void buildConfigFile() {
         final File baseDir = new File(".");
         final String fileName = "test.lst";
         final String fileAbsolutePath = baseDir.getAbsolutePath() + File.separator + fileName;
@@ -89,13 +89,13 @@ class AjcHelperTest {
     }
 
     @Test
-    void testEmptyDependencyArtifacts() {
+    void emptyDependencyArtifacts() {
         MavenProject project = new MavenProject();
         AjcHelper.createClassPath(project, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
     }
 
     @Test
-    void testProjectDependenciesBeforeOthers() {
+    void projectDependenciesBeforeOthers() {
         DefaultArtifact projectArtifact = createFixedArtifact();
         projectArtifact.setFile(new File("../sibling-project/target/some.jar"));
 

@@ -71,7 +71,7 @@ class AbstractAjcCompilerTest {
      * @throws MojoExecutionException if the mojo fails to execute
      */
     @Test
-    void testGetAjcArguments_noWeaveArtifacts() throws MojoExecutionException {
+    void getAjcArgumentsNoWeaveArtifacts() throws Exception {
         ajcCompMojo.assembleArguments();
         List args = ajcCompMojo.ajcOptions;
         assertFalse(args.contains("-inpath"));
@@ -81,7 +81,7 @@ class AbstractAjcCompilerTest {
      * Tests that the compiler fails as it should if told to weave an artifact not listed in the project dependencies.
      */
     @Test
-    void testGetAjcArguments_weaveArtifactsNotProjectDependecy() {
+    void getAjcArgumentsWeaveArtifactsNotProjectDependecy() {
         Module module1 = new Module();
         String mod1Group = "dill.group";
         module1.setGroupId(mod1Group);
@@ -100,7 +100,7 @@ class AbstractAjcCompilerTest {
      * @throws MojoExecutionException if the mojo fails to execute
      */
     @Test
-    void testGetAjcArguments_weaveArtifacts() throws MojoExecutionException {
+    void getAjcArgumentsWeaveArtifacts() throws Exception {
         ajcCompMojo.weaveDependencies = new Module[2];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -139,7 +139,7 @@ class AbstractAjcCompilerTest {
      * @throws MojoExecutionException if the mojo fails to execute
      */
     @Test
-    void testGetAjcArguments_weaveArtifactsWithClassifier() throws MojoExecutionException {
+    void getAjcArgumentsWeaveArtifactsWithClassifier() throws Exception {
         ajcCompMojo.weaveDependencies = new Module[1];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -175,7 +175,7 @@ class AbstractAjcCompilerTest {
      * @throws MojoExecutionException if the mojo fails to execute
      */
     @Test
-    void testGetAjcArguments_weaveArtifactsWithType() throws MojoExecutionException {
+    void getAjcArgumentsWeaveArtifactsWithType() throws Exception {
         ajcCompMojo.weaveDependencies = new Module[1];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -210,7 +210,7 @@ class AbstractAjcCompilerTest {
      * @throws Exception on test error
      */
     @Test
-    void testGetAjcArguments_weaveDirectories() throws Exception {
+    void getAjcArgumentsWeaveDirectories() throws Exception {
         String dir1 = "target/classes1";
         String dir2 = "target/classes2";
         ajcCompMojo.weaveDirectories = new String[] {dir1, dir2};
@@ -235,7 +235,7 @@ class AbstractAjcCompilerTest {
      * @throws Exception on test error
      */
     @Test
-    void testGetAjcArguments_noLibraryArtifacts() throws Exception {
+    void getAjcArgumentsNoLibraryArtifacts() throws Exception {
         ajcCompMojo.assembleArguments();
         List args = ajcCompMojo.ajcOptions;
         assertFalse(args.contains("-aspectpath"));
@@ -246,7 +246,7 @@ class AbstractAjcCompilerTest {
      * dependencies.
      */
     @Test
-    void testGetAjcArguments_libraryArtifactsNotProjectDependency() {
+    void getAjcArgumentsLibraryArtifactsNotProjectDependency() {
         Module module1 = new Module();
         String mod1Group = "dill.group";
         module1.setGroupId(mod1Group);
@@ -265,7 +265,7 @@ class AbstractAjcCompilerTest {
      * @throws Exception on test error
      */
     @Test
-    void testGetAjc_libraryArtifacts() throws Exception {
+    void getAjcLibraryArtifacts() throws Exception {
         ajcCompMojo.aspectLibraries = new Module[2];
         Module module1 = new Module();
         String mod1Group = "dill.group";
@@ -299,7 +299,7 @@ class AbstractAjcCompilerTest {
 
     // MASPECTJ-103
     @Test
-    void testGetAJc_EmptyClassifier() throws Exception {
+    void getAJcEmptyClassifier() throws Exception {
         String groupId = "groupId";
         String artifactId = "artifactId";
         String classifier = ""; // could be result of filtering properties

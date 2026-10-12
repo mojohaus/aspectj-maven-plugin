@@ -11,14 +11,14 @@ class AjcTestCompileMojoTest {
     }
 
     @Test
-    void testExecuteWithSkip() throws Exception {
+    void executeWithSkip() throws Exception {
         final AjcTestCompileMojo testSubject = new AjcTestCompileMojo();
         System.setProperty(AjcTestCompileMojo.MAVEN_TEST_SKIP, "true");
         testSubject.execute();
     }
 
     @Test
-    void testExecuteWithoutSkip() throws Exception {
+    void executeWithoutSkip() throws Exception {
         final AjcTestCompileMojo testSubject = new AjcTestCompileMojo();
 
         try {
