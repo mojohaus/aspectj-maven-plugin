@@ -48,7 +48,7 @@ class AjcCompilerMojoTest extends CompilerMojoTestBase {
      * @throws Exception on test error
      */
     @Test
-    void testModificationSet() throws Exception {
+    void modificationSet() throws Exception {
         ajcMojo.aspectDirectory = "src/main/aspect";
         final String[] includes = new String[] {"org/codehaus/mojo/aspectj/OldStyleAspect.aj"};
         ajcMojo.setArgumentFileName("builddef.lst");
