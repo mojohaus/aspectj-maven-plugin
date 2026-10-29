@@ -92,7 +92,6 @@
     <aspectjVersion>1.9.7</aspectjVersion>
     <mavenVersion>3.9.16</mavenVersion>
     <minimalMavenBuildVersion>3.9.0</minimalMavenBuildVersion>
-    <doxiaVersion>2.1.0</doxiaVersion>
     <doxiaSitetoolsVersion>2.1.0</doxiaSitetoolsVersion>
     <mojo.java.target>8</mojo.java.target>
     <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
@@ -142,11 +141,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-sink-api</artifactId>
-      <version>${doxiaVersion}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-site-renderer</artifactId>
       <version>${doxiaSitetoolsVersion}</version>
     </dependency>
@@ -161,6 +155,11 @@
       <artifactId>aspectjtools</artifactId>
       <version>${aspectjVersion}</version>
     </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2.2</version>
+    </dependency>
     <!--
         This is required to make the ajdoc tool work properly.
         When generating the AspectJ site documentation, the following debug statement is emitted onto the log:
@@ -173,12 +172,6 @@
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
       <version>4.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-xml</artifactId>
-      <!-- To keep compatibility with Maven 3.x use 3.x -->
-      <version>3.1.0</version>
     </dependency>
 
     <!-- Test -->
