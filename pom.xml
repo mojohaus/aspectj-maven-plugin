@@ -93,7 +93,6 @@
     <mavenVersion>3.9.16</mavenVersion>
     <minimalMavenBuildVersion>3.9.0</minimalMavenBuildVersion>
     <doxiaSitetoolsVersion>2.1.0</doxiaSitetoolsVersion>
-    <mojo.java.target>8</mojo.java.target>
     <!-- aspectJ &gt; 1.8.13 is JDK 1.8 minimum -->
     <project.build.outputTimestamp>2026-09-11T21:10:03Z</project.build.outputTimestamp>
     <!-- work around until it is correctly fixed at top parent -->
