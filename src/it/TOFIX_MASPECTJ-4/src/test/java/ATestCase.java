@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 /**
  * A testcase to test if we have correct weaving of testcases.
@@ -29,12 +29,12 @@ import junit.framework.TestCase;
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 public class ATestCase
-    extends TestCase
 {
     /**
      * Just to check if we don't get errors in weaving.
      * @throws Exception
      */
+    @Test
     public void testCp()
         throws Exception
     {
