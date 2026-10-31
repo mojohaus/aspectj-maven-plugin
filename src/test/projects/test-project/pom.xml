@@ -28,8 +28,8 @@
                <groupId>org.codehaus.mojo</groupId>
                <artifactId>aspectj-maven-plugin</artifactId>
                <configuration>
-                   <source>1.5</source>
-                   <target>1.5</target>
+                   <source>8</source>
+                   <target>8</target>
                    <verbose>true</verbose>
                    <complianceLevel>1.8</complianceLevel>
                    <showWeaveInfo>true</showWeaveInfo>
@@ -53,8 +53,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 
