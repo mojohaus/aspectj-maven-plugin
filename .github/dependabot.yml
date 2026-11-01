@@ -28,6 +28,9 @@ updates:
       # plexus-xml 4.x depends on the Maven 4 XML API
       - dependency-name: "org.codehaus.plexus:plexus-xml"
         versions: [">= 4.0.0"]
+      # Report plugin: maven-site-plugin 3.22 and older load maven-reporting-api 4.0.0
+      - dependency-name: "org.apache.maven.reporting:maven-reporting-api"
+        versions: [">= 4.1.0"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
