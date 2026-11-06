@@ -1,17 +1,12 @@
- ------
- Using aspect libraries
- ------
- ------
- ------
-
 Applying already compiled aspect JARs
-  
-  In order to apply already compiled aspects to your own sources you need do setup all the JAR
-  files you would like to weave in the plugin configuration as shown below.
+=====================================
 
-  <<Note:>> The artifacts you reference must exist as dependencies in your project.
-  
-+------------------------------------------+
+In order to apply already compiled aspects to your own sources you need do setup all the JAR
+files you would like to weave in the plugin configuration as shown below.
+
+**Note:** The artifacts you reference must exist as dependencies in your project.
+
+```xml
 <project>
   ...
   <dependencies>
@@ -67,4 +62,4 @@ Applying already compiled aspect JARs
   <build>
   ...
 </project>
-+------------------------------------------+
+```
