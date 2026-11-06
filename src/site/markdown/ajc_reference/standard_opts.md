@@ -1,20 +1,13 @@
- ------
- AJC Standard Options
- ------
- ------
- ------
+# AspectJ Compiler reference: standard options
 
-AspectJ Compiler reference: standard options
+Mojo's AspectJ Maven Plugin delegates the majority of its arguments to the AspectJ Compiler ("ajc"), which is part
+of the AspectJ binary distribution. For convenience, the help text and option reference of the AJC is reproduced
+below verbatim. Relevant options found in the listing below are mirrored in the options of its goals, as
+defined in the [Plugin Documentation](../plugin-info.html) page.
 
-  Mojo's AspectJ Maven Plugin delegates the majority of its arguments to the AspectJ Compiler ("ajc"), which is part
-  of the AspectJ binary distribution. For convenience, the help text and option reference of the AJC is reproduced
-  below verbatim. Relevant options found in the listing below are mirrored in the options of its goals, as
-  defined in the {{{../plugin-info.html}Plugin Documentation}} page.
+For a reference of non-standard AJC options, please refer to [AJC Experimental Options](./experimental_opts.html).
 
-  For a reference of non-standard AJC options, please refer to {{{./experimental_opts.html}AJC Experimental Options}}.
-
-+------------------------------------------
-
+```text
 AspectJ Compiler Eclipse Compiler a00b62fa3572b0 (7Sept2022) - Java17
 
  Usage: <options> <source files | directories>
@@ -226,5 +219,5 @@ AspectJ-specific options:
  Ignored options:
     -J<option>         pass option to virtual machine (ignored)
     -O                 optimize for execution time (ignored)
+```
 
-+------------------------------------------

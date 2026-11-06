@@ -1,17 +1,11 @@
- ------
- Weaving classes in directories
- ------
- ------
- ------
+# Weaving already compiled classes
 
-Weaving already compiled classes
+AspectJ gives a possibility to weave already compiled classes in a folder.
+In order to do this with Mojo's AspectJ Maven Plugin you need to specify the folder(s)
+with the compiled classes via `weaveDirectories` and execute the plugin after
+maven-compiler-plugin has been run (life cycle phase "process-classes" or later).
 
-  AspectJ gives a possibility to weave already compiled classes in a folder.
-  In order to do this with Mojo's AspectJ Maven Plugin you need to specify the folder(s)
-  with the compiled classes via <<<weaveDirectories>>> and execute the plugin after
-  maven-compiler-plugin has been run (life cycle phase "process-classes" or later).
-
-+------------------------------------------+
+```xml
 <project>
   ...
   <build>
@@ -27,7 +21,7 @@ Weaving already compiled classes
             <id>default-compile</id>
             <configuration>
               <compilerArguments>
-                <d>\${project.build.directory}/unwoven-classes</d>
+                <d>${project.build.directory}/unwoven-classes</d>
               </compilerArguments>
             </configuration>
           </execution>
@@ -38,7 +32,7 @@ Weaving already compiled classes
         <artifactId>aspectj-maven-plugin</artifactId>
         <configuration>
           <weaveDirectories>
-            <weaveDirectory>\${project.build.directory}/unwoven-classes</weaveDirectory>
+            <weaveDirectory>${project.build.directory}/unwoven-classes</weaveDirectory>
           </weaveDirectories>
         </configuration>
         <executions>
@@ -56,4 +50,5 @@ Weaving already compiled classes
   <build>
   ...
 </project>
-+------------------------------------------+
+```
+
