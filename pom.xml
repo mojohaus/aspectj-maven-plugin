@@ -350,6 +350,10 @@
               </setupIncludes>
               <postBuildHookScript>verify</postBuildHookScript>
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+              <properties>
+                <!-- reuse the prefix file the main build cached instead of fetching it again in every fork -->
+                <aether.remoteRepositoryFilter.prefixes.basedir>${settings.localRepository}/.meta</aether.remoteRepositoryFilter.prefixes.basedir>
+              </properties>
               <goals>
                 <goal>clean</goal>
                 <goal>test</goal>
