@@ -369,6 +369,13 @@
                   <goal>integration-test</goal>
                   <goal>verify</goal>
                 </goals>
+                <configuration>
+                  <extraArtifacts>
+                    <!-- the site plugins the CreateSite fixture pins: resolved by the main build, so CI caches them -->
+                    <extraArtifact>org.apache.maven.plugins:maven-site-plugin:3.21.0:maven-plugin</extraArtifact>
+                    <extraArtifact>org.apache.maven.plugins:maven-project-info-reports-plugin:3.9.0:maven-plugin</extraArtifact>
+                  </extraArtifacts>
+                </configuration>
               </execution>
             </executions>
           </plugin>
