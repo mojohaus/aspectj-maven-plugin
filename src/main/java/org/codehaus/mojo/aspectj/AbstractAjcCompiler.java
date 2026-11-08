@@ -35,6 +35,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -830,6 +831,35 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
                 if (sourceModified >= lastBuild) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if any class file directory or JAR on the classpath is newer than the last build. This catches
+     * dependencies which were rebuilt after the last AspectJ run, e.g. other modules of the same reactor.
+     * The project's own output directory is skipped, because AspectJ itself writes there.
+     *
+     * @param isTestCompile whether to use the test classpath instead of the compile classpath
+     * @return <code>true</code> if a classpath element is newer than the argument file, otherwise <code>false</code>
+     * @throws MojoExecutionException if the classpath elements cannot be determined
+     */
+    protected boolean hasClassPathClassesChanged(boolean isTestCompile) throws MojoExecutionException {
+        List<String> classpathElements;
+        try {
+            classpathElements =
+                    isTestCompile ? project.getTestClasspathElements() : project.getCompileClasspathElements();
+        } catch (DependencyResolutionRequiredException e) {
+            throw new MojoExecutionException("Cannot determine classpath elements", e);
+        }
+        if (classpathElements == null) {
+            return false;
+        }
+        long lastBuild = new File(getOutputDirectory(), argumentFileName).lastModified();
+        for (String source : AjcHelper.getClassFilesAndJars(classpathElements, getOutputDirectory())) {
+            if (new File(source).lastModified() >= lastBuild) {
+                return true;
             }
         }
         return false;
