@@ -31,8 +31,15 @@
         <configuration>
           <source>8</source>
           <target>8</target>
-          <!-- JDK 23 and later run no annotation processor from the class path unless asked -->
-          <proc>full</proc>
+          <!-- an explicit processor path runs Lombok on every JDK: javac 8 has no -proc:full,
+               and JDK 23 and later run no processor from the class path unless asked -->
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>
