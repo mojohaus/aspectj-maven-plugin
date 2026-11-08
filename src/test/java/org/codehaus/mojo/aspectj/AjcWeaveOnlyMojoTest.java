@@ -1,28 +1,11 @@
 package org.codehaus.mojo.aspectj;
 
-/**
- * The MIT License
- *
- * Copyright 2005-2006 The Codehaus.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is furnished to do
- * so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+import org.codehaus.plexus.util.ReflectionUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Integration test for weaveOnly parameter to support Lombok integration.
@@ -32,14 +15,11 @@ package org.codehaus.mojo.aspectj;
  *
  * @author Huang Xiao
  */
-public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
+class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
 
-    /**
-     * Initialize test with AjcCompileMojo.
-     */
-    protected void setUp() throws Exception {
-        ajcMojo = new AjcCompileMojo();
-        super.setUp();
+    @Override
+    AbstractAjcCompiler createMojo() {
+        return new AjcCompileMojo();
     }
 
     /**
@@ -49,13 +29,14 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
      *
      * @throws Exception on test error
      */
-    public void testWeaveOnly_withWeaveDirectories() throws Exception {
+    @Test
+    void weaveOnly_withWeaveDirectories() throws Exception {
         // Simulate that maven-compiler-plugin has already compiled sources
         // by setting up a weaveDirectories configuration
         ajcMojo.weaveDirectories = new String[] {project.getBuild().getOutputDirectory()};
 
         // Enable weaveOnly mode - this should skip source compilation
-        setVariableValueToObject(ajcMojo, "weaveOnly", true);
+        ReflectionUtils.setVariableValueInObject(ajcMojo, "weaveOnly", true);
 
         // Configure aspect directory
         ajcMojo.aspectDirectory = "src/main/aspect";
@@ -65,11 +46,11 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
 
         // Verify that no source files are included in weaveOnly mode
         assertTrue(
-                "weaveOnly mode should not include source files",
-                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty());
+                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty(),
+                "weaveOnly mode should not include source files");
 
         // Verify that -inpath is configured with weaveDirectories
-        assertTrue("Should contain -inpath for weaving", ajcMojo.ajcOptions.contains("-inpath"));
+        assertTrue(ajcMojo.ajcOptions.contains("-inpath"), "Should contain -inpath for weaving");
 
         // Verify that the weave directory is in the options
         String inpathValue = null;
@@ -79,10 +60,10 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
                 break;
             }
         }
-        assertNotNull("Should have inpath value", inpathValue);
+        assertNotNull(inpathValue, "Should have inpath value");
         assertTrue(
-                "Inpath should contain output directory",
-                inpathValue.contains(project.getBuild().getOutputDirectory()));
+                inpathValue.contains(project.getBuild().getOutputDirectory()),
+                "Inpath should contain output directory");
     }
 
     /**
@@ -92,12 +73,13 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
      *
      * @throws Exception on test error
      */
-    public void testWeaveOnly_noSourcesRequired() throws Exception {
+    @Test
+    void weaveOnly_noSourcesRequired() throws Exception {
         // Set up weaveDirectories
         ajcMojo.weaveDirectories = new String[] {project.getBuild().getOutputDirectory()};
 
         // Enable weaveOnly mode
-        setVariableValueToObject(ajcMojo, "weaveOnly", true);
+        ReflectionUtils.setVariableValueInObject(ajcMojo, "weaveOnly", true);
 
         // Don't set any source includes
         ajcMojo.includes = new String[0];
@@ -107,8 +89,8 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
 
         // Verify no sources are included
         assertTrue(
-                "weaveOnly mode should work without sources",
-                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty());
+                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty(),
+                "weaveOnly mode should work without sources");
     }
 
     /**
@@ -117,21 +99,22 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
      *
      * @throws Exception on test error
      */
-    public void testWeaveOnly_withForceAjcCompile() throws Exception {
+    @Test
+    void weaveOnly_withForceAjcCompile() throws Exception {
         // Set up weaveDirectories
         ajcMojo.weaveDirectories = new String[] {project.getBuild().getOutputDirectory()};
 
         // Enable both weaveOnly and forceAjcCompile
-        setVariableValueToObject(ajcMojo, "weaveOnly", true);
-        setVariableValueToObject(ajcMojo, "forceAjcCompile", true);
+        ReflectionUtils.setVariableValueInObject(ajcMojo, "weaveOnly", true);
+        ReflectionUtils.setVariableValueInObject(ajcMojo, "forceAjcCompile", true);
 
         // Assemble arguments
         ajcMojo.assembleArguments();
 
         // Verify that no source files are included
         assertTrue(
-                "weaveOnly mode should not include source files",
-                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty());
+                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty(),
+                "weaveOnly mode should not include source files");
 
         // forceAjcCompile should allow the build to proceed even without sources
         // This is verified implicitly by the fact that assembleArguments succeeds
@@ -143,20 +126,15 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
      *
      * @throws Exception on test error
      */
-    public void testWeaveOnly_defaultFalseIncludesSources() throws Exception {
-        // weaveOnly should be false by default
-        // Verify that source includes work normally
+    @Test
+    void weaveOnly_defaultFalseIncludesSources() throws Exception {
         ajcMojo.aspectDirectory = "src/main/aspect";
-        final String[] includes = new String[] {"**/*.aj"};
-        ajcMojo.includes = includes;
+        ajcMojo.includes = new String[] {"**/*.aj"};
 
-        // Assemble arguments
         ajcMojo.assembleArguments();
 
-        // With weaveOnly=false (default), sources should be processed
-        // The exact behavior depends on whether source files exist,
-        // but the mechanism should be in place to include them
-        // This is verified by the existing tests
+        assertFalse((boolean) ReflectionUtils.getValueIncludingSuperclasses("weaveOnly", ajcMojo));
+        assertNotNull(ajcMojo.resolvedIncludes);
     }
 
     /**
@@ -165,12 +143,13 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
      *
      * @throws Exception on test error
      */
-    public void testWeaveOnly_withAspectLibraries() throws Exception {
+    @Test
+    void weaveOnly_withAspectLibraries() throws Exception {
         // Set up weaveDirectories
         ajcMojo.weaveDirectories = new String[] {project.getBuild().getOutputDirectory()};
 
         // Enable weaveOnly mode
-        setVariableValueToObject(ajcMojo, "weaveOnly", true);
+        ReflectionUtils.setVariableValueInObject(ajcMojo, "weaveOnly", true);
 
         // Configure aspectLibraries (simulating external aspect library)
         ajcMojo.aspectLibraries = new Module[1];
@@ -189,16 +168,14 @@ public class AjcWeaveOnlyMojoTest extends CompilerMojoTestBase {
 
         // Verify that no source files are included
         assertTrue(
-                "weaveOnly mode should not include source files",
-                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty());
+                ajcMojo.resolvedIncludes == null || ajcMojo.resolvedIncludes.isEmpty(),
+                "weaveOnly mode should not include source files");
 
         // Verify that -aspectpath is configured
-        assertTrue("Should contain -aspectpath for aspect libraries", ajcMojo.ajcOptions.contains("-aspectpath"));
+        assertTrue(ajcMojo.ajcOptions.contains("-aspectpath"), "Should contain -aspectpath for aspect libraries");
     }
 
-    /**
-     * Returns the test project name.
-     */
+    @Override
     String getProjectName() {
         return "test-project";
     }

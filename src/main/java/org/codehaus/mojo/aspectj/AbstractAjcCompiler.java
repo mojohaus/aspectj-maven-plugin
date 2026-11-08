@@ -402,12 +402,20 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
     protected boolean forceAjcCompile;
 
     /**
-     * When set to true, only weaving will be performed on class files (specified via weaveDirectories or inpath).
-     * Source files will not be compiled. This is useful when another compiler plugin (e.g., maven-compiler-plugin)
-     * has already compiled the sources, and you only want AspectJ to weave the compiled classes.
-     * This is particularly important when using annotation processors like Lombok, which need to run before AspectJ.
+     * Weave the class files given by <code>weaveDirectories</code> and <code>weaveDependencies</code> without
+     * compiling any source file. In this mode <code>ajc</code> is started with no source files, only with
+     * <code>-inpath</code> and <code>-aspectpath</code>, and the "No sources found" check is skipped.
+     * <p>
+     * Use it when another compiler has already produced the classes, for example <code>maven-compiler-plugin</code>
+     * running the Lombok annotation processor, which <code>ajc</code> cannot run. Without it, <code>ajc</code>
+     * compiles the project sources again, bypassing Lombok, and fails on the generated members.
+     * <p>
+     * This differs from <code>forceAjcCompile</code>, which only forces <code>ajc</code> to run when there are no
+     * sources or the build looks up to date, and from <code>weaveDirectories</code>, which adds
+     * <code>-inpath</code> but leaves the sources of the project on the <code>ajc</code> command line.
+     * With the default <code>false</code> nothing changes.
      *
-     * @since 2.15.1
+     * @since 1.16.2
      */
     @Parameter(defaultValue = "false", property = "aspectj.weaveOnly")
     protected boolean weaveOnly;
