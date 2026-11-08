@@ -6,7 +6,7 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <lombok.version>1.18.38</lombok.version>
+    <lombok.version>1.18.48</lombok.version>
   </properties>
 
   <dependencies>
