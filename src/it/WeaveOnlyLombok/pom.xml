@@ -31,6 +31,8 @@
         <configuration>
           <source>8</source>
           <target>8</target>
+          <!-- JDK 23 and later run no annotation processor from the class path unless asked -->
+          <proc>full</proc>
         </configuration>
       </plugin>
       <plugin>
