@@ -39,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
@@ -140,8 +141,8 @@ public class EclipseAjcMojo extends AbstractAjcMojo {
             for (Artifact art : allArtifacts) {
                 if (art.getGroupId().equals(module.getGroupId())
                         && art.getArtifactId().equals(module.getArtifactId())
-                        && StringUtils.equals(module.getClassifier(), art.getClassifier())
-                        && StringUtils.equals(module.getType(), module.getType())) {
+                        && Objects.equals(module.getClassifier(), art.getClassifier())
+                        && Objects.equals(module.getType(), module.getType())) {
                     artifact = art;
                     break;
                 }
