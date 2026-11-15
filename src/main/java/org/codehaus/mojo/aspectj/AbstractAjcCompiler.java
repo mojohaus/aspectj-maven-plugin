@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -751,10 +752,9 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
                 for (Artifact art : allArtifacts) {
                     if (art.getGroupId().equals(module.getGroupId())
                             && art.getArtifactId().equals(module.getArtifactId())
-                            && StringUtils.defaultString(module.getClassifier())
-                                    .equals(StringUtils.defaultString(art.getClassifier()))
-                            && StringUtils.defaultString(module.getType(), "jar")
-                                    .equals(StringUtils.defaultString(art.getType()))) {
+                            && Objects.toString(module.getClassifier(), "")
+                                    .equals(Objects.toString(art.getClassifier(), ""))
+                            && Objects.toString(module.getType(), "jar").equals(Objects.toString(art.getType(), ""))) {
                         artifact = art;
                         break;
                     }
