@@ -71,6 +71,7 @@ public class Module {
         this.groupId = groupId;
     }
 
+    @Override
     public String toString() {
         String ts = getGroupId() + ":" + getArtifactId();
         if (getType() != null) {

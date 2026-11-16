@@ -12,7 +12,7 @@ public final class CompilationFailedException extends MojoExecutionException {
 
     // Internal state
     private static final long serialVersionUID = 2558168648061612263L;
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     private CompilationFailedException(final String message) {
         super(message);

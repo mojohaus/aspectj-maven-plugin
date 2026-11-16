@@ -91,6 +91,7 @@ class AjcCompilerMojoTest extends CompilerMojoTestBase {
         assertTrue(ajcMojo.isBuildNeeded(), "One of the included files has changed. a new build is needed");
     }
 
+    @Override
     String getProjectName() {
         return "test-project";
     }
