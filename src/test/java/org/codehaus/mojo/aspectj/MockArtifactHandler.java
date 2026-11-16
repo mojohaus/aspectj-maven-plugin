@@ -44,6 +44,7 @@ public class MockArtifactHandler implements ArtifactHandler {
 
     private boolean addedToClasspath;
 
+    @Override
     public String getExtension() {
         if (extension == null) {
             extension = type;
@@ -55,10 +56,12 @@ public class MockArtifactHandler implements ArtifactHandler {
         return type;
     }
 
+    @Override
     public String getClassifier() {
         return classifier;
     }
 
+    @Override
     public String getDirectory() {
         if (directory == null) {
             directory = getPackaging() + "s";
@@ -66,6 +69,7 @@ public class MockArtifactHandler implements ArtifactHandler {
         return directory;
     }
 
+    @Override
     public String getPackaging() {
         if (packaging == null) {
             packaging = type;
@@ -73,14 +77,17 @@ public class MockArtifactHandler implements ArtifactHandler {
         return packaging;
     }
 
+    @Override
     public boolean isIncludesDependencies() {
         return includesDependencies;
     }
 
+    @Override
     public String getLanguage() {
         return "java";
     }
 
+    @Override
     public boolean isAddedToClasspath() {
         return addedToClasspath;
     }

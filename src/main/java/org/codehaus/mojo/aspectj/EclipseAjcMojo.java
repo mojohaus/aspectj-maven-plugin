@@ -80,6 +80,7 @@ public class EclipseAjcMojo extends AbstractAjcMojo {
 
     private static final String AJ_NATURE = "org.eclipse.ajdt.ui.ajnature";
 
+    @Override
     public void execute() throws MojoExecutionException {
         // exclude this :
         if ("pom".endsWith(project.getPackaging()) || "ear".endsWith(project.getPackaging())) {

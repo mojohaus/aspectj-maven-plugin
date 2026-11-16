@@ -275,6 +275,7 @@ public class AjcReportMojo extends AbstractMavenReport {
     /**
      *
      */
+    @Override
     public String getOutputName() {
         return "index";
     }
@@ -282,6 +283,7 @@ public class AjcReportMojo extends AbstractMavenReport {
     /**
      *
      */
+    @Override
     public String getName(Locale locale) {
         return getBundle(locale).getString("report.aspectj.name");
     }
@@ -289,6 +291,7 @@ public class AjcReportMojo extends AbstractMavenReport {
     /**
      *
      */
+    @Override
     public String getDescription(Locale locale) {
         return getBundle(locale).getString("report.aspectj.description");
     }
@@ -296,6 +299,7 @@ public class AjcReportMojo extends AbstractMavenReport {
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#isExternalReport()
      */
+    @Override
     public boolean isExternalReport() {
         return true;
     }
@@ -303,6 +307,7 @@ public class AjcReportMojo extends AbstractMavenReport {
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
+    @Override
     public boolean canGenerateReport() {
         // Only execute reports for java projects
         ArtifactHandler artifactHandler = this.project.getArtifact().getArtifactHandler();

@@ -155,10 +155,12 @@ public class AjcTestCompileMojo extends AbstractAjcCompiler {
         return sourceDirs;
     }
 
+    @Override
     protected Scanner[] getJavaSources() {
         return testSources;
     }
 
+    @Override
     protected String getAdditionalAspectPaths() {
         String additionalPath = null;
         if (weaveWithAspectsInMainSourceFolder) {

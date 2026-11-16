@@ -508,6 +508,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      *
      * @throws MojoExecutionException if arguments file cannot be written
      */
+    @Override
     @SuppressWarnings("unchecked")
     public void execute() throws MojoExecutionException {
 

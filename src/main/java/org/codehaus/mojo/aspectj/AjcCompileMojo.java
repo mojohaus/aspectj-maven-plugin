@@ -94,6 +94,7 @@ public class AjcCompileMojo extends AbstractAjcCompiler {
     @Parameter
     private Scanner[] sources;
 
+    @Override
     protected File getOutputDirectory() {
         return outputDirectory;
     }
@@ -111,6 +112,7 @@ public class AjcCompileMojo extends AbstractAjcCompiler {
     /**
      * @return All directories matching {@code project.getBuild().getOutputDirectory()}.
      */
+    @Override
     protected List<String> getClasspathDirectories() {
         return Collections.singletonList(project.getBuild().getOutputDirectory());
     }
@@ -118,15 +120,18 @@ public class AjcCompileMojo extends AbstractAjcCompiler {
     /**
      * @return All directories matching {@code project.getCompileSourceRoots()}.
      */
+    @Override
     @SuppressWarnings("unchecked")
     protected List<String> getSourceDirectories() {
         return project.getCompileSourceRoots();
     }
 
+    @Override
     protected Scanner[] getJavaSources() {
         return sources;
     }
 
+    @Override
     protected String getAdditionalAspectPaths() {
         return null;
     }

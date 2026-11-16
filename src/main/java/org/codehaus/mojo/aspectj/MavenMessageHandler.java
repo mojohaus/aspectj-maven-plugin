@@ -100,6 +100,7 @@ public class MavenMessageHandler extends MessageHandler {
      * <p>
      * {@inheritDoc}
      */
+    @Override
     public boolean handleMessage(final IMessage message) {
 
         // Compose the message text

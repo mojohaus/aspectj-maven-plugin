@@ -79,42 +79,52 @@ public class MockArtifact implements Artifact {
         this.type = type;
     }
 
+    @Override
     public String getGroupId() {
         return groupId;
     }
 
+    @Override
     public String getArtifactId() {
         return artifactId;
     }
 
+    @Override
     public ArtifactHandler getArtifactHandler() {
         return artifactHandler;
     }
 
+    @Override
     public void setArtifactHandler(ArtifactHandler artifactHandler) {
         this.artifactHandler = artifactHandler;
     }
 
+    @Override
     public String getVersion() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setVersion(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public String getScope() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public String getType() {
         return this.type;
     }
 
+    @Override
     public String getClassifier() {
         return this.classifier;
     }
 
+    @Override
     public boolean hasClassifier() {
         return this.classifier != null;
     }
@@ -122,6 +132,7 @@ public class MockArtifact implements Artifact {
     /**
      * @return very stupid file name for artifact
      */
+    @Override
     public File getFile() {
         String path = getGroupId() + '/' + getArtifactId();
         if (getClassifier() != null) {
@@ -131,26 +142,32 @@ public class MockArtifact implements Artifact {
         return new File(path);
     }
 
+    @Override
     public void setFile(File arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public String getBaseVersion() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setBaseVersion(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public String getId() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public String getDependencyConflictId() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void addMetadata(ArtifactMetadata arg0) {
         throw new RuntimeException("Not implemented");
     }
@@ -159,38 +176,47 @@ public class MockArtifact implements Artifact {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public Collection getMetadataList() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setRepository(ArtifactRepository arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public ArtifactRepository getRepository() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void updateVersion(String arg0, ArtifactRepository arg1) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public String getDownloadUrl() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setDownloadUrl(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public ArtifactFilter getDependencyFilter() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setDependencyFilter(ArtifactFilter arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public List getDependencyTrail() {
         throw new RuntimeException("Not implemented");
     }
@@ -199,54 +225,67 @@ public class MockArtifact implements Artifact {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setScope(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public VersionRange getVersionRange() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setVersionRange(VersionRange arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void selectVersion(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setGroupId(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setArtifactId(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public boolean isSnapshot() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setResolved(boolean arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public boolean isResolved() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setResolvedVersion(String arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public boolean isRelease() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setRelease(boolean arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public List getAvailableVersions() {
         throw new RuntimeException("Not implemented");
     }
@@ -255,18 +294,22 @@ public class MockArtifact implements Artifact {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public boolean isOptional() {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public void setOptional(boolean arg0) {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public ArtifactVersion getSelectedVersion() throws OverConstrainedVersionException {
         throw new RuntimeException("Not implemented");
     }
 
+    @Override
     public boolean isSelectedVersionKnown() throws OverConstrainedVersionException {
         throw new RuntimeException("Not implemented");
     }
@@ -277,6 +320,7 @@ public class MockArtifact implements Artifact {
      * @param a other artifact to compare to
      * @return compare value
      */
+    @Override
     public int compareTo(Artifact a) {
         int val = getGroupId().compareTo(a.getGroupId());
         if (val != 0) {
