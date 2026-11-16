@@ -89,8 +89,7 @@ abstract class CompilerMojoTestBase {
     void tearDown() {
         try {
             FileUtils.deleteDirectory(project.getBuild().getDirectory());
-        } catch (Exception ex) {
-            ; // Only a problem on windows. we really do not care.. if we cant delete the file
+        } catch (Exception ex) { // Only a problem on windows. we really do not care.. if we cant delete the file
             // It is probably not there
         }
     }

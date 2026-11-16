@@ -205,12 +205,12 @@ public class EclipseAjcMojo extends AbstractAjcMojo {
             NodeList nameList = buildCommand.getElementsByTagName("name");
             for (int j = 0; j < nameList.getLength(); j++) {
                 Element name = (Element) nameList.item(j);
-                if (name.getNodeValue().equals(AJ_BUILDER)) {
+                if (AJ_BUILDER.equals(name.getNodeValue())) {
                     return false;
                 }
                 // if maven2 builder is used we don't need
                 // use aspectJ builder
-                if (name.getNodeValue().equals(M2_BUILDER)) {
+                if (M2_BUILDER.equals(name.getNodeValue())) {
                     return false;
                 }
             }
@@ -249,7 +249,7 @@ public class EclipseAjcMojo extends AbstractAjcMojo {
             NodeList natureList = natures.getElementsByTagName("nature");
             for (int j = 0; j < natureList.getLength(); j++) {
                 Element nature = (Element) natureList.item(j);
-                if (nature.getNodeValue().equals(AJ_NATURE)) {
+                if (AJ_NATURE.equals(nature.getNodeValue())) {
                     return false;
                 }
             }
