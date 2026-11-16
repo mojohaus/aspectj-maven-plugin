@@ -796,7 +796,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
 
     private boolean hasArgumentsChanged(File outDir) throws MojoExecutionException {
         try {
-            return (!ajcOptions.equals(AjcHelper.readBuildConfigFile(argumentFileName, outDir)));
+            return !ajcOptions.equals(AjcHelper.readBuildConfigFile(argumentFileName, outDir));
         } catch (IOException e) {
             throw new MojoExecutionException("Error during reading of previous argumentsfile ");
         }
@@ -806,7 +806,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * Not entirely safe, assembleArguments() must be run
      */
     private boolean hasSourcesToCompile() {
-        return resolvedIncludes.size() > 0;
+        return !resolvedIncludes.isEmpty();
     }
 
     private boolean hasSourcesChanged(File outDir) {
@@ -943,7 +943,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
 
     public void setRepeat(int repeat) {
         ajcOptions.add("-repeat");
-        ajcOptions.add("" + repeat);
+        ajcOptions.add(String.valueOf(repeat));
     }
 
     public void setShowWeaveInfo(boolean showWeaveInfo) {

@@ -48,7 +48,7 @@ public class MavenMessageHandler extends MessageHandler {
     private List<IMessage.Kind> showDetailsForMessageKindList;
 
     static {
-        DEFAULT_DETAIL_TYPES = new ArrayList<IMessage.Kind>();
+        DEFAULT_DETAIL_TYPES = new ArrayList<>();
         DEFAULT_DETAIL_TYPES.add(IMessage.ERROR);
         DEFAULT_DETAIL_TYPES.add(IMessage.WARNING);
         DEFAULT_DETAIL_TYPES.add(IMessage.FAIL);
@@ -120,7 +120,8 @@ public class MavenMessageHandler extends MessageHandler {
             final String context = sourceLocation == null || sourceLocation.getContext() == null
                     ? ""
                     : sourceLocation.getContext() + "\n";
-            final String line = sourceLocation == null ? "<no line information>" : "" + sourceLocation.getLine();
+            final String line =
+                    sourceLocation == null ? "<no line information>" : String.valueOf(sourceLocation.getLine());
 
             builder.append("\n\t")
                     .append(sourceFile)

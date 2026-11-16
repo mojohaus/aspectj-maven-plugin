@@ -100,7 +100,7 @@ public class AjcHelper {
             File artifact = classPathElement.getFile();
             if (null != artifact) {
                 String type = classPathElement.getType();
-                if (!type.equals("pom")) {
+                if (!"pom".equals(type)) {
                     cp += classPathElement.getFile().getAbsolutePath();
                     cp += File.pathSeparatorChar;
                 }
@@ -112,12 +112,11 @@ public class AjcHelper {
             cp += File.pathSeparatorChar;
         }
 
-        if (cp.endsWith("" + File.pathSeparatorChar)) {
+        if (cp.endsWith(String.valueOf(File.pathSeparatorChar))) {
             cp = cp.substring(0, cp.length() - 1);
         }
 
-        cp = StringUtils.replace(cp, "//", "/");
-        return cp;
+        return StringUtils.replace(cp, "//", "/");
     }
 
     /**
@@ -132,7 +131,7 @@ public class AjcHelper {
      */
     public static Set<String> getBuildFilesForAjdtFile(String ajdtBuildDefFile, File basedir)
             throws MojoExecutionException {
-        Set<String> result = new LinkedHashSet<String>();
+        Set<String> result = new LinkedHashSet<>();
 
         Properties ajdtBuildProperties = new Properties();
         try {
@@ -161,15 +160,15 @@ public class AjcHelper {
      */
     public static Set<String> getBuildFilesForSourceDirs(List<String> sourceDirs, String[] includes, String[] excludes)
             throws MojoExecutionException {
-        Set<String> result = new LinkedHashSet<String>();
+        Set<String> result = new LinkedHashSet<>();
 
         for (String sourceDir : sourceDirs) {
             try {
                 if (FileUtils.fileExists(sourceDir)) {
                     result.addAll(FileUtils.getFileNames(
                             new File(sourceDir),
-                            (null == includes || 0 == includes.length) ? DEFAULT_INCLUDES : getAsCsv(includes),
-                            (null == excludes || 0 == excludes.length) ? DEFAULT_EXCLUDES : getAsCsv(excludes),
+                            null == includes || 0 == includes.length ? DEFAULT_INCLUDES : getAsCsv(includes),
+                            null == excludes || 0 == excludes.length ? DEFAULT_EXCLUDES : getAsCsv(excludes),
                             true));
                 }
             } catch (IOException e) {
@@ -214,7 +213,7 @@ public class AjcHelper {
      */
     public static Set<String> getClassFilesAndJars(List<String> dirsAndJars, File outDir)
             throws MojoExecutionException {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
         for (String current : dirsAndJars) {
             File file = new File(current);
             if (!file.exists() || file.equals(outDir)) {
@@ -267,7 +266,7 @@ public class AjcHelper {
      * @throws IOException if any file operation fails
      */
     public static List<String> readBuildConfigFile(String fileName, File outputDir) throws IOException {
-        List<String> arguments = new ArrayList<String>();
+        List<String> arguments = new ArrayList<>();
         File argFile = new File(outputDir, fileName);
         if (FileUtils.fileExists(argFile.getAbsolutePath())) {
             FileReader reader = new FileReader(argFile);
@@ -325,7 +324,7 @@ public class AjcHelper {
             throws MojoExecutionException {
         Set<String> inclExlSet = new LinkedHashSet<>();
         try {
-            if (null == inExcludeString || inExcludeString.trim().equals("")) {
+            if (null == inExcludeString || "".equals(inExcludeString.trim())) {
                 return inclExlSet;
             }
             String[] elements = inExcludeString.split(",");

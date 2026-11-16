@@ -124,7 +124,9 @@ public class MockArtifact implements Artifact {
      */
     public File getFile() {
         String path = getGroupId() + '/' + getArtifactId();
-        if (getClassifier() != null) path += "-" + getClassifier();
+        if (getClassifier() != null) {
+            path += "-" + getClassifier();
+        }
         path += "." + getType();
         return new File(path);
     }
@@ -277,8 +279,9 @@ public class MockArtifact implements Artifact {
      */
     public int compareTo(Artifact a) {
         int val = getGroupId().compareTo(a.getGroupId());
-        if (val != 0) return val;
-        val = getArtifactId().compareTo(a.getArtifactId());
-        return val;
+        if (val != 0) {
+            return val;
+        }
+        return getArtifactId().compareTo(a.getArtifactId());
     }
 }

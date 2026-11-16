@@ -57,7 +57,7 @@ public class AjcTestCompileMojo extends AbstractAjcCompiler {
      *
      */
     @Parameter(defaultValue = "false")
-    protected boolean weaveMainSourceFolder = false;
+    protected boolean weaveMainSourceFolder;
 
     /**
      * Flag to indicate if aspects in the the main source dirs
@@ -124,7 +124,7 @@ public class AjcTestCompileMojo extends AbstractAjcCompiler {
 
     @Override
     protected List<String> getClasspathDirectories() {
-        List<String> outputDirectories = new ArrayList<String>();
+        List<String> outputDirectories = new ArrayList<>();
         outputDirectories.add(project.getBuild().getTestOutputDirectory());
         outputDirectories.add(project.getBuild().getOutputDirectory());
         return outputDirectories;

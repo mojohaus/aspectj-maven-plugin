@@ -124,7 +124,7 @@ class AbstractAjcCompilerTest {
         List args = ajcCompMojo.ajcOptions;
         assertTrue(args.contains("-inpath"));
         Iterator it = args.iterator();
-        while (!it.next().equals("-inpath")) {
+        while (!"-inpath".equals(it.next())) {
             // don't do nothing
         }
         String weavePath = (String) it.next();
@@ -160,7 +160,7 @@ class AbstractAjcCompilerTest {
         List args = ajcCompMojo.ajcOptions;
         assertTrue(args.contains("-inpath"));
         Iterator it = args.iterator();
-        while (!it.next().equals("-inpath")) {
+        while (!"-inpath".equals(it.next())) {
             // don't do nothing
         }
         String weavePath = (String) it.next();
@@ -196,7 +196,7 @@ class AbstractAjcCompilerTest {
         List args = ajcCompMojo.ajcOptions;
         assertTrue(args.contains("-inpath"));
         Iterator it = args.iterator();
-        while (!it.next().equals("-inpath")) {
+        while (!"-inpath".equals(it.next())) {
             // don't do nothing
         }
         String weavePath = (String) it.next();
@@ -219,7 +219,7 @@ class AbstractAjcCompilerTest {
         List args = ajcCompMojo.ajcOptions;
         assertTrue(args.contains("-inpath"));
         Iterator it = args.iterator();
-        while (!it.next().equals("-inpath")) {
+        while (!"-inpath".equals(it.next())) {
             // don't do nothing
         }
         String weavePath = (String) it.next();
@@ -289,7 +289,7 @@ class AbstractAjcCompilerTest {
         List args = ajcCompMojo.ajcOptions;
         assertTrue(args.contains("-aspectpath"));
         Iterator it = args.iterator();
-        while (!it.next().equals("-aspectpath")) {
+        while (!"-aspectpath".equals(it.next())) {
             // don't do nothing
         }
         String weavePath = (String) it.next();
@@ -363,7 +363,7 @@ class AbstractAjcCompilerTest {
 
         assertTrue(args.contains("-inpath"), "Should contain -inpath");
         Iterator it = args.iterator();
-        while (!it.next().equals("-inpath")) {
+        while (!"-inpath".equals(it.next())) {
             // find -inpath position
         }
         String weavePath = (String) it.next();
@@ -400,7 +400,7 @@ class AbstractAjcCompilerTest {
 
         assertTrue(args.contains("-inpath"), "Should contain -inpath");
         Iterator it = args.iterator();
-        while (!it.next().equals("-inpath")) {
+        while (!"-inpath".equals(it.next())) {
             // find -inpath position
         }
         String weavePath = (String) it.next();

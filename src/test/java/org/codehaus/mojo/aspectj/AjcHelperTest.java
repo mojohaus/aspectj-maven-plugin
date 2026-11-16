@@ -91,7 +91,7 @@ class AjcHelperTest {
     @Test
     void emptyDependencyArtifacts() {
         MavenProject project = new MavenProject();
-        AjcHelper.createClassPath(project, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+        AjcHelper.createClassPath(project, Collections.emptyList(), Collections.emptyList());
     }
 
     @Test
@@ -110,7 +110,7 @@ class AjcHelperTest {
         project.setDependencyArtifacts(Collections.singleton(dependencyArtifact));
 
         String classPath =
-                AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.EMPTY_LIST);
+                AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.emptyList());
         assertTrue(classPath.contains("sibling-project"), "wrong dependency order in " + classPath);
         assertFalse(classPath.contains("repository"), "wrong dependency order in " + classPath);
     }
