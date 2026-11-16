@@ -77,12 +77,12 @@ class AjcHelperTest {
         args.add("/home/aspectj/AnotherFile");
         try {
             AjcHelper.writeBuildConfigToFile(args, fileName, baseDir);
-            assertTrue(FileUtils.fileExists(fileAbsolutePath), "Config file not written to disk");
+            assertTrue(new File(fileAbsolutePath).exists(), "Config file not written to disk");
             List readArgs = AjcHelper.readBuildConfigFile(fileName, baseDir);
             assertEquals(args, readArgs);
         } catch (Exception e) {
             fail("Unexpected exception: " + e.toString());
-            if (FileUtils.fileExists(fileAbsolutePath)) {
+            if (new File(fileAbsolutePath).exists()) {
                 FileUtils.fileDelete(fileAbsolutePath);
             }
         }

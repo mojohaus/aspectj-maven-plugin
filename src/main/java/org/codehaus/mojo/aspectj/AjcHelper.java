@@ -45,7 +45,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * A helper class for creating classpaths for the compilers and report mojos
@@ -116,7 +115,7 @@ public class AjcHelper {
             cp = cp.substring(0, cp.length() - 1);
         }
 
-        return StringUtils.replace(cp, "//", "/");
+        return cp == null || cp.isEmpty() ? cp : cp.replace("//", "/");
     }
 
     /**
@@ -164,7 +163,7 @@ public class AjcHelper {
 
         for (String sourceDir : sourceDirs) {
             try {
-                if (FileUtils.fileExists(sourceDir)) {
+                if (new File(sourceDir).exists()) {
                     result.addAll(FileUtils.getFileNames(
                             new File(sourceDir),
                             null == includes || 0 == includes.length ? DEFAULT_INCLUDES : getAsCsv(includes),
@@ -192,7 +191,7 @@ public class AjcHelper {
 
         for (int i = 0; i < weaveDirs.length; i++) {
             String weaveDir = weaveDirs[i];
-            if (FileUtils.fileExists(weaveDir)) {
+            if (new File(weaveDir).exists()) {
                 try {
                     result.addAll(FileUtils.getFileNames(new File(weaveDir), "**/*.class", DEFAULT_EXCLUDES, true));
                 } catch (IOException e) {
@@ -268,7 +267,7 @@ public class AjcHelper {
     public static List<String> readBuildConfigFile(String fileName, File outputDir) throws IOException {
         List<String> arguments = new ArrayList<>();
         File argFile = new File(outputDir, fileName);
-        if (FileUtils.fileExists(argFile.getAbsolutePath())) {
+        if (new File(argFile.getAbsolutePath()).exists()) {
             FileReader reader = new FileReader(argFile);
             BufferedReader bufRead = new BufferedReader(reader);
             String line = null;
@@ -336,7 +335,7 @@ public class AjcHelper {
                         inclExlSet.addAll(FileUtils.getFileNames(basedir, element, "", true));
                     } else {
                         File lookupBaseDir = new File(basedir, element);
-                        if (FileUtils.fileExists(lookupBaseDir.getAbsolutePath())) {
+                        if (new File(lookupBaseDir.getAbsolutePath()).exists()) {
                             inclExlSet.addAll(FileUtils.getFileNames(lookupBaseDir, DEFAULT_INCLUDES, "", true));
                         }
                     }

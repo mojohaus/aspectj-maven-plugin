@@ -46,7 +46,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.codehaus.plexus.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -162,8 +161,8 @@ public class EclipseAjcMojo extends AbstractAjcMojo {
         for (int i = 0; i < paths.length; i++) {
             out.print("org.eclipse.ajdt.ui.aspectPath" + i + "=");
             String path = paths[i];
-            path = StringUtils.replace(path, "\\", "/");
-            path = StringUtils.replace(path, ":", "\\:");
+            path = path == null || path.isEmpty() ? path : path.replace("\\", "/");
+            path = path == null || path.isEmpty() ? path : path.replace(":", "\\:");
             out.println(path);
         }
     }
