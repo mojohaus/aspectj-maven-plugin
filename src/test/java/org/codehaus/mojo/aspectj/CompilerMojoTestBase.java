@@ -24,20 +24,20 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Collections;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReflectionUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Baseclass for AjcMojo testcases. Sets up the testproject, and cleans
- * up afterwards.
+ * Baseclass for AjcMojo testcases. Sets up the testproject, with its build
+ * directory in a temporary directory that JUnit deletes afterwards.
  *
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
@@ -49,6 +49,9 @@ abstract class CompilerMojoTestBase {
 
     String basedir = "";
 
+    @TempDir
+    Path buildDirectory;
+
     /**
      *
      */
@@ -58,9 +61,10 @@ abstract class CompilerMojoTestBase {
         ajcMojo.project = project;
         String temp = new File(".").getAbsolutePath();
         basedir = temp.substring(0, temp.length() - 2) + "/src/test/projects/" + getProjectName() + "/";
-        project.getBuild().setDirectory(basedir + "/target");
-        project.getBuild().setOutputDirectory(basedir + "/target/classes");
-        project.getBuild().setTestOutputDirectory(basedir + "/target/test-classes");
+        project.getBuild().setDirectory(buildDirectory.toString());
+        project.getBuild().setOutputDirectory(buildDirectory.resolve("classes").toString());
+        project.getBuild()
+                .setTestOutputDirectory(buildDirectory.resolve("test-classes").toString());
         project.getBuild().setSourceDirectory(basedir + "/src/main/java");
         project.getBuild().setTestSourceDirectory(basedir + "/src/test/java");
         project.addCompileSourceRoot(project.getBuild().getSourceDirectory());
@@ -79,19 +83,6 @@ abstract class CompilerMojoTestBase {
         artifact.setArtifactHandler(artifactHandler);
         project.setArtifact(artifact);
         project.setDependencyArtifacts(Collections.emptySet());
-    }
-
-    /**
-     * Clean up targetarea after a testcase is run.
-     * So we make shure, we don't get sideeffects between testruns.
-     */
-    @AfterEach
-    void tearDown() {
-        try {
-            FileUtils.deleteDirectory(project.getBuild().getDirectory());
-        } catch (Exception ex) { // Only a problem on windows. we really do not care.. if we cant delete the file
-            // It is probably not there
-        }
     }
 
     abstract AbstractAjcCompiler createMojo();
