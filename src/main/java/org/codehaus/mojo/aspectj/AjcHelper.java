@@ -268,15 +268,12 @@ public class AjcHelper {
         List<String> arguments = new ArrayList<>();
         File argFile = new File(outputDir, fileName);
         if (new File(argFile.getAbsolutePath()).exists()) {
-            FileReader reader = new FileReader(argFile);
-            BufferedReader bufRead = new BufferedReader(reader);
-            String line = null;
-            do {
-                line = bufRead.readLine();
-                if (null != line) {
+            try (BufferedReader bufRead = new BufferedReader(new FileReader(argFile))) {
+                String line;
+                while ((line = bufRead.readLine()) != null) {
                     arguments.add(line);
                 }
-            } while (null != line);
+            }
         }
         return arguments;
     }
