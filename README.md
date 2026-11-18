@@ -27,7 +27,7 @@ The first step is to create [an appropriate issue](https://github.com/mojohaus/a
 
 Conventions for the build, the tests and the fixtures are in [AGENTS.md](AGENTS.md).
 
-Test you changes locally using
+Test your changes locally using
 
 ```shell
 mvn clean verify -Pdocs,run-its
