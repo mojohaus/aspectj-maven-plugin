@@ -11,7 +11,7 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
 
 - `src/main/resources/aspectj-report*.properties` hold the report texts; the `nl` and `sv`
   translations are checked by the l10n report.
-- The site is built from APT pages in `src/site/apt`; `.apt.vm` files go through Velocity.
+- The site is built from Markdown pages in `src/site/markdown`; `.md.vm` files go through Velocity.
 
 ## Build gates
 
@@ -61,9 +61,10 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
 
 ## Continuous integration
 
-- `.github/workflows/maven.yml` calls the shared `maven-verify.yml@v5` workflow from
-  `apache/maven-gh-actions-shared`, which runs `-P run-its verify` on every JDK on Linux, the
-  newest JDK on macOS, and the oldest and newest on Windows (`matrix-exclude`), plus a site build.
+- `.github/workflows/maven.yml` calls the `maven-verify.yml@master` workflow in `mojohaus/.github`,
+  a thin wrapper around `apache/maven-gh-actions-shared@v5`. It runs `-P "?run-its" verify` on
+  every JDK on Linux, the newest JDK on macOS, and the oldest and newest on Windows
+  (`matrix-exclude`), plus a site build.
 - Branches pushed to this repository build under the `push` event; the `pull_request` run of the
   same commit is skipped.
 
@@ -76,6 +77,6 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
 ## Pull requests
 
 - Squash, merge and rebase merges are all enabled. Release Drafter, through the shared
-  `apache/maven-gh-actions-shared` workflow, builds the release notes from pull request titles
+  `apache/maven-gh-actions-shared@v5` workflow, builds the release notes from pull request titles
   and labels, so the title should describe the change for a user.
 
