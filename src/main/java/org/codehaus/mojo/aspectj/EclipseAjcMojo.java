@@ -155,8 +155,6 @@ public class EclipseAjcMojo extends AbstractAjcMojo {
         }
         for (int i = 1; i <= paths.length; i++) {
             out.println("org.eclipse.ajdt.ui.aspectPath.contentKind" + i + "=BINARY");
-        }
-        for (int i = 1; i <= paths.length; i++) {
             out.println("org.eclipse.ajdt.ui.aspectPath.entryKind" + i + "=LIBRARY");
         }
         for (int i = 0; i < paths.length; i++) {
