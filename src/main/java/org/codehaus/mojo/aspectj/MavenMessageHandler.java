@@ -64,9 +64,6 @@ public class MavenMessageHandler extends MessageHandler {
      */
     public MavenMessageHandler(final Log log, final List<IMessage.Kind> showDetailsForMessageKindList) {
 
-        // Check sanity
-        // assert log != null : "Cannot handle null log argument.";
-        // assert showDetailsForMessageKindList != null : "Cannot handle null showDetailsForMessageKindList argument.";
         if (log == null) {
             throw new NullPointerException("Cannot handle null log argument.");
         }
