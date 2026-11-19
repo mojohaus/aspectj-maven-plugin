@@ -61,8 +61,7 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
 
 ## Continuous integration
 
-- `.github/workflows/maven.yml` calls the `maven-verify.yml@master` workflow in `mojohaus/.github`,
-  a thin wrapper around `apache/maven-gh-actions-shared@v5`. It runs `-P "?run-its" verify` on
+- `.github/workflows/maven.yml` calls the MojoHaus `maven-verify.yml` workflow in `mojohaus/.github`. It runs `-P "?run-its" verify` on
   every JDK on Linux, the newest JDK on macOS, and the oldest and newest on Windows
   (`matrix-exclude`), plus a site build.
 - Branches pushed to this repository build under the `push` event; the `pull_request` run of the
@@ -77,6 +76,6 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
 ## Pull requests
 
 - Squash, merge and rebase merges are all enabled. Release Drafter, through the shared
-  `apache/maven-gh-actions-shared@v5` workflow, builds the release notes from pull request titles
+  MojoHaus `release-drafter.yml` workflow in `mojohaus/.github`, builds the release notes from pull request titles
   and labels, so the title should describe the change for a user.
 
