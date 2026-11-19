@@ -26,18 +26,16 @@ package org.codehaus.mojo.aspectj;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests class {@link org.codehaus.mojo.aspectj.AjcHelper}
@@ -45,6 +43,9 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author <a href="mailto:kaare.nilsen@gmail.com">Kaare Nilsen</a>
  */
 class AjcHelperTest {
+    @TempDir
+    File tempDir;
+
     @Test
     void getAsCsv() {
         String[] tests = new String[] {"kaare", "java", "aspectJ"};
@@ -56,36 +57,28 @@ class AjcHelperTest {
      */
     @Test
     void getSourcesEmptyBaseDir() throws Exception {
-        List baseDirs = new ArrayList();
+        List<String> baseDirs = new ArrayList<>();
         baseDirs.add("src/shouldNotExist");
-        HashSet sources = (HashSet) AjcHelper.getBuildFilesForSourceDirs(
+        Set<String> sources = AjcHelper.getBuildFilesForSourceDirs(
                 baseDirs, new String[] {AjcHelper.DEFAULT_INCLUDES}, new String[] {AjcHelper.DEFAULT_EXCLUDES});
         assertTrue(sources.isEmpty());
     }
 
     @Test
-    void buildConfigFile() {
-        final File baseDir = new File(".");
+    void buildConfigFile() throws Exception {
         final String fileName = "test.lst";
-        final String fileAbsolutePath = baseDir.getAbsolutePath() + File.separator + fileName;
 
-        List args = new ArrayList();
+        List<String> args = new ArrayList<>();
         args.add("-classpath");
         args.add("a:b:c");
         args.add("-showWeaveInfo");
         args.add("/home/aspectj/AFile");
         args.add("/home/aspectj/AnotherFile");
-        try {
-            AjcHelper.writeBuildConfigToFile(args, fileName, baseDir);
-            assertTrue(new File(fileAbsolutePath).exists(), "Config file not written to disk");
-            List readArgs = AjcHelper.readBuildConfigFile(fileName, baseDir);
-            assertEquals(args, readArgs);
-        } catch (Exception e) {
-            fail("Unexpected exception: " + e.toString());
-            if (new File(fileAbsolutePath).exists()) {
-                FileUtils.fileDelete(fileAbsolutePath);
-            }
-        }
+
+        AjcHelper.writeBuildConfigToFile(args, fileName, tempDir);
+        assertTrue(new File(tempDir, fileName).exists(), "Config file not written to disk");
+        List<String> readArgs = AjcHelper.readBuildConfigFile(fileName, tempDir);
+        assertEquals(args, readArgs);
     }
 
     @Test
@@ -96,14 +89,14 @@ class AjcHelperTest {
 
     @Test
     void projectDependenciesBeforeOthers() {
-        DefaultArtifact projectArtifact = createFixedArtifact();
+        DefaultArtifact projectArtifact = createFixedArtifact("project");
         projectArtifact.setFile(new File("../sibling-project/target/some.jar"));
 
-        DefaultArtifact dependencyArtifact = createFixedArtifact();
+        DefaultArtifact dependencyArtifact = createFixedArtifact("dependency");
         dependencyArtifact.setFile(new File("~/.m2/repository/coords/some.jar"));
 
-        DefaultArtifact pluginArtifact = createFixedArtifact();
-        dependencyArtifact.setFile(new File("~/.m2/repository/coords/plugin.jar"));
+        DefaultArtifact pluginArtifact = createFixedArtifact("plugin");
+        pluginArtifact.setFile(new File("~/.m2/repository/coords/plugin.jar"));
 
         MavenProject project = new MavenProject();
         project.setArtifacts(Collections.singleton(projectArtifact));
@@ -112,10 +105,15 @@ class AjcHelperTest {
         String classPath =
                 AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.emptyList());
         assertTrue(classPath.contains("sibling-project"), "wrong dependency order in " + classPath);
-        assertFalse(classPath.contains("repository"), "wrong dependency order in " + classPath);
+        assertTrue(
+                classPath.indexOf("sibling-project") < classPath.indexOf("some.jar"),
+                "project artifact must precede dependency artifact in " + classPath);
+        assertTrue(
+                classPath.indexOf("some.jar") < classPath.indexOf("plugin.jar"),
+                "dependency artifact must precede plugin artifact in " + classPath);
     }
 
-    private static DefaultArtifact createFixedArtifact() {
-        return new DefaultArtifact("group", "artifact", "1.0-SNAPSHOT", "compile", "type", "classifier", null);
+    private static DefaultArtifact createFixedArtifact(String artifactId) {
+        return new DefaultArtifact("group", artifactId, "1.0-SNAPSHOT", "compile", "type", "classifier", null);
     }
 }
