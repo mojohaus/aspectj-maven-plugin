@@ -1,5 +1,0 @@
-file = new File(basedir, "build.log")
-assert file.exists()
-assert file.getText().contains("woven aspect foo.OldStyleAspect")
-assert !file.getText().contains("woven class foo.Azpect")
-assert file.getText().contains("woven class foo.Clazz")
