@@ -17,7 +17,7 @@ Below follows a standard single-project usage example.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectjVersion}</version>
+      <version>1.9.7</version>
     </dependency>
     ...
   </dependencies>
@@ -27,7 +27,7 @@ Below follows a standard single-project usage example.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
+        <version><!-- latest release --></version>
         <executions>
           <execution>
             <goals>
@@ -39,7 +39,7 @@ Below follows a standard single-project usage example.
       </plugin>
       ...
     </plugins>
-  <build>
+  </build>
   ...
 </project>
 ```
@@ -48,14 +48,14 @@ Upgrading AspectJ
 -----------------
 
 The frequency of releases of this plugin is lower than of AspectJ.
-If you want to use a different version of AspectJ than ${aspectjVersion}, you also need to upgrade the
+If you want to use a different version of AspectJ than the one the plugin uses by default, you also need to upgrade the
 aspectjtools within the plugin.
 
 ```xml
 <project>
   ...
   <properties>
-    <aspectj.version>1.7.n</aspectj.version> <!-- specify your version -->
+    <aspectj.version>1.9.n</aspectj.version> <!-- specify your version -->
   </properties>
 
   <dependencies>
@@ -73,7 +73,6 @@ aspectjtools within the plugin.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <dependencies>
           <dependency>
             <groupId>org.aspectj</groupId>
@@ -84,7 +83,24 @@ aspectjtools within the plugin.
       </plugin>
       ...
     </plugins>
-  <build>
+  </build>
   ...
 </project>
 ```
+
+Reproducible builds
+-------------------
+
+By default the plugin writes its argument file `builddef.lst` to the output directory, so it ends up in the JAR.
+The file holds absolute paths, which differ between machines and make the artifact non-reproducible. Since 1.17.0,
+`argumentFileDirectory` moves the file elsewhere; point it at a directory below `target`:
+
+```xml
+<configuration>
+  <argumentFileDirectory>${project.build.directory}/ajc</argumentFileDirectory>
+</configuration>
+```
+
+If you configure one directory for both the `compile` and the `test-compile` goal, give them different
+`argumentFileName` values, or the second file overwrites the first.
+

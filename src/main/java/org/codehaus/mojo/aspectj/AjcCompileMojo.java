@@ -67,7 +67,7 @@ public class AjcCompileMojo extends AbstractAjcCompiler {
      * {@link #argumentFileName}s for {@code compile} vs {@code test-compile} goal execution configurations, to avoid
      * one file overwriting the other.
      *
-     * @since 1.16.2
+     * @since 1.17.0
      */
     @Parameter(defaultValue = "${project.build.outputDirectory}")
     private File argumentFileDirectory;

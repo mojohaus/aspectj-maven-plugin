@@ -12,7 +12,7 @@ you can do as shown below.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectjVersion}</version>
+      <version>1.9.7</version>
     </dependency>
     ...
   </dependencies>
@@ -22,7 +22,6 @@ you can do as shown below.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <executions>
           <execution>
             <id>compile</id>
@@ -50,3 +49,4 @@ you can do as shown below.
   ...
 </project>
 ```
+

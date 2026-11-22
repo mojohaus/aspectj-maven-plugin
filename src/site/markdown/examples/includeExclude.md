@@ -3,10 +3,9 @@ Using sources
 
 Since version 1.4 this plugin has a much stronger way of defining the Java sources, their includes and excludes.
 The plugin makes use of the Plexus Scanner
-(i.e. the [DirectoryScanner](http://plexus.codehaus.org/plexus-utils/apidocs/org/codehaus/plexus/util/DirectoryScanner.html) implementation),
+(i.e. the [DirectoryScanner](https://codehaus-plexus.github.io/plexus-utils/apidocs/org/codehaus/plexus/util/DirectoryScanner.html) implementation),
 an advanced implementation which covers most needs regarding source selection.
-If you don't want to use any sourceDirectory, Maven 3 users can just add an empty sources element (i.e. `<sources/>`).
-If you're a Maven 2 user you have to specify an empty source element (i.e. `<sources><source/></sources>`).
+If you don't want to use any sourceDirectory, just add an empty sources element (i.e. `<sources/>`).
 
 ```xml
 <project>
@@ -16,7 +15,7 @@ If you're a Maven 2 user you have to specify an empty source element (i.e. `<sou
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectjVersion}</version>
+      <version>1.9.7</version>
     </dependency>
     ...
   </dependencies>
@@ -26,7 +25,6 @@ If you're a Maven 2 user you have to specify an empty source element (i.e. `<sou
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <configuration>
           <sources>
             <source>
@@ -71,7 +69,7 @@ to add include/exclude filtering on top of that.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectjVersion}</version>
+      <version>1.9.7</version>
     </dependency>
     ...
   </dependencies>
@@ -81,7 +79,6 @@ to add include/exclude filtering on top of that.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <configuration>
           <includes>
             <include>**/TransationAspect.java</include>
@@ -105,3 +102,4 @@ to add include/exclude filtering on top of that.
   ...
 </project>
 ```
+

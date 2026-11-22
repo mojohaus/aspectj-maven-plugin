@@ -35,6 +35,7 @@ The reactor contains the following parts:
 After the introduction, let us proceed to the step-by-step guide.
 
 1. Define required runtime dependency versions
+
 ----------------------------------------------
 
 In the rootParentPom, define dependencies for the AspectJ runtime and your library holding aspects.
@@ -79,6 +80,7 @@ the AspectJ version must be changed to upgrade the dependency.
 The definitions in the rootParentPOM are now complete.
 
 2. Implement the Validation-API
+
 -------------------------------
 
 For the purpose of this example, we would like AspectJ to enforce a common behaviour/lifecycle for
@@ -142,6 +144,7 @@ configurations such as licensing, coverage, code style, etc. are frequently conf
 only in one POM - the rootParentPOM.
 
 3. Implement the Aspect performing validation
+
 ---------------------------------------------
 
 Now that our tiny Validation API is complete, it is time to implement its corresponding Aspect.
@@ -157,7 +160,7 @@ bits of the validation-aspect project are shown below:
     <parent>
         <groupId>some.group.id</groupId>
         <artifactId>rootParentPOM</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <!-- +========================================= -->
@@ -167,7 +170,7 @@ bits of the validation-aspect project are shown below:
         <dependency>
             <groupId>some.group.id</groupId>
             <artifactId>validation-api</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -187,7 +190,6 @@ bits of the validation-aspect project are shown below:
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>${project.version}</version>
                 <configuration>
                     <complianceLevel>1.6</complianceLevel>
                     <includes>
@@ -332,6 +334,7 @@ public class ValidationAspect {
 ```
 
 4. Include Aspects into aspectParentPOM
+
 ---------------------------------------
 
 The last piece of the AspectJ plugin puzzle is the inclusion of our validation-aspect into the
@@ -346,7 +349,7 @@ for parent.
     <parent>
         <groupId>some.group.id</groupId>
         <artifactId>rootParentPOM</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <!-- +========================================= -->
@@ -357,7 +360,7 @@ for parent.
             <dependency>
                 <groupId>some.group.id</groupId>
                 <artifactId>validation-aspect</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>1.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -383,7 +386,6 @@ for parent.
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>${project.version}</version>
                 <configuration>
                     <complianceLevel>1.6</complianceLevel>
                     <includes>
@@ -424,7 +426,7 @@ for parent.
                     <dependency>
                         <groupId>some.group.id</groupId>
                         <artifactId>validation-aspect</artifactId>
-                        <version>1.0.0-SNAPSHOT</version>
+                        <version>1.0.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
