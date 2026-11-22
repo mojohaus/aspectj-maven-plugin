@@ -133,8 +133,8 @@ public class AjcHelper {
         Set<String> result = new LinkedHashSet<>();
 
         Properties ajdtBuildProperties = new Properties();
-        try {
-            ajdtBuildProperties.load(new FileInputStream(new File(basedir, ajdtBuildDefFile)));
+        try (FileInputStream in = new FileInputStream(new File(basedir, ajdtBuildDefFile))) {
+            ajdtBuildProperties.load(in);
         } catch (FileNotFoundException e) {
             throw new MojoExecutionException("Build properties file specified not found", e);
         } catch (IOException e) {
