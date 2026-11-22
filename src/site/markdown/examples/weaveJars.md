@@ -15,7 +15,7 @@ files you would like to weave in the plugin configuration as shown below.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.9.7</version>
+      <version><!-- latest release --></version>
     </dependency>
 
     <dependency>

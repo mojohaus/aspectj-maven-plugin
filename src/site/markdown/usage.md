@@ -17,7 +17,7 @@ Below follows a standard single-project usage example.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.9.7</version>
+      <version><!-- latest release --></version>
     </dependency>
     ...
   </dependencies>
