@@ -24,10 +24,14 @@ package org.codehaus.mojo.aspectj;
  * SOFTWARE.
  */
 import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.project.MavenProject;
@@ -62,6 +66,126 @@ class AjcHelperTest {
         Set<String> sources = AjcHelper.getBuildFilesForSourceDirs(
                 baseDirs, new String[] {AjcHelper.DEFAULT_INCLUDES}, new String[] {AjcHelper.DEFAULT_EXCLUDES});
         assertTrue(sources.isEmpty());
+    }
+
+    private File sourceTree() throws Exception {
+        write("src/main/java/foo/Azpect.java");
+        write("src/main/java/foo/Clazz.java");
+        write("src/main/aspect/foo/OldStyleAspect.aj");
+        return tempDir;
+    }
+
+    private void write(String path) throws Exception {
+        File file = new File(tempDir, path);
+        Files.createDirectories(file.getParentFile().toPath());
+        Files.write(file.toPath(), new byte[0]);
+    }
+
+    private List<String> sourceDirs() {
+        return Arrays.asList(
+                new File(tempDir, "src/main/java").getPath(), new File(tempDir, "src/main/aspect").getPath());
+    }
+
+    private Set<String> names(Set<String> files) {
+        Set<String> names = new TreeSet<>();
+        for (String file : files) {
+            names.add(new File(file).getName());
+        }
+        return names;
+    }
+
+    @Test
+    void antStyleIncludeSelectsOnlyTheMatchingAspect() throws Exception {
+        sourceTree();
+
+        Set<String> sources =
+                AjcHelper.getBuildFilesForSourceDirs(sourceDirs(), new String[] {"**/Old*eAspect.aj"}, null);
+
+        assertEquals(Collections.singleton("OldStyleAspect.aj"), names(sources));
+    }
+
+    @Test
+    void fullPathIncludeSelectsOnlyThatFile() throws Exception {
+        sourceTree();
+
+        Set<String> sources =
+                AjcHelper.getBuildFilesForSourceDirs(sourceDirs(), new String[] {"foo/OldStyleAspect.aj"}, null);
+
+        assertEquals(Collections.singleton("OldStyleAspect.aj"), names(sources));
+    }
+
+    @Test
+    void antStyleExcludeDropsTheMatchingFiles() throws Exception {
+        sourceTree();
+
+        Set<String> sources = AjcHelper.getBuildFilesForSourceDirs(sourceDirs(), null, new String[] {"**/Az*.*"});
+
+        assertEquals(new TreeSet<>(Arrays.asList("Clazz.java", "OldStyleAspect.aj")), names(sources));
+    }
+
+    @Test
+    void fullPathExcludeDropsOnlyThatFile() throws Exception {
+        sourceTree();
+
+        Set<String> sources =
+                AjcHelper.getBuildFilesForSourceDirs(sourceDirs(), null, new String[] {"foo/Azpect.java"});
+
+        assertEquals(new TreeSet<>(Arrays.asList("Clazz.java", "OldStyleAspect.aj")), names(sources));
+    }
+
+    @Test
+    void missingAspectDirectoryStillYieldsTheJavaSources() throws Exception {
+        sourceTree();
+        List<String> dirs = Arrays.asList(
+                new File(tempDir, "src/main/java").getPath(), new File(tempDir, "src/no/aspects").getPath());
+
+        Set<String> sources = AjcHelper.getBuildFilesForSourceDirs(dirs, null, null);
+
+        assertEquals(new TreeSet<>(Arrays.asList("Azpect.java", "Clazz.java")), names(sources));
+    }
+
+    @Test
+    void ajdtBuildFileListsAFileAndADirectory() throws Exception {
+        write("src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj");
+        write("src/main/java/Clazz.java");
+        write("src/main/aspect/Other.aj");
+        Files.write(
+                new File(tempDir, "build.ajproperties").toPath(),
+                ("src.includes = src/main/aspect/org/codehaus/mojo/aspectj/OldStyleAspect.aj,\\\n"
+                                + "               src/main/java/\n")
+                        .getBytes(StandardCharsets.ISO_8859_1));
+
+        Set<String> sources = AjcHelper.getBuildFilesForAjdtFile("build.ajproperties", tempDir);
+
+        assertEquals(new TreeSet<>(Arrays.asList("Clazz.java", "OldStyleAspect.aj")), names(sources));
+    }
+
+    @Test
+    void ajdtBuildFileExcludesWinOverIncludes() throws Exception {
+        write("src/main/java/Clazz.java");
+        write("src/main/java/Azpect.java");
+        Files.write(
+                new File(tempDir, "build.ajproperties").toPath(),
+                ("src.includes = src/main/java/\nsrc.excludes = src/main/java/Azpect.java\n")
+                        .getBytes(StandardCharsets.ISO_8859_1));
+
+        Set<String> sources = AjcHelper.getBuildFilesForAjdtFile("build.ajproperties", tempDir);
+
+        assertEquals(Collections.singleton("Clazz.java"), names(sources));
+    }
+
+    @Test
+    void ajdtBuildFileDirectoryIncludesTakeBothSourceKinds() throws Exception {
+        write("src/main/aspect/OldStyleAspect.aj");
+        write("src/main/java/Clazz.java");
+        Files.write(
+                new File(tempDir, "build.ajproperties").toPath(),
+                ("src.includes = src/main/aspect/,\\\n               src/main/java/\n")
+                        .getBytes(StandardCharsets.ISO_8859_1));
+
+        Set<String> sources = AjcHelper.getBuildFilesForAjdtFile("build.ajproperties", tempDir);
+
+        assertEquals(new TreeSet<>(Arrays.asList("Clazz.java", "OldStyleAspect.aj")), names(sources));
     }
 
     @Test

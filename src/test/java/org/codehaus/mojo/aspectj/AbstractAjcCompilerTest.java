@@ -26,8 +26,10 @@ package org.codehaus.mojo.aspectj;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.model.Model;
@@ -419,6 +421,63 @@ class AbstractAjcCompilerTest {
 
         assertFalse((boolean) ReflectionUtils.getValueIncludingSuperclasses("weaveOnly", ajcCompMojo));
         assertNotNull(ajcCompMojo.resolvedIncludes);
+    }
+
+    @Test
+    void parametersTrueAddsTheFlag() throws Exception {
+        ajcCompMojo.setParameters(true);
+        ajcCompMojo.assembleArguments();
+
+        assertTrue(ajcCompMojo.ajcOptions.contains("-parameters"), String.valueOf(ajcCompMojo.ajcOptions));
+    }
+
+    @Test
+    void parametersFalseLeavesTheFlagOut() throws Exception {
+        ajcCompMojo.setParameters(false);
+        ajcCompMojo.assembleArguments();
+
+        assertFalse(ajcCompMojo.ajcOptions.contains("-parameters"), String.valueOf(ajcCompMojo.ajcOptions));
+    }
+
+    @Test
+    void xajruntimetargetAddsASupportedValue() throws Exception {
+        ajcCompMojo.setXajruntimetarget("1.2");
+        ajcCompMojo.assembleArguments();
+
+        assertTrue(ajcCompMojo.ajcOptions.contains("-Xajruntimetarget:1.2"), String.valueOf(ajcCompMojo.ajcOptions));
+    }
+
+    @Test
+    void xajruntimetargetIgnoresAnUnsupportedValue() throws Exception {
+        ajcCompMojo.setXajruntimetarget("1.3");
+        ajcCompMojo.assembleArguments();
+
+        for (Object option : ajcCompMojo.ajcOptions) {
+            assertFalse(option.toString().startsWith("-Xajruntimetarget"), String.valueOf(ajcCompMojo.ajcOptions));
+        }
+    }
+
+    @Test
+    void xsetJoinsTheEntriesIntoOneOption() throws Exception {
+        Map<String, String> xset = new LinkedHashMap<>();
+        xset.put("overWeaving", "true");
+        xset.put("avoidFinal", "false");
+        ajcCompMojo.setXset(xset);
+        ajcCompMojo.assembleArguments();
+
+        assertTrue(
+                ajcCompMojo.ajcOptions.contains("-Xset:overWeaving=true,avoidFinal=false"),
+                String.valueOf(ajcCompMojo.ajcOptions));
+    }
+
+    @Test
+    void emptyXsetAddsNoOption() throws Exception {
+        ajcCompMojo.setXset(new LinkedHashMap<>());
+        ajcCompMojo.assembleArguments();
+
+        for (Object option : ajcCompMojo.ajcOptions) {
+            assertFalse(option.toString().startsWith("-Xset"), String.valueOf(ajcCompMojo.ajcOptions));
+        }
     }
 
     private static File getTestFile(String path) {

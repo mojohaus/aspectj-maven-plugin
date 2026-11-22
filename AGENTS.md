@@ -45,7 +45,7 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
   `mvn install` is needed. Run a subset with:
 
   ```shell
-  mvn -P run-its verify -Dinvoker.test=NoParameters,Xlint
+  mvn -P run-its verify -Dinvoker.test=Xlint,XhasMember
   ```
 - They run in parallel, one per CPU core (`invoker.parallelThreads` 1C), and every forked Maven
   gets `JAVA_TOOL_OPTIONS=-XX:TieredStopAtLevel=1 -XX:+UseSerialGC`. A test must not depend on
