@@ -51,8 +51,7 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
   gets `JAVA_TOOL_OPTIONS=-XX:TieredStopAtLevel=1 -XX:+UseSerialGC`. A test must not depend on
   another test's output or on running alone.
 - The default goals are `clean test`; most tests set their own `invoker.goals`. Tests expected
-  to fail set `invoker.buildResult = failure`. `TOFIX_MASPECTJ-4` documents an unfixed issue
-  and is expected to fail.
+  to fail set `invoker.buildResult = failure`.
 - `src/it/settings.xml` adds your local repository as a remote, and the fixture POMs take real
   artifacts from Maven Central, so the ITs need network access on a clean repository.
 - The post-build hook is `verify.groovy`. Write it as `assert` statements. Invoker fails a script
