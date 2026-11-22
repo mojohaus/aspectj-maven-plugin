@@ -14,7 +14,7 @@ files you would like to weave in the plugin configuration as shown below.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectjVersion}</version>
+      <version>1.9.7</version>
     </dependency>
 
     <dependency>
@@ -36,7 +36,6 @@ files you would like to weave in the plugin configuration as shown below.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <configuration>
           <aspectLibraries>
             <aspectLibrary>
@@ -63,3 +62,4 @@ files you would like to weave in the plugin configuration as shown below.
   ...
 </project>
 ```
+

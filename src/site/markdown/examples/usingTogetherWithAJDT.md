@@ -14,7 +14,7 @@ Any include or exclude elements in the POM are also disregarded.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectjVersion}</version>
+      <version>1.9.7</version>
     </dependency>
     ...
   </dependencies>
@@ -24,7 +24,6 @@ Any include or exclude elements in the POM are also disregarded.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <configuration>
           <ajdtBuildDefFile>build-1-5.ajproperties</ajdtBuildDefFile>
         </configuration>
@@ -53,3 +52,4 @@ src.includes = src/main/aspect,\
                src/main/java/com/mycompany/myaspects/**/*TransactionAspect.java
 src.excludes = src/main/java/org/codehaus/mojo/aspectj/Azpect.java
 ```
+

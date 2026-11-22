@@ -23,10 +23,10 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
   and the `enforce-bytecode-version` rule rejects dependencies built for a newer JDK. AspectJ
   above 1.8.13 needs JDK 8 at least.
 - On JDK 8 the `tools-jar` profile adds `tools.jar` as a system dependency for ajdoc.
-- The plugin compiles against `mavenVersion` (3.9.16) and declares a literal Maven 3.9.0 as its
-  `<prerequisites>`; `minimalMavenBuildVersion` holds the build to the same floor. Keep the two
-  apart: raising `mavenVersion` must not raise the prerequisite. The AspectJ version is the `aspectjVersion` property, and the ITs receive it
-  as `@aspectjVersion@`.
+- The plugin compiles against the latest Maven 3.9.x (`mavenVersion`) and declares a literal Maven
+  3.9.0 as its `<prerequisites>`; `minimalMavenBuildVersion` holds the build to the same floor. Keep
+  the two apart: raising `mavenVersion` must not raise the prerequisite. The AspectJ version is the
+  `aspectjVersion` property, and the ITs receive it as `@aspectjVersion@`.
 - Fields of `AbstractAjcMojo` and `AbstractAjcCompiler` are plugin parameters; renaming one
   changes the plugin's configuration API.
 
@@ -61,8 +61,8 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
 
 ## Continuous integration
 
-- `.github/workflows/maven.yml` calls the MojoHaus `maven-verify.yml` workflow in `mojohaus/.github`. It runs `-P "?run-its" verify` on
-  every JDK on Linux, the newest JDK on macOS, and the oldest and newest on Windows
+- `.github/workflows/maven.yml` calls the MojoHaus `maven-verify.yml` workflow in
+  `mojohaus/.github`. It runs `-P "?run-its" verify` on every JDK on Linux, the newest JDK on macOS, and the oldest and newest on Windows
   (`matrix-exclude`), plus a site build.
 - Branches pushed to this repository build under the `push` event; the `pull_request` run of the
   same commit is skipped.
@@ -72,6 +72,25 @@ compile goals share `AbstractAjcCompiler`, which assembles the `ajc` arguments.
 - POMs under `src/it` and `src/test/projects` pin old versions on purpose. Do not update them.
 - Dependabot updates are monthly and grouped. `plexus-xml` stays below 4 because 4.x depends on
   the Maven 4 XML API.
+
+## Documentation updates
+
+A change that users or contributors can notice ships with the documentation it affects, in the
+same pull request. A refactor with no visible effect needs none.
+
+- A new goal, parameter or default: the mojo Javadoc, which becomes the goal page, and the goal
+  list in `src/site/markdown/index.md`.
+- New or changed usage: an example in `src/site/markdown/usage.md` or under
+  `src/site/markdown/examples`. The pages are plain Markdown: in the first plugin declaration of
+  the usage page write `<version><!-- latest release --></version>`, and leave the version out of
+  other snippets.
+- A new `ajc` option: the matching page under `src/site/markdown/ajc_reference`.
+- A page added, removed or renamed: the menu in `src/site/site.xml`. Never rename a published
+  page; its URL is linked from elsewhere.
+- The Maven or Java requirement, or how to build and release: `README.md`.
+- A new convention, build gate or test fixture: this file.
+
+Check the result with `mvn site` and open `target/site/index.html`.
 
 ## Pull requests
 

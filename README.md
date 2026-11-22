@@ -1,25 +1,17 @@
-# Mojohaus AspectJ Maven Plugin
-
-This is the [aspectj-maven-plugin](https://www.mojohaus.org/aspectj-maven-plugin/).
+# MojoHaus AspectJ Maven Plugin
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.mojo/aspectj-maven-plugin.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.codehaus.mojo/aspectj-maven-plugin)
-[![GitHub CI](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml/badge.svg)](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/org.codehaus.mojo/aspectj-maven-plugin.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/org.codehaus.mojo/aspectj-maven-plugin)
+[![GitHub CI](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/mojohaus/aspectj-maven-plugin/actions/workflows/maven.yml?query=branch%3Amaster)
 
-## Overview
+The AspectJ Maven Plugin weaves AspectJ aspects into your classes with the AspectJ compiler `ajc`,
+either within a single project or across the modules of a reactor. It requires Maven 3.9.0 or later
+and Java 8 or later.
 
-This plugin weaves AspectJ aspects into your classes using the AspectJ compiler `ajc`.
-Typically, aspects are used in one of two ways within your Maven reactors:
-
-* As part of a Single Project, implying aspects and code are defined within the same Maven project.
-  This is the simplest approach to start out with; feel free to examine the
-  "Examples: Single-project AspectJ use" to better understand single-project use.
-
-* As part of a Multi-module Maven Reactor where one/some project(s) contains aspects and other
-  projects within the Maven reactor contain code using the aspects ("woven by the aspects").
-  This is a more complex and powerful approach, best suited when several Maven projects should be woven
-  by a common set of aspects. The "Examples: Multi-module AspectJ use" contains a basic walk-through
-  of this approach.
+The [plugin site](https://www.mojohaus.org/aspectj-maven-plugin/) has the
+[usage page](https://www.mojohaus.org/aspectj-maven-plugin/usage.html), examples for single-project
+and multi-module use, and the `ajc` option reference. Contributor and agent notes are in
+[AGENTS.md](AGENTS.md).
 
 ## Contributing
 

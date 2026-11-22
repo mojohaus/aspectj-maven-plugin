@@ -417,7 +417,7 @@ public abstract class AbstractAjcCompiler extends AbstractAjcMojo {
      * <code>-inpath</code> but leaves the sources of the project on the <code>ajc</code> command line.
      * With the default <code>false</code> nothing changes.
      *
-     * @since 1.16.2
+     * @since 1.17.0
      */
     @Parameter(defaultValue = "false", property = "aspectj.weaveOnly")
     protected boolean weaveOnly;

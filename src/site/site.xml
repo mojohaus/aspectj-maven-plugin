@@ -24,6 +24,7 @@
       <item name="Weaving classes in directories" href="./examples/weaveDirectories.html"/>
       <item name="Using aspect libraries" href="./examples/libraryJars.html"/>
       <item name="Configuring Report" href="./examples/usingReport.html"/>
+      <item name="Weaving classes compiled by another compiler" href="./examples/weaveOnly.html"/>
     </menu>
     <menu name="Examples: Multi-module AspectJ use">
       <item name="Multi-module use of AspectJ" href="./multimodule/multimodule_strategy.html"/>

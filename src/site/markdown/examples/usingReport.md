@@ -5,9 +5,7 @@ Example of ajdoc report creation.
 
 **Note:** Since this report is using `tools.jar` as a system scoped dependency
 you will need to make sure that your JAVA_HOME environment variable
-are set to a JDK, before you could use this report.
-Also we discovered that it does not work with JDK 1.5.0, and you would
-need to upgrade your VM if this is the one you currently are using.
+is set to a JDK before you can use this report.
 
 ```xml
 <project>
@@ -17,7 +15,7 @@ need to upgrade your VM if this is the one you currently are using.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>${aspectjVersion}</version>
+      <version>1.9.7</version>
       <scope>compile</scope>
     </dependency>
     ...
@@ -28,7 +26,6 @@ need to upgrade your VM if this is the one you currently are using.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
-        <version>${project.version}</version>
         <configuration>
           <verbose>true</verbose>
           <privateScope>true</privateScope>
@@ -48,3 +45,4 @@ need to upgrade your VM if this is the one you currently are using.
   ...
 </project>
 ```
+
