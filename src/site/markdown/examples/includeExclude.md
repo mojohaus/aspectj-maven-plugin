@@ -15,7 +15,7 @@ If you don't want to use any sourceDirectory, just add an empty sources element 
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.9.7</version>
+      <version><!-- latest release --></version>
     </dependency>
     ...
   </dependencies>
@@ -69,7 +69,7 @@ to add include/exclude filtering on top of that.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.9.7</version>
+      <version><!-- latest release --></version>
     </dependency>
     ...
   </dependencies>

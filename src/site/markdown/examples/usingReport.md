@@ -15,7 +15,7 @@ is set to a JDK before you can use this report.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.9.7</version>
+      <version><!-- latest release --></version>
       <scope>compile</scope>
     </dependency>
     ...

@@ -14,7 +14,7 @@ Any include or exclude elements in the POM are also disregarded.
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.9.7</version>
+      <version><!-- latest release --></version>
     </dependency>
     ...
   </dependencies>
