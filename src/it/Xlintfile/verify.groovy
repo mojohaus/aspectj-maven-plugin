@@ -1,9 +1,9 @@
 file = new File(basedir, "build.log")
 assert file.exists()
-execLine = file.readLines().find { line -> line.contains( ' Running : ajc ' ) }
+execLine = file.readLines().find { line -> line.contains(' Running : ajc ') }
 assert execLine != null
-assert execLine.contains( " -Xlintfile " )
-assert execLine.contains( "XlintTestFile.properties" )
+assert execLine.contains(" -Xlintfile ")
+assert execLine.contains("XlintTestFile.properties")
 text = file.getText()
 //Xlint:adviceDidNotMatch set to ignore
 assert !text.contains("[Xlint:adviceDidNotMatch]")

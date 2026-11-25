@@ -1,4 +1,4 @@
-log = new File( basedir, 'build.log' )
+log = new File(basedir, 'build.log')
 assert log.exists()
-execLine = log.readLines().find { line -> line.contains( ' Running : ajc ' ) }
+execLine = log.readLines().find { line -> line.contains(' Running : ajc ') }
 assert execLine == null

@@ -1,3 +1,5 @@
-def execLine = new File(basedir, 'build.log').readLines().find { line -> line.contains(' Running : ajc ') }
+def execLine = new File(basedir, 'build.log').readLines().find { line ->
+    line.contains(' Running : ajc ')
+}
 assert execLine != null
 assert execLine.contains(' -Xlint:ignore ')
