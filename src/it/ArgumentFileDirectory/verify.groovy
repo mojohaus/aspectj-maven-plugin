@@ -7,10 +7,9 @@
 ].each { assert !new File(basedir, "target/$it").exists() : it }
 
 // ... but in the configured directory.
-[
-    "aspectj-build/builddef.lst",
-    "aspectj-build/builddef-test.lst"
-].each { assert new File(basedir, "target/$it").exists() : it }
+["aspectj-build/builddef.lst", "aspectj-build/builddef-test.lst"].each {
+    assert new File(basedir, "target/$it").exists() : it
+}
 
 // The classes were actually compiled.
 assert new File(basedir, "target/classes/Application.class").exists()
