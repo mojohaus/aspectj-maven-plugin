@@ -25,6 +25,7 @@ package org.codehaus.mojo.aspectj;
  */
 import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -216,13 +217,15 @@ public class MockArtifact implements Artifact {
         throw new RuntimeException("Not implemented");
     }
 
+    private List dependencyTrail = Collections.emptyList();
+
     @Override
     public List getDependencyTrail() {
-        throw new RuntimeException("Not implemented");
+        return dependencyTrail;
     }
 
     public void setDependencyTrail(List arg0) {
-        throw new RuntimeException("Not implemented");
+        this.dependencyTrail = arg0;
     }
 
     @Override

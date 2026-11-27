@@ -89,10 +89,13 @@ public class AjcHelper {
         Set<Artifact> classPathElements = Collections.synchronizedSet(
                 // LinkedHashSet preserves order by insertion for iteration
                 new LinkedHashSet<>());
-        Set<Artifact> dependencyArtifacts = project.getDependencyArtifacts();
-        // Set.addAll only adds if absent, so we want to add the project artifacts first
+        // Set.addAll only adds if absent, so we want to add the project artifacts first. Direct dependencies have a
+        // trail of the project GAV followed by the dependency GAV; transitive dependencies have a longer trail.
         classPathElements.addAll(project.getArtifacts());
-        classPathElements.addAll(dependencyArtifacts == null ? Collections.emptySet() : dependencyArtifacts);
+        project.getArtifacts().stream()
+                .filter(artifact -> artifact.getDependencyTrail() != null
+                        && artifact.getDependencyTrail().size() == 2)
+                .forEach(classPathElements::add);
         classPathElements.addAll(pluginArtifacts == null ? Collections.emptySet() : pluginArtifacts);
 
         for (Artifact classPathElement : classPathElements) {

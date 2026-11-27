@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -222,9 +223,12 @@ class AjcHelperTest {
         DefaultArtifact pluginArtifact = createFixedArtifact("plugin");
         pluginArtifact.setFile(new File("~/.m2/repository/coords/plugin.jar"));
 
+        projectArtifact.setDependencyTrail(Collections.singletonList("group:project:1.0-SNAPSHOT"));
+        dependencyArtifact.setDependencyTrail(
+                Arrays.asList("group:project:1.0-SNAPSHOT", "group:dependency:1.0-SNAPSHOT"));
+
         MavenProject project = new MavenProject();
-        project.setArtifacts(Collections.singleton(projectArtifact));
-        project.setDependencyArtifacts(Collections.singleton(dependencyArtifact));
+        project.setArtifacts(new LinkedHashSet<>(Arrays.asList(projectArtifact, dependencyArtifact)));
 
         String classPath =
                 AjcHelper.createClassPath(project, Collections.singletonList(pluginArtifact), Collections.emptyList());
